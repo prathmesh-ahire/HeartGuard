@@ -1,0 +1,24 @@
+================================================================================
+PV-MEPCG / PulseVision — MISSING OUTPUTS REPORT
+================================================================================
+
+Purpose
+-------
+Every deliverable named in the source documents that this project could NOT
+produce is recorded here, with the technical reason. Ground rule 1: a number is
+never invented and a gap is never silently omitted. Ground rule 7: this file is
+created empty in Phase 01 and APPENDED TO as gaps arise — it is never written at
+the end from memory, because by then the reasons are forgotten.
+
+A `[-]` (skipped) checkbox in `Docs/todo.md` REQUIRES a matching entry here and
+a matching entry in `Docs/note.md`.
+
+Entry format
+------------
+[YYYY-MM-DD] <task id> — <deliverable that is missing>
+  Reason: <the technical reason it could not be produced>
+  Impact: <what claim or figure is affected downstream>
+
+--------------------------------------------------------------------------------
+ENTRIES (none yet — created empty in Phase 01, task T01.6)
+--------------------------------------------------------------------------------

@@ -1,0 +1,111 @@
+# PV-MEPCG / PulseVision — filesystem layout (T03.1)
+#
+# Every path in this project resolves through this file. Nothing hardcodes a
+# dataset location in Python.
+#
+# ABSOLUTE vs PORTABLE
+#   `project_root` is the one machine-specific value. Every other path is
+#   declared relative to it and is resolved to an absolute path by
+#   src/utils/config.py at load time, so downstream code always receives an
+#   absolute path (as T03.1 requires) while a machine move is a one-line edit.
+#
+#   Override without editing this file:
+#     PowerShell:  $env:HEARTGUARD__PATHS__PROJECT_ROOT = "E:\HeartGuard"
+#     bash:        export HEARTGUARD__PATHS__PROJECT_ROOT=/mnt/e/HeartGuard
+#
+# THE DOUBLED CIRCOR DIRECTORY BELOW IS NOT A TYPO. The real tree is
+# archive/training_data/training_data/. A path built as archive/training_data/
+# matches zero files and returns an empty list rather than raising — the worst
+# possible failure mode. See Docs/note.md, 2026-08-22 audit, finding 2.
+
+project_root: "D:/Projects/HeartGuard"
+
+# --- dataset roots (read-only input; never written to, never committed) ------
+dataset:
+  root: "dataset"
+
+  # D1 — PhysioNet/CinC 2016. 3,240 train (a-f) + 301 validation @ 2000 Hz.
+  d1_physionet:
+    root: "dataset/archive (3)"
+    subsets: ["training-a", "training-b", "training-c", "training-d", "training-e", "training-f"]
+    validation: "dataset/archive (3)/validation"
+    annotations: "dataset/archive (3)/annotations"
+    appendix_training: "dataset/archive (3)/annotations/Online_Appendix_training_set.csv"
+    appendix_diagnosis: "dataset/archive (3)/annotations/Online_Appendix_Diagnosis_meanings.csv"
+    # REFERENCE.csv and REFERENCE-SQI.csv live inside each subset directory.
+    reference_filename: "REFERENCE.csv"
+    reference_sqi_filename: "REFERENCE-SQI.csv"
+
+  # D2 — PASCAL set_a. 124 labeled + 52 unlabelled @ 44100 Hz.
+  d2_pascal_a:
+    root: "dataset/archive (2)/set_a"
+    csv: "dataset/archive (2)/set_a.csv"
+    timing_csv: "dataset/archive (2)/set_a_timing.csv"
+
+  # D3 — PASCAL set_b. 461 labeled + 195 unlabelled @ 4000 Hz.
+  # WARNING: set_b.csv filenames have ZERO overlap with the files on disk
+  # (Btraining_extrastole_127_... vs extrastole__127_...). The CSV is a
+  # cross-check only; labels come from the Heartbeat_Sound folder structure.
+  d3_pascal_b:
+    root: "dataset/archive (2)/set_b"
+    csv: "dataset/archive (2)/set_b.csv"
+
+  # D4 — CirCor DigiScope 2022. 942 patients / 3,163 recordings @ 4000 Hz.
+  d4_circor:
+    root: "dataset/archive/training_data/training_data"   # doubled — see header
+    # AND the metadata files are NOT inside that doubled directory. They sit one
+    # level above it, directly in archive/, alongside the outer training_data/
+    # folder. Verified on disk 2026-08-23; see Docs/note.md.
+    demographics_csv: "dataset/archive/training_data.csv"
+    records_index: "dataset/archive/RECORDS"
+    checksums: "dataset/archive/SHA256SUMS.txt"
+    license: "dataset/archive/LICENSE.txt"
+
+  # Authoritative PASCAL label source: same audio as set_a + set_b, re-foldered
+  # by class. 100% duplicate (832/832 filename overlap).
+  # LABEL HELPER ONLY — including it in any supervised track silently doubles
+  # the PASCAL data and puts the same recording in both train and test.
+  heartbeat_sound:
+    root: "dataset/Heartbeat_Sound"
+    classes: ["artifact", "extrahls", "extrastole", "murmur", "normal", "unlabel"]
+    is_training_source: false
+
+# --- derived data (regenerable; gitignored) ---------------------------------
+cache:
+  root: "cache"
+  preprocessed: "cache/preprocessed"
+  features: "cache/features"
+  metadata: "cache/metadata"
+
+# --- generated artifacts ----------------------------------------------------
+outputs:
+  root: "outputs"
+  evidence_index: "outputs/00_evidence_index"
+  dataset_audit: "outputs/01_dataset_audit"
+  preprocessing: "outputs/02_preprocessing"
+  features: "outputs/03_features"
+  models: "outputs/04_models"
+  search_optimization: "outputs/05_search_optimization"
+  binary_results: "outputs/06_binary_results"
+  multiclass_results: "outputs/07_multiclass_results"
+  circor_external_validation: "outputs/08_circor_external_validation"
+  ablation: "outputs/09_ablation"
+  robustness: "outputs/10_robustness"
+  complexity: "outputs/11_complexity"
+  statistics: "outputs/12_statistics"
+  figures_diagrams: "outputs/13_figures_diagrams"
+  algorithms: "outputs/14_algorithms"
+  dashboard_screenshots: "outputs/15_dashboard_screenshots"
+  paper_assets: "outputs/Q1_PAPER_ASSETS"
+  thesis_assets: "outputs/THESIS_ASSETS"
+  logs: "outputs/logs"
+  configs: "outputs/configs"
+  missing_outputs_report: "outputs/missing_outputs_report.txt"
+  run_manifest: "outputs/00_evidence_index/run_manifest.json"
+
+# --- other roots ------------------------------------------------------------
+models_saved: "models_saved"
+frontend:
+  root: "frontend"
+  generated: "frontend/lib/generated"
+  static_export: "frontend/out"

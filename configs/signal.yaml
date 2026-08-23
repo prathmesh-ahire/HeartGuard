@@ -1,0 +1,73 @@
+# PV-MEPCG / PulseVision — signal preprocessing (T03.2)
+#
+# Consumed by src/preprocessing/ (Phases 23-29). Every value here is hashed into
+# the preprocessed-signal cache key (T27.3), so changing any of it invalidates
+# the cache rather than silently mixing settings.
+
+# --- resampling (Phase 23) --------------------------------------------------
+resample:
+  target_fs: 2000              # Hz. All four datasets are brought to this rate.
+  method: "soxr_hq"            # high-quality anti-aliased polyphase resampler
+  # PASCAL A is 44100 Hz -> 2000 Hz, a factor of 22.05. Naive decimation
+  # (x[::22]) aliases badly at this ratio; T23.4 verifies with a swept sine.
+  native_fs:
+    d1_physionet: 2000         # no-op path
+    d2_pascal_a: 44100         # 22.05x decimation
+    d3_pascal_b: 4000          # 2x decimation
+    d4_circor: 4000            # 2x decimation
+  mono: "mean"                 # channel mean; no-op fast path (all files mono)
+  dtype: "float32"
+
+# --- bandpass filter (Phase 24) ---------------------------------------------
+filter:
+  enabled: true                # ablation PP-09 flips this
+  type: "butterworth"
+  order: 4                     # sosfiltfilt applies it twice -> effective 8th order,
+                               # zero phase. Documented in T24.2.
+  low_hz: 20
+  high_hz: 400                 # well below the 1000 Hz Nyquist at target_fs
+  design: "sos"                # second-order sections; numerically stable at order 4
+  zero_phase: true             # scipy.signal.sosfiltfilt
+  # The shortest record in the corpus is 0.76 s = 1,520 samples at 2 kHz, which
+  # is below sosfiltfilt's default padlen. T24.3 reduces padding and flags the
+  # record rather than raising. This guard fires on real data, not hypothetically.
+  short_signal_policy: "reduce_padlen"
+  min_padlen: 12
+
+# --- normalization (Phase 25) -----------------------------------------------
+normalization:
+  enabled: true                # ablation PP-09 flips this
+  method: "zscore"             # alternatives: "peak", "none"
+  remove_dc: true              # subtract the mean before normalizing
+  # Guard against a constant / all-silent record producing division by zero.
+  zero_variance_epsilon: 1.0e-10
+  zero_variance_policy: "passthrough_and_flag"
+
+# --- signal quality analysis (Phase 26) -------------------------------------
+quality:
+  clipping_threshold: 0.99     # |sample| above this counts as clipped
+  clipping_ratio_flag: 0.01    # >1% clipped samples -> flagged
+  silence_threshold_db: -60.0  # frame RMS below this counts as silence
+  silence_ratio_flag: 0.50
+  snr_proxy:
+    in_band: [20, 400]         # must match filter.low_hz / filter.high_hz
+    out_of_band: [400, 1000]   # up to Nyquist at target_fs
+    low_snr_db_flag: 5.0
+  spectral_flatness_flag: 0.50 # above this the record is noise-like
+  short_duration_sec: 2.0      # is_short threshold
+  # Thresholds are calibrated against PhysioNet REFERENCE-SQI as an independent
+  # human-annotated reference (T26.5) rather than chosen by eye.
+  calibrate_against_sqi: true
+
+# --- framing (shared by quality analysis and the frequency/MFCC families) ----
+framing:
+  frame_length: 512            # 256 ms at 2000 Hz
+  hop_length: 256              # 128 ms, 50% overlap
+  window: "hann"
+  center: true
+
+# --- preprocessing cache (Phase 27) -----------------------------------------
+cache:
+  enabled: true
+  format: "npy"
+  hash_config: true            # cache key = record_uid + hash of this file

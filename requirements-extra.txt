@@ -1,0 +1,21 @@
+# PV-MEPCG / PulseVision — optional models, search methods and explainability
+#
+# Install after requirements.txt. Every pin verified to import AND to run on
+# Windows + Python 3.11.9 (Phase 02). scikit-optimize in particular was
+# runtime-tested with a real BayesSearchCV fit against scikit-learn 1.9.0,
+# because it imports cleanly and then fails at .fit() on some sklearn versions.
+
+# --- gradient boosting ---
+xgboost==3.2.0
+lightgbm==4.7.0
+
+# --- hyperparameter / weight search ---
+scikit-optimize==0.10.2   # Bayesian optimization (BayesSearchCV)
+deap==1.4.4               # genetic algorithm
+pyswarms==1.3.0           # particle swarm optimization
+
+# --- explainability ---
+shap==0.51.0
+
+# --- statistics (Wilcoxon, Friedman, post-hoc) ---
+statsmodels==0.14.6

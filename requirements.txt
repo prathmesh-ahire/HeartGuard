@@ -1,0 +1,37 @@
+# PV-MEPCG / PulseVision — core pipeline requirements
+#
+# Python 3.11.9, Windows, CPU only. Every pin below was resolved by a real
+# install on this machine (Phase 02) and verified to import — none are guessed.
+# Install order: this file first, then requirements-extra / -api / -report.
+#
+# Reproducibility rule 5: these versions are recorded in every run manifest.
+# Do not float a pin without re-running scripts/verify_env.py.
+
+# --- numerics ---
+numpy==2.4.6
+scipy==1.17.1
+pandas==3.0.5
+
+# --- machine learning ---
+scikit-learn==1.9.0
+joblib==1.5.3
+
+# --- audio / signal processing ---
+librosa==0.11.0
+soundfile==0.14.0
+PyWavelets==1.9.0
+
+# librosa pulls numba/llvmlite for its JIT paths. Pinned explicitly because a
+# numba/numpy version mismatch is the single most common way this stack breaks
+# on a fresh Windows install, and it fails at import, not at install.
+numba==0.67.0
+llvmlite==0.49.0
+
+# --- plotting ---
+matplotlib==3.11.1
+seaborn==0.13.2
+
+# --- io / misc ---
+pyarrow==25.0.1
+tqdm==4.70.0
+PyYAML==6.0.3

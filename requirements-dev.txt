@@ -1,0 +1,10 @@
+# PV-MEPCG / PulseVision — development and test tooling
+#
+# Created in Phase 05, ahead of its nominal home in T08.3, because T05.6 writes
+# the first pytest test and nothing earlier in the plan installed pytest.
+# T08.3 adds ruff and mypy to this same file.
+#
+# Not needed to run the pipeline; needed to test it and to run CI.
+
+pytest==9.1.1
+pytest-cov==7.1.0

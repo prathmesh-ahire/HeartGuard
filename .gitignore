@@ -1,0 +1,56 @@
+# ---------------------------------------------------------------------------
+# HeartGuard (PV-MEPCG / PulseVision) — .gitignore
+# Written in Phase 01, BEFORE the first `git add`. Two entries below are the
+# reason this file exists at all: dataset/ is 1.3 GB of read-only input and
+# must never be staged, and cache/ holds regenerable preprocessed signals and
+# feature shards.
+# ---------------------------------------------------------------------------
+
+# Raw datasets — read-only input, 1.3 GB, never committed
+dataset/
+
+# Derived / regenerable artifacts (directory kept, contents ignored)
+cache/*
+!cache/.gitkeep
+
+# Feature matrices and other columnar dumps
+*.parquet
+
+# Run logs — rotating, machine-local, regenerated on every run. The directory
+# itself is kept (outputs/logs/.gitkeep). run_manifest.json and
+# evidence_index.csv are NOT ignored: both are named deliverables (T102.5).
+outputs/logs/*.log
+outputs/logs/*.log.*
+outputs/logs/htmlcov/
+report.log
+
+# Coverage
+.coverage
+.coverage.*
+htmlcov/
+
+# Trained model binaries (the directory itself is kept)
+models_saved/*.pkl
+models_saved/*.joblib
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Virtual environment
+.venv/
+
+# Node / Next.js
+node_modules/
+.next/
+# NOTE: frontend/out/ is deliberately NOT ignored — the exported static
+# dashboard is committed so a grader without Node can serve it from FastAPI.
+
+# OS / editor noise
+.DS_Store
+Thumbs.db

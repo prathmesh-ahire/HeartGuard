@@ -1,0 +1,9 @@
+# PV-MEPCG / PulseVision — inference API (Part X)
+#
+# Serves exactly one runtime endpoint: POST /predict. Every precomputed metric
+# reaches the dashboard through build-time codegen, never through this API.
+
+fastapi==0.141.1
+uvicorn[standard]==0.52.4
+python-multipart==0.0.32   # WAV upload on POST /predict
+pydantic==2.13.4           # response schema; also coerces NaN/Inf at the boundary

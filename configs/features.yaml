@@ -1,0 +1,154 @@
+# PV-MEPCG / PulseVision — feature extraction (T03.3)
+#
+# THE 138-FEATURE COMPOSITION IS LOCKED. It is enforced by the feature registry
+# (T31.3 fixed ordering, T31.6 asserts exactly 138 names, no duplicates) and by
+# T38.2 on every extract_all() call. Changing any count here invalidates every
+# cached feature matrix, every trained model and every ablation result.
+# Rationale and the full breakdown: Docs/note.md, 2026-08-22 entry.
+#
+#   Time 24 + Frequency 22 + MFCC 39 + Chroma 24 + DWT 24 + Envelope 5 = 138
+#
+# The `enabled` flags exist for the EXP-F1 family ablation (A1-A8). They are all
+# true for the headline 138-feature representation; the ablation runner overrides
+# them per configuration. Disabling a family here does NOT change its locked count.
+
+expected_total: 138
+
+# --- NaN / Inf policy (T31.4) -----------------------------------------------
+# Extractors return NaN on failure and NEVER raise. Every failure is logged with
+# the record uid, so a degenerate record shows up as a tracked gap rather than a
+# crashed batch or a silently dropped row.
+failure_policy:
+  on_error: "nan"
+  log_record_uid: true
+  raise_on_error: false
+
+families:
+
+  # --- Time domain: 24 (Phase 32) -------------------------------------------
+  time:
+    enabled: true
+    count: 24
+    composition:
+      basic_stats: 8        # mean, std, var, min, max, range, median, iqr
+      shape_stats: 2        # skewness, kurtosis
+      energy: 4             # total energy, rms, peak-to-peak, crest factor
+      zcr: 2                # zero-crossing rate mean, std (framed)
+      complexity: 5         # shannon entropy, sample entropy, hjorth x3
+      autocorr_duration: 3  # autocorr peak value, peak lag, duration
+    sample_entropy:
+      m: 2                  # embedding dimension
+      r_factor: 0.2         # tolerance as a multiple of the signal SD
+      max_samples: 20000    # subsample cap — sample entropy is O(n^2) and the
+                            # longest record is 122 s = 244,000 samples at 2 kHz
+    shannon_entropy_bins: 64
+    autocorr_max_lag_sec: 2.0
+
+  # --- Frequency domain: 22 (Phase 33) --------------------------------------
+  frequency:
+    enabled: true
+    count: 22
+    composition:
+      spectral_stats: 12    # centroid/bandwidth/rolloff85/rolloff95/flatness/flux,
+                            # each mean + std over frames
+      global_stats: 4       # spectral entropy, dominant freq, peak power, total power
+      band_powers: 6        # relative power in the six bands below
+    rolloff_percentiles: [0.85, 0.95]
+    welch:
+      nperseg: 512
+      noverlap: 256
+      window: "hann"
+      detrend: "constant"
+      scaling: "density"
+    # Six bands spanning the 20-400 Hz passband. Reported as RELATIVE power, so
+    # they sum to <= 1 of in-band power (asserted by T33.7).
+    bands_hz:
+      - [20, 50]
+      - [50, 100]
+      - [100, 150]
+      - [150, 250]
+      - [250, 350]
+      - [350, 400]
+
+  # --- MFCC: 39 (Phase 34) ---------------------------------------------------
+  mfcc:
+    enabled: true
+    count: 39
+    composition:
+      mean: 13
+      std: 13
+      delta_mean: 13
+    n_mfcc: 13
+    n_mels: 40
+    fmin: 20
+    fmax: 400               # MUST stay below Nyquist (1000 Hz at 2 kHz).
+                            # librosa's defaults assume 22 kHz speech and would
+                            # place most mel filters above Nyquist here.
+    n_fft: 512
+    hop_length: 256
+    htk: false
+    delta_width: 9          # librosa requires an odd width and at least that
+                            # many frames. A 0.76 s record yields ~6 frames, so
+                            # T34.6 degrades gracefully and flags rather than raising.
+    short_signal_policy: "shrink_delta_width_then_pad"
+
+  # --- Chroma: 24 (Phase 35) -------------------------------------------------
+  # CAVEAT (T35.4): chroma is a musical-pitch construct with no physiological
+  # meaning for heart sounds. It is included because both source documents
+  # mandate it, and is defensible only as a generic harmonic-distribution
+  # descriptor. The write-up must say so rather than imply a cardiac rationale.
+  chroma:
+    enabled: true
+    count: 24
+    composition:
+      mean: 12
+      std: 12
+    n_chroma: 12
+    n_fft: 512
+    hop_length: 256
+    fmin: 20                # adapted to the 20-400 Hz band, not the musical default
+    tuning: 0.0             # fixed, not estimated — estimation is unstable on PCG
+
+  # --- Discrete wavelet transform: 24 (Phase 36) -----------------------------
+  dwt:
+    enabled: true
+    count: 24
+    wavelet: "db4"
+    level: 5                # sub-bands cA5, cD5, cD4, cD3, cD2, cD1
+    mode: "symmetric"
+    subbands: ["cA5", "cD5", "cD4", "cD3", "cD2", "cD1"]
+    stats: ["energy", "std", "entropy", "mean_abs"]   # 6 x 4 = 24
+    entropy_bins: 64
+    # db4 has filter length 8; a 5-level decomposition needs roughly 8 * 2^5
+    # samples. The 0.76 s PASCAL B record (1,520 samples at 2 kHz) is near that
+    # floor, so T36.6 reduces the level and flags rather than failing.
+    short_signal_policy: "reduce_level_and_flag"
+    min_level: 1
+
+  # --- Envelope: 5 (Phase 37) ------------------------------------------------
+  envelope:
+    enabled: true
+    count: 5
+    composition:
+      mean: 1
+      std: 1
+      skew: 1
+      kurtosis: 1
+      peak_rate: 1          # peaks per second — a heart-rate proxy
+    method: "hilbert"
+    smooth_lowpass_hz: 20
+    peak_detection:
+      min_distance_sec: 0.25   # 240 bpm ceiling
+      prominence_factor: 0.3   # of envelope SD
+    # Plausible physiological range used to flag outliers (T37.5). CirCor is
+    # ~98% paediatric, and infant heart rates reach ~180 bpm, so the upper bound
+    # is deliberately generous. Values outside this are flagged, not clipped.
+    plausible_peak_rate_hz: [0.6, 3.5]   # 36-210 bpm
+
+# --- batch extraction (Phase 39) --------------------------------------------
+extraction:
+  n_jobs: -1
+  checkpoint_every: 250     # records; enables resume-on-restart for long runs
+  cache_format: "parquet"
+  timing_per_family: true   # feeds the complexity table (T25/T26)
+  smoke_limit: 20           # --smoke path: 20 records per dataset

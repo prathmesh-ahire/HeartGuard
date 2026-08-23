@@ -1,0 +1,210 @@
+# PV-MEPCG / PulseVision — model defaults and search spaces (T03.4)
+#
+# `defaults` are the untuned baseline parameters used by EXP-A1 (Phase 64).
+# `search_space` is consumed by the model registry (T51.1) and the search
+# framework (Part VI). Searches run on INNER folds only; the outer test fold is
+# never scored during search (T54.3, T54.6).
+#
+# Every estimator carries random_state 42. Rule 5: two runs of the same command
+# must produce identical numbers.
+
+global:
+  random_state: 42
+  n_jobs: -1
+  # CPU only — this machine has no CUDA device. Any GPU parameter is wrong here.
+  device: "cpu"
+
+# --- fold-safe pipeline (Phase 44) ------------------------------------------
+# Imputer, scaler and selector are pipeline STEPS so they fit on the training
+# fold only. Rule 2. Fitting any of them on the full matrix is leakage.
+pipeline:
+  imputer:
+    strategy: "median"
+  scaler:
+    kind: "standard"        # StandardScaler
+    with_mean: true
+    with_std: true
+  selector:
+    enabled: false          # switched on by SO-04 / the A8 ablation
+    kind: "none"            # "mutual_info" | "anova_f" | "rfecv" | "fixed_subset"
+    k: 60
+  class_weight:
+    strategy: "balanced"    # applied where the estimator supports it
+  resampling:
+    enabled: false          # imbalance is handled by class weights by default
+
+# --- calibration (Phase 47) -------------------------------------------------
+# SVM has no native probabilities and the soft-voting ensemble needs well-formed
+# ones, so M3 is wrapped explicitly. The calibrator is fitted INSIDE the training
+# fold, never on the outer test fold.
+calibration:
+  method: "sigmoid"         # "isotonic" needs more data than PASCAL A provides
+  cv: 3
+  fit_inside_fold: true
+
+models:
+
+  # --- M1 Logistic Regression (Phase 46) ------------------------------------
+  M1:
+    name: "Logistic Regression"
+    estimator: "sklearn.linear_model.LogisticRegression"
+    mandatory: true
+    defaults:
+      C: 1.0
+      penalty: "l2"
+      solver: "lbfgs"
+      max_iter: 2000        # raised from the sklearn default of 100; 138 scaled
+                            # features do not converge reliably at 100
+      class_weight: "balanced"
+      random_state: 42
+    search_space:
+      C: {type: "log_uniform", low: 1.0e-3, high: 1.0e3}
+      penalty: {type: "categorical", choices: ["l1", "l2"]}
+      solver: {type: "categorical", choices: ["liblinear", "saga"]}
+      max_iter: {type: "categorical", choices: [1000, 2000, 5000]}
+
+  # --- M2 K-Nearest Neighbours (Phase 46, optional baseline) ----------------
+  M2:
+    name: "K-Nearest Neighbours"
+    estimator: "sklearn.neighbors.KNeighborsClassifier"
+    mandatory: false
+    defaults:
+      n_neighbors: 5
+      weights: "uniform"
+      metric: "minkowski"
+      p: 2
+    search_space:
+      n_neighbors: {type: "int_uniform", low: 3, high: 31}
+      weights: {type: "categorical", choices: ["uniform", "distance"]}
+      metric: {type: "categorical", choices: ["minkowski", "manhattan", "chebyshev"]}
+      p: {type: "categorical", choices: [1, 2]}
+
+  # --- M3 SVM-RBF (Phase 47) — an ensemble member ---------------------------
+  M3:
+    name: "SVM (RBF kernel)"
+    estimator: "sklearn.svm.SVC"
+    mandatory: true
+    calibrate: true         # probability=False + explicit CalibratedClassifierCV
+    defaults:
+      C: 1.0
+      gamma: "scale"
+      kernel: "rbf"
+      probability: false
+      class_weight: "balanced"
+      cache_size: 500       # MB
+      random_state: 42
+    search_space:
+      C: {type: "log_uniform", low: 1.0e-2, high: 1.0e3}
+      gamma: {type: "log_uniform", low: 1.0e-4, high: 1.0e1}
+      class_weight: {type: "categorical", choices: ["balanced", null]}
+
+  # --- M4 Random Forest (Phase 48) — an ensemble member ---------------------
+  M4:
+    name: "Random Forest"
+    estimator: "sklearn.ensemble.RandomForestClassifier"
+    mandatory: true
+    defaults:
+      n_estimators: 500
+      max_depth: null
+      min_samples_leaf: 1
+      max_features: "sqrt"
+      class_weight: "balanced"
+      n_jobs: -1
+      random_state: 42
+    search_space:
+      n_estimators: {type: "int_uniform", low: 100, high: 1000}
+      max_depth: {type: "categorical", choices: [null, 5, 10, 20, 30]}
+      min_samples_leaf: {type: "int_uniform", low: 1, high: 10}
+      max_features: {type: "categorical", choices: ["sqrt", "log2", 0.3, 0.5]}
+      class_weight: {type: "categorical", choices: ["balanced", "balanced_subsample", null]}
+
+  # --- M5 Gradient Boosting (Phase 49) — an ensemble member -----------------
+  M5:
+    name: "Gradient Boosting"
+    estimator: "sklearn.ensemble.GradientBoostingClassifier"
+    mandatory: true
+    defaults:
+      n_estimators: 200
+      learning_rate: 0.1
+      max_depth: 3
+      subsample: 1.0
+      min_samples_leaf: 1
+      random_state: 42
+    search_space:
+      n_estimators: {type: "int_uniform", low: 100, high: 800}
+      learning_rate: {type: "log_uniform", low: 1.0e-3, high: 0.5}
+      max_depth: {type: "int_uniform", low: 2, high: 8}
+      subsample: {type: "uniform", low: 0.6, high: 1.0}
+      min_samples_leaf: {type: "int_uniform", low: 1, high: 20}
+
+  # --- M6 equal-weight soft voting (Phase 50) — the mandatory baseline ------
+  M6:
+    name: "Soft Voting (equal weights)"
+    estimator: "src.ensemble.soft_voting.SoftVotingEnsemble"
+    mandatory: true
+    members: ["M3", "M4", "M5"]   # calibrated SVM-RBF, RF, GB
+    defaults:
+      weights: "equal"
+      voting: "soft"
+    search_space: {}              # nothing to search — this is the fixed baseline
+
+  # --- M7 optimized-weight soft voting (Phase 50) — the PROPOSED model ------
+  M7:
+    name: "Soft Voting (optimized weights)"
+    estimator: "src.ensemble.soft_voting.SoftVotingEnsemble"
+    mandatory: true
+    members: ["M3", "M4", "M5"]
+    defaults:
+      weights: "optimized"
+      voting: "soft"
+    weight_search:
+      # Weights are optimized on OUT-OF-FOLD probabilities from the inner folds
+      # only (T50.5). Touching the outer test fold here would invalidate every
+      # headline result in the project.
+      method: "SO-05"
+      simplex_constrained: true   # weights are non-negative and sum to 1
+      objective: "balanced_accuracy_plus_sensitivity"
+    search_space: {}
+
+  # --- M8 external gradient boosting (Phase 49) -----------------------------
+  # Behind a capability check that degrades gracefully if the package is absent
+  # (T49.3). Both are installed and verified on this machine (Phase 02).
+  M8:
+    name: "XGBoost / LightGBM"
+    estimator: "xgboost.XGBClassifier"
+    fallback_estimator: "lightgbm.LGBMClassifier"
+    mandatory: false
+    capability_check: true
+    defaults:
+      n_estimators: 400
+      learning_rate: 0.1
+      max_depth: 6
+      subsample: 0.9
+      colsample_bytree: 0.9
+      reg_lambda: 1.0
+      tree_method: "hist"
+      n_jobs: -1
+      random_state: 42
+      # Determinism: single-threaded histogram construction differs from
+      # multi-threaded in float accumulation order. Verified by T77.1.
+      deterministic: true
+    search_space:
+      n_estimators: {type: "int_uniform", low: 100, high: 1000}
+      learning_rate: {type: "log_uniform", low: 1.0e-3, high: 0.5}
+      max_depth: {type: "int_uniform", low: 2, high: 10}
+      subsample: {type: "uniform", low: 0.6, high: 1.0}
+      colsample_bytree: {type: "uniform", low: 0.5, high: 1.0}
+      reg_lambda: {type: "log_uniform", low: 1.0e-2, high: 1.0e2}
+
+  # --- M9 1D-CNN (Phase 52) — OPTIONAL, scope undecided ---------------------
+  # Listed as Optional in both source documents. This machine is CPU only.
+  # The decision is DEFERRED to a user call against the Phase 75 complexity
+  # timings (T52.1). If dropped, the reason goes in missing_outputs_report.txt
+  # (T52.6) — never silently omitted. Open item 1 in Docs/note.md.
+  M9:
+    name: "1D-CNN"
+    estimator: null
+    mandatory: false
+    in_scope: null            # null = undecided; set true/false at T52.1
+    defaults: {}
+    search_space: {}

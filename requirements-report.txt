@@ -1,0 +1,14 @@
+# PV-MEPCG / PulseVision — document and workbook generation (Part IX)
+
+python-docx==1.2.0   # .docx thesis and audit report generation
+openpyxl==3.1.5      # .xlsx table workbooks
+
+# kaleido: static image export for Plotly figures.
+# WINDOWS NOTE (Phase 02): kaleido 1.x dropped the bundled Chromium that 0.2.1
+# shipped and now drives an EXTERNAL Chrome/Chromium via choreographer. No
+# Chrome is installed on this machine, so kaleido cannot render until either
+# `kaleido_get_chrome` is run (downloads Chromium) or a system Chrome exists.
+# It is imported by scripts/verify_env.py but NOT exercised — nothing in the
+# pipeline currently renders Plotly from Python (all figures are matplotlib /
+# seaborn; Plotly is a frontend-JS concern). See Docs/note.md.
+kaleido==1.3.0
