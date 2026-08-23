@@ -53,6 +53,65 @@ Never write into it — no converted WAVs, no cached features, no metadata files
 
 ---
 
+## 2026-08-23 — Phase 07: the T01.7 gate had to be changed (deliberately), and rotating logs were excluded from git
+
+### 1. A gate went red because it had become obsolete — changed, not weakened
+
+Immediately after `git init`, the **T01.7 gate started failing**:
+
+```
+FAIL  a .git dir already exists — .gitignore must precede the first git add (git init is T07.1)
+```
+
+That assertion was correct for Phase 01. Its purpose was to prove `.gitignore` existed *before* anything could be staged, and with no repository yet the only available proof was "there is no repository yet". T07.1 made it permanently unsatisfiable.
+
+Per the testing discipline — *if the gate itself is wrong, say so explicitly, change it deliberately, and write a note explaining why* — it was **replaced with the stronger assertion it was only a proxy for**, now that git history exists to check against:
+
+- `.gitignore` is tracked;
+- no `dataset/`, `cache/` (bar `.gitkeep`), `.venv/` or `node_modules/` file is tracked at HEAD;
+- **and none has ever been committed in any revision** (`git log --all --name-only`), because a file committed once and later deleted is still in the pack and still leaked.
+
+This is a strictly stronger check than the original: "no repo yet" proved nothing about what would eventually be staged. The gate went from 98 to 99 checks and passes.
+
+**The general point, worth carrying forward:** a `[TEST]` gate written at phase *N* can be invalidated by a later phase legitimately doing its job. That is not a failing build to route around — it is a signal the assertion needs rewriting against the new reality, and the rewrite must be at least as strong.
+
+### 2. `git check-ignore` reported three false misses, and the reason matters
+
+Verifying T07.3 before staging, three patterns looked broken:
+
+```
+cache            *** NOT IGNORED ***
+node_modules     *** NOT IGNORED ***
+frontend/.next   *** NOT IGNORED ***
+```
+
+All three are fine.
+
+- **`cache`** is *deliberately* not ignored — the rule is `cache/*` plus `!cache/.gitkeep` so the directory survives a clone (see the Phase 01 entry). `cache/preprocessed/a.npy` is correctly ignored.
+- **`node_modules` and `frontend/.next`** do not exist on disk yet. A trailing-slash pattern matches directories only, and git cannot tell a *nonexistent* path is a directory, so it reports no match. Re-checked with a path inside each (`node_modules/react/index.js`) and with an explicit trailing slash: both IGNORED.
+
+Worth remembering, because the naive reading is "my gitignore is broken" and the naive fix is to strip the trailing slashes — which would then also ignore any *file* named `node_modules`. Test directory patterns with a path *inside* them.
+
+### 3. Rotating logs excluded from git; the manifest and evidence index deliberately kept
+
+`outputs/` is not gitignored — it holds the deliverables. But `outputs/logs/*.log` is a rotating, machine-local file regenerated on every run, and there is no version of it worth diffing. Added to `.gitignore` along with `report.log` (an empty stray that appeared during Phase 04) and coverage output. `outputs/logs/.gitkeep` keeps the directory.
+
+**`run_manifest.json` and `evidence_index.csv` are NOT ignored**, and that is a decision with a known cost. Both are named deliverables — T102.5 finalises the manifest — and they are the provenance trail rule 1 depends on. The cost is churn: the manifest grows ~3 KB per run and will appear in most future phase commits. Accepted; the alternative is a repository whose deliverables cannot be traced to the runs that produced them.
+
+### 4. T07.2 was marked [MANUAL] and turned out to be already done
+
+`git ls-remote https://github.com/prathmesh-ahire/HeartGuard.git` returned **exit 0 with no refs** — the repository exists, is reachable, and is empty. So the part only the user could do (creating it) was already complete, and adding the remote plus pushing needed no intervention. Push succeeded on the first attempt with cached credentials.
+
+### 5. First commit: 78 files, 0.87 MB
+
+Staged **by explicit name list** via `git add --pathspec-from-file`, never `git add -A`. Verified before committing: 0 dataset files, 0 cache files beyond `.gitkeep`, 0 `.venv`/`node_modules`/`.parquet`/`.pkl`/`.log`. Largest tracked blob is the 405 KB blueprint PDF; nothing within two orders of magnitude of the 50 MB limit. `.git` is 564 KB.
+
+Remote verification went beyond comparing commit SHAs: the **tree object hashes** were compared too (`c4d407a3…` on both sides), which proves the content matches rather than just the commit pointer.
+
+**Files:** `CHANGELOG.md`, `.gitignore`, the T01.7 gate script; `.git/` initialised on `main` with `origin` set.
+
+---
+
 ## 2026-08-23 — Phase 06: the `needs_data` skip path could not be tested on a machine that has the dataset, so it got a switch
 
 ### 1. `--no-data`, and why an untested skip path is a broken one

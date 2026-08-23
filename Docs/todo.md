@@ -113,13 +113,13 @@ Work through tasks in order (Phase → Task, e.g. T09.4). Do not skip ahead — 
 - [x] **T06.7** [TEST] Run the full pytest suite on the empty skeleton — green, with `slow` and `needs_data` markers correctly skipping.
 
 ### Phase 07 — Version Control
-- [ ] **T07.1** `git init`; set default branch `main`.
-- [ ] **T07.2** [MANUAL] Create the private GitHub repository, then add remote `https://github.com/prathmesh-ahire/HeartGuard.git`.
-- [ ] **T07.3** Verify `dataset/` and `cache/` are ignored; confirm nothing >50 MB is staged.
-- [ ] **T07.4** Commit the skeleton as `chore: project skeleton, env and config system`.
-- [ ] **T07.5** Add `CHANGELOG.md` with a Phase-completion log format.
-- [ ] **T07.6** Push `main` and verify the remote tree.
-- [ ] **T07.7** [TEST] Confirm `git status` shows no dataset or cache file staged, nothing over 50 MB is tracked, and the remote tree matches local after push.
+- [x] **T07.1** `git init`; set default branch `main`.
+- [x] **T07.2** [MANUAL] Create the private GitHub repository, then add remote `https://github.com/prathmesh-ahire/HeartGuard.git`.
+- [x] **T07.3** Verify `dataset/` and `cache/` are ignored; confirm nothing >50 MB is staged.
+- [x] **T07.4** Commit the skeleton as `chore: project skeleton, env and config system`.
+- [x] **T07.5** Add `CHANGELOG.md` with a Phase-completion log format.
+- [x] **T07.6** Push `main` and verify the remote tree.
+- [x] **T07.7** [TEST] Confirm `git status` shows no dataset or cache file staged, nothing over 50 MB is tracked, and the remote tree matches local after push.
 
 ### Phase 08 — Continuous Integration
 - [ ] **T08.1** Create `.github/workflows/ci.yml` triggering on push and pull request to `main`, with a concurrency group so superseded runs cancel.
@@ -1247,7 +1247,7 @@ Work through tasks in order (Phase → Task, e.g. T09.4). Do not skip ahead — 
 
 | Part | Phases | Tasks | Status |
 |------|--------|-------|--------|
-| I — Foundation, Environment & CI | 01-08 | 56 | In progress — 6/8 phases |
+| I — Foundation, Environment & CI | 01-08 | 56 | In progress — 7/8 phases |
 | II — Data Layer & Audit | 09-22 | 98 | Not started |
 | III — Signal Preprocessing | 23-29 | 49 | Not started |
 | 🔴 **MEGA TEST 1** — Data & Preprocessing Integrity | **30** | **7** | Not started |
