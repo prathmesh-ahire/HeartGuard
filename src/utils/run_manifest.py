@@ -27,7 +27,7 @@ import socket
 import subprocess
 import sys
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any
@@ -97,7 +97,7 @@ def package_versions() -> dict[str, str | None]:
 
 def _run_git(args: list[str]) -> str | None:
     try:
-        result = subprocess.run(  # noqa: S603
+        result = subprocess.run(
             ["git", *args],
             cwd=str(PROJECT_ROOT),
             capture_output=True,
@@ -191,7 +191,7 @@ class RunManifest:
     ) -> None:
         from src.utils.seed import GLOBAL_SEED, seed_state
 
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         self.run_id = now.strftime("%Y%m%dT%H%M%SZ") + "-" + uuid.uuid4().hex[:8]
         self.name = name
         self.started_utc = now.isoformat()
@@ -201,7 +201,9 @@ class RunManifest:
         self.git = git_info()
         self.environment = environment_info()
         self.packages = package_versions()
-        self.config_snapshot = config_snapshot if config_snapshot is not None else _snapshot_configs()
+        self.config_snapshot = (
+            config_snapshot if config_snapshot is not None else _snapshot_configs()
+        )
         self.timings: dict[str, float] = {}
         self.artifacts: list[str] = []
         self.extra: dict[str, Any] = {}
@@ -288,13 +290,13 @@ class RunManifest:
         runs.append(self.to_dict())
         existing["runs"] = runs
         existing["schema"] = SCHEMA_VERSION
-        existing["updated_utc"] = datetime.now(timezone.utc).isoformat()
+        existing["updated_utc"] = datetime.now(UTC).isoformat()
         save_json(existing, self.path)
         return self.path
 
     def finish(self, status: str = "completed") -> Path:
         self.status = status
-        self.finished_utc = datetime.now(timezone.utc).isoformat()
+        self.finished_utc = datetime.now(UTC).isoformat()
         started = datetime.fromisoformat(self.started_utc)
         finished = datetime.fromisoformat(self.finished_utc)
         self.timings["_total_run"] = round((finished - started).total_seconds(), 6)

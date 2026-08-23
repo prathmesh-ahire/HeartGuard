@@ -33,7 +33,6 @@ import pytest
 
 from src.utils import constants as K
 
-
 # ---------------------------------------------------------------------------
 # task and dataset identity (T05.1)
 # ---------------------------------------------------------------------------
@@ -311,5 +310,7 @@ def test_label_maps_cannot_be_mutated_at_runtime():
 
 
 def test_dataset_info_is_frozen():
-    with pytest.raises(Exception):
+    import dataclasses
+
+    with pytest.raises((dataclasses.FrozenInstanceError, AttributeError)):
         K.DATASETS["D1"].native_fs = 8000              # type: ignore[misc]

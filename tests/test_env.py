@@ -42,6 +42,12 @@ IMPORT_NAME = {
 
 PIN_RE = re.compile(r"^([A-Za-z0-9_.\-]+)(?:\[[^\]]+\])?==(\S+)$")
 
+# Stub-only distributions ship type information for mypy and have no importable
+# runtime module at all. They must still be installed at the pinned version --
+# CI type-checks against them -- but asserting they import would be asserting
+# something that is false by design.
+STUB_ONLY = {"types-PyYAML"}
+
 EXPECTED_PYTHON = "3.11.9"
 
 
@@ -139,6 +145,8 @@ def test_pinned_package_is_installed_at_that_version(source, dist, pin):
     ("source", "dist", "pin"), ALL_PINS, ids=PIN_IDS
 )
 def test_pinned_package_imports(source, dist, pin):
+    if dist in STUB_ONLY:
+        pytest.skip(f"{dist} is a stub-only distribution with no runtime module")
     module = IMPORT_NAME.get(dist, dist.replace("-", "_"))
     try:
         __import__(module)
@@ -223,3 +231,12 @@ def test_no_cuda_is_expected_not_a_failure():
     import xgboost
 
     assert xgboost.__version__, "xgboost must work on CPU"
+
+
+def test_stub_only_distributions_are_installed():
+    """They have no runtime module, but mypy in CI needs them present."""
+    for dist in STUB_ONLY:
+        try:
+            version(dist)
+        except PackageNotFoundError:
+            pytest.fail(f"stub package {dist} is not installed; mypy in CI will differ")

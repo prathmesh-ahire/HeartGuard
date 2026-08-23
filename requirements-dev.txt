@@ -8,3 +8,8 @@
 
 pytest==9.1.1
 pytest-cov==7.1.0
+
+# Linting and type checking (T08.3). Run over src/ in CI on every push.
+ruff==0.16.4
+mypy==2.3.1
+types-PyYAML==6.0.12.20260815

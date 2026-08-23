@@ -605,12 +605,16 @@ def _validate_experiments(data: dict) -> list[str]:
             splits = spec.get("n_splits")
             repeats = spec.get("n_repeats", 1)
             total = spec.get("total_folds")
-            if isinstance(splits, int) and isinstance(repeats, int) and isinstance(total, int):
-                if splits * repeats != total:
-                    problems.append(
-                        "cv_schemes." + str(scheme_id) + ": n_splits x n_repeats = "
-                        + str(splits * repeats) + " but total_folds is " + str(total)
-                    )
+            if (
+                isinstance(splits, int)
+                and isinstance(repeats, int)
+                and isinstance(total, int)
+                and splits * repeats != total
+            ):
+                problems.append(
+                    "cv_schemes." + str(scheme_id) + ": n_splits x n_repeats = "
+                    + str(splits * repeats) + " but total_folds is " + str(total)
+                )
 
     if isinstance(experiments, dict):
         for exp_id, spec in experiments.items():

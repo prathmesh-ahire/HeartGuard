@@ -15,6 +15,7 @@ system clock being adjusted mid-run.
 
 from __future__ import annotations
 
+import contextlib
 import functools
 import time
 from collections.abc import Callable, Iterator
@@ -41,14 +42,13 @@ def format_duration(seconds: float) -> str:
 
 def _record(label: str, seconds: float) -> None:
     """Write a duration into the active manifest, if there is one."""
-    try:
+    # Instrumentation must never break the work it is measuring.
+    with contextlib.suppress(Exception):
         from src.utils.run_manifest import current_run
 
         run = current_run()
         if run is not None:
             run.record_timing(label, seconds)
-    except Exception:  # noqa: BLE001 - instrumentation must never break the work
-        pass
 
 
 class Stopwatch:
@@ -101,15 +101,13 @@ def timer(
         if record:
             _record(key, elapsed)
         if log:
-            try:
+            with contextlib.suppress(Exception):
                 from src.utils.logging_setup import get_logger
 
                 logger = get_logger("pvmepcg.timing")
                 getattr(logger, level, logger.info)(
                     key + " took " + format_duration(elapsed)
                 )
-            except Exception:  # noqa: BLE001
-                pass
 
 
 def timed(

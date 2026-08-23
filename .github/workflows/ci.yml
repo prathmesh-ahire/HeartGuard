@@ -1,0 +1,216 @@
+# PV-MEPCG / PulseVision — continuous integration (Phase 08)
+#
+# ============================================================================
+# WHAT THIS CI CAN AND CANNOT PROVE  (T08.5 — read this before trusting a green
+# tick, and before adding a check that assumes otherwise)
+# ============================================================================
+#
+# The 1.3 GB `dataset/` tree is gitignored and NEVER reaches GitHub. Every
+# data-dependent test is therefore excluded here BY DESIGN, not by accident:
+# the `needs_data` marker auto-skips when `dataset/` is absent, and the pytest
+# job additionally deselects those tests with `-m "not needs_data"` so the
+# exclusion is explicit in the log rather than inferred from a skip count.
+#
+# CI PROVES:
+#   * the package imports on a clean machine, from the pinned requirements
+#     alone — catching an import that only works because of something left
+#     installed locally
+#   * every pinned version actually resolves and installs
+#   * the logic tests pass (label vocabularies, config validation, atomic IO,
+#     the synthetic-signal harness)
+#   * ruff and mypy are clean over src/
+#   * from Part X: the frontend builds and contains no hand-typed metric
+#
+# CI PROVES NOTHING ABOUT:
+#   * behaviour on real audio — resampling, filtering, feature extraction,
+#     every count and every metric
+#   * fold safety, subject leakage, or any result
+#   * anything requiring the four dataset families
+#
+# That evidence comes from the phase `[TEST]` gates and the five MEGA TEST
+# phases (29, 52, 76, 104, 120), which run locally against the real files. A
+# green tick here is a statement about the code, never about the science.
+#
+# ============================================================================
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# A superseded run is wasted compute; cancel it when a newer commit arrives.
+# Never cancel on main — those runs are the record of what was pushed.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+permissions:
+  contents: read
+
+env:
+  PYTHON_VERSION: "3.11"
+  # Determinism: set BEFORE the interpreter starts, which is the only point at
+  # which it has any effect (see src/utils/seed.py).
+  PYTHONHASHSEED: "42"
+
+jobs:
+  # --------------------------------------------------------------------------
+  # T08.2 — tests
+  # --------------------------------------------------------------------------
+  tests:
+    name: Tests (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-extra.txt
+            requirements-api.txt
+            requirements-report.txt
+            requirements-dev.txt
+
+      - name: Install requirements
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install \
+            -r requirements.txt \
+            -r requirements-extra.txt \
+            -r requirements-api.txt \
+            -r requirements-report.txt \
+            -r requirements-dev.txt
+
+      - name: Confirm the dataset is absent (it must never reach CI)
+        run: |
+          if [ -d dataset ] && [ -n "$(ls -A dataset 2>/dev/null)" ]; then
+            echo "::error::dataset/ is present in CI. The 1.3 GB corpus must"
+            echo "::error::never be committed. Check .gitignore before anything else."
+            exit 1
+          fi
+          echo "dataset/ absent, as expected — needs_data tests will be excluded"
+
+      - name: Run tests
+        # -m "not needs_data" makes the exclusion explicit in the log. The
+        # marker would auto-skip them anyway with dataset/ absent; saying it
+        # twice means a future change to either mechanism cannot silently
+        # start running tests that have no data to run against.
+        run: pytest -m "not needs_data" --cov=src --cov-report=term-missing
+
+      - name: Summarise what was NOT proven
+        if: always()
+        run: |
+          {
+            echo "### What this run did not prove"
+            echo ""
+            echo "\`dataset/\` is gitignored and absent here, so every"
+            echo "data-dependent test was excluded. Nothing in this run says"
+            echo "anything about behaviour on real audio, fold safety, or any"
+            echo "metric. That evidence comes from the local phase gates."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # --------------------------------------------------------------------------
+  # T08.3 — lint and type check
+  # --------------------------------------------------------------------------
+  quality:
+    name: Lint and type check
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+
+      - name: Install requirements
+        # mypy needs the runtime packages present to resolve real signatures;
+        # installing only requirements-dev.txt would type-check against stubs
+        # that do not match what the project actually runs.
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: ruff
+        run: ruff check src/ tests/ scripts/ conftest.py
+
+      - name: ruff format check
+        run: ruff format --check --diff src/ tests/ scripts/ conftest.py
+        continue-on-error: true   # advisory: formatting is not yet enforced
+
+      - name: mypy
+        run: mypy
+
+  # --------------------------------------------------------------------------
+  # T08.4 — frontend (activates from Part X; skips cleanly until then)
+  # --------------------------------------------------------------------------
+  frontend:
+    name: Frontend build and metric guard rail
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Detect whether the frontend exists yet
+        id: detect
+        run: |
+          if [ -f frontend/package.json ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+            echo "frontend/package.json found — building"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "frontend/package.json absent — Part X has not started; skipping"
+          fi
+
+      - name: Set up Node LTS
+        if: steps.detect.outputs.present == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install and build
+        if: steps.detect.outputs.present == 'true'
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
+
+      - name: Set up Python for the guard rail
+        if: steps.detect.outputs.present == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: No hard-coded metrics
+        # The rule that matters more than any other: the client never computes
+        # and never declares a metric. This grep-based check fails the build on
+        # any numeric metric literal in frontend/app/ or frontend/components/.
+        # It exists because a parallel implementation of this same brief shipped
+        # a 95.82% PhysioNet result its pipeline never produced.
+        if: steps.detect.outputs.present == 'true'
+        run: python scripts/07_check_no_hardcoded_metrics.py
+
+      - name: Report skip
+        if: steps.detect.outputs.present != 'true'
+        run: |
+          echo "Frontend job skipped: Part X has not started." >> "$GITHUB_STEP_SUMMARY"

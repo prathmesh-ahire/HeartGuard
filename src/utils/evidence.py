@@ -29,9 +29,10 @@ each other about which file is current.
 
 from __future__ import annotations
 
+import contextlib
 import csv
 import os
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -91,12 +92,14 @@ def read_evidence(path: str | os.PathLike | None = None) -> list[dict[str, str]]
 
 
 def _write_rows(rows: list[dict[str, str]], target: Path) -> None:
-    with atomic_path(target, suffix=".csv") as tmp:
-        with tmp.open("w", encoding="utf-8", newline="") as fh:
-            writer = csv.DictWriter(fh, fieldnames=EVIDENCE_COLUMNS)
-            writer.writeheader()
-            for row in rows:
-                writer.writerow({col: row.get(col, "") for col in EVIDENCE_COLUMNS})
+    with (
+        atomic_path(target, suffix=".csv") as tmp,
+        tmp.open("w", encoding="utf-8", newline="") as fh,
+    ):
+        writer = csv.DictWriter(fh, fieldnames=EVIDENCE_COLUMNS)
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({col: row.get(col, "") for col in EVIDENCE_COLUMNS})
 
 
 def register_evidence(
@@ -135,7 +138,7 @@ def register_evidence(
         "filename": _relative(artifact),
         "source_data": _relative(source_data) if source_data else "",
         "command": command,
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
         "status": status,
     }
 
@@ -143,14 +146,14 @@ def register_evidence(
     rows.append(row)
     _write_rows(rows, target)
 
-    try:
+    # Attaching to the manifest is best-effort: a manifest problem must not
+    # lose an artifact registration that already succeeded on disk.
+    with contextlib.suppress(Exception):
         from src.utils.run_manifest import current_run
 
         run = current_run()
         if run is not None:
             run.record_artifact(row["filename"])
-    except Exception:  # noqa: BLE001
-        pass
 
     return row
 

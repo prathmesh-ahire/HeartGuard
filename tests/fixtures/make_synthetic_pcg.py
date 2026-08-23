@@ -115,12 +115,12 @@ def make_synthetic_pcg(
         raise ValueError("systole_fraction must be in (0, 1)")
 
     rng = np.random.default_rng(seed)
-    n = int(round(duration_sec * fs))
+    n = round(duration_sec * fs)
     signal = np.zeros(n, dtype=np.float64)
 
     cycle_sec = 60.0 / heart_rate_bpm
-    s1_n = max(1, int(round(s1_width_sec * fs)))
-    s2_n = max(1, int(round(s2_width_sec * fs)))
+    s1_n = max(1, round(s1_width_sec * fs))
+    s2_n = max(1, round(s2_width_sec * fs))
     s1_kernel = _burst(s1_n, fs, s1_freq_hz, s1_width_sec, rng)
     s2_kernel = _burst(s2_n, fs, s2_freq_hz, s2_width_sec, rng)
 
@@ -137,7 +137,7 @@ def make_synthetic_pcg(
             (0.0, s1_kernel, s1_times, 1.0),
             (systole_fraction * cycle_sec, s2_kernel, s2_times, 0.7),
         ):
-            idx = int(round((start + offset) * fs))
+            idx = round((start + offset) * fs)
             if idx >= n:
                 continue
             end = min(idx + kernel.size, n)
@@ -182,7 +182,7 @@ def make_edge_case_signals(fs: int = DEFAULT_FS) -> dict[str, np.ndarray]:
     constant signal whose z-score normalization divides by zero, a clipped
     signal, a pure DC offset.
     """
-    n_short = int(round(REAL_MIN_DURATION_SEC * fs))
+    n_short = round(REAL_MIN_DURATION_SEC * fs)
     return {
         # 0.76 s -- the shortest real record. Below what a 5-level db4
         # decomposition or an MFCC delta window wants.

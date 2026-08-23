@@ -245,4 +245,6 @@ def load_pickle(path: str | os.PathLike, *, use_joblib: bool = True) -> Any:
 
         return joblib.load(path)
     with Path(path).open("rb") as fh:
-        return pickle.load(fh)
+        # Deserializing only artifacts this project wrote into models_saved/.
+        # No untrusted input reaches this path.
+        return pickle.load(fh)  # noqa: S301

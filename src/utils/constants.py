@@ -33,9 +33,10 @@ be mutated by accident halfway through a run.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass
 from types import MappingProxyType
-from typing import Any, Mapping
+from typing import Any
 
 __all__ = [
     "DatasetInfo",
@@ -324,7 +325,7 @@ def all_namespaced_ids() -> tuple[str, ...]:
     )
 
 
-def map_physionet_reference(value: int) -> dict[str, Any]:
+def map_physionet_reference(value: object) -> dict[str, Any]:
     """Map a PhysioNet REFERENCE.csv value to the binary label space (T05.2).
 
     Returns the mapped code alongside the original value, so the raw -1/1 is
@@ -334,8 +335,13 @@ def map_physionet_reference(value: int) -> dict[str, Any]:
     # a confident "abnormal". A float is accepted only when it is exactly
     # integral -- pandas reads a REFERENCE.csv column as float64 whenever the
     # column contains a NaN, so -1.0 is legitimate and must still work.
+    # `True == 1` in Python, so a bool would otherwise map straight to
+    # "abnormal". ValueError rather than TypeError keeps one exception type for
+    # every invalid value, which is simpler for callers than discriminating.
     if isinstance(value, bool):
-        raise ValueError("PhysioNet reference value must not be a bool: " + repr(value))
+        raise ValueError(  # noqa: TRY004
+            "PhysioNet reference value must not be a bool: " + repr(value)
+        )
     if isinstance(value, float):
         if not value.is_integer():
             raise ValueError(
@@ -346,8 +352,11 @@ def map_physionet_reference(value: int) -> dict[str, Any]:
     elif isinstance(value, int):
         raw = int(value)
     else:
+        # numpy scalars land here: np.int64 is not a Python int and np.float64
+        # is, confusingly, a float subclass caught above. Anything without a
+        # usable integer conversion is rejected rather than guessed at.
         try:
-            raw = int(value)
+            raw = int(value)  # type: ignore[call-overload]
         except (TypeError, ValueError) as exc:
             raise ValueError(
                 "PhysioNet reference value is not an integer: " + repr(value)

@@ -1,5 +1,7 @@
 # HeartGuard — PV-MEPCG / PulseVision
 
+[![CI](https://github.com/prathmesh-ahire/HeartGuard/actions/workflows/ci.yml/badge.svg)](https://github.com/prathmesh-ahire/HeartGuard/actions/workflows/ci.yml)
+
 **Framework name:** PV-MEPCG / PulseVision
 **Repository name:** HeartGuard
 
@@ -128,6 +130,28 @@ that Node LTS and npm resolve. Exits nonzero on any failure.
 ### 5. Run the pipeline
 
 _Placeholder — entry points land in Part IX._
+
+## What CI proves — and what it does not
+
+The badge above turns green on every push. It is a statement about the **code**,
+never about the **science**.
+
+`dataset/` is 1.3 GB, gitignored, and never reaches GitHub. Every data-dependent
+test is therefore excluded in CI by design: the `needs_data` marker auto-skips
+when `dataset/` is absent, and the workflow additionally deselects those tests
+with `-m "not needs_data"` so the exclusion is explicit in the log rather than
+inferred from a skip count.
+
+| CI proves | CI proves nothing about |
+|---|---|
+| The package imports on a clean machine from the pinned requirements alone | Behaviour on real audio — resampling, filtering, feature extraction |
+| Every pinned version resolves and installs | Any count, any metric, any result |
+| Logic tests pass: label vocabularies, config validation, atomic IO, the synthetic-signal harness | Fold safety and subject leakage |
+| `ruff` and `mypy` are clean over `src/` | Anything needing the four dataset families |
+| From Part X: the frontend builds and contains no hand-typed metric | |
+
+That second column is covered by the phase `[TEST]` gates and the five MEGA TEST
+phases, which run locally against the real files.
 
 ## Reproducibility
 

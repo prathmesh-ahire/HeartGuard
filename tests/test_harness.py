@@ -22,7 +22,6 @@ from tests.fixtures.make_synthetic_pcg import (
     make_synthetic_pcg,
 )
 
-
 # ---------------------------------------------------------------------------
 # synthetic generator (T06.3)
 # ---------------------------------------------------------------------------
@@ -109,7 +108,7 @@ def test_edge_case_signals_are_all_present(edge_case_signals):
 
 def test_shortest_real_matches_the_audited_minimum(edge_case_signals):
     """0.76 s at 2 kHz = 1,520 samples -- below what a 5-level db4 wants."""
-    assert edge_case_signals["shortest_real"].size == int(round(0.76 * DEFAULT_FS))
+    assert edge_case_signals["shortest_real"].size == round(0.76 * DEFAULT_FS)
     assert duration_extremes()["min_sec"] == 0.76
     assert duration_extremes()["max_sec"] == 122.0
 

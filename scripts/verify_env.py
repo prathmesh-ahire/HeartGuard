@@ -85,7 +85,10 @@ def parse_requirements(path: Path) -> list[tuple[str, str]]:
             continue
         match = PIN_RE.match(line)
         if match is None:
-            fail(path.name + ": cannot parse pin " + repr(line) + " (every line must be name==version)")
+            fail(
+                path.name + ": cannot parse pin " + repr(line)
+                + " (every line must be name==version)"
+            )
             continue
         pins.append((match.group(1), match.group(2)))
     return pins
@@ -152,7 +155,10 @@ def check_imports() -> None:
         try:
             __import__(module)
         except Exception as exc:  # noqa: BLE001 - any import error is a failure here
-            fail("import " + module + " (" + dist + ") raised " + type(exc).__name__ + ": " + str(exc))
+            fail(
+                "import " + module + " (" + dist + ") raised "
+                + type(exc).__name__ + ": " + str(exc)
+            )
         else:
             ok("import " + module)
 
@@ -163,8 +169,8 @@ def run_tool(args: list[str]) -> str | None:
     if exe is None:
         return None
     try:
-        result = subprocess.run(  # noqa: S603
-            [exe] + args[1:], capture_output=True, text=True, timeout=60, check=False
+        result = subprocess.run(
+            [exe, *args[1:]], capture_output=True, text=True, timeout=60, check=False
         )
     except (OSError, subprocess.TimeoutExpired):
         return None
