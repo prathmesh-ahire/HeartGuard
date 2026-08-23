@@ -52,7 +52,10 @@ permissions:
   contents: read
 
 env:
-  PYTHON_VERSION: "3.11"
+  # The exact locked version, not "3.11". setup-python resolves "3.11" to the
+  # latest patch, which would not be the version this project is pinned to --
+  # and tests/test_env.py asserts the exact version on purpose.
+  PYTHON_VERSION: "3.11.9"
   # Determinism: set BEFORE the interpreter starts, which is the only point at
   # which it has any effect (see src/utils/seed.py).
   PYTHONHASHSEED: "42"
@@ -67,7 +70,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.11"]
+        python-version: ["3.11.9"]
 
     steps:
       - uses: actions/checkout@v4
@@ -108,7 +111,38 @@ jobs:
         # marker would auto-skip them anyway with dataset/ absent; saying it
         # twice means a future change to either mechanism cannot silently
         # start running tests that have no data to run against.
-        run: pytest -m "not needs_data" --cov=src --cov-report=term-missing
+        run: >
+          pytest -m "not needs_data"
+          --cov=src --cov-report=term-missing
+          --junitxml=junit.xml
+
+      - name: Surface failures as annotations
+        # Raw job logs need an authenticated token to fetch, but annotations are
+        # readable from the public API. Without this, a red build reports only
+        # "Process completed with exit code 1" to anyone without log access --
+        # which is exactly how the first failure of this workflow was debugged
+        # blind. Emitting ::error:: lines makes the failing test names visible.
+        if: failure()
+        run: |
+          python - <<'PY'
+          import xml.etree.ElementTree as ET
+          from pathlib import Path
+
+          path = Path("junit.xml")
+          if not path.is_file():
+              print("::error::pytest produced no junit.xml — it failed before collection")
+              raise SystemExit(0)
+
+          root = ET.parse(path).getroot()
+          for case in root.iter("testcase"):
+              for kind in ("failure", "error"):
+                  node = case.find(kind)
+                  if node is None:
+                      continue
+                  name = f"{case.get('classname', '')}::{case.get('name', '')}"
+                  detail = " ".join((node.get("message") or "").split())[:400]
+                  print(f"::error title={kind}::{name} — {detail}")
+          PY
 
       - name: Summarise what was NOT proven
         if: always()
