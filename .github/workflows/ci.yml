@@ -81,21 +81,21 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: pip
           cache-dependency-path: |
-            requirements.txt
-            requirements-extra.txt
-            requirements-api.txt
-            requirements-report.txt
-            requirements-dev.txt
+            requirements/base.txt
+            requirements/extra.txt
+            requirements/api.txt
+            requirements/report.txt
+            requirements/dev.txt
 
       - name: Install requirements
         run: |
           python -m pip install --upgrade pip setuptools wheel
           python -m pip install \
-            -r requirements.txt \
-            -r requirements-extra.txt \
-            -r requirements-api.txt \
-            -r requirements-report.txt \
-            -r requirements-dev.txt
+            -r requirements/base.txt \
+            -r requirements/extra.txt \
+            -r requirements/api.txt \
+            -r requirements/report.txt \
+            -r requirements/dev.txt
 
       - name: Confirm the dataset is absent (it must never reach CI)
         run: |
@@ -172,16 +172,16 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: pip
           cache-dependency-path: |
-            requirements.txt
-            requirements-dev.txt
+            requirements/base.txt
+            requirements/dev.txt
 
       - name: Install requirements
         # mypy needs the runtime packages present to resolve real signatures;
-        # installing only requirements-dev.txt would type-check against stubs
+        # installing only requirements/dev.txt would type-check against stubs
         # that do not match what the project actually runs.
         run: |
           python -m pip install --upgrade pip setuptools wheel
-          python -m pip install -r requirements.txt -r requirements-dev.txt
+          python -m pip install -r requirements/base.txt -r requirements/dev.txt
 
       - name: ruff
         run: ruff check src/ tests/ scripts/ conftest.py

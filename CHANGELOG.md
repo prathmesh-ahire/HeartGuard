@@ -20,6 +20,13 @@ gate has actually passed.
 
 ---
 
+## Housekeeping — root reorganisation (before Part II)
+**Gate:** ruff clean, mypy clean, 136 passed / 2 skipped, verify_env PASSED
+**Added:** `pyproject.toml` (ruff + mypy + pytest config consolidated), `requirements/` (base, extra, api, report, dev)
+**Changed:** `.github/workflows/ci.yml`, `scripts/verify_env.py` (now covers all five requirements files, plus a STUB_ONLY exemption), `src/utils/run_manifest.py`, `tests/test_env.py`, `README.md`, `CLAUDE.md`
+**Removed:** `ruff.toml`, `mypy.ini`, `pytest.ini` (merged into `pyproject.toml`)
+**Notes:** Root went from 14 loose files to 7. `conftest.py` must stay at root — pytest only honours `pytest_addoption` in the rootdir conftest. `report.log` is written by `pyswarms` on import, not by this project; it stays gitignored. See `Docs/note.md`.
+
 ## Phase 08 — Continuous Integration
 **Gate:** T08.7 — CI has gone red on a real failure (run #1) and green after the fix (runs #2, #3) — PASS
 **Added:** `.github/workflows/ci.yml` (tests / quality / frontend jobs), `requirements-dev.txt`, `ruff.toml`, `mypy.ini`, CI badge in `README.md`, `.gitattributes`

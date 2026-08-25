@@ -22,11 +22,11 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 
 REQ_FILES = (
-    "requirements.txt",
-    "requirements-extra.txt",
-    "requirements-api.txt",
-    "requirements-report.txt",
-    "requirements-dev.txt",
+    "requirements/base.txt",
+    "requirements/extra.txt",
+    "requirements/api.txt",
+    "requirements/report.txt",
+    "requirements/dev.txt",
 )
 
 # Distribution name -> importable module name, where the two differ.

@@ -55,10 +55,10 @@ SCHEMA_VERSION = 2
 # Distributions recorded in every manifest. Sourced from the pinned requirements
 # so the manifest reflects what the project declares, not an arbitrary subset.
 _REQ_FILES = (
-    "requirements.txt",
-    "requirements-extra.txt",
-    "requirements-api.txt",
-    "requirements-report.txt",
+    "requirements/base.txt",
+    "requirements/extra.txt",
+    "requirements/api.txt",
+    "requirements/report.txt",
 )
 
 

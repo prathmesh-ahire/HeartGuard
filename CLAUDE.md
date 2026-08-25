@@ -37,7 +37,7 @@ These are not interchangeable. Do not write "HeartGuard" into a paper table capt
 - **Node LTS** required to build the frontend (not to run it — `frontend/out/` is committed)
 - **CPU only** — this machine has no CUDA GPU. Any task that assumes a GPU is wrong; say so rather than working around it silently.
 
-Pin every version in `requirements.txt` and commit `package-lock.json`. Before adding a new Python dependency, check it actually installs on Windows + Python 3.11 with no compiler toolchain — several audio and optimization packages ship broken or source-only wheels for this combination.
+Pin every version in `requirements/` and commit `package-lock.json`. Before adding a new Python dependency, check it actually installs on Windows + Python 3.11 with no compiler toolchain — several audio and optimization packages ship broken or source-only wheels for this combination.
 
 ## The frontend rule that matters more than any other
 

@@ -102,15 +102,15 @@ Confirm the prompt shows `(.venv)`, and that
 
 ```bash
 python -m pip install --upgrade pip setuptools wheel
-python -m pip install -r requirements.txt -r requirements-extra.txt -r requirements-api.txt -r requirements-report.txt
+python -m pip install -r requirements/base.txt -r requirements/extra.txt -r requirements/api.txt -r requirements/report.txt
 ```
 
 | File | Contents |
 |---|---|
-| `requirements.txt` | core pipeline — numerics, scikit-learn, librosa, DWT, plotting |
-| `requirements-extra.txt` | XGBoost / LightGBM, Bayesian / GA / PSO search, SHAP, statsmodels |
-| `requirements-api.txt` | FastAPI inference service (Part X) |
-| `requirements-report.txt` | .docx / .xlsx / static-image generation (Part IX) |
+| `requirements/base.txt` | core pipeline — numerics, scikit-learn, librosa, DWT, plotting |
+| `requirements/extra.txt` | XGBoost / LightGBM, Bayesian / GA / PSO search, SHAP, statsmodels |
+| `requirements/api.txt` | FastAPI inference service (Part X) |
+| `requirements/report.txt` | .docx / .xlsx / static-image generation (Part IX) |
 
 Every version is pinned. The pins were resolved by a real install on this
 Windows + Python 3.11.9 machine and each was verified to import — none are

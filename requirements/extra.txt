@@ -1,6 +1,6 @@
 # PV-MEPCG / PulseVision — optional models, search methods and explainability
 #
-# Install after requirements.txt. Every pin verified to import AND to run on
+# Install after requirements/base.txt. Every pin verified to import AND to run on
 # Windows + Python 3.11.9 (Phase 02). scikit-optimize in particular was
 # runtime-tested with a real BayesSearchCV fit against scikit-learn 1.9.0,
 # because it imports cleanly and then fails at .fit() on some sklearn versions.

@@ -29,11 +29,19 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 REQ_FILES = [
-    "requirements.txt",
-    "requirements-extra.txt",
-    "requirements-api.txt",
-    "requirements-report.txt",
+    "requirements/base.txt",
+    "requirements/extra.txt",
+    "requirements/api.txt",
+    "requirements/report.txt",
+    # dev.txt is included so a missing pytest/ruff/mypy is reported here rather
+    # than only surfacing when a phase gate or CI run fails to start.
+    "requirements/dev.txt",
 ]
+
+# Stub-only distributions ship type information for a *different* package and
+# have no importable module of their own. They are pinned like any other
+# dependency but must be exempted from the import check.
+STUB_ONLY = {"types-PyYAML"}
 
 EXPECTED_PYTHON = "3.11.9"
 
@@ -151,6 +159,9 @@ def check_imports() -> None:
     print(DIM + "[3/5] Every pinned package imports" + RESET)
     warnings.filterwarnings("ignore")
     for dist, _ in all_pins():
+        if dist in STUB_ONLY:
+            ok("skip " + dist + " (stub-only, no runtime module)")
+            continue
         module = IMPORT_NAME.get(dist, dist.replace("-", "_"))
         try:
             __import__(module)
