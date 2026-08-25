@@ -20,6 +20,12 @@ gate has actually passed.
 
 ---
 
+## Phases 12-13 — PASCAL loader, subject derivation and timing
+**Gate:** T12.7 / T13.7 — labelled counts land exactly on set_a = 124 (40/19/34/31) and set_b = 461 (46/95/320), the normalizer resolves 176/176 set_a and 656/656 set_b CSV rows, folder labels agree with both CSVs (conflict file written empty), every set_b record carries an auscultation site, and the "~149-record outlier group" is explained in writing — PASS (36 tests)
+**Added:** `src/data_loader/pascal.py`, `tests/test_pascal_loader.py`, `outputs/01_dataset_audit/pascal_label_conflicts.csv`, `pascal_subject_derivation.csv`
+**Changed:** `Docs/todo.md` (14 checkboxes), `Docs/note.md`
+**Notes:** T13.3's mystery outlier group is a **regex fallback bucket**, not a subject — 149 set_b files carry a noise qualifier (`normal_noisynormal_125_...`) that a double-underscore pattern cannot match. set_b has **165 subjects**, not the 167 in T13.1, which counts recording sessions; three subjects were recorded twice on one day. `set_a.csv` turns out to have its own filename mismatch on its 52 unlabelled rows. Full reasoning in `Docs/note.md`.
+
 ## Phases 09-11 — PhysioNet 2016 loader, annotation enrichment, subject derivation
 **Gate:** T09.7 / T10.7 / T11.7 — 3,541 rows loaded across 7 subsets, every WAV labelled and every label filed, `.hea` comments agree with `REFERENCE.csv` on all 3,240 training records (conflict file written empty), 3,153 appendix rows joined, 12 diagnosis categories populated, 87 unmatched records listed, every record carries a `subject_id` and training-b's 106 derived IDs match the native column record-for-record — PASS (35 tests)
 **Added:** `src/data_loader/physionet.py`, `tests/test_physionet_loader.py`, `outputs/01_dataset_audit/physionet_label_conflicts.csv`, `physionet_unannotated.csv`, `physionet_subject_derivation.csv`
