@@ -139,6 +139,7 @@ module = [
     "pyarrow.*",
     "librosa.*",
     "soundfile.*",
+    "soxr.*",
     "pywt.*",
     "numba.*",
     "sklearn.*",

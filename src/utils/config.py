@@ -283,7 +283,7 @@ def _resolve_paths(data: dict) -> None:
 # Allowed top-level keys per file. Anything else is a typo, not a feature.
 ALLOWED_TOP_LEVEL: dict[str, set[str]] = {
     "paths": {"project_root", "dataset", "cache", "outputs", "models_saved", "frontend"},
-    "signal": {"resample", "filter", "normalization", "quality", "framing", "cache"},
+    "signal": {"resample", "filter", "normalization", "quality", "framing", "cache", "integrity"},
     "features": {"expected_total", "failure_policy", "families", "extraction"},
     "models": {"global", "pipeline", "calibration", "models"},
     "experiments": {"defaults", "cv_schemes", "experiments"},
@@ -314,6 +314,11 @@ REQUIRED: dict[str, list[tuple[str, type | tuple[type, ...]]]] = {
         ("normalization.method", str),
         ("framing.frame_length", int),
         ("framing.hop_length", int),
+        ("integrity.silence_peak", (int, float)),
+        ("integrity.clipping_threshold", (int, float)),
+        ("integrity.content_hash_fs", int),
+        ("integrity.envelope_points", int),
+        ("integrity.near_duplicate_correlation", (int, float)),
     ],
     "features": [
         ("expected_total", int),

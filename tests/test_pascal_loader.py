@@ -249,11 +249,46 @@ def test_set_a_has_no_subject_information(table: Any) -> None:
     set_a = table[table["subset"] == pa.SET_A]
     assert len(set_a) == 176
     assert not set_a["subject_derived"].any()
-    assert set_a["subject_id"].nunique() == 176
     assert (set_a["session_id"] == "").all()
+
+    # 175 groups, not 176: one pair is the same audio filed under two class
+    # labels and shares a group so it cannot split across folds. Everything else
+    # is its own group, because a set_a filename carries only a timestamp.
+    assert set_a["subject_id"].nunique() == 175
     assert set(set_a["subject_pattern"]) == {
-        "set_a: timestamp-only filename -- record is its own group"
+        "set_a: timestamp-only filename -- record is its own group",
+        "set_a: same audio as another record under a different class label; "
+        "grouped so they cannot split across folds",
     }
+
+
+@pytest.mark.needs_data
+def test_the_duplicated_set_a_recording_shares_a_group(table: Any) -> None:
+    """One recording, two class labels, and no way to tell which is wrong.
+
+    Found by the Phase 17 near-duplicate scan: sample correlation 0.999978 and
+    identical length. Both records are kept -- the audited counts still hold and
+    the data cannot say which label is the error -- but they must never land on
+    opposite sides of a fold, because set_a has no other subject information.
+    """
+    pair = table[table["subject_id"] == "a_dup_201104021355"]
+    assert len(pair) == 2
+    assert set(pair["record_id"]) == {
+        "extrahls__201104021355",
+        "murmur__201104021355",
+    }
+    assert set(pair["class_folder"]) == {"extrahls", "murmur"}
+    assert pair["use_in_supervised"].all()
+
+    # The counts T12.6 asserts are unaffected -- nothing was dropped.
+    labelled = table[(table["subset"] == pa.SET_A) & table["use_in_supervised"]]
+    assert len(labelled) == 124
+
+    # The other same-timestamp pair is NOT grouped: different lengths and a
+    # sample correlation of -0.013 make it two recordings, not one.
+    other = table[table["record_id"].str.endswith("201106141148")]
+    assert len(other) == 2
+    assert other["subject_id"].nunique() == 2
 
 
 @pytest.mark.needs_data

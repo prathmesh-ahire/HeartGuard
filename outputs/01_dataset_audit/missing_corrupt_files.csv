@@ -1,0 +1,65 @@
+record_uid,dataset_source,task,problem,detail,file_path
+D2_set_a_Aunlabelledtest__201106120928,D2,,all_silent,peak=0.000274658 var=3.83355e-09 clipped_fraction=0,dataset/archive (2)/set_a/Aunlabelledtest__201106120928.wav
+D1_training-a_a0314,D1,,clipped,peak=1 var=0.321497 clipped_fraction=0.0902544,dataset/archive (3)/training-a/a0314.wav
+D1_training-a_a0315,D1,,clipped,peak=1 var=0.190601 clipped_fraction=0.0487645,dataset/archive (3)/training-a/a0315.wav
+D1_training-a_a0320,D1,,clipped,peak=1 var=0.0774374 clipped_fraction=0.0120512,dataset/archive (3)/training-a/a0320.wav
+D1_training-a_a0347,D1,,clipped,peak=1 var=0.137587 clipped_fraction=0.0362753,dataset/archive (3)/training-a/a0347.wav
+D1_training-e_e00066,D1,,clipped,peak=1 var=0.172962 clipped_fraction=0.0441483,dataset/archive (3)/training-e/e00066.wav
+D1_training-e_e00397,D1,,clipped,peak=0.999969 var=0.0685121 clipped_fraction=0.028104,dataset/archive (3)/training-e/e00397.wav
+D1_training-e_e00578,D1,,clipped,peak=1 var=0.131973 clipped_fraction=0.0397833,dataset/archive (3)/training-e/e00578.wav
+D1_training-e_e00873,D1,,clipped,peak=1 var=0.146313 clipped_fraction=0.0312386,dataset/archive (3)/training-e/e00873.wav
+D1_training-e_e00954,D1,,clipped,peak=1 var=0.147048 clipped_fraction=0.0496222,dataset/archive (3)/training-e/e00954.wav
+D1_training-e_e01069,D1,,clipped,peak=1 var=0.0233249 clipped_fraction=0.0120297,dataset/archive (3)/training-e/e01069.wav
+D1_training-e_e01178,D1,,clipped,peak=0.999969 var=0.0634563 clipped_fraction=0.0122226,dataset/archive (3)/training-e/e01178.wav
+D1_training-e_e01242,D1,,clipped,peak=1 var=0.145677 clipped_fraction=0.0357424,dataset/archive (3)/training-e/e01242.wav
+D1_training-e_e01358,D1,,clipped,peak=1 var=0.049888 clipped_fraction=0.0160362,dataset/archive (3)/training-e/e01358.wav
+D1_training-e_e01384,D1,,clipped,peak=1 var=0.0498145 clipped_fraction=0.0164743,dataset/archive (3)/training-e/e01384.wav
+D1_training-e_e01562,D1,,clipped,peak=1 var=0.0479494 clipped_fraction=0.0157898,dataset/archive (3)/training-e/e01562.wav
+D1_training-e_e01784,D1,,clipped,peak=1 var=0.0292183 clipped_fraction=0.013504,dataset/archive (3)/training-e/e01784.wav
+D1_training-e_e01923,D1,,clipped,peak=0.999939 var=0.0654542 clipped_fraction=0.0230605,dataset/archive (3)/training-e/e01923.wav
+D1_training-e_e02089,D1,,clipped,peak=1 var=0.0343737 clipped_fraction=0.0173673,dataset/archive (3)/training-e/e02089.wav
+D3_set_b_Bunlabelledtest__130_1306347376079_A,D3,,clipped,peak=1 var=0.0394023 clipped_fraction=0.010584,dataset/archive (2)/set_b/Bunlabelledtest__130_1306347376079_A.wav
+D3_set_b_Bunlabelledtest__170_1307970562729_D,D3,,clipped,peak=1 var=0.0475187 clipped_fraction=0.0110894,dataset/archive (2)/set_b/Bunlabelledtest__170_1307970562729_D.wav
+D3_set_b_Bunlabelledtest__171_1307971016233_C,D3,,clipped,peak=1 var=0.109957 clipped_fraction=0.016225,dataset/archive (2)/set_b/Bunlabelledtest__171_1307971016233_C.wav
+D3_set_b_Bunlabelledtest__189_1308075231945_C,D3,,clipped,peak=1 var=0.0326196 clipped_fraction=0.0118709,dataset/archive (2)/set_b/Bunlabelledtest__189_1308075231945_C.wav
+D3_set_b_Bunlabelledtest__235_1308749032454_C1,D3,,clipped,peak=1 var=0.0607128 clipped_fraction=0.019708,dataset/archive (2)/set_b/Bunlabelledtest__235_1308749032454_C1.wav
+D3_set_b_extrastole__179_1307990076841_C,D3,,clipped,peak=1 var=0.0475616 clipped_fraction=0.0169239,dataset/archive (2)/set_b/extrastole__179_1307990076841_C.wav
+D3_set_b_murmur__112_1306243000964_B,D3,,clipped,peak=1 var=0.0319772 clipped_fraction=0.0109369,dataset/archive (2)/set_b/murmur__112_1306243000964_B.wav
+D3_set_b_murmur__160_1307100683334_B,D3,,clipped,peak=1 var=0.133061 clipped_fraction=0.0159638,dataset/archive (2)/set_b/murmur__160_1307100683334_B.wav
+D3_set_b_murmur__193_1308078104592_C1,D3,,clipped,peak=1 var=0.106853 clipped_fraction=0.0135528,dataset/archive (2)/set_b/murmur__193_1308078104592_C1.wav
+D3_set_b_murmur__197_1308141235553_A,D3,,clipped,peak=1 var=0.129108 clipped_fraction=0.0221155,dataset/archive (2)/set_b/murmur__197_1308141235553_A.wav
+D3_set_b_normal__141_1306520154450_B,D3,,clipped,peak=1 var=0.0426734 clipped_fraction=0.0120427,dataset/archive (2)/set_b/normal__141_1306520154450_B.wav
+D3_set_b_normal__170_1307970562729_B,D3,,clipped,peak=1 var=0.0404611 clipped_fraction=0.0136017,dataset/archive (2)/set_b/normal__170_1307970562729_B.wav
+D3_set_b_normal__173_1307973611151_B,D3,,clipped,peak=1 var=0.0454244 clipped_fraction=0.0106915,dataset/archive (2)/set_b/normal__173_1307973611151_B.wav
+D3_set_b_normal__235_1308749032454_C,D3,,clipped,peak=1 var=0.0719237 clipped_fraction=0.0288083,dataset/archive (2)/set_b/normal__235_1308749032454_C.wav
+D3_set_b_normal_noisynormal_118_1306262335509_B,D3,,clipped,peak=1 var=0.0613521 clipped_fraction=0.0273676,dataset/archive (2)/set_b/normal_noisynormal_118_1306262335509_B.wav
+D3_set_b_normal_noisynormal_137_1306764999211_A1,D3,,clipped,peak=1 var=0.237192 clipped_fraction=0.143781,dataset/archive (2)/set_b/normal_noisynormal_137_1306764999211_A1.wav
+D3_set_b_normal_noisynormal_137_1306764999211_A2,D3,,clipped,peak=1 var=0.138135 clipped_fraction=0.0568714,dataset/archive (2)/set_b/normal_noisynormal_137_1306764999211_A2.wav
+D3_set_b_normal_noisynormal_188_1308074301731_A,D3,,clipped,peak=1 var=0.0587513 clipped_fraction=0.0359491,dataset/archive (2)/set_b/normal_noisynormal_188_1308074301731_A.wav
+D4_training_data_29378_MV,D4,,clipped,peak=1 var=0.142267 clipped_fraction=0.0513066,dataset/archive/training_data/training_data/29378_MV.wav
+D4_training_data_49704_MV,D4,,clipped,peak=1 var=0.0706232 clipped_fraction=0.0110513,dataset/archive/training_data/training_data/49704_MV.wav
+D4_training_data_49873_MV,D4,,clipped,peak=1 var=0.056111 clipped_fraction=0.0121368,dataset/archive/training_data/training_data/49873_MV.wav
+D4_training_data_49980_AV,D4,,clipped,peak=1 var=0.0475891 clipped_fraction=0.0244104,dataset/archive/training_data/training_data/49980_AV.wav
+D4_training_data_50001_AV,D4,,clipped,peak=1 var=0.0219156 clipped_fraction=0.0106063,dataset/archive/training_data/training_data/50001_AV.wav
+D4_training_data_50001_PV,D4,,clipped,peak=1 var=0.0486631 clipped_fraction=0.0193064,dataset/archive/training_data/training_data/50001_PV.wav
+D4_training_data_50056_AV,D4,,clipped,peak=1 var=0.0426115 clipped_fraction=0.0122115,dataset/archive/training_data/training_data/50056_AV.wav
+D4_training_data_50061_MV,D4,,clipped,peak=1 var=0.0352802 clipped_fraction=0.013365,dataset/archive/training_data/training_data/50061_MV.wav
+D4_training_data_50174_PV,D4,,clipped,peak=1 var=0.0506676 clipped_fraction=0.0135109,dataset/archive/training_data/training_data/50174_PV.wav
+D4_training_data_50174_TV,D4,,clipped,peak=1 var=0.0438808 clipped_fraction=0.0133929,dataset/archive/training_data/training_data/50174_TV.wav
+D4_training_data_50250_AV,D4,,clipped,peak=1 var=0.0380778 clipped_fraction=0.0161886,dataset/archive/training_data/training_data/50250_AV.wav
+D4_training_data_50291_AV,D4,,clipped,peak=1 var=0.0430281 clipped_fraction=0.0150544,dataset/archive/training_data/training_data/50291_AV.wav
+D4_training_data_50625_AV,D4,,clipped,peak=1 var=0.0504616 clipped_fraction=0.0163729,dataset/archive/training_data/training_data/50625_AV.wav
+D4_training_data_50631_AV,D4,,clipped,peak=1 var=0.0541032 clipped_fraction=0.0140517,dataset/archive/training_data/training_data/50631_AV.wav
+D4_training_data_50654_PV,D4,,clipped,peak=1 var=0.0429763 clipped_fraction=0.015709,dataset/archive/training_data/training_data/50654_PV.wav
+D4_training_data_50654_TV,D4,,clipped,peak=1 var=0.0395087 clipped_fraction=0.0119016,dataset/archive/training_data/training_data/50654_TV.wav
+D4_training_data_50787_MV,D4,,clipped,peak=1 var=0.0342258 clipped_fraction=0.0114734,dataset/archive/training_data/training_data/50787_MV.wav
+D4_training_data_68556_AV,D4,,clipped,peak=1 var=0.119492 clipped_fraction=0.0311611,dataset/archive/training_data/training_data/68556_AV.wav
+D4_training_data_68864_PV,D4,,clipped,peak=1 var=0.0345328 clipped_fraction=0.0132702,dataset/archive/training_data/training_data/68864_PV.wav
+D4_training_data_72288_PV,D4,,clipped,peak=1 var=0.104312 clipped_fraction=0.0436292,dataset/archive/training_data/training_data/72288_PV.wav
+D4_training_data_84736_MV,D4,,clipped,peak=1 var=0.142243 clipped_fraction=0.0192024,dataset/archive/training_data/training_data/84736_MV.wav
+D4_training_data_84798_AV,D4,,clipped,peak=1 var=0.027366 clipped_fraction=0.0101021,dataset/archive/training_data/training_data/84798_AV.wav
+D4_training_data_84984_MV,D4,,clipped,peak=1 var=0.153395 clipped_fraction=0.0614181,dataset/archive/training_data/training_data/84984_MV.wav
+D4_training_data_84984_PV,D4,,clipped,peak=1 var=0.0885303 clipped_fraction=0.0400964,dataset/archive/training_data/training_data/84984_PV.wav
+D4_training_data_85063_MV,D4,,clipped,peak=1 var=0.0939842 clipped_fraction=0.0352921,dataset/archive/training_data/training_data/85063_MV.wav
+D4_training_data_85087_TV,D4,,clipped,peak=1 var=0.160488 clipped_fraction=0.0478258,dataset/archive/training_data/training_data/85087_TV.wav
+D4_training_data_85155_AV,D4,,clipped,peak=1 var=0.0432585 clipped_fraction=0.011011,dataset/archive/training_data/training_data/85155_AV.wav

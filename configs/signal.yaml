@@ -71,3 +71,52 @@ cache:
   enabled: true
   format: "npy"
   hash_config: true            # cache key = record_uid + hash of this file
+
+# --- raw-file integrity and audit thresholds (Phases 16-18) -----------------
+# NOT part of the preprocessing contract. These thresholds describe the RAW
+# files on disk, before any resampling or filtering, and are used by the
+# dataset audit only.
+#
+# T27.3 note: when the preprocessed-signal cache key is built, hash the
+# resample / filter / normalization / framing sections only. Hashing this whole
+# file would make a change to an audit threshold invalidate every cached
+# preprocessed signal, which is unrelated work.
+integrity:
+  # T16.3 -- an all-silent or constant-value recording. Applied to raw samples
+  # scaled to [-1, 1].
+  #
+  # `silence_peak` is 1e-3 because that IS -60 dBFS, the same silence line
+  # `quality.silence_threshold_db` above already draws for the preprocessed
+  # signal. One definition of silence for the whole project, not two. An earlier
+  # draft used 1e-4 (-80 dBFS), chosen by eye, and it missed the one genuinely
+  # dead recording in the corpus: set_a's Aunlabelledtest__201106120928 peaks at
+  # -71 dBFS over its full 9 seconds.
+  silence_peak: 1.0e-03
+  constant_variance: 1.0e-12
+
+  # T16.4 -- full-scale samples. Shares its definition with quality.clipping_*
+  # above, which applies the same test to the preprocessed signal in Phase 26.
+  clipping_threshold: 0.99
+  clipping_ratio_flag: 0.01
+
+  # T16.2 -- a file shorter than this holds too few samples to be a recording
+  # at any of the three native rates; treated as truncated rather than short.
+  min_samples: 2
+
+  # T17.2 -- the canonical form an audio-content hash is computed on: mono,
+  # resampled to this rate, quantized to this many decimal places. Quantizing
+  # matters because two resamplers, or two library versions, will not agree in
+  # the last float bits on an otherwise identical signal.
+  content_hash_fs: 2000
+  content_hash_decimals: 5
+
+  # T17.4 -- near-duplicate detection. Envelopes are resampled to a fixed
+  # length so recordings of different durations remain comparable, then
+  # correlated within each dataset.
+  envelope_points: 256
+  near_duplicate_correlation: 0.98
+
+  # T18.3 -- robustness duration bands, in seconds.
+  duration_bands:
+    short_below: 5.0
+    long_above: 20.0

@@ -1,0 +1,5 @@
+dataset_source,dataset_name,original_fs,converted_fs,conversion,factor,n_records,n_supervised,total_hours
+D1,PhysioNet 2016,2000,2000,none,1.0,3541,3240,21.979
+D2,PASCAL set_a,44100,2000,decimation,22.05,176,124,0.3935
+D3,PASCAL set_b,4000,2000,decimation,2.0,656,461,1.1935
+D4,CirCor 2022,4000,2000,decimation,2.0,3163,3163,20.0941

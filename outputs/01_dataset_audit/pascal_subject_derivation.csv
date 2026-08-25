@@ -106,7 +106,7 @@ D2_set_a_extrahls__201103150114,set_a,extrahls__201103150114,extrahls_2011031501
 D2_set_a_extrahls__201103170134,set_a,extrahls__201103170134,extrahls_201103170134,set_a: timestamp-only filename -- record is its own group,a_extrahls__201103170134,,,,,False,True
 D2_set_a_extrahls__201103182227,set_a,extrahls__201103182227,extrahls_201103182227,set_a: timestamp-only filename -- record is its own group,a_extrahls__201103182227,,,,,False,True
 D2_set_a_extrahls__201103200218,set_a,extrahls__201103200218,extrahls_201103200218,set_a: timestamp-only filename -- record is its own group,a_extrahls__201103200218,,,,,False,True
-D2_set_a_extrahls__201104021355,set_a,extrahls__201104021355,extrahls_201104021355,set_a: timestamp-only filename -- record is its own group,a_extrahls__201104021355,,,,,False,True
+D2_set_a_extrahls__201104021355,set_a,extrahls__201104021355,extrahls_201104021355,set_a: same audio as another record under a different class label; grouped so they cannot split across folds,a_dup_201104021355,,,,,False,True
 D2_set_a_extrahls__201104140118,set_a,extrahls__201104140118,extrahls_201104140118,set_a: timestamp-only filename -- record is its own group,a_extrahls__201104140118,,,,,False,True
 D2_set_a_extrahls__201104270458,set_a,extrahls__201104270458,extrahls_201104270458,set_a: timestamp-only filename -- record is its own group,a_extrahls__201104270458,,,,,False,True
 D2_set_a_extrahls__201104270459,set_a,extrahls__201104270459,extrahls_201104270459,set_a: timestamp-only filename -- record is its own group,a_extrahls__201104270459,,,,,False,True
@@ -117,7 +117,7 @@ D2_set_a_murmur__201101180902,set_a,murmur__201101180902,murmur_201101180902,set
 D2_set_a_murmur__201102051443,set_a,murmur__201102051443,murmur_201102051443,set_a: timestamp-only filename -- record is its own group,a_murmur__201102051443,,,,,False,True
 D2_set_a_murmur__201102052338,set_a,murmur__201102052338,murmur_201102052338,set_a: timestamp-only filename -- record is its own group,a_murmur__201102052338,,,,,False,True
 D2_set_a_murmur__201103291548,set_a,murmur__201103291548,murmur_201103291548,set_a: timestamp-only filename -- record is its own group,a_murmur__201103291548,,,,,False,True
-D2_set_a_murmur__201104021355,set_a,murmur__201104021355,murmur_201104021355,set_a: timestamp-only filename -- record is its own group,a_murmur__201104021355,,,,,False,True
+D2_set_a_murmur__201104021355,set_a,murmur__201104021355,murmur_201104021355,set_a: same audio as another record under a different class label; grouped so they cannot split across folds,a_dup_201104021355,,,,,False,True
 D2_set_a_murmur__201104241315,set_a,murmur__201104241315,murmur_201104241315,set_a: timestamp-only filename -- record is its own group,a_murmur__201104241315,,,,,False,True
 D2_set_a_murmur__201104291843,set_a,murmur__201104291843,murmur_201104291843,set_a: timestamp-only filename -- record is its own group,a_murmur__201104291843,,,,,False,True
 D2_set_a_murmur__201106141148,set_a,murmur__201106141148,murmur_201106141148,set_a: timestamp-only filename -- record is its own group,a_murmur__201106141148,,,,,False,True

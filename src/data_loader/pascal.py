@@ -69,6 +69,7 @@ __all__ = [
     "EXPECTED_CLASS_COUNTS",
     "EXPECTED_LABELLED_TOTALS",
     "EXPECTED_UNLABELLED_COUNTS",
+    "SET_A_SHARED_SUBJECTS",
     "N_SET_B_SUBJECTS",
     "N_SET_B_SESSIONS",
     "N_NOISY_SET_B_FILES",
@@ -115,6 +116,27 @@ EXPECTED_CLASS_COUNTS: dict[str, dict[str, int]] = {
 }
 EXPECTED_LABELLED_TOTALS: dict[str, int] = {SET_A: 124, SET_B: 461}
 EXPECTED_UNLABELLED_COUNTS: dict[str, int] = {SET_A: 52, SET_B: 195}
+
+# Two set_a records that are the same audio under two different class labels.
+# Found by the Phase 17 near-duplicate scan (2026-08-25): identical length,
+# sample correlation 0.999978, maximum sample difference 4e-4 -- a re-encode of
+# one recording, not two recordings. Both label sources agree with themselves
+# (`Heartbeat_Sound/extrahls/` and `Heartbeat_Sound/murmur/`, and set_a.csv
+# likewise), so the dataset cannot say which of the two labels is the wrong one.
+#
+# They are kept -- deleting either would break the audited 124 (40/19/34/31) and
+# would mean asserting a label the data does not support -- but they share a
+# subject id so grouped CV can never place them on opposite sides of a fold.
+# set_a otherwise has no subject information at all (T13.4), which is precisely
+# why this pair would otherwise split. Decided with the user, 2026-08-25.
+#
+# The other same-timestamp set_a pair (murmur / normal __201106141148) is NOT a
+# duplicate: different lengths, sample correlation -0.013. A shared timestamp is
+# not by itself evidence of anything.
+SET_A_SHARED_SUBJECTS: dict[str, str] = {
+    "extrahls__201104021355": "a_dup_201104021355",
+    "murmur__201104021355": "a_dup_201104021355",
+}
 
 # T13.1 / T13.3 -- see the module docstring.
 N_SET_B_SUBJECTS = 165        # distinct people among the 461 labelled records
@@ -652,6 +674,19 @@ def derive_subject_pascal(record_id: str, dataset: str) -> SubjectDerivation:
     must never be described as subject-level.
     """
     if dataset == SET_A:
+        shared = SET_A_SHARED_SUBJECTS.get(record_id)
+        if shared is not None:
+            return SubjectDerivation(
+                subject_id=shared,
+                session_id="",
+                recording_location="",
+                location_repeat="",
+                pattern=(
+                    "set_a: same audio as another record under a different class "
+                    "label; grouped so they cannot split across folds"
+                ),
+                subject_derived=False,
+            )
         return SubjectDerivation(
             subject_id="a_" + record_id,
             session_id="",
