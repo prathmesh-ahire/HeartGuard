@@ -1,0 +1,74 @@
+patient_id,field,training_data_csv,patient_txt,authoritative
+36327,Age,Young Adult,Adolescent,patient_txt
+38337,Age,Infant,Child,patient_txt
+39403,Age,Infant,Child,patient_txt
+43852,Age,Infant,Child,patient_txt
+46532,Age,Infant,Child,patient_txt
+46579,Age,Infant,Child,patient_txt
+47002,Age,Infant,Child,patient_txt
+49595,Age,Infant,Child,patient_txt
+49598,Age,Infant,Child,patient_txt
+49638,Age,Infant,Child,patient_txt
+49832,Age,Infant,Child,patient_txt
+49850,Age,Infant,Child,patient_txt
+49959,Age,Infant,Child,patient_txt
+49966,Age,Infant,Child,patient_txt
+49970,Age,Infant,Child,patient_txt
+49989,Age,Infant,Child,patient_txt
+50017,Age,Young Adult,Adolescent,patient_txt
+50027,Age,Infant,Child,patient_txt
+50080,Age,Infant,Child,patient_txt
+50123,Age,Infant,Child,patient_txt
+50149,Age,Infant,Child,patient_txt
+50164,Age,Young Adult,Adolescent,patient_txt
+50174,Age,Infant,Child,patient_txt
+50204,Age,Infant,Child,patient_txt
+50214,Age,Infant,Child,patient_txt
+50244,Age,Young Adult,Adolescent,patient_txt
+50247,Age,Infant,Child,patient_txt
+50249,Age,Infant,Child,patient_txt
+50251,Age,Infant,Child,patient_txt
+50264,Age,Infant,Child,patient_txt
+50272,Age,Young Adult,Adolescent,patient_txt
+50291,Age,Infant,Child,patient_txt
+50631,Age,Infant,Child,patient_txt
+50644,Age,Infant,Child,patient_txt
+50671,Age,Infant,Child,patient_txt
+50768,Age,Infant,Child,patient_txt
+50787,Age,Infant,Child,patient_txt
+50797,Age,Infant,Child,patient_txt
+59536,Age,Infant,Child,patient_txt
+61117,Age,Infant,Child,patient_txt
+68213,Age,Young Adult,Adolescent,patient_txt
+68269,Age,Infant,Child,patient_txt
+68298,Age,Infant,Child,patient_txt
+68404,Age,Infant,Child,patient_txt
+68406,Age,Infant,Child,patient_txt
+68407,Age,Infant,Child,patient_txt
+68435,Age,Infant,Child,patient_txt
+68532,Age,Infant,Child,patient_txt
+68556,Age,Infant,Child,patient_txt
+68576,Age,Infant,Child,patient_txt
+68698,Age,Infant,Child,patient_txt
+68857,Age,Infant,Child,patient_txt
+68888,Age,Infant,Child,patient_txt
+69093,Age,Adolescent,Child,patient_txt
+75440,Age,Infant,Child,patient_txt
+77373,Age,Infant,Child,patient_txt
+78582,Age,Infant,Child,patient_txt
+81501,Age,Infant,Child,patient_txt
+84693,Age,Infant,Child,patient_txt
+84704,Age,Young Adult,Adolescent,patient_txt
+84721,Age,Infant,Child,patient_txt
+84755,Age,Infant,Child,patient_txt
+84760,Age,Infant,Child,patient_txt
+84762,Age,Infant,Child,patient_txt
+84824,Age,Infant,Child,patient_txt
+84894,Age,Infant,Child,patient_txt
+84912,Age,Infant,Child,patient_txt
+85010,Age,Infant,Child,patient_txt
+85198,Age,Infant,Child,patient_txt
+85226,Age,Infant,Child,patient_txt
+85230,Age,Infant,Child,patient_txt
+85322,Age,Infant,Child,patient_txt
+85336,Age,Infant,Child,patient_txt

@@ -20,6 +20,12 @@ gate has actually passed.
 
 ---
 
+## Phases 14-15 — CirCor loader, segmentation and integrity
+**Gate:** T14.7 / T15.7 — 942 patients, 3,163 recordings, murmur 695/179/68 and **outcome 486/456 parsed from the patient .txt files** (the CSV has no Outcome column), locations AV 800 / PV 766 / TV 732 / MV 861 / Phc 4; every one of the 3,162 real segmentations parses with states inside 0-4, times monotonic and within the recording to one sample, and the unsegmented recording is reported — PASS (30 tests, including the slow checksum pass)
+**Added:** `src/data_loader/circor.py`, `tests/test_circor_loader.py`, `outputs/01_dataset_audit/circor_demographics_conflicts.csv`, `circor_segmentation_summary.csv`, `circor_unsegmented.csv`, `circor_integrity.csv`, `cache/metadata/circor_segmentation.parquet` (gitignored)
+**Changed:** `Docs/todo.md` (14 checkboxes), `Docs/note.md`
+**Notes:** All 9,489 WAV/HEA/TSV files match their published SHA-256; all 942 patient `.txt` files do not — a stale manifest, not corruption. `RECORDS` and `SHA256SUMS.txt` resolve against the *middle* `training_data/` directory. `training_data.csv` and the txt files disagree about `Age` for 73 patients; the txt files are authoritative. One recording has no segmentation and one orphan segmentation has no recording — not adopted as each other. Full reasoning in `Docs/note.md`.
+
 ## Phases 12-13 — PASCAL loader, subject derivation and timing
 **Gate:** T12.7 / T13.7 — labelled counts land exactly on set_a = 124 (40/19/34/31) and set_b = 461 (46/95/320), the normalizer resolves 176/176 set_a and 656/656 set_b CSV rows, folder labels agree with both CSVs (conflict file written empty), every set_b record carries an auscultation site, and the "~149-record outlier group" is explained in writing — PASS (36 tests)
 **Added:** `src/data_loader/pascal.py`, `tests/test_pascal_loader.py`, `outputs/01_dataset_audit/pascal_label_conflicts.csv`, `pascal_subject_derivation.csv`

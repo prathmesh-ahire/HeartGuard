@@ -1,0 +1,3 @@
+record_uid,record_id,patient_id,recording_location,duration_sec,segmentation_issues,kind
+D4_training_data_50782_MV_1,50782_MV_1,50782,MV,28.496,no .tsv listed in the patient file,recording without usable segmentation
+,50782_MV,50782,,,"orphan .tsv: no recording of this name is listed in any patient file; invalid state 28 on line 1 (valid: 0, 1, 2, 3, 4)",segmentation without a recording
