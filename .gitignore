@@ -55,3 +55,9 @@ node_modules/
 .DS_Store
 Thumbs.db
 junit.xml
+
+# Planning and working documents — kept local by the user's decision
+# (2026-08-23). todo.md, note.md and the two source documents are NOT pushed.
+# NOTE: they remain in commits f440a24..b817e84 on the remote; this rule stops
+# future pushes only. CLAUDE.md at the repo root stays tracked.
+Docs/

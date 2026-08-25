@@ -1,0 +1,37 @@
+# Normalize line endings so a re-save from a different editor does not show
+# every line of a file as changed. Without this, a 6-checkbox edit to a
+# markdown file can appear as a 1,282-line rewrite and real changes get lost
+# in the noise.
+
+# Default: let git decide for text, normalize to LF in the repository.
+* text=auto eol=lf
+
+# Explicitly text
+*.md      text eol=lf
+*.py      text eol=lf
+*.yml     text eol=lf
+*.yaml    text eol=lf
+*.json    text eol=lf
+*.csv     text eol=lf
+*.txt     text eol=lf
+*.ts      text eol=lf
+*.tsx     text eol=lf
+*.cfg     text eol=lf
+*.ini     text eol=lf
+.gitignore     text eol=lf
+.gitattributes text eol=lf
+
+# Windows-only scripts keep CRLF
+*.ps1     text eol=crlf
+*.bat     text eol=crlf
+
+# Binary — never touch
+*.wav     binary
+*.pdf     binary
+*.docx    binary
+*.xlsx    binary
+*.png     binary
+*.jpg     binary
+*.parquet binary
+*.pkl     binary
+*.joblib  binary
