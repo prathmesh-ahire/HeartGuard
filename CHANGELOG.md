@@ -20,6 +20,12 @@ gate has actually passed.
 
 ---
 
+## Phase 08 — Continuous Integration
+**Gate:** T08.7 — CI has gone red on a real failure (run #1) and green after the fix (runs #2, #3) — PASS
+**Added:** `.github/workflows/ci.yml` (tests / quality / frontend jobs), `requirements-dev.txt`, `ruff.toml`, `mypy.ini`, CI badge in `README.md`, `.gitattributes`
+**Changed:** `tests/test_env.py`, `tests/test_harness.py` (two assertions encoded local-machine assumptions), `.gitignore` (`Docs/` now untracked)
+**Notes:** The gate's "and blocks" clause was amended — blocking is enforced by the standing rule that a red build is fixed before the next phase, not by branch protection. See the Phase 08 entry in `Docs/note.md`.
+
 ## Phase 07 — Version Control
 **Gate:** T07.7 — no dataset or cache file staged, nothing over 50 MB tracked, remote tree matches local — PASS
 **Added:** `CHANGELOG.md`; git repository on `main` with `origin` set to the GitHub remote
