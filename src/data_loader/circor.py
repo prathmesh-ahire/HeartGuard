@@ -1239,13 +1239,46 @@ def load_circor(
     write_outputs: bool = False,
     out_dir: str | Path | None = None,
     verify: bool = False,
+    limit: int | None = None,
+    use_cache: bool = True,
 ) -> Any:
     """Patient labels, recordings and segmentation summaries in one call.
 
     ``verify=True`` additionally runs the SHA-256 pass over 585 MB, which takes
     around 40 seconds -- off by default so an ordinary load stays quick.
+
+    ``limit`` caps the table at N recordings for smoke runs (T22.1). The sample
+    interleaves the murmur classes, so a 20-record limit still contains Absent,
+    Present and Unknown rather than 20 Absents. Audit outputs are never written
+    from a limited table.
     """
-    table = build_record_table(root, with_segmentation=with_segmentation)
+    from src.data_loader.cache import apply_limit, cached_table
+
+    def _build() -> Any:
+        return build_record_table(root, with_segmentation=with_segmentation)
+
+    archive = circor_archive_root()
+    table = cached_table(
+        "circor",
+        _build,
+        metadata_files=[
+            archive / "training_data.csv",
+            archive / "RECORDS",
+        ],
+        trees=[root or circor_root()],
+        extra={"with_segmentation": bool(with_segmentation)},
+        enabled=use_cache,
+    )
+
+    if limit is not None:
+        if write_outputs:
+            raise ValueError(
+                "refusing to write CirCor audit outputs from a --limit run: "
+                "a partial DA artifact reads as a complete one"
+            )
+        return apply_limit(
+            table, limit, by=("dataset_source",), stratify=("murmur", "outcome")
+        )
 
     if write_outputs:
         patients = build_patient_table(root)

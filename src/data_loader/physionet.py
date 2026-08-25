@@ -1296,16 +1296,52 @@ def load_physionet(
     subsets: tuple[str, ...] | list[str] | None = None,
     write_outputs: bool = False,
     out_dir: str | Path | None = None,
+    limit: int | None = None,
+    use_cache: bool = True,
 ) -> Any:
     """Record table, appendix annotations and subject groups in one call.
 
     ``write_outputs=True`` also emits the three Part II audit files:
     ``physionet_label_conflicts.csv`` (T09.6), ``physionet_unannotated.csv``
     (T10.6) and ``physionet_subject_derivation.csv`` (T11.6).
+
+    ``limit`` caps the table at N records per subset for smoke runs (T22.1);
+    the sample is deterministic and keeps both classes present. The audit files
+    are never written from a limited table -- a partial DA artifact is worse
+    than none.
     """
-    table = build_record_table(subsets, root)
-    table = enrich_with_appendix(table, root)
-    table = add_subject_ids(table)
+    from src.data_loader.cache import apply_limit, cached_table
+
+    resolved = root or physionet_root()
+    selected = tuple(subsets) if subsets else ALL_SUBSETS
+
+    def _build() -> Any:
+        table = build_record_table(subsets, root)
+        table = enrich_with_appendix(table, root)
+        return add_subject_ids(table)
+
+    table = cached_table(
+        "physionet",
+        _build,
+        metadata_files=[
+            *(subset_dir(s, root) / "REFERENCE.csv" for s in selected),
+            _appendix_path(root),
+            _diagnosis_meanings_path(root),
+        ],
+        trees=[resolved],
+        extra={"subsets": list(selected)},
+        enabled=use_cache,
+    )
+
+    if limit is not None:
+        if write_outputs:
+            raise ValueError(
+                "refusing to write PhysioNet audit outputs from a --limit run: "
+                "a partial DA artifact reads as a complete one"
+            )
+        return apply_limit(
+            table, limit, by=("subset",), stratify=("binary_label_name",)
+        )
 
     if write_outputs:
         write_label_conflicts(table, out_dir)

@@ -35,6 +35,7 @@ from src.utils.logging_setup import get_logger
 __all__ = [
     "DUPLICATE_REPORT_COLUMNS",
     "HEARTBEAT_PREFIX",
+    "heartbeat_extra_files",
     "exact_duplicate_groups",
     "content_duplicate_groups",
     "near_duplicate_pairs",
@@ -48,6 +49,28 @@ __all__ = [
 log = get_logger(__name__)
 
 HEARTBEAT_PREFIX = "HB_"
+
+
+def heartbeat_extra_files(root: Path | None = None) -> dict[str, Path]:
+    """The 832 ``Heartbeat_Sound/`` files, keyed for the scan's ``extra_files``.
+
+    These are not records -- T17.3 hashes them only to prove they duplicate
+    set_a + set_b -- but they still need a stable, unique key. The class folder
+    goes into it because the same basename can legitimately appear under two
+    class folders, and PASCAL A is already known to file one recording under
+    two different labels.
+
+    One definition, used by the audit script and the Phase 17 tests alike. Three
+    independent reconstructions of this key produced two different answers once
+    already.
+    """
+    from src.data_loader.pascal import heartbeat_sound_root
+
+    base = root or heartbeat_sound_root()
+    return {
+        HEARTBEAT_PREFIX + path.parent.name + "_" + path.stem: path
+        for path in sorted(base.rglob("*.wav"))
+    }
 
 DUPLICATE_REPORT_COLUMNS: tuple[str, ...] = (
     "group_id",

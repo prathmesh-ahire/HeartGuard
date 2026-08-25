@@ -95,7 +95,14 @@ def package_versions() -> dict[str, str | None]:
     return out
 
 
-def _run_git(args: list[str]) -> str | None:
+def _run_git(args: list[str], *, strip: bool = True) -> str | None:
+    """Run a git command. ``strip=False`` preserves leading whitespace.
+
+    That matters for ``status --porcelain``: its status field is two columns
+    wide and an unstaged modification reads " M path", so stripping the output
+    eats the first line's leading space and the path parse then loses its first
+    character.
+    """
     try:
         result = subprocess.run(
             ["git", *args],
@@ -109,7 +116,22 @@ def _run_git(args: list[str]) -> str | None:
         return None
     if result.returncode != 0:
         return None
-    return result.stdout.strip()
+    if strip:
+        return result.stdout.strip()
+    return result.stdout.rstrip("\n")
+
+
+def _porcelain_path(line: str) -> str:
+    """The path out of one ``git status --porcelain`` line.
+
+    The status field is two columns plus a separating space, so the path starts
+    at index 3. A rename reads ``R  old -> new``; the new path is the one that
+    describes the working tree.
+    """
+    path = line[3:]
+    if " -> " in path:
+        path = path.split(" -> ", 1)[1]
+    return path.strip('"')
 
 
 def git_info() -> dict[str, Any]:
@@ -136,7 +158,7 @@ def git_info() -> dict[str, Any]:
             "dirty": None,
         }
 
-    status = _run_git(["status", "--porcelain"])
+    status = _run_git(["status", "--porcelain"], strip=False)
     return {
         "available": True,
         "reason": None,
@@ -147,7 +169,9 @@ def git_info() -> dict[str, Any]:
         # code at that commit. Recording it is the difference between "this is
         # reproducible" and "this looks reproducible".
         "dirty": bool(status),
-        "dirty_files": [line[3:] for line in status.splitlines()] if status else [],
+        "dirty_files": [_porcelain_path(line) for line in status.splitlines()]
+        if status
+        else [],
     }
 
 

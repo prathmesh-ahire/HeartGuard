@@ -50,13 +50,22 @@ cv_schemes:
   # PASCAL A is 124 records with 19 in one class. Five folds would put ~4
   # samples of extrahls in a test fold. 5x2 repeats keep test folds usable.
   repeated_5x2_stratified:
-    kind: "RepeatedStratifiedKFold"
+    kind: "RepeatedStratifiedGroupKFold"
     n_splits: 2
     n_repeats: 5
     total_folds: 10
-    group_key: null           # PASCAL A has NO recoverable subject IDs -
-                              # results are record-level only. This is a real
-                              # dataset limitation, not a method limitation.
+    # PASCAL A has NO recoverable subject IDs, so this is record-level
+    # stratification and its results are record-level only. That is a real
+    # dataset limitation, not a method limitation, and it is stated as such in
+    # the write-up (T21.4).
+    #
+    # `split_group` is still supplied, and is NOT a subject id: it is
+    # record-level for 174 of 176 files. The exception is the single recording
+    # Phase 17 found filed under two class labels (extrahls__201104021355 and
+    # murmur__201104021355, envelope correlation 0.999978). Those two rows share
+    # one group so grouped CV cannot put the same audio in train and test.
+    # Dropping the group key would reintroduce that leak.
+    group_key: "split_group"
     shuffle: true
     random_state: 42
 
@@ -96,7 +105,13 @@ experiments:
     models: ["M1", "M3", "M4", "M5", "M6", "M8"]
     tuned: false                    # default hyperparameters throughout
     cv: "repeated_5x5_grouped"
-    external_test: "physionet_validation"   # the untouched 301 records
+    # NO external test set for D1. The 301-record `validation/` folder is 301
+    # BYTE-IDENTICAL copies of training records (Phase 09), whose 205 subjects
+    # account for 1,108 of the 3,240 training records - so a subject-clean
+    # holdout would cost 34% of this track for a test set containing no new
+    # material. Confirmed with the user 2026-08-26; recorded in
+    # outputs/missing_outputs_report.txt. EXP-D1 carries external validation.
+    external_test: null
     output_section: "06_binary_results"
     emits: ["T08", "T10"]
     notes: >
@@ -117,7 +132,8 @@ experiments:
     feature_subset_source: "SO-04"
     cv: "repeated_5x5_grouped"      # outer loop; search runs on inner folds
     nested: true
-    external_test: "physionet_validation"
+    external_test: null             # see EXP-A1 - the validation folder is a
+                                    # duplicate of training, not a held-out set
     output_section: "06_binary_results"
     emits: ["T09"]
     final_model_path: "models_saved/binary/final/"
@@ -157,7 +173,9 @@ experiments:
     label_space: {normal: 0, murmur: 1, extrastole: 2}
     n_records: 461
     class_counts: {normal: 320, murmur: 95, extrastole: 46}
-    n_subject_groups: 167           # filename-derived
+    n_subject_groups: 165           # filename-derived: 165 subjects over 167
+                                    # recording sessions (2 subjects were
+                                    # recorded twice). Phase 13; Docs/note.md.
     models: ["M1", "M3", "M4", "M5", "M6", "M7"]
     tuned: true
     cv: "grouped_5fold"

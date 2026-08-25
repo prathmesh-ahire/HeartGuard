@@ -22,15 +22,10 @@ from src.data_loader import duplicates as dup
 def scanned() -> tuple[Any, Any]:
     """Scan of every WAV plus the Heartbeat_Sound helper files."""
     from src.data_loader.catalog import build_catalog
+    from src.data_loader.duplicates import heartbeat_extra_files
     from src.data_loader.integrity import scan_corpus
-    from src.data_loader.pascal import heartbeat_sound_root
 
-    catalog = build_catalog()
-    extra = {
-        ("HB_" + p.parent.name + "_" + p.stem): p
-        for p in sorted(heartbeat_sound_root().rglob("*.wav"))
-    }
-    return scan_corpus(catalog, extra_files=extra)
+    return scan_corpus(build_catalog(), extra_files=heartbeat_extra_files())
 
 
 @pytest.fixture(scope="module")

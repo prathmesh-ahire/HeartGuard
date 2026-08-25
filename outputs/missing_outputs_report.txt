@@ -20,5 +20,22 @@ Entry format
   Impact: <what claim or figure is affected downstream>
 
 --------------------------------------------------------------------------------
-ENTRIES (none yet — created empty in Phase 01, task T01.6)
+ENTRIES (newest last)
 --------------------------------------------------------------------------------
+[2026-08-26] T20.5 — PhysioNet 2016 held-out external test set (301 validation records)
+  Reason: All 301 records in `dataset/archive (3)/validation/` are BYTE-IDENTICAL
+    (SHA-256 of raw bytes) to 301 records already present in training-a..f. They
+    contain no audio the training corpus does not already contain. Those 301
+    twins belong to 205 derived subjects, and those 205 subjects account for
+    1,108 of the 3,240 training records — so constructing a subject-disjoint
+    holdout from this folder (rule 3) would remove 34% of the primary track's
+    training data in exchange for a test set of previously-seen material.
+    Verified in Phase 09 (physionet_subject_derivation.csv) and Phase 17
+    (duplicate_report.csv: 301 rows, method=raw_sha256, decision=drop).
+  Impact: EXP-A1 and EXP-A2 report repeated 5x5 subject-grouped cross-validation
+    only; `external_test` is null for both in configs/experiments.yaml. No
+    single-number "held-out test" figure is claimed for PhysioNet anywhere in
+    the thesis, paper or dashboard. External validation for the binary track is
+    carried by EXP-D1 (PhysioNet -> CirCor), which uses a genuinely independent
+    corpus. Decision confirmed with the user 2026-08-26.
+

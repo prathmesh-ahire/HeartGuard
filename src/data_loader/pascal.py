@@ -846,14 +846,47 @@ def load_pascal(
     dataset: str | None = None,
     write_outputs: bool = False,
     out_dir: str | Path | None = None,
+    limit: int | None = None,
+    use_cache: bool = True,
 ) -> Any:
     """Record table with labels, subjects, sessions and locations in one call.
 
     ``write_outputs=True`` also emits ``pascal_label_conflicts.csv`` (T12.4) and
     ``pascal_subject_derivation.csv`` (T13.6).
+
+    ``limit`` caps the table at N records per set for smoke runs (T22.1),
+    keeping every class present. Audit outputs are never written from a limited
+    table.
     """
-    table = build_record_table(dataset, root)
-    table = add_subject_ids(table)
+    from src.data_loader.cache import apply_limit, cached_table
+
+    resolved = root or pascal_root()
+    selected = (dataset,) if dataset else PASCAL_SETS
+
+    def _build() -> Any:
+        return add_subject_ids(build_record_table(dataset, root))
+
+    table = cached_table(
+        "pascal",
+        _build,
+        metadata_files=[
+            *(_csv_path(name, root) for name in selected),
+            _timing_path(root),
+        ],
+        trees=[resolved, heartbeat_sound_root()],
+        extra={"sets": list(selected)},
+        enabled=use_cache,
+    )
+
+    if limit is not None:
+        if write_outputs:
+            raise ValueError(
+                "refusing to write PASCAL audit outputs from a --limit run: "
+                "a partial DA artifact reads as a complete one"
+            )
+        return apply_limit(
+            table, limit, by=("dataset_source",), stratify=("multiclass_label_name",)
+        )
 
     if write_outputs:
         write_label_conflicts(table, out_dir)
