@@ -20,6 +20,12 @@ gate has actually passed.
 
 ---
 
+## Phases 09-11 — PhysioNet 2016 loader, annotation enrichment, subject derivation
+**Gate:** T09.7 / T10.7 / T11.7 — 3,541 rows loaded across 7 subsets, every WAV labelled and every label filed, `.hea` comments agree with `REFERENCE.csv` on all 3,240 training records (conflict file written empty), 3,153 appendix rows joined, 12 diagnosis categories populated, 87 unmatched records listed, every record carries a `subject_id` and training-b's 106 derived IDs match the native column record-for-record — PASS (35 tests)
+**Added:** `src/data_loader/physionet.py`, `tests/test_physionet_loader.py`, `outputs/01_dataset_audit/physionet_label_conflicts.csv`, `physionet_unannotated.csv`, `physionet_subject_derivation.csv`
+**Changed:** `Docs/todo.md` (21 checkboxes), `Docs/note.md`
+**Notes:** Two audited figures changed and one grouping rule was deliberately deviated from. PhysioNet is **3,240 unique records / 2,575 normal / 665 abnormal** — the `validation/` folder is 301 byte-identical copies of training records. training-e is grouped by (cohort, `# Raw record`) into 404 subjects rather than one-per-record as T11.4 said, because the latter leaks across 66% of the corpus. Both settled with the user on 2026-08-25; full reasoning in `Docs/note.md`.
+
 ## Housekeeping — root reorganisation (before Part II)
 **Gate:** ruff clean, mypy clean, 136 passed / 2 skipped, verify_env PASSED
 **Added:** `pyproject.toml` (ruff + mypy + pytest config consolidated), `requirements/` (base, extra, api, report, dev)
