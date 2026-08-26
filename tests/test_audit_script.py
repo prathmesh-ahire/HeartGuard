@@ -95,6 +95,17 @@ def test_smoke_run_records_its_wall_time(script: Any, tmp_path: Path) -> None:
 # ===========================================================================
 
 
+def _evidence_rows(out_dir: Path) -> list[dict[str, str]]:
+    """The evidence index the audit wrote beside its artifacts, if any."""
+    import csv
+
+    path = out_dir / "evidence_index.csv"
+    if not path.is_file():
+        return []
+    with path.open(encoding="utf-8", newline="") as handle:
+        return list(csv.DictReader(handle))
+
+
 @pytest.mark.slow
 def test_full_run_on_a_cleared_directory_is_complete_and_idempotent(
     script: Any, tmp_path: Path
@@ -124,19 +135,46 @@ def test_full_run_on_a_cleared_directory_is_complete_and_idempotent(
         assert path.is_file(), evidence_id + " missing after a full run"
         assert path.stat().st_size > 0, evidence_id + " is empty"
 
-    before = {
-        path.name: _digest(path) for path in sorted(out_dir.glob("*.csv"))
-    }
+    # `evidence_index.csv` is excluded from the byte comparison and checked
+    # separately below. It is a provenance LOG, not a DA artifact: it carries a
+    # `timestamp` column that must differ between two runs, so requiring byte
+    # equality of it would assert that a clock does not advance. It only appears
+    # in this directory at all since the Phase 30 fix that stops `--out-dir`
+    # runs from rewriting the project's real index (Docs/note.md, 2026-08-26).
+    def digests(directory: Path) -> dict[str, str]:
+        return {
+            path.name: _digest(path)
+            for path in sorted(directory.glob("*.csv"))
+            if path.name != "evidence_index.csv"
+        }
+
+    before = digests(out_dir)
     assert len(before) >= 15
+
+    index_before = _evidence_rows(out_dir)
+    assert index_before, "the audit registered no evidence beside its artifacts"
 
     second = script.run_audit(args)
     assert second["n_records"] == first["n_records"]
     assert second["n_assignments"] == first["n_assignments"]
 
-    after = {path.name: _digest(path) for path in sorted(out_dir.glob("*.csv"))}
+    after = digests(out_dir)
     assert set(after) == set(before)
     changed = [name for name in before if before[name] != after[name]]
     assert changed == [], "not idempotent: " + ", ".join(changed)
+
+    # The index reproduces too, in every column a rerun should not move.
+    index_after = _evidence_rows(out_dir)
+    assert len(index_after) == len(index_before)
+    for first_row, second_row in zip(index_before, index_after, strict=True):
+        for column, value in first_row.items():
+            if column == "timestamp":
+                continue
+            assert second_row[column] == value, column
+
+    # And it stayed local: no row points back into the project's real outputs.
+    for row in index_after:
+        assert "outputs/01_dataset_audit" not in row["filename"] or str(out_dir) in row["filename"]
 
 
 @pytest.mark.slow

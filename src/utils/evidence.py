@@ -41,6 +41,7 @@ from src.utils.io import atomic_path
 __all__ = [
     "EVIDENCE_COLUMNS",
     "register_evidence",
+    "index_for_artifact",
     "read_evidence",
     "evidence_index_path",
     "verify_evidence",
@@ -73,6 +74,38 @@ def evidence_index_path() -> Path:
         return PROJECT_ROOT / "outputs" / "00_evidence_index" / "evidence_index.csv"
 
 
+def _is_inside_project(path: str | os.PathLike) -> bool:
+    """True when ``path`` lives under the project root."""
+    try:
+        Path(path).resolve().relative_to(PROJECT_ROOT)
+    except (ValueError, OSError):
+        return False
+    return True
+
+
+def _index_for(artifact: str | os.PathLike) -> Path:
+    """Which index a given artifact's row belongs in.
+
+    **An artifact outside the project root never registers into the project's
+    index.** Its row goes to an index beside the artifact instead.
+
+    This is a structural guard, not a style preference. Any run pointed at a
+    different output directory -- a smoke run, a ``--out-dir`` invocation, a
+    pytest ``tmp_path`` -- otherwise rewrites the committed rows to paths that
+    are deleted minutes later, leaving an index that claims ``status=ok`` for
+    files nobody can open. The Phase 30 sweep found exactly that: all nine
+    DA rows pointing into ``AppData/Local/Temp/pytest-of-prath/pytest-40/``,
+    written there by the T22.7 audit-script test, and no gate had noticed
+    because every gate checked the artifacts rather than the index.
+
+    Putting the rule here rather than in each caller means a future phase cannot
+    reintroduce the leak by writing one more ``register_evidence`` call.
+    """
+    if _is_inside_project(artifact):
+        return evidence_index_path()
+    return Path(artifact).resolve().parent / "evidence_index.csv"
+
+
 def _relative(path: str | os.PathLike) -> str:
     """Store paths relative to the project root so the index stays portable."""
     candidate = Path(path)
@@ -80,6 +113,11 @@ def _relative(path: str | os.PathLike) -> str:
         return candidate.resolve().relative_to(PROJECT_ROOT).as_posix()
     except (ValueError, OSError):
         return candidate.as_posix()
+
+
+def index_for_artifact(artifact: str | os.PathLike) -> Path:
+    """Public form of the routing rule; see :func:`_index_for`."""
+    return _index_for(artifact)
 
 
 def read_evidence(path: str | os.PathLike | None = None) -> list[dict[str, str]]:
@@ -122,8 +160,8 @@ def register_evidence(
     artifact that does not exist is recorded as ``missing``, never as ``ok``.
     The row is also attached to the active run manifest.
     """
-    target = Path(index_path) if index_path else evidence_index_path()
     artifact = Path(filename)
+    target = Path(index_path) if index_path else _index_for(artifact)
 
     if status is None:
         status = "ok" if artifact.is_file() else "missing"

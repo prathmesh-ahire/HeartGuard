@@ -40,7 +40,7 @@ ENTRIES (newest last)
     corpus. Decision confirmed with the user 2026-08-26.
 
 
-[2026-08-26] T29.3 / T29.4 — PP-09 `preprocessing_ablation.csv` (deferred, not skipped)
+[2026-08-26] T29.3 / T29.4 / T29.7 — PP-09 `preprocessing_ablation.csv` (deferred, not skipped)
   Reason: The task asks for features to be extracted and a baseline model trained
     under each of the four filter x normalization configurations. Neither input
     exists at Phase 29: the locked 138-feature extractor is built in Phases 31-42
@@ -49,7 +49,10 @@ ENTRIES (newest last)
     throwaway feature set and model for this one table, which would place metrics
     in a deliverable that the actual pipeline never produced — the failure mode
     ground rule 1 exists to prevent.
-  Impact: PP-09 is registered in the evidence index with status=missing rather
+  Impact: T29.7, the Phase 29 gate, is blocked on the same gap: its PP-07 and
+    evidence-registration clauses pass, its "the ablation ran all four
+    configurations" clause cannot until PP-09 exists.
+    PP-09 is registered in the evidence index with status=missing rather
     than omitted, so the gap is visible. The four arms ARE defined and verified
     (T29.2 complete): `preprocessing_ablation_grid.csv` holds their config hashes
     and cache directories, and all four were confirmed to produce distinct

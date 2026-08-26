@@ -110,10 +110,19 @@ def preprocessing_dir(out_dir: str | Path | None = None) -> Path:
 def register_preprocessing_artifacts(
     out_dir: str | Path | None = None, *, index_path: str | Path | None = None
 ) -> list[dict[str, str]]:
-    """Register PP-01 .. PP-09 and the supporting files (T29.5)."""
-    from src.utils.evidence import register_evidence
+    """Register PP-01 .. PP-09 and the supporting files (T29.5).
+
+    Evidence rows follow their artifacts: an ``out_dir`` outside the configured
+    preprocessing directory registers into an index inside it, never into the
+    project's real one. See ``inventory.register_audit_artifacts`` for the
+    incident that made this rule explicit.
+    """
+    from src.utils.evidence import evidence_index_path, register_evidence
 
     directory = preprocessing_dir(out_dir)
+    if index_path is None and directory.resolve() != preprocessing_dir().resolve():
+        index_path = directory / "evidence_index.csv"
+    target = Path(index_path) if index_path is not None else evidence_index_path()
     rows: list[dict[str, str]] = []
 
     for evidence_id, filename, description, source in (*PP_ARTIFACTS, *SUPPORTING_ARTIFACTS):
@@ -126,7 +135,7 @@ def register_preprocessing_artifacts(
                 filename=directory / filename,
                 source_data=source,
                 command=_COMMANDS.get(evidence_id, FIGURE_COMMAND),
-                index_path=index_path,
+                index_path=target,
             )
         )
 

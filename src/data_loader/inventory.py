@@ -582,15 +582,36 @@ AUDIT_ARTIFACTS: tuple[tuple[str, str, str], ...] = (
 )
 
 
-def register_audit_artifacts(out_dir: str | Path | None = None) -> list[dict[str, str]]:
+def register_audit_artifacts(
+    out_dir: str | Path | None = None, *, index_path: str | Path | None = None
+) -> list[dict[str, str]]:
     """Register DA-01 .. DA-09 in the evidence index (T21.6).
 
     An artifact that is not on disk is registered as ``missing`` rather than
     skipped -- a gap has to be visible in the index, not absent from it.
+
+    **Evidence rows follow their artifacts.** When ``out_dir`` points somewhere
+    other than the configured audit directory -- a smoke run, a test, anyone
+    passing ``--out-dir`` -- the rows are written to an index inside that
+    directory instead of the project's real one. Without this rule, a single
+    ``--out-dir /tmp/...`` run rewrites DA-01..DA-09 in the committed index to
+    paths under a temporary folder that is deleted minutes later, leaving nine
+    rows claiming ``status=ok`` for files that no longer exist. That is not
+    hypothetical: it is what the Phase 30 sweep found in this repository, put
+    there by the T22.7 audit-script test.
     """
-    from src.utils.evidence import register_evidence
+    from src.utils.evidence import evidence_index_path, register_evidence
 
     audit_dir = _audit_dir(out_dir)
+    if index_path is None and audit_dir.resolve() != _audit_dir().resolve():
+        index_path = audit_dir / "evidence_index.csv"
+        log.info(
+            "audit artifacts registered to %s, not the project index, because "
+            "out_dir is not the configured audit directory",
+            index_path,
+        )
+    target = Path(index_path) if index_path is not None else evidence_index_path()
+
     rows: list[dict[str, str]] = []
     for evidence_id, filename, description in AUDIT_ARTIFACTS:
         rows.append(
@@ -602,6 +623,7 @@ def register_audit_artifacts(out_dir: str | Path | None = None) -> list[dict[str
                 filename=audit_dir / filename,
                 source_data="dataset/ (read-only input)",
                 command="python scripts/01_run_dataset_audit.py",
+                index_path=target,
             )
         )
     missing = [r for r in rows if r.get("status") != "ok"]
