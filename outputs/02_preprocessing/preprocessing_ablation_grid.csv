@@ -1,0 +1,5 @@
+arm_id,label,filter_enabled,normalization_enabled,config_hash,cache_dir,is_shipped_configuration
+PP-A,"filter on, normalization on",True,True,f967c8ab0a0c,cache/preprocessed/f967c8ab0a0c,True
+PP-B,"filter on, normalization off",True,False,3f1ef231e09f,cache/preprocessed/3f1ef231e09f,False
+PP-C,"filter off, normalization on",False,True,ee2272ca4e50,cache/preprocessed/ee2272ca4e50,False
+PP-D,"filter off, normalization off",False,False,5866b91707cd,cache/preprocessed/5866b91707cd,False

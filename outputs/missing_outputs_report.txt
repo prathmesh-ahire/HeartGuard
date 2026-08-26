@@ -39,3 +39,25 @@ ENTRIES (newest last)
     carried by EXP-D1 (PhysioNet -> CirCor), which uses a genuinely independent
     corpus. Decision confirmed with the user 2026-08-26.
 
+
+[2026-08-26] T29.3 / T29.4 — PP-09 `preprocessing_ablation.csv` (deferred, not skipped)
+  Reason: The task asks for features to be extracted and a baseline model trained
+    under each of the four filter x normalization configurations. Neither input
+    exists at Phase 29: the locked 138-feature extractor is built in Phases 31-42
+    and the fold-safe CV pipeline, metrics module and baseline models in Phases
+    43-46. The only way to produce PP-09 on schedule would be to write a
+    throwaway feature set and model for this one table, which would place metrics
+    in a deliverable that the actual pipeline never produced — the failure mode
+    ground rule 1 exists to prevent.
+  Impact: PP-09 is registered in the evidence index with status=missing rather
+    than omitted, so the gap is visible. The four arms ARE defined and verified
+    (T29.2 complete): `preprocessing_ablation_grid.csv` holds their config hashes
+    and cache directories, and all four were confirmed to produce distinct
+    preprocessed signals, so the ablation is ready to run rather than merely
+    planned. Re-entry point: immediately after Phase 46, using the real 138
+    features, the Phase 44 fold-safe pipeline and a baseline model, so PP-09 is
+    comparable with every other metric in the thesis. Decision taken with the
+    user 2026-08-26. No preprocessing claim anywhere may cite an ablation result
+    until that run exists — the justification for the shipped configuration is,
+    until then, the design argument in Docs/note.md and the T24/T26 measurements,
+    not a measured metric delta.
