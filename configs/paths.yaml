@@ -4,12 +4,20 @@
 # dataset location in Python.
 #
 # ABSOLUTE vs PORTABLE
-#   `project_root` is the one machine-specific value. Every other path is
-#   declared relative to it and is resolved to an absolute path by
-#   src/utils/config.py at load time, so downstream code always receives an
-#   absolute path (as T03.1 requires) while a machine move is a one-line edit.
+#   `project_root` is "auto": src/utils/config.py resolves it to the directory
+#   that contains this configs/ folder. Every other path is declared relative to
+#   it and resolved to an absolute path at load time, so downstream code always
+#   receives an absolute path (as T03.1 requires) and the repository works from
+#   any location on any machine without an edit.
 #
-#   Override without editing this file:
+#   It used to hold a literal "D:/Projects/HeartGuard". That is a
+#   machine-specific value in a committed file, and on CI it produced paths like
+#   /home/runner/work/HeartGuard/HeartGuard/D:/Projects/HeartGuard/outputs/...
+#   -- a Windows path glued onto a Linux checkout. Every derived path was wrong
+#   on every machine except one. See Docs/note.md, 2026-08-26 Phase 30.
+#
+#   An explicit absolute path still works (for an out-of-tree checkout), and an
+#   environment override still wins over both:
 #     PowerShell:  $env:HEARTGUARD__PATHS__PROJECT_ROOT = "E:\HeartGuard"
 #     bash:        export HEARTGUARD__PATHS__PROJECT_ROOT=/mnt/e/HeartGuard
 #
@@ -18,7 +26,7 @@
 # matches zero files and returns an empty list rather than raising — the worst
 # possible failure mode. See Docs/note.md, 2026-08-22 audit, finding 2.
 
-project_root: "D:/Projects/HeartGuard"
+project_root: "auto"          # resolved to the repository root; see above
 
 # --- dataset roots (read-only input; never written to, never committed) ------
 dataset:

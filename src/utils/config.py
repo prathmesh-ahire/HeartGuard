@@ -245,6 +245,40 @@ NON_PATH_KEYS = frozenset(
 PATH_SECTIONS = frozenset({"dataset", "cache", "outputs", "models_saved", "frontend"})
 
 
+# The repository root: the directory holding configs/, which is where this file
+# lives two levels down.
+REPO_ROOT = Path(__file__).resolve().parents[2]
+
+
+def _resolve_project_root(raw: str) -> Path:
+    """Resolve ``project_root``, falling back to the repository root.
+
+    Order: ``"auto"`` (or empty, or ``"."``) means the repository root. An
+    explicit path is honoured **if it exists on this machine**, which supports an
+    out-of-tree checkout. A configured path that does not exist is ignored in
+    favour of the repository root rather than propagated.
+
+    That last rule is the important one. ``paths.yaml`` shipped a literal
+    ``D:/Projects/HeartGuard`` for twenty-nine phases. On Linux that is not
+    absolute, so every derived path became
+    ``/home/runner/work/HeartGuard/HeartGuard/D:/Projects/HeartGuard/...`` and
+    every file lookup failed. It went unnoticed because until Phase 29 no test
+    that runs without the dataset resolved a real output path -- CI had nothing
+    pointing at the bug even though it ran on every push.
+    """
+    candidate = raw.strip()
+    if candidate.lower() in {"", ".", "auto"}:
+        return REPO_ROOT
+
+    resolved = Path(candidate).expanduser()
+    if resolved.is_dir():
+        return resolved.resolve()
+
+    # A configured root that is not there is almost always a config written on
+    # another machine; the checkout we are running from is the safer answer.
+    return REPO_ROOT
+
+
 def _resolve_paths(data: dict) -> None:
     """Make every path in paths.yaml absolute, relative to ``project_root``.
 
@@ -254,7 +288,7 @@ def _resolve_paths(data: dict) -> None:
     root_raw = data.get("project_root")
     if not isinstance(root_raw, str):
         return
-    root = Path(root_raw).expanduser().resolve()
+    root = _resolve_project_root(root_raw)
     data["project_root"] = str(root)
 
     def walk(node: Any, key: str | None) -> Any:

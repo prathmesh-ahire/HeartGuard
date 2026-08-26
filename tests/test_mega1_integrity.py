@@ -553,6 +553,52 @@ def test_extra_every_config_loads_and_validates() -> None:
     assert set(configs) == {"paths", "signal", "features", "models", "experiments"}
 
 
+def test_extra_project_root_is_portable_not_machine_specific(root: Path) -> None:
+    """Regression: `paths.yaml` shipped a literal `D:/Projects/HeartGuard`.
+
+    On Linux that string is not absolute, so every derived path became
+    `/home/runner/work/HeartGuard/HeartGuard/D:/Projects/HeartGuard/...` and CI
+    failed on four consecutive pushes. It survived twenty-nine phases because
+    until Phase 29 no test that runs *without* the dataset resolved a real
+    output path, so CI had nothing pointing at it.
+    """
+    raw = (Path(__file__).resolve().parents[1] / "configs" / "paths.yaml").read_text(
+        encoding="utf-8"
+    )
+    declared = [line for line in raw.splitlines() if line.startswith("project_root:")]
+    assert len(declared) == 1
+
+    # A drive letter ("C:/", "D:\") pins the file to one machine. Checked by
+    # scanning for "<letter>:" followed by a separator, without a regex, so the
+    # check itself cannot be broken by an escaping mistake.
+    line = declared[0]
+    drive_letters = [
+        line[i - 1 : i + 2]
+        for i in range(1, len(line) - 1)
+        if line[i] == ":" and line[i - 1].isalpha() and line[i + 1] in "/\\"
+    ]
+    assert not drive_letters, "configs/paths.yaml pins a drive letter: " + line
+
+    # It resolves to this checkout, wherever the checkout happens to be.
+    assert root == Path(__file__).resolve().parents[1]
+    assert (root / "configs" / "paths.yaml").is_file()
+
+
+def test_extra_every_configured_path_lands_inside_the_checkout(root: Path) -> None:
+    """Nothing resolves to a path from somebody else's machine."""
+    from src.utils.config import load_config
+
+    paths = load_config("paths")
+    for dotted in paths.leaf_paths():
+        value = paths.get(dotted)
+        if not isinstance(value, str) or (not value.startswith(("/", "\\")) and ":" not in value):
+            continue
+        if dotted.split(".")[0] not in {"dataset", "cache", "outputs", "models_saved", "frontend"}:
+            continue
+        assert Path(value).is_absolute(), dotted + " -> " + value
+        assert Path(value).resolve().is_relative_to(root.resolve()), dotted + " -> " + value
+
+
 def test_extra_the_locked_138_still_sums(features_config: Any) -> None:
     counts = {
         family: int(features_config.require("families." + family + ".count"))
