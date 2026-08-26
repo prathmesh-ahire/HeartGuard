@@ -36,6 +36,7 @@ import argparse
 import sys
 import time
 from pathlib import Path
+from typing import Any
 
 if __package__ in (None, ""):  # allow `python scripts/01_run_dataset_audit.py`
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -82,6 +83,26 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 def run_audit(args: argparse.Namespace) -> dict[str, object]:
+    """The audit, with its run manifest closed whatever happens.
+
+    A crashed run used to leave its manifest entry at ``status="running"``
+    forever, indistinguishable from one still in progress -- eight such entries
+    had accumulated by Phase 30, three of them written by the test that
+    deliberately makes the audit fail. A run that died is a fact worth
+    recording, so it is now recorded as ``failed`` rather than left ambiguous.
+    """
+    from src.utils.run_manifest import start_run
+
+    smoke = args.limit is not None
+    run = start_run("dataset_audit" + ("_smoke" if smoke else ""))
+    try:
+        return _run_audit(args, run)
+    except BaseException:
+        run.finish("failed")
+        raise
+
+
+def _run_audit(args: argparse.Namespace, run: Any) -> dict[str, object]:
     """The audit itself. Returns a summary dict; raises on any failure."""
     from src.data_loader.catalog import build_catalog
     from src.data_loader.circor import load_circor
@@ -100,13 +121,10 @@ def run_audit(args: argparse.Namespace) -> dict[str, object]:
     from src.data_loader.physionet import load_physionet
     from src.data_loader.splits import run_split_generation
     from src.data_loader.summaries import run_summaries
-    from src.utils.run_manifest import start_run
-
     smoke = args.limit is not None
     use_cache = not args.no_cache
     out_dir = args.out_dir
 
-    run = start_run("dataset_audit" + ("_smoke" if smoke else ""))
     run.set("audit_mode", "smoke" if smoke else "full")
     run.set("audit_limit", args.limit)
     started = time.perf_counter()

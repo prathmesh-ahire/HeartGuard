@@ -11832,7 +11832,840 @@
         "audit_files_scanned": 8368,
         "audit_fold_assignments": 23607
       }
+    },
+    {
+      "run_id": "20260826T164452Z-b587c7f5",
+      "name": "dataset_audit",
+      "status": "failed",
+      "started_utc": "2026-08-26T16:44:52.386974+00:00",
+      "finished_utc": "2026-08-26T16:44:54.013325+00:00",
+      "seed": 42,
+      "seed_state": {
+        "global_seed": 42,
+        "applied_seed": 42,
+        "seed_applied": true,
+        "python_hash_seed": {
+          "value_at_interpreter_start": null,
+          "value_now": "42",
+          "hash_randomization_enabled": true,
+          "effective_for_this_process": false,
+          "effective_for_child_processes": true,
+          "note": "PYTHONHASHSEED is read once at interpreter start. Set it in the shell before launching Python if this process's own hash order must be deterministic; code should not depend on it regardless."
+        }
+      },
+      "git": {
+        "available": true,
+        "reason": null,
+        "commit": "473402c647a7e6c425f7aa48e4a735212aefb1cc",
+        "commit_short": "473402c6",
+        "branch": "main",
+        "dirty": true,
+        "dirty_files": [
+          "scripts/01_run_dataset_audit.py"
+        ]
+      },
+      "environment": {
+        "python_version": "3.11.9",
+        "python_executable": "D:\\Projects\\HeartGuard\\.venv\\Scripts\\python.exe",
+        "in_venv": true,
+        "platform": "Windows-10-10.0.19045-SP0",
+        "machine": "AMD64",
+        "processor": "Intel64 Family 6 Model 142 Stepping 9, GenuineIntel",
+        "cpu_count": 4,
+        "hostname": "DESKTOP-DUC8EHD",
+        "user": "prath",
+        "gpu": "none (CPU-only machine)"
+      },
+      "packages": {
+        "numpy": "2.4.6",
+        "scipy": "1.17.1",
+        "pandas": "3.0.5",
+        "scikit-learn": "1.9.0",
+        "joblib": "1.5.3",
+        "librosa": "0.11.0",
+        "soundfile": "0.14.0",
+        "PyWavelets": "1.9.0",
+        "soxr": "1.1.0",
+        "numba": "0.67.0",
+        "llvmlite": "0.49.0",
+        "matplotlib": "3.11.1",
+        "seaborn": "0.13.2",
+        "pyarrow": "25.0.1",
+        "tqdm": "4.70.0",
+        "PyYAML": "6.0.3",
+        "xgboost": "3.2.0",
+        "lightgbm": "4.7.0",
+        "scikit-optimize": "0.10.2",
+        "deap": "1.4.4",
+        "pyswarms": "1.3.0",
+        "shap": "0.51.0",
+        "statsmodels": "0.14.6",
+        "fastapi": "0.141.1",
+        "uvicorn": "0.52.4",
+        "python-multipart": "0.0.32",
+        "pydantic": "2.13.4",
+        "python-docx": "1.2.0",
+        "openpyxl": "3.1.5",
+        "kaleido": "1.3.0"
+      },
+      "config_hash": "c84082cca92722eb",
+      "timings_sec": {
+        "audit:phase_08_11_physionet [failed]": 1.083916,
+        "_total_run": 1.626351
+      },
+      "artifacts": [],
+      "extra": {
+        "logging": {
+          "configured": true,
+          "log_file": "D:\\Projects\\HeartGuard\\outputs\\logs\\pvmepcg.log",
+          "max_bytes": 10485760,
+          "backup_count": 5
+        },
+        "audit_mode": "full",
+        "audit_limit": null
+      }
+    },
+    {
+      "run_id": "20260826T164505Z-25305e6e",
+      "name": "dataset_audit_smoke",
+      "status": "completed",
+      "started_utc": "2026-08-26T16:45:05.969525+00:00",
+      "finished_utc": "2026-08-26T16:45:12.446118+00:00",
+      "seed": 42,
+      "seed_state": {
+        "global_seed": 42,
+        "applied_seed": 42,
+        "seed_applied": true,
+        "python_hash_seed": {
+          "value_at_interpreter_start": null,
+          "value_now": "42",
+          "hash_randomization_enabled": true,
+          "effective_for_this_process": false,
+          "effective_for_child_processes": true,
+          "note": "PYTHONHASHSEED is read once at interpreter start. Set it in the shell before launching Python if this process's own hash order must be deterministic; code should not depend on it regardless."
+        }
+      },
+      "git": {
+        "available": true,
+        "reason": null,
+        "commit": "473402c647a7e6c425f7aa48e4a735212aefb1cc",
+        "commit_short": "473402c6",
+        "branch": "main",
+        "dirty": true,
+        "dirty_files": [
+          "outputs/00_evidence_index/run_manifest.json",
+          "scripts/01_run_dataset_audit.py"
+        ]
+      },
+      "environment": {
+        "python_version": "3.11.9",
+        "python_executable": "D:\\Projects\\HeartGuard\\.venv\\Scripts\\python.exe",
+        "in_venv": true,
+        "platform": "Windows-10-10.0.19045-SP0",
+        "machine": "AMD64",
+        "processor": "Intel64 Family 6 Model 142 Stepping 9, GenuineIntel",
+        "cpu_count": 4,
+        "hostname": "DESKTOP-DUC8EHD",
+        "user": "prath",
+        "gpu": "none (CPU-only machine)"
+      },
+      "packages": {
+        "numpy": "2.4.6",
+        "scipy": "1.17.1",
+        "pandas": "3.0.5",
+        "scikit-learn": "1.9.0",
+        "joblib": "1.5.3",
+        "librosa": "0.11.0",
+        "soundfile": "0.14.0",
+        "PyWavelets": "1.9.0",
+        "soxr": "1.1.0",
+        "numba": "0.67.0",
+        "llvmlite": "0.49.0",
+        "matplotlib": "3.11.1",
+        "seaborn": "0.13.2",
+        "pyarrow": "25.0.1",
+        "tqdm": "4.70.0",
+        "PyYAML": "6.0.3",
+        "xgboost": "3.2.0",
+        "lightgbm": "4.7.0",
+        "scikit-optimize": "0.10.2",
+        "deap": "1.4.4",
+        "pyswarms": "1.3.0",
+        "shap": "0.51.0",
+        "statsmodels": "0.14.6",
+        "fastapi": "0.141.1",
+        "uvicorn": "0.52.4",
+        "python-multipart": "0.0.32",
+        "pydantic": "2.13.4",
+        "python-docx": "1.2.0",
+        "openpyxl": "3.1.5",
+        "kaleido": "1.3.0"
+      },
+      "config_hash": "c84082cca92722eb",
+      "timings_sec": {
+        "audit:phase_08_11_physionet": 2.558903,
+        "audit:phase_12_13_pascal": 0.344378,
+        "audit:phase_14_15_circor": 0.956909,
+        "audit:catalog": 0.078005,
+        "audit:smoke_scan": 2.021957,
+        "_total_run": 6.476593
+      },
+      "artifacts": [],
+      "extra": {
+        "logging": {
+          "configured": true,
+          "log_file": "D:\\Projects\\HeartGuard\\outputs\\logs\\pvmepcg.log",
+          "max_bytes": 10485760,
+          "backup_count": 5
+        },
+        "audit_mode": "smoke",
+        "audit_limit": 20,
+        "audit_records": 200,
+        "audit_wall_seconds": 5.965
+      }
+    },
+    {
+      "run_id": "20260826T164512Z-f2592249",
+      "name": "dataset_audit_smoke",
+      "status": "completed",
+      "started_utc": "2026-08-26T16:45:12.520300+00:00",
+      "finished_utc": "2026-08-26T16:45:16.588564+00:00",
+      "seed": 42,
+      "seed_state": {
+        "global_seed": 42,
+        "applied_seed": 42,
+        "seed_applied": true,
+        "python_hash_seed": {
+          "value_at_interpreter_start": null,
+          "value_now": "42",
+          "hash_randomization_enabled": true,
+          "effective_for_this_process": false,
+          "effective_for_child_processes": true,
+          "note": "PYTHONHASHSEED is read once at interpreter start. Set it in the shell before launching Python if this process's own hash order must be deterministic; code should not depend on it regardless."
+        }
+      },
+      "git": {
+        "available": true,
+        "reason": null,
+        "commit": "473402c647a7e6c425f7aa48e4a735212aefb1cc",
+        "commit_short": "473402c6",
+        "branch": "main",
+        "dirty": true,
+        "dirty_files": [
+          "outputs/00_evidence_index/run_manifest.json",
+          "scripts/01_run_dataset_audit.py"
+        ]
+      },
+      "environment": {
+        "python_version": "3.11.9",
+        "python_executable": "D:\\Projects\\HeartGuard\\.venv\\Scripts\\python.exe",
+        "in_venv": true,
+        "platform": "Windows-10-10.0.19045-SP0",
+        "machine": "AMD64",
+        "processor": "Intel64 Family 6 Model 142 Stepping 9, GenuineIntel",
+        "cpu_count": 4,
+        "hostname": "DESKTOP-DUC8EHD",
+        "user": "prath",
+        "gpu": "none (CPU-only machine)"
+      },
+      "packages": {
+        "numpy": "2.4.6",
+        "scipy": "1.17.1",
+        "pandas": "3.0.5",
+        "scikit-learn": "1.9.0",
+        "joblib": "1.5.3",
+        "librosa": "0.11.0",
+        "soundfile": "0.14.0",
+        "PyWavelets": "1.9.0",
+        "soxr": "1.1.0",
+        "numba": "0.67.0",
+        "llvmlite": "0.49.0",
+        "matplotlib": "3.11.1",
+        "seaborn": "0.13.2",
+        "pyarrow": "25.0.1",
+        "tqdm": "4.70.0",
+        "PyYAML": "6.0.3",
+        "xgboost": "3.2.0",
+        "lightgbm": "4.7.0",
+        "scikit-optimize": "0.10.2",
+        "deap": "1.4.4",
+        "pyswarms": "1.3.0",
+        "shap": "0.51.0",
+        "statsmodels": "0.14.6",
+        "fastapi": "0.141.1",
+        "uvicorn": "0.52.4",
+        "python-multipart": "0.0.32",
+        "pydantic": "2.13.4",
+        "python-docx": "1.2.0",
+        "openpyxl": "3.1.5",
+        "kaleido": "1.3.0"
+      },
+      "config_hash": "c84082cca92722eb",
+      "timings_sec": {
+        "audit:phase_08_11_physionet": 1.404303,
+        "audit:phase_12_13_pascal": 0.349904,
+        "audit:phase_14_15_circor": 0.935728,
+        "audit:catalog": 0.084208,
+        "audit:smoke_scan": 1.024374,
+        "_total_run": 4.068264
+      },
+      "artifacts": [],
+      "extra": {
+        "logging": {
+          "configured": true,
+          "log_file": "D:\\Projects\\HeartGuard\\outputs\\logs\\pvmepcg.log",
+          "max_bytes": 10485760,
+          "backup_count": 5
+        },
+        "audit_mode": "smoke",
+        "audit_limit": 10,
+        "audit_records": 100,
+        "audit_wall_seconds": 3.802
+      }
+    },
+    {
+      "run_id": "20260826T164516Z-40825ec7",
+      "name": "dataset_audit",
+      "status": "completed",
+      "started_utc": "2026-08-26T16:45:16.688947+00:00",
+      "finished_utc": "2026-08-26T16:46:50.159486+00:00",
+      "seed": 42,
+      "seed_state": {
+        "global_seed": 42,
+        "applied_seed": 42,
+        "seed_applied": true,
+        "python_hash_seed": {
+          "value_at_interpreter_start": null,
+          "value_now": "42",
+          "hash_randomization_enabled": true,
+          "effective_for_this_process": false,
+          "effective_for_child_processes": true,
+          "note": "PYTHONHASHSEED is read once at interpreter start. Set it in the shell before launching Python if this process's own hash order must be deterministic; code should not depend on it regardless."
+        }
+      },
+      "git": {
+        "available": true,
+        "reason": null,
+        "commit": "473402c647a7e6c425f7aa48e4a735212aefb1cc",
+        "commit_short": "473402c6",
+        "branch": "main",
+        "dirty": true,
+        "dirty_files": [
+          "outputs/00_evidence_index/run_manifest.json",
+          "scripts/01_run_dataset_audit.py"
+        ]
+      },
+      "environment": {
+        "python_version": "3.11.9",
+        "python_executable": "D:\\Projects\\HeartGuard\\.venv\\Scripts\\python.exe",
+        "in_venv": true,
+        "platform": "Windows-10-10.0.19045-SP0",
+        "machine": "AMD64",
+        "processor": "Intel64 Family 6 Model 142 Stepping 9, GenuineIntel",
+        "cpu_count": 4,
+        "hostname": "DESKTOP-DUC8EHD",
+        "user": "prath",
+        "gpu": "none (CPU-only machine)"
+      },
+      "packages": {
+        "numpy": "2.4.6",
+        "scipy": "1.17.1",
+        "pandas": "3.0.5",
+        "scikit-learn": "1.9.0",
+        "joblib": "1.5.3",
+        "librosa": "0.11.0",
+        "soundfile": "0.14.0",
+        "PyWavelets": "1.9.0",
+        "soxr": "1.1.0",
+        "numba": "0.67.0",
+        "llvmlite": "0.49.0",
+        "matplotlib": "3.11.1",
+        "seaborn": "0.13.2",
+        "pyarrow": "25.0.1",
+        "tqdm": "4.70.0",
+        "PyYAML": "6.0.3",
+        "xgboost": "3.2.0",
+        "lightgbm": "4.7.0",
+        "scikit-optimize": "0.10.2",
+        "deap": "1.4.4",
+        "pyswarms": "1.3.0",
+        "shap": "0.51.0",
+        "statsmodels": "0.14.6",
+        "fastapi": "0.141.1",
+        "uvicorn": "0.52.4",
+        "python-multipart": "0.0.32",
+        "pydantic": "2.13.4",
+        "python-docx": "1.2.0",
+        "openpyxl": "3.1.5",
+        "kaleido": "1.3.0"
+      },
+      "config_hash": "c84082cca92722eb",
+      "timings_sec": {
+        "audit:phase_08_11_physionet": 0.356551,
+        "audit:phase_12_13_pascal": 0.136544,
+        "audit:phase_14_15_circor": 5.713991,
+        "audit:catalog": 0.089451,
+        "audit:phase_16_integrity": 74.964383,
+        "audit:phase_17_duplicates": 0.85022,
+        "audit:phase_18_summaries": 0.777935,
+        "audit:phase_19_master": 2.811611,
+        "audit:phase_20_splits": 6.650749,
+        "audit:phase_21_inventory": 0.853982,
+        "_total_run": 93.470539
+      },
+      "artifacts": [
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_on_a_cleared_dir0/audit/metadata_master.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_on_a_cleared_dir0/audit/subject_split_map.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_on_a_cleared_dir0/audit/dataset_inventory.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_on_a_cleared_dir0/audit/class_distribution.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_on_a_cleared_dir0/audit/recording_duration_summary.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_on_a_cleared_dir0/audit/sampling_rate_summary.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_on_a_cleared_dir0/audit/missing_corrupt_files.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_on_a_cleared_dir0/audit/duplicate_report.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_on_a_cleared_dir0/audit/dataset_audit_report.docx"
+      ],
+      "extra": {
+        "logging": {
+          "configured": true,
+          "log_file": "D:\\Projects\\HeartGuard\\outputs\\logs\\pvmepcg.log",
+          "max_bytes": 10485760,
+          "backup_count": 5
+        },
+        "audit_mode": "full",
+        "audit_limit": null,
+        "audit_wall_seconds": 93.213,
+        "audit_records": 7536,
+        "audit_supervised": 6988,
+        "audit_files_scanned": 8368,
+        "audit_fold_assignments": 23607
+      }
+    },
+    {
+      "run_id": "20260826T164650Z-0a3a1839",
+      "name": "dataset_audit",
+      "status": "completed",
+      "started_utc": "2026-08-26T16:46:50.369000+00:00",
+      "finished_utc": "2026-08-26T16:47:06.831104+00:00",
+      "seed": 42,
+      "seed_state": {
+        "global_seed": 42,
+        "applied_seed": 42,
+        "seed_applied": true,
+        "python_hash_seed": {
+          "value_at_interpreter_start": null,
+          "value_now": "42",
+          "hash_randomization_enabled": true,
+          "effective_for_this_process": false,
+          "effective_for_child_processes": true,
+          "note": "PYTHONHASHSEED is read once at interpreter start. Set it in the shell before launching Python if this process's own hash order must be deterministic; code should not depend on it regardless."
+        }
+      },
+      "git": {
+        "available": true,
+        "reason": null,
+        "commit": "473402c647a7e6c425f7aa48e4a735212aefb1cc",
+        "commit_short": "473402c6",
+        "branch": "main",
+        "dirty": true,
+        "dirty_files": [
+          "outputs/00_evidence_index/run_manifest.json",
+          "scripts/01_run_dataset_audit.py"
+        ]
+      },
+      "environment": {
+        "python_version": "3.11.9",
+        "python_executable": "D:\\Projects\\HeartGuard\\.venv\\Scripts\\python.exe",
+        "in_venv": true,
+        "platform": "Windows-10-10.0.19045-SP0",
+        "machine": "AMD64",
+        "processor": "Intel64 Family 6 Model 142 Stepping 9, GenuineIntel",
+        "cpu_count": 4,
+        "hostname": "DESKTOP-DUC8EHD",
+        "user": "prath",
+        "gpu": "none (CPU-only machine)"
+      },
+      "packages": {
+        "numpy": "2.4.6",
+        "scipy": "1.17.1",
+        "pandas": "3.0.5",
+        "scikit-learn": "1.9.0",
+        "joblib": "1.5.3",
+        "librosa": "0.11.0",
+        "soundfile": "0.14.0",
+        "PyWavelets": "1.9.0",
+        "soxr": "1.1.0",
+        "numba": "0.67.0",
+        "llvmlite": "0.49.0",
+        "matplotlib": "3.11.1",
+        "seaborn": "0.13.2",
+        "pyarrow": "25.0.1",
+        "tqdm": "4.70.0",
+        "PyYAML": "6.0.3",
+        "xgboost": "3.2.0",
+        "lightgbm": "4.7.0",
+        "scikit-optimize": "0.10.2",
+        "deap": "1.4.4",
+        "pyswarms": "1.3.0",
+        "shap": "0.51.0",
+        "statsmodels": "0.14.6",
+        "fastapi": "0.141.1",
+        "uvicorn": "0.52.4",
+        "python-multipart": "0.0.32",
+        "pydantic": "2.13.4",
+        "python-docx": "1.2.0",
+        "openpyxl": "3.1.5",
+        "kaleido": "1.3.0"
+      },
+      "config_hash": "c84082cca92722eb",
+      "timings_sec": {
+        "audit:phase_08_11_physionet": 0.364762,
+        "audit:phase_12_13_pascal": 0.138727,
+        "audit:phase_14_15_circor": 5.779424,
+        "audit:catalog": 0.09672,
+        "audit:phase_16_integrity": 0.494253,
+        "audit:phase_17_duplicates": 1.013914,
+        "audit:phase_18_summaries": 0.799935,
+        "audit:phase_19_master": 2.504189,
+        "audit:phase_20_splits": 4.315087,
+        "audit:phase_21_inventory": 0.659788,
+        "_total_run": 16.462104
+      },
+      "artifacts": [
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_on_a_cleared_dir0/audit/metadata_master.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_on_a_cleared_dir0/audit/subject_split_map.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_on_a_cleared_dir0/audit/dataset_inventory.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_on_a_cleared_dir0/audit/class_distribution.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_on_a_cleared_dir0/audit/recording_duration_summary.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_on_a_cleared_dir0/audit/sampling_rate_summary.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_on_a_cleared_dir0/audit/missing_corrupt_files.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_on_a_cleared_dir0/audit/duplicate_report.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_on_a_cleared_dir0/audit/dataset_audit_report.docx"
+      ],
+      "extra": {
+        "logging": {
+          "configured": true,
+          "log_file": "D:\\Projects\\HeartGuard\\outputs\\logs\\pvmepcg.log",
+          "max_bytes": 10485760,
+          "backup_count": 5
+        },
+        "audit_mode": "full",
+        "audit_limit": null,
+        "audit_wall_seconds": 16.175,
+        "audit_records": 7536,
+        "audit_supervised": 6988,
+        "audit_files_scanned": 8368,
+        "audit_fold_assignments": 23607
+      }
+    },
+    {
+      "run_id": "20260826T164707Z-82718cd0",
+      "name": "dataset_audit",
+      "status": "completed",
+      "started_utc": "2026-08-26T16:47:07.051214+00:00",
+      "finished_utc": "2026-08-26T16:47:23.919673+00:00",
+      "seed": 42,
+      "seed_state": {
+        "global_seed": 42,
+        "applied_seed": 42,
+        "seed_applied": true,
+        "python_hash_seed": {
+          "value_at_interpreter_start": null,
+          "value_now": "42",
+          "hash_randomization_enabled": true,
+          "effective_for_this_process": false,
+          "effective_for_child_processes": true,
+          "note": "PYTHONHASHSEED is read once at interpreter start. Set it in the shell before launching Python if this process's own hash order must be deterministic; code should not depend on it regardless."
+        }
+      },
+      "git": {
+        "available": true,
+        "reason": null,
+        "commit": "473402c647a7e6c425f7aa48e4a735212aefb1cc",
+        "commit_short": "473402c6",
+        "branch": "main",
+        "dirty": true,
+        "dirty_files": [
+          "outputs/00_evidence_index/run_manifest.json",
+          "scripts/01_run_dataset_audit.py"
+        ]
+      },
+      "environment": {
+        "python_version": "3.11.9",
+        "python_executable": "D:\\Projects\\HeartGuard\\.venv\\Scripts\\python.exe",
+        "in_venv": true,
+        "platform": "Windows-10-10.0.19045-SP0",
+        "machine": "AMD64",
+        "processor": "Intel64 Family 6 Model 142 Stepping 9, GenuineIntel",
+        "cpu_count": 4,
+        "hostname": "DESKTOP-DUC8EHD",
+        "user": "prath",
+        "gpu": "none (CPU-only machine)"
+      },
+      "packages": {
+        "numpy": "2.4.6",
+        "scipy": "1.17.1",
+        "pandas": "3.0.5",
+        "scikit-learn": "1.9.0",
+        "joblib": "1.5.3",
+        "librosa": "0.11.0",
+        "soundfile": "0.14.0",
+        "PyWavelets": "1.9.0",
+        "soxr": "1.1.0",
+        "numba": "0.67.0",
+        "llvmlite": "0.49.0",
+        "matplotlib": "3.11.1",
+        "seaborn": "0.13.2",
+        "pyarrow": "25.0.1",
+        "tqdm": "4.70.0",
+        "PyYAML": "6.0.3",
+        "xgboost": "3.2.0",
+        "lightgbm": "4.7.0",
+        "scikit-optimize": "0.10.2",
+        "deap": "1.4.4",
+        "pyswarms": "1.3.0",
+        "shap": "0.51.0",
+        "statsmodels": "0.14.6",
+        "fastapi": "0.141.1",
+        "uvicorn": "0.52.4",
+        "python-multipart": "0.0.32",
+        "pydantic": "2.13.4",
+        "python-docx": "1.2.0",
+        "openpyxl": "3.1.5",
+        "kaleido": "1.3.0"
+      },
+      "config_hash": "c84082cca92722eb",
+      "timings_sec": {
+        "audit:phase_08_11_physionet": 0.362678,
+        "audit:phase_12_13_pascal": 0.145195,
+        "audit:phase_14_15_circor": 6.006284,
+        "audit:catalog": 0.087651,
+        "audit:phase_16_integrity": 0.508404,
+        "audit:phase_17_duplicates": 0.951499,
+        "audit:phase_18_summaries": 0.815223,
+        "audit:phase_19_master": 2.610711,
+        "audit:phase_20_splits": 4.308807,
+        "audit:phase_21_inventory": 0.639264,
+        "_total_run": 16.868459
+      },
+      "artifacts": [
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_records_wall_tim0/metadata_master.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_records_wall_tim0/subject_split_map.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_records_wall_tim0/dataset_inventory.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_records_wall_tim0/class_distribution.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_records_wall_tim0/recording_duration_summary.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_records_wall_tim0/sampling_rate_summary.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_records_wall_tim0/missing_corrupt_files.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_records_wall_tim0/duplicate_report.csv",
+        "C:/Users/prath/AppData/Local/Temp/pytest-of-prath/pytest-67/test_full_run_records_wall_tim0/dataset_audit_report.docx"
+      ],
+      "extra": {
+        "logging": {
+          "configured": true,
+          "log_file": "D:\\Projects\\HeartGuard\\outputs\\logs\\pvmepcg.log",
+          "max_bytes": 10485760,
+          "backup_count": 5
+        },
+        "audit_mode": "full",
+        "audit_limit": null,
+        "audit_wall_seconds": 16.444,
+        "audit_records": 7536,
+        "audit_supervised": 6988,
+        "audit_files_scanned": 8368,
+        "audit_fold_assignments": 23607
+      }
+    },
+    {
+      "run_id": "20260826T164724Z-f7bd6a7f",
+      "name": "dataset_audit_smoke",
+      "status": "completed",
+      "started_utc": "2026-08-26T16:47:24.025963+00:00",
+      "finished_utc": "2026-08-26T16:47:27.417755+00:00",
+      "seed": 42,
+      "seed_state": {
+        "global_seed": 42,
+        "applied_seed": 42,
+        "seed_applied": true,
+        "python_hash_seed": {
+          "value_at_interpreter_start": null,
+          "value_now": "42",
+          "hash_randomization_enabled": true,
+          "effective_for_this_process": false,
+          "effective_for_child_processes": true,
+          "note": "PYTHONHASHSEED is read once at interpreter start. Set it in the shell before launching Python if this process's own hash order must be deterministic; code should not depend on it regardless."
+        }
+      },
+      "git": {
+        "available": true,
+        "reason": null,
+        "commit": "473402c647a7e6c425f7aa48e4a735212aefb1cc",
+        "commit_short": "473402c6",
+        "branch": "main",
+        "dirty": true,
+        "dirty_files": [
+          "outputs/00_evidence_index/run_manifest.json",
+          "scripts/01_run_dataset_audit.py"
+        ]
+      },
+      "environment": {
+        "python_version": "3.11.9",
+        "python_executable": "D:\\Projects\\HeartGuard\\.venv\\Scripts\\python.exe",
+        "in_venv": true,
+        "platform": "Windows-10-10.0.19045-SP0",
+        "machine": "AMD64",
+        "processor": "Intel64 Family 6 Model 142 Stepping 9, GenuineIntel",
+        "cpu_count": 4,
+        "hostname": "DESKTOP-DUC8EHD",
+        "user": "prath",
+        "gpu": "none (CPU-only machine)"
+      },
+      "packages": {
+        "numpy": "2.4.6",
+        "scipy": "1.17.1",
+        "pandas": "3.0.5",
+        "scikit-learn": "1.9.0",
+        "joblib": "1.5.3",
+        "librosa": "0.11.0",
+        "soundfile": "0.14.0",
+        "PyWavelets": "1.9.0",
+        "soxr": "1.1.0",
+        "numba": "0.67.0",
+        "llvmlite": "0.49.0",
+        "matplotlib": "3.11.1",
+        "seaborn": "0.13.2",
+        "pyarrow": "25.0.1",
+        "tqdm": "4.70.0",
+        "PyYAML": "6.0.3",
+        "xgboost": "3.2.0",
+        "lightgbm": "4.7.0",
+        "scikit-optimize": "0.10.2",
+        "deap": "1.4.4",
+        "pyswarms": "1.3.0",
+        "shap": "0.51.0",
+        "statsmodels": "0.14.6",
+        "fastapi": "0.141.1",
+        "uvicorn": "0.52.4",
+        "python-multipart": "0.0.32",
+        "pydantic": "2.13.4",
+        "python-docx": "1.2.0",
+        "openpyxl": "3.1.5",
+        "kaleido": "1.3.0"
+      },
+      "config_hash": "c84082cca92722eb",
+      "timings_sec": {
+        "audit:phase_08_11_physionet": 1.090789,
+        "audit:phase_12_13_pascal": 0.466204,
+        "audit:phase_14_15_circor": 0.981975,
+        "audit:catalog": 0.09321,
+        "audit:smoke_scan": 0.508573,
+        "_total_run": 3.391792
+      },
+      "artifacts": [],
+      "extra": {
+        "logging": {
+          "configured": true,
+          "log_file": "D:\\Projects\\HeartGuard\\outputs\\logs\\pvmepcg.log",
+          "max_bytes": 10485760,
+          "backup_count": 5
+        },
+        "audit_mode": "smoke",
+        "audit_limit": 5,
+        "audit_records": 50,
+        "audit_wall_seconds": 3.144
+      }
+    },
+    {
+      "run_id": "20260826T164727Z-f8cbc1e1",
+      "name": "dataset_audit_smoke",
+      "status": "failed",
+      "started_utc": "2026-08-26T16:47:27.482336+00:00",
+      "finished_utc": "2026-08-26T16:47:28.053472+00:00",
+      "seed": 42,
+      "seed_state": {
+        "global_seed": 42,
+        "applied_seed": 42,
+        "seed_applied": true,
+        "python_hash_seed": {
+          "value_at_interpreter_start": null,
+          "value_now": "42",
+          "hash_randomization_enabled": true,
+          "effective_for_this_process": false,
+          "effective_for_child_processes": true,
+          "note": "PYTHONHASHSEED is read once at interpreter start. Set it in the shell before launching Python if this process's own hash order must be deterministic; code should not depend on it regardless."
+        }
+      },
+      "git": {
+        "available": true,
+        "reason": null,
+        "commit": "473402c647a7e6c425f7aa48e4a735212aefb1cc",
+        "commit_short": "473402c6",
+        "branch": "main",
+        "dirty": true,
+        "dirty_files": [
+          "outputs/00_evidence_index/run_manifest.json",
+          "scripts/01_run_dataset_audit.py"
+        ]
+      },
+      "environment": {
+        "python_version": "3.11.9",
+        "python_executable": "D:\\Projects\\HeartGuard\\.venv\\Scripts\\python.exe",
+        "in_venv": true,
+        "platform": "Windows-10-10.0.19045-SP0",
+        "machine": "AMD64",
+        "processor": "Intel64 Family 6 Model 142 Stepping 9, GenuineIntel",
+        "cpu_count": 4,
+        "hostname": "DESKTOP-DUC8EHD",
+        "user": "prath",
+        "gpu": "none (CPU-only machine)"
+      },
+      "packages": {
+        "numpy": "2.4.6",
+        "scipy": "1.17.1",
+        "pandas": "3.0.5",
+        "scikit-learn": "1.9.0",
+        "joblib": "1.5.3",
+        "librosa": "0.11.0",
+        "soundfile": "0.14.0",
+        "PyWavelets": "1.9.0",
+        "soxr": "1.1.0",
+        "numba": "0.67.0",
+        "llvmlite": "0.49.0",
+        "matplotlib": "3.11.1",
+        "seaborn": "0.13.2",
+        "pyarrow": "25.0.1",
+        "tqdm": "4.70.0",
+        "PyYAML": "6.0.3",
+        "xgboost": "3.2.0",
+        "lightgbm": "4.7.0",
+        "scikit-optimize": "0.10.2",
+        "deap": "1.4.4",
+        "pyswarms": "1.3.0",
+        "shap": "0.51.0",
+        "statsmodels": "0.14.6",
+        "fastapi": "0.141.1",
+        "uvicorn": "0.52.4",
+        "python-multipart": "0.0.32",
+        "pydantic": "2.13.4",
+        "python-docx": "1.2.0",
+        "openpyxl": "3.1.5",
+        "kaleido": "1.3.0"
+      },
+      "config_hash": "c84082cca92722eb",
+      "timings_sec": {
+        "audit:phase_08_11_physionet [failed]": 0.301394,
+        "_total_run": 0.571136
+      },
+      "artifacts": [],
+      "extra": {
+        "logging": {
+          "configured": true,
+          "log_file": "D:\\Projects\\HeartGuard\\outputs\\logs\\pvmepcg.log",
+          "max_bytes": 10485760,
+          "backup_count": 5
+        },
+        "audit_mode": "smoke",
+        "audit_limit": 0
+      }
     }
   ],
-  "updated_utc": "2026-08-26T16:29:45.309331+00:00"
+  "updated_utc": "2026-08-26T16:47:28.069102+00:00"
 }
