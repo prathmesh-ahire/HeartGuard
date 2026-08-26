@@ -60,6 +60,24 @@ quality:
     out_of_band: [400, 1000]   # up to Nyquist at target_fs
     low_snr_db_flag: 5.0
   spectral_flatness_flag: 0.50 # above this the record is noise-like
+  # Power below in_band[0] relative to the in-band power, in dB. Positive means
+  # the recording holds more energy below 20 Hz -- rubbing, movement, breathing,
+  # loose contact -- than in the 20-400 Hz band the heart sounds occupy.
+  #
+  # This is the ONLY noise proxy of the three that survives the T26.5 sanity
+  # check. Measured against the 404 PhysioNet recordings the Challenge
+  # organisers marked poor quality (2026-08-26, all 3,541 D1 records):
+  #
+  #   snr_proxy_db < 5      sens 0.062  spec 0.997  balanced acc 0.530
+  #   spectral_flatness>0.5 flags nothing (corpus max is 0.146)
+  #   drift_ratio_db > 5    sens 0.634  spec 0.918  balanced acc 0.776
+  #   the three OR-ed        sens 0.663  spec 0.915  balanced acc 0.789
+  #
+  # +5.0 dB was chosen from the sweep in outputs/02_preprocessing/
+  # sqi_calibration.csv, not by eye. The two proxies above are KEPT: they fire
+  # on out-of-band and white-noise-like records that this one misses, mostly in
+  # CirCor. See the 2026-08-26 Phases 26-27 entry in Docs/note.md.
+  drift_ratio_db_flag: 5.0
   short_duration_sec: 2.0      # is_short threshold
   # Thresholds are calibrated against PhysioNet REFERENCE-SQI as an independent
   # human-annotated reference (T26.5) rather than chosen by eye.
