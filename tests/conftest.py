@@ -150,3 +150,39 @@ def rng() -> np.random.Generator:
     from src.utils.seed import get_rng
 
     return get_rng(42)
+
+
+# ---------------------------------------------------------------------------
+# real records (Phases 23-25)
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture(scope="session")
+def master_frame() -> Any:
+    """DA-08, read from disk. Only meaningful in ``needs_data`` tests."""
+    from src.data_loader import master as ms
+
+    return ms.load_master()
+
+
+@pytest.fixture(scope="session")
+def sample_records(master_frame: Any, project_root: Path):
+    """``sample_records("D2", 5)`` -> a deterministic list of real WAV paths.
+
+    Sampled with seed 42 so the same files are exercised on every run and a
+    failure can be reproduced from the record uid alone. Unlabelled and
+    duplicate records are kept: preprocessing has to survive every file on disk,
+    not only the ones that reach a classifier.
+    """
+
+    def pick(dataset_source: str, n: int = 5, *, seed: int = 42) -> list[tuple[str, Path]]:
+        subset = master_frame[master_frame["dataset_source"] == dataset_source]
+        if subset.empty:
+            return []
+        take = subset.sample(n=min(n, len(subset)), random_state=seed)
+        return [
+            (str(row.record_uid), project_root / str(row.file_path))
+            for row in take.itertuples()
+        ]
+
+    return pick

@@ -21,6 +21,11 @@ librosa==0.11.0
 soundfile==0.14.0
 PyWavelets==1.9.0
 
+# Pinned explicitly, not left to librosa's transitive resolution: it is the
+# resampler src/preprocessing/io.py and the Phase 17 content hash call directly,
+# and a different soxr version would change the samples both produce.
+soxr==1.1.0
+
 # librosa pulls numba/llvmlite for its JIT paths. Pinned explicitly because a
 # numba/numpy version mismatch is the single most common way this stack breaks
 # on a fresh Windows install, and it fails at import, not at install.

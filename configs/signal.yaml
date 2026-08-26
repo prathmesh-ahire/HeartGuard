@@ -22,15 +22,21 @@ resample:
 filter:
   enabled: true                # ablation PP-09 flips this
   type: "butterworth"
-  order: 4                     # sosfiltfilt applies it twice -> effective 8th order,
-                               # zero phase. Documented in T24.2.
+  order: 4                     # prototype order. The bandpass transform doubles it
+                               # to 8 poles (4 SOS sections), and sosfiltfilt runs
+                               # it forwards and backwards, doubling again to an
+                               # effective 16: -6.02 dB at each cutoff rather than
+                               # -3.01, zero phase. Documented in T24.2.
   low_hz: 20
   high_hz: 400                 # well below the 1000 Hz Nyquist at target_fs
   design: "sos"                # second-order sections; numerically stable at order 4
   zero_phase: true             # scipy.signal.sosfiltfilt
-  # The shortest record in the corpus is 0.76 s = 1,520 samples at 2 kHz, which
-  # is below sosfiltfilt's default padlen. T24.3 reduces padding and flags the
-  # record rather than raising. This guard fires on real data, not hypothetically.
+  # sosfiltfilt needs padlen = 27 samples of edge padding for this design (4
+  # second-order sections). Every record in the corpus clears it: the shortest,
+  # 0.76 s, is 1,520 samples at 2 kHz. An earlier draft of this comment claimed
+  # the opposite; Phase 24 measured it. The guard below reduces padding and flags
+  # the record rather than raising, and exists for the inference API, where an
+  # uploaded clip can be any length.
   short_signal_policy: "reduce_padlen"
   min_padlen: 12
 
