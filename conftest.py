@@ -28,7 +28,10 @@ hook that acts on them is kept alongside for coherence. ``tests/conftest.py``
 
 from __future__ import annotations
 
+import os
+import shutil
 import sys
+import tempfile
 from pathlib import Path
 
 import pytest
@@ -38,6 +41,14 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 DATASET_ROOT = ROOT / "dataset"
+
+#: The project's real run manifest. Tests must never append to it; a test that
+#: wants to *read* it does so explicitly through this constant.
+REAL_RUN_MANIFEST = ROOT / "outputs" / "00_evidence_index" / "run_manifest.json"
+
+MANIFEST_ENV = "HEARTGUARD__PATHS__OUTPUTS__RUN_MANIFEST"
+
+_manifest_sandbox: Path | None = None
 
 
 def pytest_addoption(parser: pytest.Parser) -> None:
@@ -69,6 +80,53 @@ def pytest_configure(config: pytest.Config) -> None:
     config.addinivalue_line(
         "markers", "_internal: reserved; not used by project tests"
     )
+    _redirect_run_manifest()
+
+
+def _redirect_run_manifest() -> None:
+    """Point the run manifest at a throwaway file for the whole test session.
+
+    ``tests/conftest.py`` promises that no test writes into the real
+    ``outputs/`` tree. Until now that promise held for artifacts and for the
+    evidence index but *not* for the run manifest, because
+    ``run_manifest._default_manifest_path()`` resolves through
+    ``configs/paths.yaml`` and ignores whatever ``--out-dir`` a script was given.
+    Every audit test that called ``run_audit`` therefore appended a real row to
+    the project's own provenance file, and any such test killed mid-run left a
+    row stuck at ``status="running"`` forever.
+
+    Rule 5 makes the manifest a deliverable: it is what maps a published number
+    back to the run that produced it. Rows from ``--limit 10`` test invocations
+    map to nothing, and a permanent "running" row reads as an interrupted
+    project run. Both are noise in a file whose entire value is that it is
+    trustworthy.
+
+    The redirect happens in ``pytest_configure`` rather than in an autouse
+    fixture because it must land before the first test module is imported --
+    a module that loads config at import time would otherwise cache the real
+    path and ignore the override.
+    """
+    global _manifest_sandbox
+
+    if os.environ.get(MANIFEST_ENV):  # an explicit override wins; don't fight it
+        return
+
+    _manifest_sandbox = Path(tempfile.mkdtemp(prefix="pvmepcg-manifest-"))
+    os.environ[MANIFEST_ENV] = str(_manifest_sandbox / "run_manifest.json")
+
+    from src.utils.config import clear_cache
+
+    clear_cache()  # anything already loaded holds the real path
+
+
+def pytest_unconfigure(config: pytest.Config) -> None:
+    global _manifest_sandbox
+
+    if _manifest_sandbox is None:
+        return
+    os.environ.pop(MANIFEST_ENV, None)
+    shutil.rmtree(_manifest_sandbox, ignore_errors=True)
+    _manifest_sandbox = None
 
 
 def pytest_collection_modifyitems(
@@ -105,5 +163,7 @@ def pytest_report_header(config: pytest.Config) -> list[str]:
         "PV-MEPCG: dataset="
         + ("present" if dataset_available(config) else "absent -> needs_data will SKIP")
         + ", slow="
-        + ("included" if config.getoption("--runslow") else "SKIPPED (--runslow to include)")
+        + ("included" if config.getoption("--runslow") else "SKIPPED (--runslow to include)"),
+        "PV-MEPCG: run manifest -> "
+        + (str(_manifest_sandbox) if _manifest_sandbox else "NOT REDIRECTED (real outputs/)"),
     ]

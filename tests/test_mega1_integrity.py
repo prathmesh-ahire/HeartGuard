@@ -22,6 +22,7 @@ the suite, not by a test asserting about itself.
 from __future__ import annotations
 
 import hashlib
+import os
 from pathlib import Path
 from typing import Any
 
@@ -590,6 +591,16 @@ def test_extra_every_configured_path_lands_inside_the_checkout(root: Path) -> No
 
     paths = load_config("paths")
     for dotted in paths.leaf_paths():
+        if dotted in paths.overrides:
+            # A `HEARTGUARD__...` environment override is not what the repository
+            # ships, and this guard is about the committed file: it exists because
+            # `configs/paths.yaml` once pinned a literal `D:/Projects/HeartGuard`.
+            # The test session's own run-manifest redirect (rootdir `conftest.py`)
+            # lands here, and so would any deliberate operator override. The raw
+            # text of `paths.yaml` is still scanned for drive letters by
+            # `test_extra_paths_yaml_is_machine_independent`, which no override
+            # can reach.
+            continue
         value = paths.get(dotted)
         if not isinstance(value, str) or (not value.startswith(("/", "\\")) and ":" not in value):
             continue
@@ -678,3 +689,67 @@ def test_extra_committed_pp08_matches_a_fresh_write(quality: Any, tmp_path: Path
     assert hashlib.sha256(fresh.read_bytes()).hexdigest() == (
         hashlib.sha256(committed.read_bytes()).hexdigest()
     ), "outputs/02_preprocessing/signal_quality_flags.csv is stale -- regenerate it"
+
+
+# ===========================================================================
+# provenance isolation -- the test suite must not write into its own evidence
+# ===========================================================================
+
+#: Imported by name rather than from ``conftest``: ``tests/`` is on ``sys.path``
+#: during a run, so a bare ``import conftest`` resolves to ``tests/conftest.py``
+#: and never to the rootdir one that owns the redirect.
+MANIFEST_ENV = "HEARTGUARD__PATHS__OUTPUTS__RUN_MANIFEST"
+REAL_RUN_MANIFEST = (
+    Path(__file__).resolve().parents[1] / "outputs" / "00_evidence_index" / "run_manifest.json"
+)
+
+
+def test_the_test_session_cannot_append_to_the_real_run_manifest() -> None:
+    """A test run must not leave rows in the project's provenance file.
+
+    Found after Mega Test 1: ``run_manifest._default_manifest_path()`` resolves
+    through ``configs/paths.yaml`` and ignores a script's ``--out-dir``, so every
+    audit test appended a real row to ``outputs/00_evidence_index/run_manifest.json``
+    -- 33 ``dataset_audit_smoke`` rows, 7 rows from a ``t04_7_throwaway_job``
+    that no longer exists in the codebase, and 8 rows stuck at
+    ``status="running"`` because the test process was killed mid-run.
+
+    Same failure shape as the evidence-index pollution fixed in Phase 30: a
+    deliverable quietly filling with rows describing work that produced no
+    deliverable. ``conftest.pytest_configure`` redirects the manifest for the
+    session; this test is what stops that redirect from being removed or from
+    silently returning early.
+    """
+    from src.utils.run_manifest import _default_manifest_path
+
+    active = _default_manifest_path().resolve()
+
+    assert os.environ.get(MANIFEST_ENV), (
+        "the run manifest is not redirected -- conftest.pytest_configure did not run "
+        "or returned early, and this session is appending to the real manifest"
+    )
+    assert active != REAL_RUN_MANIFEST.resolve(), (
+        "tests resolve to the real run manifest at " + str(active)
+    )
+
+
+def test_a_run_started_by_a_test_lands_in_the_sandbox_not_in_outputs() -> None:
+    """The redirect must survive an actual ``start_run`` round trip.
+
+    Asserting on the resolved path alone would pass if ``start_run`` computed
+    its destination some other way. This runs the real thing and then checks the
+    real manifest is untouched.
+    """
+    from src.utils.run_manifest import _default_manifest_path, load_manifest, start_run
+
+    before = REAL_RUN_MANIFEST.read_bytes() if REAL_RUN_MANIFEST.is_file() else b""
+
+    run = start_run("provenance_isolation_probe", seed=42)
+    run.finish("completed")
+
+    sandbox = load_manifest(_default_manifest_path())
+    assert sandbox["runs"][-1]["name"] == "provenance_isolation_probe"
+    assert sandbox["runs"][-1]["status"] == "completed"
+
+    after = REAL_RUN_MANIFEST.read_bytes() if REAL_RUN_MANIFEST.is_file() else b""
+    assert after == before, "start_run inside a test mutated the real run manifest"
