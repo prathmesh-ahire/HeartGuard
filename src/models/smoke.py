@@ -35,6 +35,7 @@ __all__ = [
     "run_smoke",
     "smoke_frame",
     "write_smoke_metrics",
+    "serialized_size",
 ]
 
 log = get_logger("models.smoke")
@@ -89,7 +90,11 @@ class SmokeResult:
     predict_seconds: float
     metrics: dict[str, float] = field(default_factory=dict)
     probability: dict[str, Any] = field(default_factory=dict)
+    model_bytes: int = -1
     notes: str = ""
+    #: The fitted pipeline, when the caller asked to keep it (importances need
+    #: it). Never written to the CSV -- it is a model, not a measurement.
+    pipeline: Any = None
 
     def as_row(self) -> dict[str, Any]:
         row: dict[str, Any] = {
@@ -101,6 +106,9 @@ class SmokeResult:
             "n_features": self.n_features,
             "fit_seconds": round(self.fit_seconds, 4),
             "predict_seconds": round(self.predict_seconds, 4),
+            "model_mb": (
+                round(self.model_bytes / 1024**2, 4) if self.model_bytes >= 0 else None
+            ),
         }
         row.update(self.metrics)
         row.update(self.probability)
@@ -198,6 +206,8 @@ def smoke_fold(
     pipeline_config: dict[str, Any] | None = None,
     positive_label: int = 1,
     notes: str = "",
+    measure_size: bool = True,
+    keep_pipeline: bool = False,
 ) -> SmokeResult:
     """Fit one model on ``fold``'s training rows and score its test rows.
 
@@ -280,18 +290,44 @@ def smoke_fold(
         predict_seconds=predict_seconds,
         metrics=_scalar_metrics(scores),
         probability=probability,
+        model_bytes=serialized_size(built) if measure_size else -1,
         notes=notes,
+        pipeline=built if keep_pipeline else None,
     )
     log.info(
-        "%s on %s %s: bal-acc %.4f, sens %.4f, fit %.2f s",
+        "%s on %s %s: bal-acc %.4f, sens %.4f, fit %.2f s, %.2f MB",
         model_id,
         data.task,
         fold.label,
         result.metrics.get("balanced_accuracy", float("nan")),
         result.metrics.get("sensitivity", float("nan")),
         fit_seconds,
+        max(result.model_bytes, 0) / 1024**2,
     )
     return result
+
+
+def serialized_size(model: Any) -> int:
+    """Bytes the fitted pipeline occupies once joblib has written it out.
+
+    Measured by actually serialising, not by ``sys.getsizeof`` or by counting
+    trees. A 500-tree forest's in-memory footprint and its on-disk footprint
+    differ by more than an order of magnitude, and the number the complexity
+    table (T26) needs is the one a deployment would actually have to ship.
+
+    Written to a temporary file rather than a BytesIO because that is what
+    Phase 51 will do, and a size that changes between the measurement and the
+    thing it is supposed to describe is not a measurement.
+    """
+    import tempfile
+    from pathlib import Path as _Path
+
+    import joblib
+
+    with tempfile.TemporaryDirectory() as directory:
+        target = _Path(directory) / "model.joblib"
+        joblib.dump(model, target)
+        return int(target.stat().st_size)
 
 
 def run_smoke(
@@ -300,6 +336,7 @@ def run_smoke(
     task: str = "binary",
     data: TaskData | None = None,
     factories: dict[str, Callable[[], Any]] | None = None,
+    keep_pipelines: bool = False,
 ) -> tuple[SmokeResult, ...]:
     """Smoke-run several models on the same fold 0 of ``task``."""
     from src.models import estimators as est
@@ -314,7 +351,9 @@ def run_smoke(
             def factory(model_id: str = model_id) -> Any:
                 return est.build_estimator(model_id)
 
-        results.append(smoke_fold(model_id, factory, loaded, fold))
+        results.append(
+            smoke_fold(model_id, factory, loaded, fold, keep_pipeline=keep_pipelines)
+        )
     return tuple(results)
 
 

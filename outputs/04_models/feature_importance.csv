@@ -1,0 +1,277 @@
+model_id,kind,feature,importance,scoring,n_repeats,n_scored_rows,computed_on,rank,importance_std
+M4,impurity,time_zcr_mean,0.06646062669788995,mean decrease in impurity,0,0,train,1,
+M4,impurity,mfcc_04_mean,0.060856126553966286,mean decrease in impurity,0,0,train,2,
+M4,impurity,dwt_cD1_entropy,0.05953214018666161,mean decrease in impurity,0,0,train,3,
+M4,impurity,dwt_cD2_entropy,0.03925375314806611,mean decrease in impurity,0,0,train,4,
+M4,impurity,dwt_cA5_energy,0.022800653165203154,mean decrease in impurity,0,0,train,5,
+M4,impurity,dwt_cA5_mean_abs,0.021864696585417225,mean decrease in impurity,0,0,train,6,
+M4,impurity,mfcc_05_mean,0.018801286286576017,mean decrease in impurity,0,0,train,7,
+M4,impurity,time_hjorth_complexity,0.018579050670708162,mean decrease in impurity,0,0,train,8,
+M4,impurity,mfcc_06_mean,0.017744751331740496,mean decrease in impurity,0,0,train,9,
+M4,impurity,mfcc_01_std,0.01748522542577169,mean decrease in impurity,0,0,train,10,
+M4,impurity,time_duration,0.016030357583344625,mean decrease in impurity,0,0,train,11,
+M4,impurity,time_energy,0.01534060515118454,mean decrease in impurity,0,0,train,12,
+M4,impurity,dwt_cD5_mean_abs,0.01475461646265561,mean decrease in impurity,0,0,train,13,
+M4,impurity,mfcc_08_mean,0.01428481967238895,mean decrease in impurity,0,0,train,14,
+M4,impurity,time_iqr,0.012700942224421415,mean decrease in impurity,0,0,train,15,
+M4,impurity,dwt_cA5_std,0.012580795810004397,mean decrease in impurity,0,0,train,16,
+M4,impurity,dwt_cD1_energy,0.012493163415069567,mean decrease in impurity,0,0,train,17,
+M4,impurity,freq_centroid_mean,0.012395675910661416,mean decrease in impurity,0,0,train,18,
+M4,impurity,mfcc_07_mean,0.01193085903826975,mean decrease in impurity,0,0,train,19,
+M4,impurity,dwt_cD5_energy,0.011529700642036341,mean decrease in impurity,0,0,train,20,
+M4,impurity,freq_band_power_250_350,0.011523096394714945,mean decrease in impurity,0,0,train,21,
+M4,impurity,time_zcr_std,0.010747753127645221,mean decrease in impurity,0,0,train,22,
+M4,impurity,chroma_12_mean,0.009646934087735292,mean decrease in impurity,0,0,train,23,
+M4,impurity,dwt_cD3_entropy,0.009398681738482238,mean decrease in impurity,0,0,train,24,
+M4,impurity,dwt_cD4_energy,0.009346107602925648,mean decrease in impurity,0,0,train,25,
+M4,impurity,dwt_cD2_energy,0.009308301115414455,mean decrease in impurity,0,0,train,26,
+M4,impurity,freq_band_power_350_400,0.00908177437141968,mean decrease in impurity,0,0,train,27,
+M4,impurity,dwt_cD1_std,0.009003650808472543,mean decrease in impurity,0,0,train,28,
+M4,impurity,dwt_cD4_mean_abs,0.008640518928290456,mean decrease in impurity,0,0,train,29,
+M4,impurity,dwt_cD4_std,0.00832067320163653,mean decrease in impurity,0,0,train,30,
+M4,impurity,env_mean,0.00802478924005196,mean decrease in impurity,0,0,train,31,
+M4,impurity,mfcc_03_mean,0.007579212360640841,mean decrease in impurity,0,0,train,32,
+M4,impurity,chroma_01_mean,0.0073284697527125735,mean decrease in impurity,0,0,train,33,
+M4,impurity,dwt_cD3_mean_abs,0.006897958519753207,mean decrease in impurity,0,0,train,34,
+M4,impurity,freq_band_power_50_100,0.006819139998651294,mean decrease in impurity,0,0,train,35,
+M4,impurity,mfcc_11_mean,0.006715789279571494,mean decrease in impurity,0,0,train,36,
+M4,impurity,time_sample_entropy,0.0065600943662972415,mean decrease in impurity,0,0,train,37,
+M4,impurity,freq_flux_mean,0.006556507644456186,mean decrease in impurity,0,0,train,38,
+M4,impurity,dwt_cD2_std,0.006457917142574663,mean decrease in impurity,0,0,train,39,
+M4,impurity,mfcc_12_mean,0.00615055047463961,mean decrease in impurity,0,0,train,40,
+M4,impurity,dwt_cD5_std,0.0057906993004915,mean decrease in impurity,0,0,train,41,
+M4,impurity,time_peak_to_peak,0.005751067768638059,mean decrease in impurity,0,0,train,42,
+M4,impurity,env_std,0.0056372379506518565,mean decrease in impurity,0,0,train,43,
+M4,impurity,time_range,0.005571668888352401,mean decrease in impurity,0,0,train,44,
+M4,impurity,mfcc_05_std,0.005316692540558057,mean decrease in impurity,0,0,train,45,
+M4,impurity,freq_rolloff85_mean,0.005274888846467795,mean decrease in impurity,0,0,train,46,
+M4,impurity,mfcc_10_mean,0.0052588523046831915,mean decrease in impurity,0,0,train,47,
+M4,impurity,time_autocorr_peak_lag,0.00514431355614935,mean decrease in impurity,0,0,train,48,
+M4,impurity,mfcc_02_mean,0.005124471532997623,mean decrease in impurity,0,0,train,49,
+M4,impurity,chroma_02_mean,0.005122129650703981,mean decrease in impurity,0,0,train,50,
+M4,impurity,time_max,0.005085187648927996,mean decrease in impurity,0,0,train,51,
+M4,impurity,mfcc_13_mean,0.0049636392072321105,mean decrease in impurity,0,0,train,52,
+M4,impurity,dwt_cA5_entropy,0.004864869801487585,mean decrease in impurity,0,0,train,53,
+M4,impurity,dwt_cD1_mean_abs,0.004693894363088231,mean decrease in impurity,0,0,train,54,
+M4,impurity,freq_flux_std,0.0046838283197588645,mean decrease in impurity,0,0,train,55,
+M4,impurity,time_autocorr_peak_value,0.004669358913924808,mean decrease in impurity,0,0,train,56,
+M4,impurity,time_crest_factor,0.004555727478517682,mean decrease in impurity,0,0,train,57,
+M4,impurity,mfcc_07_delta_mean,0.004401514432062284,mean decrease in impurity,0,0,train,58,
+M4,impurity,chroma_03_mean,0.00437846648857122,mean decrease in impurity,0,0,train,59,
+M4,impurity,dwt_cD3_energy,0.004250251006955896,mean decrease in impurity,0,0,train,60,
+M4,impurity,mfcc_06_std,0.004234995443163992,mean decrease in impurity,0,0,train,61,
+M4,impurity,freq_band_power_100_150,0.0042063994590892636,mean decrease in impurity,0,0,train,62,
+M4,impurity,dwt_cD2_mean_abs,0.004179540425000302,mean decrease in impurity,0,0,train,63,
+M4,impurity,freq_centroid_std,0.004152957355995684,mean decrease in impurity,0,0,train,64,
+M4,impurity,mfcc_04_std,0.004114155063776942,mean decrease in impurity,0,0,train,65,
+M4,impurity,chroma_07_mean,0.00410386840112475,mean decrease in impurity,0,0,train,66,
+M4,impurity,mfcc_01_mean,0.004092015982016879,mean decrease in impurity,0,0,train,67,
+M4,impurity,freq_band_power_20_50,0.004067990065046455,mean decrease in impurity,0,0,train,68,
+M4,impurity,chroma_07_std,0.00406786951480245,mean decrease in impurity,0,0,train,69,
+M4,impurity,time_hjorth_mobility,0.004064630273315188,mean decrease in impurity,0,0,train,70,
+M4,impurity,chroma_11_mean,0.004034484790082135,mean decrease in impurity,0,0,train,71,
+M4,impurity,freq_rolloff85_std,0.004012813603862813,mean decrease in impurity,0,0,train,72,
+M4,impurity,dwt_cD3_std,0.004009393808985334,mean decrease in impurity,0,0,train,73,
+M4,impurity,freq_bandwidth_mean,0.0040003088866163205,mean decrease in impurity,0,0,train,74,
+M4,impurity,mfcc_09_mean,0.003999910746617895,mean decrease in impurity,0,0,train,75,
+M4,impurity,mfcc_08_std,0.003913487406380369,mean decrease in impurity,0,0,train,76,
+M4,impurity,chroma_06_mean,0.0038953917179828735,mean decrease in impurity,0,0,train,77,
+M4,impurity,chroma_08_std,0.0038341812398816214,mean decrease in impurity,0,0,train,78,
+M4,impurity,mfcc_01_delta_mean,0.0038040311302455906,mean decrease in impurity,0,0,train,79,
+M4,impurity,freq_band_power_150_250,0.003767177530218218,mean decrease in impurity,0,0,train,80,
+M4,impurity,freq_rolloff95_mean,0.003740473404811906,mean decrease in impurity,0,0,train,81,
+M4,impurity,chroma_06_std,0.0037271266808927873,mean decrease in impurity,0,0,train,82,
+M4,impurity,chroma_05_std,0.003718933596605784,mean decrease in impurity,0,0,train,83,
+M4,impurity,mfcc_06_delta_mean,0.003639218443917515,mean decrease in impurity,0,0,train,84,
+M4,impurity,mfcc_11_std,0.0036368859806634856,mean decrease in impurity,0,0,train,85,
+M4,impurity,mfcc_02_delta_mean,0.0035910771546098594,mean decrease in impurity,0,0,train,86,
+M4,impurity,mfcc_10_std,0.0035585652817732936,mean decrease in impurity,0,0,train,87,
+M4,impurity,env_peak_rate,0.003531001963612045,mean decrease in impurity,0,0,train,88,
+M4,impurity,freq_spectral_entropy,0.0034996029587786343,mean decrease in impurity,0,0,train,89,
+M4,impurity,chroma_04_mean,0.003465620737975866,mean decrease in impurity,0,0,train,90,
+M4,impurity,time_skewness,0.003443178662773383,mean decrease in impurity,0,0,train,91,
+M4,impurity,freq_rolloff95_std,0.003439437086679781,mean decrease in impurity,0,0,train,92,
+M4,impurity,mfcc_07_std,0.0034365377071033858,mean decrease in impurity,0,0,train,93,
+M4,impurity,chroma_10_mean,0.0034345211185860553,mean decrease in impurity,0,0,train,94,
+M4,impurity,freq_peak_power,0.0033836625454542173,mean decrease in impurity,0,0,train,95,
+M4,impurity,time_median,0.0033677663829634165,mean decrease in impurity,0,0,train,96,
+M4,impurity,env_kurtosis,0.003339936658941088,mean decrease in impurity,0,0,train,97,
+M4,impurity,mfcc_13_delta_mean,0.003330722623403055,mean decrease in impurity,0,0,train,98,
+M4,impurity,mfcc_09_std,0.0033282923602443695,mean decrease in impurity,0,0,train,99,
+M4,impurity,mfcc_03_std,0.003320401088904016,mean decrease in impurity,0,0,train,100,
+M4,impurity,mfcc_13_std,0.0032645000381235846,mean decrease in impurity,0,0,train,101,
+M4,impurity,dwt_cD5_entropy,0.0032344312474447585,mean decrease in impurity,0,0,train,102,
+M4,impurity,chroma_09_mean,0.003218715753096237,mean decrease in impurity,0,0,train,103,
+M4,impurity,dwt_cD4_entropy,0.003216350454313674,mean decrease in impurity,0,0,train,104,
+M4,impurity,mfcc_10_delta_mean,0.0031795652526756825,mean decrease in impurity,0,0,train,105,
+M4,impurity,freq_flatness_mean,0.0031767554035316966,mean decrease in impurity,0,0,train,106,
+M4,impurity,freq_flatness_std,0.0031722197029439045,mean decrease in impurity,0,0,train,107,
+M4,impurity,mfcc_12_std,0.0031717910350318374,mean decrease in impurity,0,0,train,108,
+M4,impurity,chroma_01_std,0.0031399338442293675,mean decrease in impurity,0,0,train,109,
+M4,impurity,mfcc_04_delta_mean,0.003107196505008343,mean decrease in impurity,0,0,train,110,
+M4,impurity,freq_bandwidth_std,0.0031067027243423407,mean decrease in impurity,0,0,train,111,
+M4,impurity,chroma_04_std,0.003080243955035807,mean decrease in impurity,0,0,train,112,
+M4,impurity,time_min,0.003007450442518446,mean decrease in impurity,0,0,train,113,
+M4,impurity,chroma_12_std,0.0029353137568721736,mean decrease in impurity,0,0,train,114,
+M4,impurity,mfcc_02_std,0.0029190514501749817,mean decrease in impurity,0,0,train,115,
+M4,impurity,chroma_08_mean,0.002890162887608913,mean decrease in impurity,0,0,train,116,
+M4,impurity,time_kurtosis,0.0028493013338018545,mean decrease in impurity,0,0,train,117,
+M4,impurity,mfcc_12_delta_mean,0.0028485482062471255,mean decrease in impurity,0,0,train,118,
+M4,impurity,chroma_05_mean,0.0027947677088439415,mean decrease in impurity,0,0,train,119,
+M4,impurity,freq_dominant,0.0027846152080587138,mean decrease in impurity,0,0,train,120,
+M4,impurity,chroma_10_std,0.0027834294426335006,mean decrease in impurity,0,0,train,121,
+M4,impurity,mfcc_08_delta_mean,0.0027623390857053325,mean decrease in impurity,0,0,train,122,
+M4,impurity,mfcc_03_delta_mean,0.002760591067054511,mean decrease in impurity,0,0,train,123,
+M4,impurity,chroma_02_std,0.0027525263975965476,mean decrease in impurity,0,0,train,124,
+M4,impurity,chroma_03_std,0.0027106079389125023,mean decrease in impurity,0,0,train,125,
+M4,impurity,mfcc_11_delta_mean,0.0026704645501664007,mean decrease in impurity,0,0,train,126,
+M4,impurity,time_shannon_entropy,0.002664513606796652,mean decrease in impurity,0,0,train,127,
+M4,impurity,chroma_11_std,0.0026420321902068883,mean decrease in impurity,0,0,train,128,
+M4,impurity,env_skew,0.0026314422280350244,mean decrease in impurity,0,0,train,129,
+M4,impurity,time_hjorth_activity,0.0026204120450917636,mean decrease in impurity,0,0,train,130,
+M4,impurity,mfcc_05_delta_mean,0.0026007771251562346,mean decrease in impurity,0,0,train,131,
+M4,impurity,time_std,0.002597981755775808,mean decrease in impurity,0,0,train,132,
+M4,impurity,time_mean,0.002493037128433548,mean decrease in impurity,0,0,train,133,
+M4,impurity,mfcc_09_delta_mean,0.002425901192320726,mean decrease in impurity,0,0,train,134,
+M4,impurity,freq_total_power,0.002407873234582254,mean decrease in impurity,0,0,train,135,
+M4,impurity,time_rms,0.0023666836462278118,mean decrease in impurity,0,0,train,136,
+M4,impurity,chroma_09_std,0.002331689465659021,mean decrease in impurity,0,0,train,137,
+M4,impurity,time_var,0.002124989588499099,mean decrease in impurity,0,0,train,138,
+M4,permutation,time_zcr_mean,0.03471609296852011,balanced_accuracy,10,647,held-out fold,1,0.007101637291611948
+M4,permutation,mfcc_04_mean,0.017454398352456556,balanced_accuracy,10,647,held-out fold,2,0.00874543905923675
+M4,permutation,dwt_cD1_entropy,0.013270079435127946,balanced_accuracy,10,647,held-out fold,3,0.0052893304805394425
+M4,permutation,dwt_cD1_std,0.005080170638422999,balanced_accuracy,10,647,held-out fold,4,0.0015953730179396502
+M4,permutation,freq_bandwidth_mean,0.004876434245366212,balanced_accuracy,10,647,held-out fold,5,0.0015151515151514694
+M4,permutation,freq_band_power_250_350,0.004594733745219126,balanced_accuracy,10,647,held-out fold,6,0.0018216948604377725
+M4,permutation,dwt_cD1_energy,0.004313033245072029,balanced_accuracy,10,647,held-out fold,7,0.0018566742922253418
+M4,permutation,mfcc_07_std,0.0037878787878786735,balanced_accuracy,10,647,held-out fold,8,0.0
+M4,permutation,chroma_09_mean,0.0037878787878786735,balanced_accuracy,10,647,held-out fold,8,0.0
+M4,permutation,mfcc_11_std,0.0036907914092379037,balanced_accuracy,10,647,held-out fold,10,0.00029126213592230995
+M4,permutation,freq_rolloff95_mean,0.0028170050014709735,balanced_accuracy,10,647,held-out fold,11,0.0
+M4,permutation,time_hjorth_mobility,0.0027199176228302037,balanced_accuracy,10,647,held-out fold,12,0.0005228315346732167
+M4,permutation,mfcc_13_std,0.0026228302441894226,balanced_accuracy,10,647,held-out fold,13,0.0005825242718446533
+M4,permutation,dwt_cD2_std,0.0023315681082671236,balanced_accuracy,10,647,held-out fold,14,0.00048543689320385
+M4,permutation,dwt_cD3_mean_abs,0.0023315681082671236,balanced_accuracy,10,647,held-out fold,14,0.00048543689320385
+M4,permutation,freq_band_power_150_250,0.002253604001176757,balanced_accuracy,10,647,held-out fold,16,0.0016555070634179155
+M4,permutation,freq_flux_mean,0.002146954986760774,balanced_accuracy,10,647,held-out fold,17,0.0014807578964058377
+M4,permutation,mfcc_02_mean,0.002146954986760774,balanced_accuracy,10,647,held-out fold,17,0.0015431017884750722
+M4,permutation,dwt_cD1_mean_abs,0.0021373933509855835,balanced_accuracy,10,647,held-out fold,19,0.0004449102616461673
+M4,permutation,mfcc_01_std,0.002068990879670429,balanced_accuracy,10,647,held-out fold,20,0.001939961048615203
+M4,permutation,freq_spectral_entropy,0.0020403059723448137,balanced_accuracy,10,647,held-out fold,21,0.00038834951456308
+M4,permutation,mfcc_06_std,0.0018748161223888782,balanced_accuracy,10,647,held-out fold,22,0.0019955564073994144
+M4,permutation,mfcc_01_mean,0.001846131215063218,balanced_accuracy,10,647,held-out fold,23,0.00261758650144874
+M4,permutation,dwt_cD4_mean_abs,0.0017777287437481081,balanced_accuracy,10,647,held-out fold,24,0.0018216948604378106
+M4,permutation,chroma_02_mean,0.0016997646366577856,balanced_accuracy,10,647,held-out fold,25,0.0019333447114719975
+M4,permutation,dwt_cD5_entropy,0.001690203000882562,balanced_accuracy,10,647,held-out fold,26,0.0018372656343848552
+M4,permutation,dwt_cD4_entropy,0.001690203000882551,balanced_accuracy,10,647,held-out fold,27,0.002027573785473633
+M4,permutation,mfcc_10_mean,0.0015151515151514694,balanced_accuracy,10,647,held-out fold,28,0.0018556740475629576
+M4,permutation,dwt_cD2_mean_abs,0.001457781700500127,balanced_accuracy,10,647,held-out fold,29,0.00077669902912621
+M4,permutation,time_shannon_entropy,0.0013209767578699183,balanced_accuracy,10,647,held-out fold,30,0.0018566742922253416
+M4,permutation,freq_rolloff85_std,0.0013209767578699072,balanced_accuracy,10,647,held-out fold,31,0.0020451772225552386
+M4,permutation,freq_flatness_std,0.001320976757869885,balanced_accuracy,10,647,held-out fold,32,0.0026556270472322028
+M4,permutation,time_kurtosis,0.0013114151220946836,balanced_accuracy,10,647,held-out fold,33,0.0019527492020501565
+M4,permutation,mfcc_09_std,0.001039276257722832,balanced_accuracy,10,647,held-out fold,34,0.0016071906297316179
+M4,permutation,dwt_cD3_std,0.0010010297146219038,balanced_accuracy,10,647,held-out fold,35,0.0020615596774879383
+M4,permutation,freq_rolloff95_std,0.0008355398646660462,balanced_accuracy,10,647,held-out fold,36,0.0016609812697977633
+M4,permutation,time_var,0.0007575757575757347,balanced_accuracy,10,647,held-out fold,37,0.0015151515151514694
+M4,permutation,freq_total_power,0.0007575757575757347,balanced_accuracy,10,647,held-out fold,37,0.0015151515151514694
+M4,permutation,mfcc_03_std,0.0007575757575757347,balanced_accuracy,10,647,held-out fold,37,0.0015151515151514694
+M4,permutation,chroma_06_mean,0.0007575757575757347,balanced_accuracy,10,647,held-out fold,37,0.0015151515151514694
+M4,permutation,env_peak_rate,0.0007480141218004999,balanced_accuracy,10,647,held-out fold,41,0.0016281584880601802
+M4,permutation,mfcc_10_delta_mean,0.0007480141218004887,balanced_accuracy,10,647,held-out fold,42,0.0018402202331489251
+M4,permutation,dwt_cA5_entropy,0.0007384524860252428,balanced_accuracy,10,647,held-out fold,43,0.002159970655167553
+M4,permutation,dwt_cD3_entropy,0.0007384524860252428,balanced_accuracy,10,647,held-out fold,43,0.002462530707426976
+M4,permutation,time_rms,0.0006604883789349536,balanced_accuracy,10,647,held-out fold,45,0.001589848997401169
+M4,permutation,time_hjorth_activity,0.0006604883789349536,balanced_accuracy,10,647,held-out fold,45,0.001589848997401169
+M4,permutation,chroma_08_mean,0.0006509267431597188,balanced_accuracy,10,647,held-out fold,47,0.0017519983836850352
+M4,permutation,dwt_cD2_energy,0.0006031185642836001,balanced_accuracy,10,647,held-out fold,48,0.003121147908111818
+M4,permutation,dwt_cD4_std,0.0005634010002941725,balanced_accuracy,10,647,held-out fold,49,0.001655507063417893
+M4,permutation,mfcc_03_delta_mean,0.0005538393645189265,balanced_accuracy,10,647,held-out fold,50,0.0019564551548756953
+M4,permutation,dwt_cA5_mean_abs,0.0005251544571932664,balanced_accuracy,10,647,held-out fold,51,0.002326237568849487
+M4,permutation,freq_band_power_350_400,0.0005251544571932554,balanced_accuracy,10,647,held-out fold,52,0.001906766532441112
+M4,permutation,dwt_cD5_std,0.0003883495145631244,balanced_accuracy,10,647,held-out fold,53,0.0006440048136612719
+M4,permutation,chroma_04_std,0.00037878787878786735,balanced_accuracy,10,647,held-out fold,54,0.001136363636363602
+M4,permutation,chroma_05_std,0.00037878787878786735,balanced_accuracy,10,647,held-out fold,54,0.001136363636363602
+M4,permutation,mfcc_02_std,0.0003787878787878451,balanced_accuracy,10,647,held-out fold,56,0.0020398351542175986
+M4,permutation,time_crest_factor,0.00037878787878782295,balanced_accuracy,10,647,held-out fold,57,0.0026515151515151413
+M4,permutation,mfcc_07_delta_mean,0.00028170050014708625,balanced_accuracy,10,647,held-out fold,58,0.0012040377860749996
+M4,permutation,chroma_05_mean,0.00028170050014708625,balanced_accuracy,10,647,held-out fold,58,0.0012040377860749994
+M4,permutation,mfcc_01_delta_mean,0.00028170050014705297,balanced_accuracy,10,647,held-out fold,60,0.0028150360067341024
+M4,permutation,time_autocorr_peak_lag,0.00018461312150630516,balanced_accuracy,10,647,held-out fold,61,0.001260650525863765
+M4,permutation,chroma_06_std,0.00018461312150630516,balanced_accuracy,10,647,held-out fold,61,0.001260650525863765
+M4,permutation,time_max,9.708737864071449e-05,balanced_accuracy,10,647,held-out fold,63,0.0028210173013597287
+M4,permutation,mfcc_12_mean,8.752574286551296e-05,balanced_accuracy,10,647,held-out fold,64,0.003137543846303734
+M4,permutation,chroma_12_std,7.796410709027812e-05,balanced_accuracy,10,647,held-out fold,65,0.0016696806378715926
+M4,permutation,time_mean,0.0,balanced_accuracy,10,647,held-out fold,66,0.0
+M4,permutation,mfcc_12_std,0.0,balanced_accuracy,10,647,held-out fold,66,0.0
+M4,permutation,mfcc_11_delta_mean,0.0,balanced_accuracy,10,647,held-out fold,66,0.0
+M4,permutation,chroma_07_std,0.0,balanced_accuracy,10,647,held-out fold,66,0.0
+M4,permutation,chroma_09_std,0.0,balanced_accuracy,10,647,held-out fold,66,0.0
+M4,permutation,chroma_11_std,0.0,balanced_accuracy,10,647,held-out fold,66,0.0
+M4,permutation,time_std,-2.2204460492503132e-17,balanced_accuracy,10,647,held-out fold,72,0.0016939908920452938
+M4,permutation,freq_dominant,-1.912327155049187e-05,balanced_accuracy,10,647,held-out fold,73,0.0014670703056186524
+M4,permutation,mfcc_09_delta_mean,-9.70873786407922e-05,balanced_accuracy,10,647,held-out fold,74,0.0014896067702270274
+M4,permutation,chroma_01_std,-9.70873786408033e-05,balanced_accuracy,10,647,held-out fold,75,0.0017188480951365222
+M4,permutation,time_median,-0.0001941747572815622,balanced_accuracy,10,647,held-out fold,76,0.0003883495145631244
+M4,permutation,mfcc_13_delta_mean,-0.0002912621359223433,balanced_accuracy,10,647,held-out fold,77,0.0004449102616462182
+M4,permutation,env_skew,-0.0003008237716975892,balanced_accuracy,10,647,held-out fold,78,0.0011263278038356277
+M4,permutation,mfcc_08_delta_mean,-0.0003787878787878896,balanced_accuracy,10,647,held-out fold,79,0.0011363636363636688
+M4,permutation,time_min,-0.0003883495145631244,balanced_accuracy,10,647,held-out fold,80,0.0004756290762685998
+M4,permutation,freq_band_power_100_150,-0.0003883495145631244,balanced_accuracy,10,647,held-out fold,80,0.00047562907626859987
+M4,permutation,mfcc_13_mean,-0.0003883495145631244,balanced_accuracy,10,647,held-out fold,80,0.0004756290762685998
+M4,permutation,mfcc_06_mean,-0.00043615769343926527,balanced_accuracy,10,647,held-out fold,83,0.002529189424006465
+M4,permutation,env_kurtosis,-0.0004854368932039055,balanced_accuracy,10,647,held-out fold,84,0.0004854368932039055
+M4,permutation,dwt_cA5_energy,-0.0004854368932039166,balanced_accuracy,10,647,held-out fold,85,0.005712561465331563
+M4,permutation,env_std,-0.0004949985289791515,balanced_accuracy,10,647,held-out fold,86,0.001141317178284282
+M4,permutation,mfcc_11_mean,-0.0004949985289791625,balanced_accuracy,10,647,held-out fold,87,0.0019528794031338631
+M4,permutation,chroma_07_mean,-0.0005729626360694518,balanced_accuracy,10,647,held-out fold,88,0.0011379962964181394
+M4,permutation,freq_bandwidth_std,-0.0005825242718446866,balanced_accuracy,10,647,held-out fold,89,0.0004756290762685998
+M4,permutation,dwt_cA5_std,-0.0005825242718446866,balanced_accuracy,10,647,held-out fold,89,0.0004756290762685998
+M4,permutation,freq_peak_power,-0.0005920859076199326,balanced_accuracy,10,647,held-out fold,91,0.0011363636363636352
+M4,permutation,mfcc_12_delta_mean,-0.0007575757575758013,balanced_accuracy,10,647,held-out fold,92,0.0022727272727272926
+M4,permutation,chroma_02_std,-0.0007575757575758235,balanced_accuracy,10,647,held-out fold,93,0.002834588929374207
+M4,permutation,mfcc_08_std,-0.0007671373933510362,balanced_accuracy,10,647,held-out fold,94,0.0020231031355012062
+M4,permutation,mfcc_09_mean,-0.0007958223006767184,balanced_accuracy,10,647,held-out fold,95,0.0025421730840592153
+M4,permutation,mfcc_06_delta_mean,-0.0008546631362165491,balanced_accuracy,10,647,held-out fold,96,0.001723057196115878
+M4,permutation,chroma_10_mean,-0.0008546631362165824,balanced_accuracy,10,647,held-out fold,97,0.0022589866752973126
+M4,permutation,time_energy,-0.001020152986172429,balanced_accuracy,10,647,held-out fold,98,0.004045132321224857
+M4,permutation,chroma_04_mean,-0.0010488378934981224,balanced_accuracy,10,647,held-out fold,99,0.0014325930993255383
+M4,permutation,freq_band_power_20_50,-0.001058399529273346,balanced_accuracy,10,647,held-out fold,100,0.0013076393188651803
+M4,permutation,mfcc_05_delta_mean,-0.0011363636363636686,balanced_accuracy,10,647,held-out fold,101,0.0017358241268772615
+M4,permutation,mfcc_05_std,-0.0012525742865549193,balanced_accuracy,10,647,held-out fold,102,0.0028483235246432666
+M4,permutation,dwt_cD5_mean_abs,-0.0013305383936452198,balanced_accuracy,10,647,held-out fold,103,0.004118601642161985
+M4,permutation,dwt_cD3_energy,-0.0013496616651956894,balanced_accuracy,10,647,held-out fold,104,0.0011363636363636352
+M4,permutation,dwt_cD5_energy,-0.0015055898793763455,balanced_accuracy,10,647,held-out fold,105,0.002438713624883378
+M4,permutation,dwt_cD2_entropy,-0.001513680494263081,balanced_accuracy,10,647,held-out fold,106,0.001881052107720616
+M4,permutation,freq_band_power_50_100,-0.0015438364224772405,balanced_accuracy,10,647,held-out fold,107,0.003058898451278972
+M4,permutation,mfcc_04_std,-0.0016122388937923281,balanced_accuracy,10,647,held-out fold,108,0.0019924020852152527
+M4,permutation,freq_rolloff85_mean,-0.0019321859370403538,balanced_accuracy,10,647,held-out fold,109,0.001986414913361534
+M4,permutation,time_skewness,-0.002019711679905911,balanced_accuracy,10,647,held-out fold,110,0.0014969442775406832
+M4,permutation,chroma_03_mean,-0.0021947631656369926,balanced_accuracy,10,647,held-out fold,111,0.00194642580145422
+M4,permutation,chroma_03_std,-0.0022727272727273372,balanced_accuracy,10,647,held-out fold,112,0.0018556740475630666
+M4,permutation,dwt_cD4_energy,-0.00228228890850255,balanced_accuracy,10,647,held-out fold,113,0.0033201597279753072
+M4,permutation,chroma_11_mean,-0.0022918505442777737,balanced_accuracy,10,647,held-out fold,114,0.001856674292225395
+M4,permutation,mfcc_08_mean,-0.0026213592233010007,balanced_accuracy,10,647,held-out fold,115,0.0031194214518064744
+M4,permutation,env_mean,-0.0026610767872904282,balanced_accuracy,10,647,held-out fold,116,0.0026420939797578177
+M4,permutation,freq_flatness_mean,-0.002748602530156008,balanced_accuracy,10,647,held-out fold,117,0.0016071906297317065
+M4,permutation,freq_centroid_mean,-0.0027964107090320822,balanced_accuracy,10,647,held-out fold,118,0.002221051080097583
+M4,permutation,mfcc_02_delta_mean,-0.0028552515445719796,balanced_accuracy,10,647,held-out fold,119,0.0020377616515473824
+M4,permutation,mfcc_03_mean,-0.0030494263018535084,balanced_accuracy,10,647,held-out fold,120,0.002364212946682285
+M4,permutation,time_hjorth_complexity,-0.003068549573403967,balanced_accuracy,10,647,held-out fold,121,0.0024990298424836825
+M4,permutation,time_peak_to_peak,-0.0031178287731686294,balanced_accuracy,10,647,held-out fold,122,0.0024078537194665906
+M4,permutation,time_range,-0.0031369520447190767,balanced_accuracy,10,647,held-out fold,123,0.002086144779996113
+M4,permutation,chroma_01_mean,-0.0031369520447190992,balanced_accuracy,10,647,held-out fold,124,0.0016973447365247808
+M4,permutation,time_zcr_std,-0.0031465136804943116,balanced_accuracy,10,647,held-out fold,125,0.0022382533910196216
+M4,permutation,mfcc_07_mean,-0.003359811709326299,balanced_accuracy,10,647,held-out fold,126,0.0017079521765271475
+M4,permutation,freq_centroid_std,-0.003409090909091006,balanced_accuracy,10,647,held-out fold,127,0.0011363636363636688
+M4,permutation,chroma_10_std,-0.003409090909091006,balanced_accuracy,10,647,held-out fold,127,0.0011363636363636688
+M4,permutation,freq_flux_std,-0.003700353045013294,balanced_accuracy,10,647,held-out fold,129,0.0021399826472601616
+M4,permutation,mfcc_10_std,-0.003700353045013316,balanced_accuracy,10,647,held-out fold,130,0.0024978122028883726
+M4,permutation,mfcc_04_delta_mean,-0.0037099146807885288,balanced_accuracy,10,647,held-out fold,131,0.0024565172375681185
+M4,permutation,time_autocorr_peak_value,-0.0038356869667549587,balanced_accuracy,10,647,held-out fold,132,0.0018939393939393367
+M4,permutation,time_duration,-0.003953368637834687,balanced_accuracy,10,647,held-out fold,133,0.002756434193170757
+M4,permutation,chroma_08_std,-0.004166666666666719,balanced_accuracy,10,647,held-out fold,134,0.0023975051391069944
+M4,permutation,chroma_12_mean,-0.004185789938217177,balanced_accuracy,10,647,held-out fold,135,0.0012180126241086492
+M4,permutation,time_sample_entropy,-0.004526331273904105,balanced_accuracy,10,647,held-out fold,136,0.0023488435926215124
+M4,permutation,time_iqr,-0.00892541924095327,balanced_accuracy,10,647,held-out fold,137,0.003887277073524419
+M4,permutation,mfcc_05_mean,-0.009022506619594028,balanced_accuracy,10,647,held-out fold,138,0.003320236307304913

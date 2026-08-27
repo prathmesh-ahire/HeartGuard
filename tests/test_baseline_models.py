@@ -60,10 +60,22 @@ def test_m2_is_knn_and_has_no_class_weight():
 
 
 def test_an_unimplemented_model_names_the_phase_that_builds_it():
-    with pytest.raises(est.EstimatorError, match="Phase 48"):
-        est.build_estimator("M4")
+    """Update the id here as phases land -- never the assertion."""
+    with pytest.raises(est.EstimatorError, match="Phase 50"):
+        est.build_estimator("M6")
     with pytest.raises(est.EstimatorError, match="unknown model id"):
         est.build_estimator("M99")
+
+
+def test_the_implemented_list_matches_what_can_actually_be_built():
+    """Stops IMPLEMENTED_MODELS drifting away from the factory table."""
+    for model_id in est.IMPLEMENTED_MODELS:
+        try:
+            est.build_estimator(model_id)
+        except est.EstimatorError as error:
+            # An optional model whose package is absent is a legitimate decline;
+            # a missing factory is not.
+            assert "unavailable" in str(error), model_id + ": " + str(error)
 
 
 def test_both_baselines_are_deterministic_across_two_builds():

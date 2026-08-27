@@ -143,13 +143,23 @@ models:
   M5:
     name: "Gradient Boosting"
     estimator: "sklearn.ensemble.GradientBoostingClassifier"
+    hist_estimator: "sklearn.ensemble.HistGradientBoostingClassifier"
     mandatory: true
+    # "classic" is the estimator both source documents name. "hist" is the
+    # binned implementation, ~6x faster on this matrix. T49.1 permits either;
+    # the measured cost of the choice is in gradient_boosting_choice.csv.
+    implementation: "classic"
+    # GradientBoostingClassifier has NO class_weight, so it is wrapped in
+    # ClassWeightedClassifier, which converts this into per-row sample_weight
+    # using scikit-learn's own "balanced" definition. Without it M5 would be the
+    # only mandatory ensemble member with no imbalance handling at all.
     defaults:
       n_estimators: 200
       learning_rate: 0.1
       max_depth: 3
       subsample: 1.0
       min_samples_leaf: 1
+      class_weight: "balanced"
       random_state: 42
     search_space:
       n_estimators: {type: "int_uniform", low: 100, high: 800}
@@ -204,10 +214,28 @@ models:
       colsample_bytree: 0.9
       reg_lambda: 1.0
       tree_method: "hist"
-      n_jobs: -1
+      # PINNED, and NOT the global -1. XGBoost draws its `subsample` row mask per
+      # thread block, so with subsample < 1.0 the number of threads changes which
+      # rows each tree sees: measured 2026-08-27, n_jobs=1 against n_jobs=4
+      # differ by up to 0.062 in predicted probability -- a different model, not
+      # a rounding artifact. `-1` means "however many cores this machine has",
+      # which would make M8 irreproducible across machines and CI runners and
+      # break research rule 5. A fixed thread count is deterministic on any
+      # machine, including one with fewer cores. Do not change this to -1.
+      n_jobs: 4
       random_state: 42
-      # Determinism: single-threaded histogram construction differs from
-      # multi-threaded in float accumulation order. Verified by T77.1.
+      # XGBoost has no class_weight and only binary scale_pos_weight, so M8 is
+      # wrapped in ClassWeightedClassifier for one mechanism that works on the
+      # multiclass tracks too. LightGBM has a native class_weight and is not
+      # wrapped.
+      class_weight: "balanced"
+      # DETERMINISM IS NOT A FLAG HERE. `deterministic` is not an XGBoost
+      # parameter -- the booster accepts it silently and logs
+      # `Parameters: { "deterministic" } are not used`. It was measured instead:
+      # XGBoost, LightGBM and RandomForest all produce bit-identical
+      # probabilities between n_jobs=1 and n_jobs=-1 on the real D1 matrix
+      # (2026-08-27). Kept declared so the intent is on record; make_m8 reads it
+      # as a note and drops it. See the Phase 48-49 entry in Docs/note.md.
       deterministic: true
     search_space:
       n_estimators: {type: "int_uniform", low: 100, high: 1000}

@@ -2,10 +2,16 @@
 
 Emits, into ``outputs/04_models/``:
 
-    baseline_smoke_metrics.csv     M1/M2/M3 on D1 fold 0 (T46.6, T47.6)
-    model_search_spaces.csv        every declared dimension, per model (T46.2/4, T47.3)
-    svm_fit_time_benchmark.csv     fit cost vs n and cache_size (T47.4)
-    svm_calibration_benchmark.csv  sigmoid/isotonic x ensemble x split (T47.5)
+    baseline_smoke_metrics.csv        M1-M5, M8 on D1 fold 0 (T46.6, T47.6, T48.6, T49.6)
+    model_search_spaces.csv           every declared dimension, per model (T46.2/4, T47.3,
+                                      T48.2, T49.2, T49.4)
+    svm_fit_time_benchmark.csv        fit cost vs n and cache_size (T47.4)
+    svm_calibration_benchmark.csv     sigmoid/isotonic x ensemble x split (T47.5)
+    feature_importance.csv            M4 impurity + permutation (T48.3, T48.4)
+    feature_importance_by_family.csv  the same, rolled up to the six families
+    tree_calibration_assessment.csv   M4/M5/M8 raw vs calibrated (T48.5, T49.5)
+    gradient_boosting_choice.csv      classic vs histogram boosting (T49.1)
+    external_model_capability.csv     whether M8 is usable, and why not (T49.3)
 
 These are **diagnostic** numbers, not results. One fold of one repeat says
 whether a model runs, produces usable probabilities and costs what was expected;
@@ -32,7 +38,7 @@ from src.utils.logging_setup import get_logger
 
 log = get_logger("model_smoke")
 
-DEFAULT_MODELS = ("M1", "M2", "M3")
+DEFAULT_MODELS = ("M1", "M2", "M3", "M4", "M5", "M8")
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -48,6 +54,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--out-dir", default=None, help="write elsewhere than outputs/04_models"
     )
     parser.add_argument("--skip-benchmark", action="store_true")
+    parser.add_argument(
+        "--permutation-repeats",
+        type=int,
+        default=10,
+        metavar="N",
+        help="shuffles per feature for permutation importance (T48.4)",
+    )
     parser.add_argument(
         "--fresh",
         action="store_true",
@@ -134,6 +147,8 @@ def main(argv: list[str] | None = None) -> int:
     import pandas as pd
 
     from src.models import benchmark as bm
+    from src.models import estimators as est
+    from src.models import importance as imp
     from src.models import smoke as sm
     from src.models import spaces
     from src.utils.config import load_config
@@ -188,7 +203,9 @@ def main(argv: list[str] | None = None) -> int:
             data.classes,
         )
 
-        results = sm.run_smoke(tuple(args.models), task=args.task, data=data)
+        results = sm.run_smoke(
+            tuple(args.models), task=args.task, data=data, keep_pipelines=True
+        )
         smoke_path = sm.write_smoke_metrics(
             results, directory, append=not args.fresh
         )
@@ -237,6 +254,97 @@ def main(argv: list[str] | None = None) -> int:
                 dataset="D1",
                 command=command,
             )
+
+        # -- feature importance, from M4 (T48.3, T48.4) ----------------------
+        forest = next((r for r in results if r.model_id == "M4"), None)
+        if forest is not None and forest.pipeline is not None:
+            fold = sm._fold_zero(args.task, data)
+            measured = [
+                imp.impurity_importance(
+                    forest.pipeline, data.feature_names, model_id="M4"
+                ),
+                imp.permutation_importance(
+                    forest.pipeline,
+                    data.X,
+                    data.y,
+                    held_out_index=fold.test_index,
+                    train_index=fold.train_index,
+                    feature_names=data.feature_names,
+                    model_id="M4",
+                    n_repeats=args.permutation_repeats,
+                    n_jobs=-1,
+                ),
+            ]
+            importance_path = _write(
+                imp.importance_frame(measured), directory, imp.IMPORTANCE_FILENAME
+            )
+            family_path = _write(
+                pd.concat([imp.family_importance(m) for m in measured], ignore_index=True),
+                directory,
+                "feature_importance_by_family.csv",
+            )
+            run.record_artifact(importance_path)
+            run.record_artifact(family_path)
+            for measure in measured:
+                log.info(
+                    "M4 %s importance, top 5: %s",
+                    measure.kind,
+                    ", ".join(name for name, _ in measure.top(5)),
+                )
+            register_evidence(
+                "MD-IMPORTANCE",
+                importance_path,
+                metric_or_asset=(
+                    "M4 impurity (train) and permutation (held-out fold) importance"
+                ),
+                dataset="D1",
+                model="M4",
+                command=command,
+            )
+
+        # -- do the tree models need calibrating? (T48.5, T49.5) -------------
+        tree_ids = tuple(m for m in args.models if m in ("M4", "M5", "M8"))
+        if not args.skip_benchmark and tree_ids:
+            fold = sm._fold_zero(args.task, data)
+            assessment = bm.tree_calibration_assessment(data, fold, model_ids=tree_ids)
+            if not assessment.empty:
+                assessment_path = _write(
+                    assessment, directory, bm.TREE_CALIBRATION_FILENAME
+                )
+                run.record_artifact(assessment_path)
+                register_evidence(
+                    "MD-TREECAL",
+                    assessment_path,
+                    metric_or_asset="M4/M5/M8 raw vs calibrated: Brier, ECE, verdict",
+                    dataset="D1",
+                    command=command,
+                )
+
+            # -- classic gradient boosting or histogram? (T49.1) -------------
+            if "M5" in args.models:
+                choice = bm.gradient_boosting_choice(data, fold)
+                choice_path = _write(choice, directory, bm.GB_CHOICE_FILENAME)
+                run.record_artifact(choice_path)
+                register_evidence(
+                    "MD-GBCHOICE",
+                    choice_path,
+                    metric_or_asset=(
+                        "M5 classic vs histogram gradient boosting, weighted and not"
+                    ),
+                    dataset="D1",
+                    command=command,
+                )
+
+        # -- M8's capability check, recorded either way (T49.3) --------------
+        capability = est.m8_capability()
+        capability_path = _write(
+            pd.DataFrame([capability.as_row()]), directory, "external_model_capability.csv"
+        )
+        run.record_artifact(capability_path)
+        run.set("m8_available", capability.available)
+        run.set("m8_backend", capability.backend)
+        if not capability.available:
+            log.warning("M8 unavailable: %s", capability.reason)
     except BaseException:
         run.finish("failed")
         raise

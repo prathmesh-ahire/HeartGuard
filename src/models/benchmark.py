@@ -35,8 +35,12 @@ from src.utils.logging_setup import get_logger
 __all__ = [
     "FIT_TIME_FILENAME",
     "CALIBRATION_FILENAME",
+    "TREE_CALIBRATION_FILENAME",
+    "GB_CHOICE_FILENAME",
     "fit_time_benchmark",
     "calibration_benchmark",
+    "tree_calibration_assessment",
+    "gradient_boosting_choice",
     "search_budget_estimate",
 ]
 
@@ -320,3 +324,249 @@ def calibration_benchmark(data: Any, fold: Any, *, seed: int = 42) -> Any:
         )
 
     return pd.DataFrame(rows)
+
+
+# ---------------------------------------------------------------------------
+# T48.5 / T49.5 -- do the tree models need calibrating?
+# ---------------------------------------------------------------------------
+
+TREE_CALIBRATION_FILENAME = "tree_calibration_assessment.csv"
+GB_CHOICE_FILENAME = "gradient_boosting_choice.csv"
+
+
+def tree_calibration_assessment(
+    data: Any, fold: Any, *, model_ids: tuple[str, ...] = ("M4", "M5", "M8"), seed: int = 42
+) -> Any:
+    """Measure each tree model raw against the same model wrapped in a calibrator.
+
+    The question T48.5 asks is not "are these probabilities perfect" -- none are
+    -- but "does calibrating them earn its cost". Answered by measuring, per
+    model, the raw Brier score and expected calibration error against the same
+    numbers after a sigmoid calibration fitted on a subject-grouped split of the
+    training fold, plus what the wrapper costs in fit time.
+
+    The two model families fail in opposite directions and it is worth expecting
+    that before reading the table. A random forest averages many bounded votes,
+    so its probabilities cluster toward the middle -- **under**-confident, and a
+    calibrator has real work to do. Boosted trees optimise a loss until the
+    training set is nearly separated, so theirs are pushed toward 0 and 1 --
+    **over**-confident. A single verdict for "the tree models" would therefore be
+    the wrong shape of answer, and the table is per model.
+
+    AUC is reported alongside because it is the control: monotone calibration
+    cannot change the ranking, so an AUC that moves between the raw and
+    calibrated rows means something other than calibration happened.
+    """
+    import pandas as pd
+
+    from src.evaluation import metrics as mt
+    from src.models import estimators as est
+    from src.models.calibration import CalibratedSVM, grouped_calibration_cv
+
+    train_index = np.asarray(fold.train_index, dtype=int)
+    test_index = np.asarray(fold.test_index, dtype=int)
+    X_train, y_train = data.X[train_index], data.y[train_index]
+    X_test, y_test = data.X[test_index], data.y[test_index]
+    labels = tuple(np.unique(data.y).tolist())
+
+    grouped = grouped_calibration_cv(
+        data.groups[train_index], y_train, n_splits=3, seed=seed
+    )
+
+    rows: list[dict[str, Any]] = []
+    for model_id in model_ids:
+        try:
+            base = est.build_estimator(model_id)
+        except est.EstimatorError as error:
+            log.warning("skipping %s in the calibration assessment: %s", model_id, error)
+            continue
+
+        arms: list[tuple[str, Any]] = [("raw", base)]
+        # CalibratedSVM is not SVM-specific in its mechanics -- it is the
+        # project's one calibration wrapper, and reusing it here means the tree
+        # models are calibrated by exactly the same code path as M3 rather than
+        # by a second implementation that could drift from it.
+        arms.append(
+            (
+                "sigmoid, subject-grouped",
+                CalibratedSVM(
+                    estimator=est.build_estimator(model_id),
+                    method="sigmoid",
+                    cv=grouped,
+                    class_weight=None,
+                ),
+            )
+        )
+
+        for arm, estimator in arms:
+            fitted, seconds = _timed_fit(estimator, X_train, y_train)
+            y_pred = np.asarray(fitted.predict(X_test))
+            proba = np.asarray(fitted.predict_proba(X_test))
+            classes = np.asarray(fitted.named_steps["estimator"].classes_)
+
+            report = est.probability_report(
+                proba, n_classes=len(labels), y_pred=y_pred, classes=classes
+            )
+            scores = mt.binary_metrics(
+                y_test, y_pred, proba, labels=labels, positive_label=1
+            )
+            positive = proba[:, list(labels).index(1)]
+            rows.append(
+                {
+                    "model_id": model_id,
+                    "arm": arm,
+                    "fit_seconds": round(seconds, 4),
+                    "balanced_accuracy": round(scores["balanced_accuracy"], 4),
+                    "sensitivity": round(scores["sensitivity"], 4),
+                    "roc_auc": round(scores["roc_auc"], 4),
+                    "brier": round(mt.brier_score(y_test, proba, labels=labels), 4),
+                    "ece": round(
+                        mt.expected_calibration_error(y_test, proba, labels=labels), 4
+                    ),
+                    # Mean predicted P(abnormal) against the fold's true rate is
+                    # the direction of the error: above is over-confident on the
+                    # positive class, below is under-confident.
+                    "mean_predicted_positive": round(float(positive.mean()), 4),
+                    "true_positive_rate": round(float((y_test == 1).mean()), 4),
+                    "proba_min": report.min_value,
+                    "proba_max": report.max_value,
+                    "max_row_sum_error": report.max_row_sum_error,
+                    "n_nan": report.n_nan,
+                    "well_formed": report.is_well_formed,
+                }
+            )
+            log.info(
+                "%s (%s): brier %.4f, ece %.4f, mean P %.3f vs true %.3f",
+                model_id,
+                arm,
+                rows[-1]["brier"],
+                rows[-1]["ece"],
+                rows[-1]["mean_predicted_positive"],
+                rows[-1]["true_positive_rate"],
+            )
+
+    frame = pd.DataFrame(rows)
+    if frame.empty:
+        return frame
+
+    # The verdict is derived, not typed: calibration is worth it for a model when
+    # it improves both Brier and ECE by more than a trivial margin.
+    verdicts = []
+    for model_id, group in frame.groupby("model_id", sort=False):
+        raw = group[group["arm"] == "raw"]
+        calibrated = group[group["arm"] != "raw"]
+        if raw.empty or calibrated.empty:
+            verdicts.append((model_id, "undetermined"))
+            continue
+        brier_delta = float(raw["brier"].iloc[0] - calibrated["brier"].iloc[0])
+        ece_delta = float(raw["ece"].iloc[0] - calibrated["ece"].iloc[0])
+        helps = brier_delta > 0.005 and ece_delta > 0.005
+        verdicts.append((model_id, "calibrate" if helps else "raw is adequate"))
+    verdict_map = dict(verdicts)
+    frame["verdict"] = frame["model_id"].map(verdict_map)
+    return frame
+
+
+# ---------------------------------------------------------------------------
+# T49.1 -- classic gradient boosting or the histogram implementation?
+# ---------------------------------------------------------------------------
+
+
+def gradient_boosting_choice(data: Any, fold: Any, *, seed: int = 42) -> Any:
+    """Fit M5 both ways on fold 0 and record what the choice costs.
+
+    Both source documents name ``GradientBoostingClassifier``; T49.1 permits the
+    histogram implementation "where the speed is needed". Whether it is needed is
+    a measurement, and swapping the estimator that the thesis calls "Gradient
+    Boosting" is not a decision to take on a general impression that binned
+    boosting is faster.
+
+    The table carries an **unweighted** row for each implementation as well, and
+    that pair is the one worth reading first. The histogram implementation is
+    dramatically faster with no sample weights and barely faster with them: its
+    weighted path gives up an optimisation the unweighted one uses. Since this
+    project's imbalance handling *is* sample weighting, a comparison run without
+    weights would recommend a substitution on a speed advantage that does not
+    exist under the configuration the project actually ships.
+    """
+    import pandas as pd
+
+    from src.evaluation import metrics as mt
+    from src.models import estimators as est
+
+    train_index = np.asarray(fold.train_index, dtype=int)
+    test_index = np.asarray(fold.test_index, dtype=int)
+    X_train, y_train = data.X[train_index], data.y[train_index]
+    X_test, y_test = data.X[test_index], data.y[test_index]
+    labels = tuple(np.unique(data.y).tolist())
+
+    unweighted = {
+        implementation: _timed_fit(
+            est.make_m5(implementation=implementation, class_weight=None),
+            X_train,
+            y_train,
+        )[1]
+        for implementation in ("classic", "hist")
+    }
+
+    rows: list[dict[str, Any]] = []
+    for implementation in ("classic", "hist"):
+        estimator = est.make_m5(implementation=implementation)
+        fitted, seconds = _timed_fit(estimator, X_train, y_train)
+        y_pred = np.asarray(fitted.predict(X_test))
+        proba = np.asarray(fitted.predict_proba(X_test))
+        scores = mt.binary_metrics(y_test, y_pred, proba, labels=labels, positive_label=1)
+        rows.append(
+            {
+                "implementation": implementation,
+                "estimator": type(
+                    getattr(
+                        fitted.named_steps["estimator"], "estimator_",
+                        fitted.named_steps["estimator"],
+                    )
+                ).__name__,
+                "class_weight_route": (
+                    "sample_weight wrapper" if implementation == "classic"
+                    else "native class_weight"
+                ),
+                "fit_seconds": round(seconds, 4),
+                "fit_seconds_unweighted": round(unweighted[implementation], 4),
+                "weighting_cost_x": round(
+                    seconds / max(unweighted[implementation], 1e-9), 2
+                ),
+                "balanced_accuracy": round(scores["balanced_accuracy"], 4),
+                "sensitivity": round(scores["sensitivity"], 4),
+                "specificity": round(scores["specificity"], 4),
+                "roc_auc": round(scores["roc_auc"], 4),
+                "brier": round(mt.brier_score(y_test, proba, labels=labels), 4),
+                "model_mb": round(_serialized_mb(fitted), 4),
+            }
+        )
+        log.info(
+            "M5 %s: bal-acc %.4f, %.2f s",
+            implementation,
+            rows[-1]["balanced_accuracy"],
+            rows[-1]["fit_seconds"],
+        )
+
+    frame = pd.DataFrame(rows)
+    classic = frame[frame["implementation"] == "classic"].iloc[0]
+    hist = frame[frame["implementation"] == "hist"].iloc[0]
+    frame["hist_speedup_weighted"] = round(
+        float(classic["fit_seconds"]) / max(float(hist["fit_seconds"]), 1e-9), 2
+    )
+    frame["hist_speedup_unweighted"] = round(
+        float(classic["fit_seconds_unweighted"])
+        / max(float(hist["fit_seconds_unweighted"]), 1e-9),
+        2,
+    )
+    frame["balanced_accuracy_delta_hist_minus_classic"] = round(
+        float(hist["balanced_accuracy"]) - float(classic["balanced_accuracy"]), 4
+    )
+    return frame
+
+
+def _serialized_mb(model: Any) -> float:
+    from src.models.smoke import serialized_size
+
+    return serialized_size(model) / 1024**2
