@@ -1,0 +1,2 @@
+M1 -- M1_SOLVER_PENALTY: lbfgs/newton-cg/sag accept l1_ratio 0.0 only; liblinear accepts 0.0 or 1.0; saga accepts any value in [0, 1]
+M2 -- M2_P_ONLY_FOR_MINKOWSKI: p is read only when metric is 'minkowski'; off it, p is pinned to 2 so the space does not hold duplicate configurations

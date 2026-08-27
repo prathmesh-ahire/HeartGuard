@@ -7,6 +7,11 @@
 #
 # Every estimator carries random_state 42. Rule 5: two runs of the same command
 # must produce identical numbers.
+#
+# NOTE ON SCIENTIFIC NOTATION: PyYAML implements YAML 1.1, whose float pattern
+# requires a SIGNED exponent. `1.0e-3` parses as a float; `1.0e3` parses as the
+# STRING "1.0e3" and blows up the first time anything compares it to a number.
+# Always write `1.0e+3`. Guarded by tests/test_model_spaces.py.
 
 global:
   random_state: 42
@@ -41,6 +46,10 @@ calibration:
   method: "sigmoid"         # "isotonic" needs more data than PASCAL A provides
   cv: 3
   fit_inside_fold: true
+  # ensemble=true averages the k per-calibration-fold models; false calibrates a
+  # single model refitted on all training rows. Measured on D1 fold 0 in
+  # `svm_calibration_benchmark.csv` — see the Phase 47 entry in Docs/note.md.
+  ensemble: true
 
 models:
 
@@ -51,17 +60,25 @@ models:
     mandatory: true
     defaults:
       C: 1.0
-      penalty: "l2"
+      # `penalty` was DEPRECATED in scikit-learn 1.8 and is removed in 1.10.
+      # `l1_ratio` is its replacement and produces bit-identical fits:
+      # 0.0 == penalty "l2", 1.0 == penalty "l1", between == elasticnet.
+      # Verified on 2026-08-27; see the Phase 46 entry in Docs/note.md.
+      l1_ratio: 0.0
       solver: "lbfgs"
       max_iter: 2000        # raised from the sklearn default of 100; 138 scaled
                             # features do not converge reliably at 100
       class_weight: "balanced"
       random_state: 42
     search_space:
-      C: {type: "log_uniform", low: 1.0e-3, high: 1.0e3}
-      penalty: {type: "categorical", choices: ["l1", "l2"]}
-      solver: {type: "categorical", choices: ["liblinear", "saga"]}
+      C: {type: "log_uniform", low: 1.0e-3, high: 1.0e+3}
+      l1_ratio: {type: "categorical", choices: [0.0, 0.5, 1.0]}
+      solver: {type: "categorical", choices: ["lbfgs", "liblinear", "saga"]}
       max_iter: {type: "categorical", choices: [1000, 2000, 5000]}
+    # Not every (solver, l1_ratio) pair is legal; the illegal ones raise rather
+    # than degrade, so the space is filtered by `spaces.M1_SOLVER_PENALTY`
+    # before sampling. lbfgs: 0.0 only. liblinear: 0.0 or 1.0. saga: anything.
+    constraints: ["M1_SOLVER_PENALTY"]
 
   # --- M2 K-Nearest Neighbours (Phase 46, optional baseline) ----------------
   M2:
@@ -78,6 +95,10 @@ models:
       weights: {type: "categorical", choices: ["uniform", "distance"]}
       metric: {type: "categorical", choices: ["minkowski", "manhattan", "chebyshev"]}
       p: {type: "categorical", choices: [1, 2]}
+    # `p` is read only when metric is "minkowski"; sklearn silently ignores it
+    # otherwise, so an unconstrained space spends half its budget re-evaluating
+    # configurations it has already seen. Pinned to p=2 off minkowski.
+    constraints: ["M2_P_ONLY_FOR_MINKOWSKI"]
 
   # --- M3 SVM-RBF (Phase 47) — an ensemble member ---------------------------
   M3:
@@ -94,8 +115,8 @@ models:
       cache_size: 500       # MB
       random_state: 42
     search_space:
-      C: {type: "log_uniform", low: 1.0e-2, high: 1.0e3}
-      gamma: {type: "log_uniform", low: 1.0e-4, high: 1.0e1}
+      C: {type: "log_uniform", low: 1.0e-2, high: 1.0e+3}
+      gamma: {type: "log_uniform", low: 1.0e-4, high: 1.0e+1}
       class_weight: {type: "categorical", choices: ["balanced", null]}
 
   # --- M4 Random Forest (Phase 48) — an ensemble member ---------------------
@@ -194,7 +215,7 @@ models:
       max_depth: {type: "int_uniform", low: 2, high: 10}
       subsample: {type: "uniform", low: 0.6, high: 1.0}
       colsample_bytree: {type: "uniform", low: 0.5, high: 1.0}
-      reg_lambda: {type: "log_uniform", low: 1.0e-2, high: 1.0e2}
+      reg_lambda: {type: "log_uniform", low: 1.0e-2, high: 1.0e+2}
 
   # --- M9 1D-CNN (Phase 52) — OPTIONAL, scope undecided ---------------------
   # Listed as Optional in both source documents. This machine is CPU only.

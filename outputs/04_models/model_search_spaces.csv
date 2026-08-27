@@ -1,0 +1,12 @@
+model_id,parameter,kind,low,high,choices
+M1,C,log_uniform,0.001,1000.0,
+M1,l1_ratio,categorical,,,0.0|0.5|1.0
+M1,solver,categorical,,,lbfgs|liblinear|saga
+M1,max_iter,categorical,,,1000|2000|5000
+M2,n_neighbors,int_uniform,3.0,31.0,
+M2,weights,categorical,,,uniform|distance
+M2,metric,categorical,,,minkowski|manhattan|chebyshev
+M2,p,categorical,,,1|2
+M3,C,log_uniform,0.01,1000.0,
+M3,gamma,log_uniform,0.0001,10.0,
+M3,class_weight,categorical,,,balanced|None

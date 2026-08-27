@@ -26,3 +26,6 @@ FE-10,,,D1+D2+D3+D4,,138x138 feature correlation heatmap,outputs/03_features/fea
 FE-05,,,D1,,12 class-conditional panels in feature_distribution_plots/,outputs/03_features/feature_distribution_plots/panel_index.csv,outputs/03_features/all_features_matrix.parquet,python scripts/03_feature_reports.py,2026-08-27T11:33:54.444831+00:00,ok
 FE-06,,,D1,,"MFCC heatmap, representative record",outputs/03_features/mfcc_heatmap.png,,python scripts/03_feature_reports.py,2026-08-27T11:34:01.145977+00:00,ok
 G10,,,,,feature-family composition 24/22/39/24/24/5,outputs/13_figures_diagrams/feature_family_count_chart.png,feature registry,python scripts/03_feature_reports.py,2026-08-27T11:34:01.647788+00:00,ok
+MD-SMOKE,,,D1,,"baseline smoke metrics, D1 fold 0 (diagnostic)",outputs/04_models/baseline_smoke_metrics.csv,outputs/03_features/all_features_matrix.parquet,python scripts/04_model_smoke.py,2026-08-27T12:17:45.705855+00:00,ok
+MD-SVMTIME,,,D1,,M3 fit time vs n and cache_size,outputs/04_models/svm_fit_time_benchmark.csv,,python scripts/04_model_smoke.py,2026-08-27T12:18:40.076291+00:00,ok
+MD-SVMCAL,,,D1,,"M3 calibration variants: Brier, ECE, well-formedness",outputs/04_models/svm_calibration_benchmark.csv,,python scripts/04_model_smoke.py,2026-08-27T12:18:40.105942+00:00,ok
