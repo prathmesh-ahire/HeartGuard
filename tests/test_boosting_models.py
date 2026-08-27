@@ -303,8 +303,26 @@ def test_m8_pins_its_thread_count_rather_than_inheriting_the_global(imbalanced: 
     assert np.array_equal(first, second)
 
 
-def test_the_thread_sensitivity_that_forced_the_pin_is_real(imbalanced: Any):
-    """The measurement the pin rests on -- so a future n_jobs=-1 fails loudly here."""
+def test_the_pin_holds_whether_or_not_this_platform_is_thread_sensitive(
+    imbalanced: Any, capsys: Any
+):
+    """Measure the sensitivity the pin exists for -- and assert only the safe direction.
+
+    **This test does not assert that XGBoost is thread-sensitive**, and an earlier
+    version that did was wrong. The sensitivity is platform-specific: on Windows
+    (xgboost 3.2.0) ``subsample=0.9`` makes ``n_jobs=1`` and ``n_jobs=4`` differ
+    by 0.05 on toy data and **0.57 on the real D1 matrix**; on the Linux CI runner
+    the same comparison is bit-identical. Asserting the pathology therefore made
+    a green build go red for the wrong reason -- the code was fine, the
+    expectation was parochial.
+
+    What is asserted instead holds on every platform: with the shipped
+    configuration, two builds of M8 agree exactly. That is the property the pin
+    buys, and it is the one that would break if someone set ``n_jobs`` back to
+    ``-1`` on a machine where the sensitivity is real. The measurement is printed
+    rather than asserted, so a platform's behaviour is visible in the test output
+    without any platform being required to misbehave.
+    """
     capability = est.m8_capability()
     if not capability.available or capability.backend != "xgboost":
         pytest.skip("XGBoost is not the active M8 backend")
@@ -313,18 +331,31 @@ def test_the_thread_sensitivity_that_forced_the_pin_is_real(imbalanced: Any):
 
     X, y = imbalanced
 
-    def fit(n_jobs: int, **kwargs: Any) -> np.ndarray:
+    def raw(n_jobs: int, **kwargs: Any) -> np.ndarray:
         model = xgboost.XGBClassifier(
             n_estimators=60, tree_method="hist", n_jobs=n_jobs,
             random_state=42, **kwargs,
         )
         return model.fit(X, y).predict_proba(X)
 
-    assert np.array_equal(fit(1), fit(4)), "no subsampling should be thread-stable"
-    assert not np.array_equal(fit(1, subsample=0.9), fit(4, subsample=0.9)), (
-        "if this now passes, XGBoost has changed its subsample RNG and the "
-        "n_jobs pin can be revisited -- do not just delete the assertion"
-    )
+    unsampled = float(np.abs(raw(1) - raw(4)).max())
+    subsampled = float(np.abs(raw(1, subsample=0.9) - raw(4, subsample=0.9)).max())
+    with capsys.disabled():
+        print(
+            "\n  thread sensitivity on this platform: no subsample "
+            + format(unsampled, ".2e")
+            + ", subsample=0.9 "
+            + format(subsampled, ".2e")
+        )
+
+    # The invariant, everywhere: the shipped config is reproducible.
+    first = est.make_m8(n_estimators=60).fit(X, y).predict_proba(X)
+    second = est.make_m8(n_estimators=60).fit(X, y).predict_proba(X)
+    assert np.array_equal(first, second)
+
+    # And the pin is what makes that true where the sensitivity is real. Never
+    # relax this to -1: on Windows the real-matrix gap is 0.57 in probability.
+    assert est.model_defaults("M8")["n_jobs"] != -1
 
 
 # ---------------------------------------------------------------------------
