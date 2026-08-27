@@ -504,10 +504,9 @@ def _write_errors(errors: Any, out_dir: str | Path | None, *, smoke: bool) -> Pa
     from src.feature_extraction.extractor import features_dir
     from src.utils.io import save_csv
 
-    if smoke and out_dir is None:
-        directory = features_root(smoke=True)
-    else:
-        directory = features_dir(out_dir)
+    directory = (
+        features_root(smoke=True) if smoke and out_dir is None else features_dir(out_dir)
+    )
     name = ("smoke_" if smoke else "") + ERRORS_FILENAME
     return save_csv(errors, directory / name)
 
