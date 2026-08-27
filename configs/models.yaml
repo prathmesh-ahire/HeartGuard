@@ -232,6 +232,22 @@ models:
       # at its own best threshold. The best weights at 0.5 are not the best
       # weights at the threshold the model will actually use.
       joint_with_threshold: true
+      # ONE-STANDARD-ERROR RULE (added 2026-08-27, on the user's instruction and
+      # on principle, NOT to move a score). Taking the argmax of 231 candidates
+      # scored on a few thousand rows captures some signal and some luck, and the
+      # more candidates there are the more of the winning margin is luck. So the
+      # search takes the SIMPLEST candidate — the one closest to equal weights,
+      # which is M6 — whose score is within `n_standard_errors` of the best.
+      # M7 therefore departs from its own baseline only where the evidence
+      # exceeds the noise.
+      # The margin is exact, not bootstrapped: every objective is a*sens +
+      # b*spec, and both are binomial proportions over disjoint record sets, so
+      # SE = sqrt(a^2*sens(1-sens)/n_pos + b^2*spec(1-spec)/n_neg).
+      # This is a SELECTION RULE, not a tuning knob. It would be the right rule
+      # whether M7 were winning or losing, and it must never be adjusted in
+      # response to a result. See the 2026-08-27 Phases 50-52 entry in note.md.
+      selection_rule: "one_standard_error"
+      n_standard_errors: 1.0
     search_space: {}
 
   # --- M8 external gradient boosting (Phase 49) -----------------------------

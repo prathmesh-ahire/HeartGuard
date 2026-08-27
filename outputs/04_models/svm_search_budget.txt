@@ -5,29 +5,29 @@ Measured on the real D1 matrix (n=3240 x 138), CPU only.
 
 Measured numbers
 ----------------
-worst_bare_fit_seconds: 2.3198
+worst_bare_fit_seconds: 2.4536
 calibration_overhead_x: 2.18
-seconds_per_trial: 15.19
-search_minutes_one_outer_fold: 50.6
-search_hours_all_outer_folds: 21.1
+seconds_per_trial: 16.02
+search_minutes_one_outer_fold: 53.4
+search_hours_all_outer_folds: 22.25
 full-matrix kernel size (MB): 80.1
-cache_size spread over 200/500/1000 MB, medians of 5 (s): 0.0469
-widest within-setting jitter across those repeats (s): 0.1329
+cache_size spread over 200/500/1000 MB, medians of 5 (s): 0.0044
+widest within-setting jitter across those repeats (s): 0.0577
 
 Decision: cache_size stays at 500 MB, uncapped.
   The kernel matrix at the full n is 80.1 MB -- below even the
   200 MB setting -- so the cache never thrashes. Across 5 repeats the three
-  settings' medians differ by 0.0469 s while a single setting varies
-  by up to 0.1329 s on its own: the spread is jitter, not an effect.
+  settings' medians differ by 0.0044 s while a single setting varies
+  by up to 0.0577 s on its own: the spread is jitter, not an effect.
   Raising cache_size would reserve memory that is never touched.
 
 Decision: no subsampling per fit.
-  The slowest corner of the declared space costs 2.3198 s at full n.
+  The slowest corner of the declared space costs 2.4536 s at full n.
   Degrading every fit would change the model being searched in order to
   fix a problem that is not per-fit.
 
 Open for Part VI: the search TOTAL is the cost, not the fit.
-  21.1 h for 200 trials across all 25 outer folds.
+  22.25 h for 200 trials across all 25 outer folds.
   The lever is the trial count and how many outer folds are searched
   (one repeat = 5 outer folds cuts it fivefold), not the size of each
   fit. Decided at Phase 54/62 against the rest of the search timings.

@@ -192,6 +192,150 @@ def test_ties_are_broken_toward_equal_weights():
     assert winner[0] == 1.0
 
 
+def test_the_margin_only_ever_moves_the_choice_toward_equal_weights():
+    """The one-standard-error rule cannot make the selection more extreme."""
+    grid = sv.simplex_grid(3, 0.05)
+    rng = np.random.default_rng(0)
+    scores = rng.random(len(grid))
+
+    uniform = np.full(3, 1.0 / 3)
+    strict, _ = sv._pick_among_ties(grid, scores, margin=0.0)
+    relaxed, n_within = sv._pick_among_ties(grid, scores, margin=0.2)
+
+    assert n_within > 1
+    assert np.linalg.norm(relaxed - uniform) <= np.linalg.norm(strict - uniform)
+
+
+def test_a_negative_margin_is_refused():
+    grid = sv.simplex_grid(2, 0.5)
+    with pytest.raises(sv.EnsembleError, match="non-negative"):
+        sv._pick_among_ties(grid, np.zeros(len(grid)), margin=-0.1)
+
+
+# ---------------------------------------------------------------------------
+# the one-standard-error rule
+# ---------------------------------------------------------------------------
+
+
+def test_every_objective_is_linear_in_sensitivity_and_specificity():
+    """That is what makes the standard error exact rather than bootstrapped."""
+    for name, (a, b) in sv.OBJECTIVE_COEFFICIENTS.items():
+        scorer = sv.OBJECTIVES[name]
+        base = scorer(0.5, 0.5)
+        assert scorer(0.6, 0.5) - base == pytest.approx(0.1 * a), name
+        assert scorer(0.5, 0.6) - base == pytest.approx(0.1 * b), name
+
+
+def test_the_standard_error_matches_the_binomial_formula():
+    sens, spec, n_pos, n_neg = 0.86, 0.88, 532, 2061
+    expected = float(
+        np.sqrt(
+            0.25 * sens * (1 - sens) / n_pos + 0.25 * spec * (1 - spec) / n_neg
+        )
+    )
+    assert sv.objective_standard_error(
+        "balanced_accuracy", sens, spec, n_pos, n_neg
+    ) == pytest.approx(expected)
+
+
+def test_the_standard_error_shrinks_as_the_fold_grows():
+    """The margin adapts to the fold: small fold, wide margin, weights near equal."""
+    small = sv.objective_standard_error("balanced_accuracy", 0.8, 0.8, 50, 200)
+    large = sv.objective_standard_error("balanced_accuracy", 0.8, 0.8, 500, 2000)
+    assert small > large
+    assert large == pytest.approx(small / np.sqrt(10), rel=1e-6)
+
+
+def test_a_perfect_score_has_zero_standard_error():
+    assert sv.objective_standard_error("balanced_accuracy", 1.0, 1.0, 100, 100) == 0.0
+
+
+def test_an_unknown_objective_has_no_standard_error():
+    with pytest.raises(sv.EnsembleError, match="unknown objective"):
+        sv.objective_standard_error("f1_ish", 0.8, 0.8, 10, 10)
+
+
+def test_the_rule_records_what_a_plain_argmax_would_have_chosen(imbalanced: Any):
+    """The departure from the argmax must be inspectable, not silent."""
+    X, y, groups = imbalanced
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.tree import DecisionTreeClassifier
+
+    fitted = sv.SoftVotingEnsemble(
+        [
+            ("lr", LogisticRegression(max_iter=500, class_weight="balanced")),
+            ("tree", DecisionTreeClassifier(max_depth=3, random_state=42)),
+            ("dud", _ConstantProbability(0.5)),
+        ],
+        weights="optimized", groups=groups, inner_cv=3,
+    ).fit(X, y)
+
+    selection = fitted.weight_selection_
+    for key in (
+        "n_candidates",
+        "n_within_margin",
+        "best_score",
+        "chosen_score",
+        "standard_error",
+        "margin",
+        "argmax_weights",
+    ):
+        assert key in selection, key
+
+    assert selection["margin"] >= 0
+    assert selection["chosen_score"] <= selection["best_score"] + 1e-12
+    assert selection["chosen_score"] >= selection["best_score"] - selection["margin"] - 1e-9
+    assert 1 <= selection["n_within_margin"] <= selection["n_candidates"]
+
+
+def test_zero_standard_errors_reproduces_the_plain_argmax(imbalanced: Any):
+    """The rule is a parameter, and turning it off must give back the old behaviour."""
+    X, y, groups = imbalanced
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.tree import DecisionTreeClassifier
+
+    def build(n_se: float) -> Any:
+        return sv.SoftVotingEnsemble(
+            [
+                ("lr", LogisticRegression(max_iter=500, class_weight="balanced")),
+                ("tree", DecisionTreeClassifier(max_depth=3, random_state=42)),
+            ],
+            weights="optimized", groups=groups, inner_cv=3,
+            selection_standard_errors=n_se,
+        )
+
+    strict = build(0.0).fit(X, y)
+    assert strict.weight_selection_["margin"] == 0.0
+    assert strict.weight_selection_["chosen_score"] == pytest.approx(
+        strict.weight_selection_["best_score"]
+    )
+
+
+def test_the_rule_never_scores_below_equal_weights_in_fold(imbalanced: Any):
+    """Equal weights are on the grid, so they are always inside the margin."""
+    X, y, groups = imbalanced
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.tree import DecisionTreeClassifier
+
+    def members() -> list[tuple[str, Any]]:
+        return [
+            ("lr", LogisticRegression(max_iter=500, class_weight="balanced")),
+            ("tree", DecisionTreeClassifier(max_depth=3, random_state=42)),
+        ]
+
+    equal = sv.SoftVotingEnsemble(
+        members(), weights="equal", groups=groups, inner_cv=3
+    ).fit(X, y)
+    optimised = sv.SoftVotingEnsemble(
+        members(), weights="optimized", groups=groups, inner_cv=3
+    ).fit(X, y)
+
+    assert (
+        optimised.threshold_choice_.balanced_accuracy
+        >= equal.threshold_choice_.balanced_accuracy - optimised.weight_selection_["margin"]
+    )
+
+
 # ---------------------------------------------------------------------------
 # T50.4 -- the threshold
 # ---------------------------------------------------------------------------

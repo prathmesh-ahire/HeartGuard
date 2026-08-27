@@ -1,9 +1,9 @@
 model_id,task,path,model_mb,fit_seconds,inference_seconds_per_record,inference_seconds_per_record_batched,n_features
-M1,binary,models_saved\binary\M1\model.joblib,0.006822,0.224442,0.00098048,5.106e-05,138
-M2,binary,models_saved\binary\M2\model.joblib,2.755552,0.055141,0.00367506,0.0001731,138
-M3,binary,models_saved\binary\M3\model.joblib,2.111459,0.952122,0.00575967,0.00080262,138
-M4,binary,models_saved\binary\M4\model.joblib,11.893328,5.566723,0.13270286,0.00640625,138
-M5,binary,models_saved\binary\M5\model.joblib,0.260522,27.360972,0.00144593,6.851e-05,138
-M6,binary,models_saved\binary\M6\model.joblib,14.864898,166.480676,0.14886504,0.00947738,138
-M7,binary,models_saved\binary\M7\model.joblib,14.864912,168.623492,0.18005736,0.00933112,138
-M8,binary,models_saved\binary\M8\model.joblib,0.641496,5.889321,0.00318747,0.0002129,138
+M1,binary,models_saved\binary\M1\model.joblib,0.006822,0.203309,0.0011659,6.1e-05,138
+M2,binary,models_saved\binary\M2\model.joblib,2.755552,0.04907,0.00340184,0.0001732,138
+M3,binary,models_saved\binary\M3\model.joblib,2.111459,0.99877,0.00630611,0.0008279,138
+M4,binary,models_saved\binary\M4\model.joblib,11.893328,4.950346,0.12482566,0.00534118,138
+M5,binary,models_saved\binary\M5\model.joblib,0.260522,26.50332,0.0015889,0.00012013,138
+M6,binary,models_saved\binary\M6\model.joblib,14.864964,165.375907,0.13181291,0.00635625,138
+M7,binary,models_saved\binary\M7\model.joblib,14.865242,174.339473,0.13354758,0.00704547,138
+M8,binary,models_saved\binary\M8\model.joblib,0.641496,5.94268,0.00323196,0.00020416,138

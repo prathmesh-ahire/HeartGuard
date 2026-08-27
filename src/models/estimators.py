@@ -573,6 +573,7 @@ def make_ensemble(model_id: str, *, groups: Any = None, **overrides: Any) -> Any
             params.pop("objective", search.get("objective", "balanced_accuracy_plus_sensitivity"))
         ),
         weight_resolution=float(search.get("resolution", 0.05)),
+        selection_standard_errors=float(search.get("n_standard_errors", 1.0)),
         tune_threshold=bool(params.pop("tune_threshold", True)),
         random_state=int(_global_setting("random_state", 42)),
     )

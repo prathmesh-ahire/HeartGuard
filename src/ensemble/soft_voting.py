@@ -57,6 +57,8 @@ from src.utils.logging_setup import get_logger
 
 __all__ = [
     "OBJECTIVES",
+    "OBJECTIVE_COEFFICIENTS",
+    "objective_standard_error",
     "EnsembleError",
     "SoftVotingEnsemble",
     "ThresholdChoice",
@@ -167,21 +169,78 @@ def _balanced_accuracy(sensitivity: float, specificity: float) -> float:
     return float(np.nanmean([sensitivity, specificity]))
 
 
-#: Objectives the weight search and threshold search may be scored against.
-#: Every one of them is built from sensitivity and specificity rather than
-#: accuracy, because on a 79/21 task accuracy is maximised by a model that
-#: rarely says "abnormal" -- research rule 6.
-OBJECTIVES: dict[str, Any] = {
-    "balanced_accuracy": lambda sens, spec: _balanced_accuracy(sens, spec),
-    # The config's headline objective. Weighting balanced accuracy and
-    # sensitivity equally breaks ties toward catching the abnormal case, which
-    # is the direction a screening tool should err in.
-    "balanced_accuracy_plus_sensitivity": lambda sens, spec: (
-        _balanced_accuracy(sens, spec) + sens
-    ),
-    "sensitivity": lambda sens, spec: sens,
-    "youden": lambda sens, spec: sens + spec - 1.0,
+#: Objectives the weight search and threshold search may be scored against, each
+#: as the coefficients ``(a, b)`` of ``a*sensitivity + b*specificity``.
+#:
+#: Every one is built from sensitivity and specificity rather than accuracy,
+#: because on a 79/21 task accuracy is maximised by a model that rarely says
+#: "abnormal" -- research rule 6. And every one is **linear** in the two, which
+#: is not a coincidence worth losing: sensitivity and specificity are binomial
+#: proportions with known denominators, so a linear objective has an exact
+#: standard error and :func:`objective_standard_error` can compute how much of a
+#: score difference is noise without bootstrapping anything.
+OBJECTIVE_COEFFICIENTS: dict[str, tuple[float, float]] = {
+    "balanced_accuracy": (0.5, 0.5),
+    # Weights sensitivity at 3x specificity once expanded (1.5*sens + 0.5*spec).
+    # Measured on D1 fold 0 to drive the threshold to a saturating 1.000
+    # sensitivity; kept available, not the shipped default. See Docs/note.md.
+    "balanced_accuracy_plus_sensitivity": (1.5, 0.5),
+    "sensitivity": (1.0, 0.0),
+    # Youden's J is 2*balanced_accuracy - 1 -- the same ranking under a different
+    # name, so it always picks the same threshold and the same weights.
+    "youden": (1.0, 1.0),
 }
+
+_OBJECTIVE_OFFSET: dict[str, float] = {"youden": -1.0}
+
+
+def _linear_objective(name: str) -> Any:
+    a, b = OBJECTIVE_COEFFICIENTS[name]
+    offset = _OBJECTIVE_OFFSET.get(name, 0.0)
+
+    def score(sensitivity: float, specificity: float) -> float:
+        return float(np.nansum([a * sensitivity, b * specificity])) + offset
+
+    return score
+
+
+OBJECTIVES: dict[str, Any] = {
+    name: _linear_objective(name) for name in OBJECTIVE_COEFFICIENTS
+}
+
+
+def objective_standard_error(
+    objective: str,
+    sensitivity: float,
+    specificity: float,
+    n_positive: int,
+    n_negative: int,
+) -> float:
+    """How much of this objective's value is sampling noise, exactly.
+
+    Sensitivity is a proportion over ``n_positive`` records and specificity over
+    ``n_negative``; both are binomial, so ``var = p(1-p)/n``. Every objective
+    here is ``a*sens + b*spec``, and the two proportions are computed on disjoint
+    record sets, so the variances add with no covariance term:
+
+        SE = sqrt(a^2 * sens(1-sens)/n_pos + b^2 * spec(1-spec)/n_neg)
+
+    This is what makes the one-standard-error rule usable here without
+    bootstrapping 231 candidates. It is exact for the objective as defined, and
+    it is deliberately **not** an estimate of how the score will transfer to the
+    outer fold -- that is a larger and different quantity. It measures only the
+    noise in the in-fold estimate, which is the thing the rule needs.
+    """
+    if objective not in OBJECTIVE_COEFFICIENTS:
+        raise EnsembleError("unknown objective " + repr(objective))
+    a, b = OBJECTIVE_COEFFICIENTS[objective]
+
+    variance = 0.0
+    if n_positive > 0 and np.isfinite(sensitivity):
+        variance += (a**2) * sensitivity * (1.0 - sensitivity) / n_positive
+    if n_negative > 0 and np.isfinite(specificity):
+        variance += (b**2) * specificity * (1.0 - specificity) / n_negative
+    return float(np.sqrt(max(variance, 0.0)))
 
 
 @dataclass
@@ -317,38 +376,53 @@ def _other(y_true: np.ndarray, positive_label: Any) -> Any:
 
 
 def _pick_among_ties(
-    grid: np.ndarray, scores: np.ndarray, *, tolerance: float = 1e-12
+    grid: np.ndarray, scores: np.ndarray, *, margin: float = 0.0
 ) -> tuple[np.ndarray, int]:
-    """The best weight vector, ties broken toward equal weights.
+    """The simplest weight vector whose score is within ``margin`` of the best.
 
-    Ties are not rare here and they are not cosmetic. The objective is a step
-    function, so many weight vectors score identically -- and in one measured
-    case a member whose out-of-fold probabilities were a constant 0.5 could take
-    95% of the weight without changing the score at all, because shrinking every
-    fused probability toward 0.5 is a monotone transform that the threshold
-    simply undoes. Taking the first maximum in grid order reported that 0.95 as
-    if it had been learned.
+    "Simplest" means closest to **equal weights**, in L2, which is minimised only
+    by the uniform vector itself -- so the choice is unique and deterministic
+    rather than a function of enumeration order.
 
-    Two things follow. A published weight vector has to mean something: M7's
-    weights are a headline result, and "0.95 to M5" must reflect M5 earning it
-    rather than an enumeration order. And M7 must not lose to M6 by accident --
-    equal weights are inside the tied set whenever the tie spans the simplex, so
-    preferring the most even tied vector makes M7 at least as good as its own
-    baseline by construction, and any remaining difference is real.
+    Two separate problems are solved by the same mechanism, and they need
+    distinguishing because only one of them is about noise.
 
-    Distance to uniform is measured in L2, which is minimised only by the uniform
-    vector itself, so the choice is unique and deterministic.
+    **Exact ties (margin 0).** The objective is a step function of the weights,
+    so many vectors score *identically*. Measured: a member whose out-of-fold
+    probabilities were a constant 0.5 could take 95% of the weight without
+    changing the score at all, because shrinking every fused probability toward
+    0.5 is a monotone transform the tuned threshold undoes. Taking the first
+    maximum in grid order reported that 0.95 as if it had been learned. M7's
+    weights are a published result; they must not be an artefact of iteration
+    order.
+
+    **Near-ties (margin > 0) -- the one-standard-error rule.** Picking the single
+    best of 231 candidates scored on a few thousand rows captures some genuine
+    signal and some luck, and the more candidates there are the more of the
+    winning margin is luck. The standard remedy in model selection is to prefer
+    the simplest candidate within one standard error of the best, and here
+    "simplest" has an obvious meaning: equal weights, which is M6. So M7 departs
+    from its own baseline only where the evidence exceeds the noise.
+
+    This is a **selection rule, not a tuning knob.** It was adopted because
+    selecting the argmax of many noisy estimates is known to overfit the
+    selection data, and it would be the right rule whether M7 were winning or
+    losing. It must not be adjusted in response to a score.
     """
     if grid.shape[0] != scores.shape[0]:
         raise EnsembleError(
             "grid and scores disagree: " + str((grid.shape[0], scores.shape[0]))
         )
+    if margin < 0:
+        raise EnsembleError("margin must be non-negative, got " + str(margin))
+
     best = float(np.nanmax(scores))
-    tied = np.flatnonzero(scores >= best - tolerance)
+    # 1e-12 absorbs float noise even at margin 0; it is not a tolerance choice.
+    within = np.flatnonzero(scores >= best - margin - 1e-12)
     uniform = np.full(grid.shape[1], 1.0 / grid.shape[1])
-    distances = np.linalg.norm(grid[tied] - uniform, axis=1)
-    chosen = tied[int(np.argmin(distances))]
-    return np.asarray(grid[chosen], dtype=float), int(tied.size)
+    distances = np.linalg.norm(grid[within] - uniform, axis=1)
+    chosen = within[int(np.argmin(distances))]
+    return np.asarray(grid[chosen], dtype=float), int(within.size)
 
 
 # ---------------------------------------------------------------------------
@@ -364,6 +438,10 @@ class EnsembleFitReport:
     weight_strategy: str = "equal"
     weight_objective: str = ""
     weight_candidates: int = 0
+    #: How the weights were selected among near-equal candidates (the
+    #: one-standard-error rule): margin, how many candidates fell inside it, and
+    #: what a plain argmax would have chosen instead.
+    weight_selection: dict[str, Any] = field(default_factory=dict)
     inner_folds: int = 0
     n_oof_rows: int = 0
     grouped_inner_cv: bool = False
@@ -379,6 +457,9 @@ class EnsembleFitReport:
             "grouped_inner_cv": self.grouped_inner_cv,
         }
         row.update({"weight_" + name: value for name, value in self.weights.items()})
+        row.update(
+            {"selection_" + name: value for name, value in self.weight_selection.items()}
+        )
         if self.threshold is not None:
             row.update(self.threshold.as_dict())
         return row
@@ -407,6 +488,7 @@ class SoftVotingEnsemble(BaseEstimator, ClassifierMixin):
         groups: Any = None,
         objective: str = "balanced_accuracy",
         weight_resolution: float = 0.05,
+        selection_standard_errors: float = 1.0,
         tune_threshold: bool = True,
         positive_label: Any = 1,
         random_state: int = 42,
@@ -418,6 +500,7 @@ class SoftVotingEnsemble(BaseEstimator, ClassifierMixin):
         self.groups = groups
         self.objective = objective
         self.weight_resolution = weight_resolution
+        self.selection_standard_errors = selection_standard_errors
         self.tune_threshold = tune_threshold
         self.positive_label = positive_label
         self.random_state = random_state
@@ -459,6 +542,7 @@ class SoftVotingEnsemble(BaseEstimator, ClassifierMixin):
                 vector, candidates = self._optimize_weights(oof, targets)
                 report.weight_objective = self.objective
                 report.weight_candidates = candidates
+                report.weight_selection = dict(getattr(self, "weight_selection_", {}))
             else:
                 raise EnsembleError(
                     "weights must be 'equal', 'optimized', or a sequence; got "
@@ -630,6 +714,8 @@ class SoftVotingEnsemble(BaseEstimator, ClassifierMixin):
 
         column = self._positive_column()
         scores = np.empty(grid.shape[0], dtype=float)
+        sensitivities = np.empty(grid.shape[0], dtype=float)
+        specificities = np.empty(grid.shape[0], dtype=float)
         for index, candidate in enumerate(grid):
             fused = fuse_probabilities(oof, candidate)[:, column]
             choice = select_threshold(
@@ -637,16 +723,51 @@ class SoftVotingEnsemble(BaseEstimator, ClassifierMixin):
                 positive_label=self.positive_label,
             )
             scores[index] = float(score_function(choice.sensitivity, choice.specificity))
+            sensitivities[index] = choice.sensitivity
+            specificities[index] = choice.specificity
 
-        best_weights, n_tied = _pick_among_ties(grid, scores)
+        # The one-standard-error rule. The margin is the noise in the BEST
+        # candidate's own estimate, so it adapts to the fold: a small or
+        # badly-balanced training fold gives a wide margin and M7 stays close to
+        # equal weights, a large one gives a narrow margin and M7 is free to
+        # depart. Nothing here is tuned to a score.
+        best_index = int(np.nanargmax(scores))
+        n_positive = int((targets == self.positive_label).sum())
+        n_negative = int(targets.size - n_positive)
+        standard_error = objective_standard_error(
+            self.objective,
+            float(sensitivities[best_index]),
+            float(specificities[best_index]),
+            n_positive,
+            n_negative,
+        )
+        margin = float(self.selection_standard_errors) * standard_error
+
+        best_weights, n_within = _pick_among_ties(grid, scores, margin=margin)
+        chosen_index = int(
+            np.argmin(np.linalg.norm(grid - best_weights, axis=1))
+        )
+        self.weight_selection_ = {
+            "n_candidates": int(grid.shape[0]),
+            "n_within_margin": int(n_within),
+            "best_score": float(scores[best_index]),
+            "chosen_score": float(scores[chosen_index]),
+            "standard_error": round(standard_error, 6),
+            "selection_standard_errors": float(self.selection_standard_errors),
+            "margin": round(margin, 6),
+            "argmax_weights": np.round(grid[best_index], 4).tolist(),
+        }
         log.info(
-            "weights %s from %d simplex points (%d tied at the optimum), "
-            "objective %s = %.4f",
+            "weights %s from %d simplex points (%d within %.4f of the best; "
+            "argmax was %s), objective %s = %.4f (best %.4f)",
             np.round(best_weights, 3).tolist(),
             grid.shape[0],
-            n_tied,
+            n_within,
+            margin,
+            np.round(grid[best_index], 3).tolist(),
             self.objective,
-            float(scores.max()),
+            float(scores[chosen_index]),
+            float(scores[best_index]),
         )
         return best_weights, int(grid.shape[0])
 
@@ -664,6 +785,12 @@ class SoftVotingEnsemble(BaseEstimator, ClassifierMixin):
                 f1_score(targets, predicted, average="macro", zero_division=0)
                 + balanced_accuracy_score(targets, predicted)
             )
+        # Multiclass keeps exact-tie breaking only. The objective there is
+        # macro-F1 plus balanced accuracy, which is not linear in a pair of
+        # binomial proportions, so it has no exact standard error to build a
+        # margin from -- and inventing an approximate one would make the rule
+        # look principled while resting on a guess. Revisit if the multiclass
+        # tracks show the same selection overfitting.
         return _pick_among_ties(grid, scores)[0]
 
     # -- prediction (T50.4) ------------------------------------------------
