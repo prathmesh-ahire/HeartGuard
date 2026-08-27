@@ -75,10 +75,27 @@ def shannon_entropy(signal: np.ndarray, bins: int = 64) -> float:
     A histogram rather than a differential entropy: the bin count is fixed in
     config, so two records are comparable, and a constant signal lands in one
     bin and scores exactly 0 instead of diverging.
+
+    **The degenerate-range guard is not defensive padding.** ``np.histogram``
+    raises ``ValueError: Too many bins for data range`` when the requested bin
+    width falls below the float spacing at the data's magnitude -- which happens
+    for an array that is constant to within rounding but not exactly constant.
+    A DC-only recording produces exactly that in its ``cA5`` wavelet sub-band:
+    54 coefficients spanning 8.88e-16 around -4.525, where 64 bins would each be
+    1.4e-17 wide and float64 cannot represent the edges. Such an array carries no
+    information, so its entropy is 0 -- returning that is the correct answer, not
+    a fallback. Found by the T36.7 gate; see Docs/note.md, 2026-08-27.
     """
     values = np.asarray(signal, dtype=np.float64)
     if values.size == 0:
         return float("nan")
+
+    low = float(np.min(values))
+    high = float(np.max(values))
+    span = high - low
+    if span <= 0.0 or span <= float(np.spacing(max(abs(low), abs(high)))) * int(bins):
+        return 0.0
+
     counts, _edges = np.histogram(values, bins=int(bins))
     total = counts.sum()
     if total <= 0:

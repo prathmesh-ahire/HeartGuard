@@ -140,10 +140,24 @@ families:
     peak_detection:
       min_distance_sec: 0.25   # 240 bpm ceiling
       prominence_factor: 0.3   # of envelope SD
-    # Plausible physiological range used to flag outliers (T37.5). CirCor is
-    # ~98% paediatric, and infant heart rates reach ~180 bpm, so the upper bound
-    # is deliberately generous. Values outside this are flagged, not clipped.
-    plausible_peak_rate_hz: [0.6, 3.5]   # 36-210 bpm
+    # Plausible range used to flag outliers (T37.5). Values outside this are
+    # flagged, not clipped.
+    #
+    # READ THE UNIT CAREFULLY: this bounds heart *sounds* per second, not beats.
+    # A normal cycle produces two envelope peaks (S1 and S2) and the 0.25 s
+    # minimum distance above resolves both, so a 72 bpm recording measures ~2.4
+    # peaks/s. An earlier version of this comment read the range as "36-210 bpm",
+    # which is what it would mean if this counted beats. It does not. The
+    # equivalent beat range is 18-105 bpm, and the corresponding rule is that a
+    # write-up must never convert env_peak_rate to bpm by multiplying by 60.
+    #
+    # The bounds are kept as originally configured because they were measured
+    # against the real corpus (2026-08-27, 60 records per dataset): rates run
+    # 0.11-3.63 Hz with a median of 2.50 in D1 (= 75 bpm), and the range flags
+    # 1.7% of records overall (D1 0.0%, D2 3.3%, D3 1.7%, D4 1.7%) -- a useful
+    # outlier flag rather than one that fires on everything or nothing.
+    # See Docs/note.md, 2026-08-27.
+    plausible_peak_rate_hz: [0.6, 3.5]   # heart SOUNDS per second (~18-105 bpm)
 
 # --- batch extraction (Phase 39) --------------------------------------------
 extraction:

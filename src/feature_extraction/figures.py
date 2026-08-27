@@ -1,4 +1,4 @@
-"""Feature-family figures: FE-07 in Phase 35, FE-08 and FE-09 to follow.
+"""Feature-family figures: FE-07 (Phase 35), FE-08 (Phase 36), FE-09 (Phase 37).
 
 **The record is chosen by rule, not by eye.** These figures reuse
 :func:`src.preprocessing.figures.select_records`, which resolves "a
@@ -16,10 +16,19 @@ from typing import Any
 
 import numpy as np
 
-__all__ = ["FE_FIGURES", "features_dir", "plot_chroma_heatmap", "generate_all"]
+__all__ = [
+    "FE_FIGURES",
+    "features_dir",
+    "plot_chroma_heatmap",
+    "plot_wavelet_decomposition",
+    "plot_signal_envelope",
+    "generate_all",
+]
 
 FE_FIGURES: dict[str, str] = {
     "FE-07": "chroma_heatmap.png",
+    "FE-08": "wavelet_decomposition.png",
+    "FE-09": "signal_envelope.png",
 }
 
 
@@ -125,8 +134,168 @@ def plot_chroma_heatmap(
     )
 
 
+def plot_wavelet_decomposition(path: str | Path, record: Any | None = None) -> Path:
+    """FE-08 -- the six db4 sub-bands of one representative record (T36.6).
+
+    Each panel is annotated with the band it actually covers, because "cD1" says
+    nothing on its own and the dyadic split does not line up with the 20-400 Hz
+    passband. The y-axes are independent: sub-band amplitudes span three orders
+    of magnitude here, and a shared scale would draw four of the six as flat
+    lines.
+    """
+    from src.feature_extraction.wavelet import SUBBANDS, WaveletExtractor, decompose
+    from src.reporting.plot_style import figure, save_figure
+
+    if record is None:
+        record = _representative()
+
+    signal, fs = _preprocessed(record)
+    settings = WaveletExtractor().settings()
+    bands = decompose(signal, settings)
+    if not bands:
+        raise ValueError(
+            "no DWT sub-bands for " + str(record["record_uid"]) + "; cannot draw FE-08"
+        )
+
+    present = [name for name in SUBBANDS if name in bands]
+    fig, axes = figure("tall", nrows=len(present), sharex=False)
+    axes = np.atleast_1d(axes)
+    duration = signal.size / fs
+
+    for axis, name in zip(axes, present, strict=True):
+        coefficients = bands[name]
+        times = np.linspace(0.0, duration, coefficients.size, endpoint=False)
+        axis.plot(times, coefficients, linewidth=0.5, color="#0072B2")
+        # The band goes in the y-label rather than in an annotation inside the
+        # panel: the first draft floated it over the trace, where it collided
+        # with the waveform on every sub-band that actually has content.
+        axis.set_ylabel(
+            name + "\n" + _band_label(name, fs) + "\n" + str(coefficients.size) + " coef.",
+            rotation=0,
+            ha="right",
+            va="center",
+            fontsize=7,
+        )
+        axis.set_xlim(0.0, duration)
+        axis.tick_params(labelbottom=False, labelsize=7)
+        # Sub-band amplitudes span three orders of magnitude, so the default tick
+        # locator crowds four labels into a panel 0.9 inches tall.
+        axis.locator_params(axis="y", nbins=3)
+
+    axes[-1].tick_params(labelbottom=True)
+    axes[-1].set_xlabel("Time (s)")
+    axes[0].set_title(
+        str(settings.level)
+        + "-level "
+        + settings.wavelet
+        + " decomposition, "
+        + str(record["record_uid"])
+    )
+    fig.tight_layout()
+
+    return save_figure(
+        fig,
+        path,
+        source=(
+            "FE-08 | "
+            + str(record["record_uid"])
+            + " | independent y-axes; only cD1 (500-1000 Hz) lies wholly outside "
+            "the 20-400 Hz passband, and it carries a median 0.2% of decomposition "
+            "energy across the corpus"
+        ),
+    )
+
+
+def _band_label(name: str, fs: int) -> str:
+    """The frequency range a named sub-band covers at this sampling rate."""
+    nyquist = fs / 2.0
+    if name.startswith("cD"):
+        level = int(name[2:])
+        low = format(nyquist / 2**level, ".4g")
+        high = format(nyquist / 2 ** (level - 1), ".4g")
+        return low + "-" + high + " Hz"
+    level = int(name[2:])
+    return "0-" + format(nyquist / 2**level, ".4g") + " Hz"
+
+
+def plot_signal_envelope(path: str | Path, record: Any | None = None) -> Path:
+    """FE-09 -- the preprocessed signal, its smoothed envelope and its peaks (T37.6).
+
+    The detected peaks are drawn, not just the envelope, because ``env_peak_rate``
+    is the one feature whose correctness a reader can check by eye: the markers
+    should land on the S1/S2 bursts and nowhere else.
+    """
+    from src.feature_extraction.envelope import EnvelopeExtractor, envelope_peaks
+    from src.reporting.plot_style import figure, save_figure
+
+    if record is None:
+        record = _representative()
+
+    signal, fs = _preprocessed(record)
+    extractor = EnvelopeExtractor()
+    envelope = extractor.envelope_of(signal, fs)
+    peaks = envelope_peaks(envelope, fs, extractor.settings())
+
+    # A 17-second waveform at 2 kHz is 35,000 points of ink; the first six
+    # seconds show the burst structure the envelope is tracking.
+    window = min(signal.size, int(6.0 * fs))
+    times = np.arange(window) / fs
+    visible = peaks[peaks < window]
+
+    fig, axis = figure("double")
+    axis.plot(times, signal[:window], linewidth=0.4, color="#999999", label="Preprocessed signal")
+    axis.plot(
+        times,
+        envelope[:window],
+        linewidth=1.4,
+        color="#D55E00",
+        label="Hilbert envelope (20 Hz low-pass)",
+    )
+    axis.plot(
+        visible / fs,
+        envelope[visible],
+        "v",
+        color="#0072B2",
+        markersize=6,
+        linestyle="none",
+        label="Detected peaks",
+    )
+    axis.set_xlim(0.0, times[-1] if times.size else 1.0)
+    axis.set_xlabel("Time (s)")
+    axis.set_ylabel("Amplitude (z-normalized)")
+    rate = peaks.size / (signal.size / fs)
+    axis.set_title(
+        "Signal envelope and peak detection, "
+        + str(record["record_uid"])
+        + " (peak rate "
+        + format(rate, ".2f")
+        + " sounds/s)"
+    )
+    axis.legend(loc="upper right", fontsize=7)
+    fig.tight_layout()
+
+    return save_figure(
+        fig,
+        path,
+        source=(
+            "FE-09 | "
+            + str(record["record_uid"])
+            + " | first "
+            + format(window / fs, ".0f")
+            + " s of "
+            + format(signal.size / fs, ".0f")
+            + " s | env_peak_rate counts heart SOUNDS (S1 and S2), not beats -- "
+            "never convert it to bpm by multiplying by 60 (T37.5)"
+        ),
+    )
+
+
 def generate_all(out_dir: str | Path | None = None) -> dict[str, Path]:
     """Emit every feature figure built so far."""
     directory = features_dir(out_dir)
     record = _representative()
-    return {"FE-07": plot_chroma_heatmap(directory / FE_FIGURES["FE-07"], record)}
+    return {
+        "FE-07": plot_chroma_heatmap(directory / FE_FIGURES["FE-07"], record),
+        "FE-08": plot_wavelet_decomposition(directory / FE_FIGURES["FE-08"], record),
+        "FE-09": plot_signal_envelope(directory / FE_FIGURES["FE-09"], record),
+    }
