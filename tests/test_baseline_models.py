@@ -59,10 +59,22 @@ def test_m2_is_knn_and_has_no_class_weight():
     assert "class_weight" not in model.get_params()
 
 
-def test_an_unimplemented_model_names_the_phase_that_builds_it():
-    """Update the id here as phases land -- never the assertion."""
-    with pytest.raises(est.EstimatorError, match="Phase 50"):
-        est.build_estimator("M6")
+def test_a_model_that_cannot_be_built_says_why_rather_than_failing_vaguely():
+    """Every declared-but-unbuildable id must explain itself.
+
+    Written against `_ADDED_IN_PHASE` rather than a hard-coded id, because the
+    previous version named whichever model was next to be implemented and had to
+    be edited every time a phase landed -- twice it failed the suite for that
+    reason alone. What must hold is the property, not the particular id.
+    """
+    for model_id, reason in est._ADDED_IN_PHASE.items():
+        assert model_id not in est.IMPLEMENTED_MODELS, (
+            model_id + " is implemented but still listed as unavailable"
+        )
+        with pytest.raises(est.EstimatorError) as caught:
+            est.build_estimator(model_id)
+        assert reason in str(caught.value), model_id
+
     with pytest.raises(est.EstimatorError, match="unknown model id"):
         est.build_estimator("M99")
 

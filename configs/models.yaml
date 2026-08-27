@@ -174,9 +174,32 @@ models:
     estimator: "src.ensemble.soft_voting.SoftVotingEnsemble"
     mandatory: true
     members: ["M3", "M4", "M5"]   # calibrated SVM-RBF, RF, GB
+    # Members are NOT treated alike, on evidence. M3 carries its own explicit
+    # calibration (an SVM has no probabilities at all). Calibrating M4 makes its
+    # ECE *worse* — 0.027 -> 0.039 measured on D1 fold 0 — so it stays raw.
+    # Calibrating M5 improves it substantially, 0.088 -> 0.029. One uniform
+    # policy would knowingly degrade a member for the sake of symmetry.
+    # Evidence: outputs/04_models/tree_calibration_assessment.csv (T48.5/T49.5).
+    calibrate_members: ["M5"]
     defaults:
       weights: "equal"
       voting: "soft"
+      inner_cv: 3
+      # T50.4: the binary decision rule is a threshold chosen inside the
+      # training fold, not a fixed 0.5. Applies to M6 as well as M7 — the
+      # baseline and the proposed model must differ in their weights, not in
+      # their decision rule, or the comparison measures the wrong thing.
+      tune_threshold: true
+      # DECIDED 2026-08-27 against measurements on D1 fold 0, not by default.
+      # `balanced_accuracy_plus_sensitivity` is algebraically 1.5*sens +
+      # 0.5*spec, so it weights sensitivity 3x specificity; it drove the
+      # threshold to 0.153 and produced test sensitivity 1.000 at specificity
+      # 0.619 — a number that reads as a bug and costs balanced accuracy.
+      # `balanced_accuracy` beats a fixed 0.5 on BOTH metrics rule 6 selects on
+      # (sens 0.871 vs 0.689, bal 0.836 vs 0.786) and does not saturate.
+      # `youden` is a monotone transform of it and picks the same threshold.
+      # Evidence: outputs/04_models/threshold_objective_comparison.csv.
+      objective: "balanced_accuracy"
     search_space: {}              # nothing to search — this is the fixed baseline
 
   # --- M7 optimized-weight soft voting (Phase 50) — the PROPOSED model ------
@@ -185,16 +208,30 @@ models:
     estimator: "src.ensemble.soft_voting.SoftVotingEnsemble"
     mandatory: true
     members: ["M3", "M4", "M5"]
+    calibrate_members: ["M5"]
     defaults:
       weights: "optimized"
       voting: "soft"
+      inner_cv: 3
+      tune_threshold: true
+      objective: "balanced_accuracy"   # see the note on M6; decided 2026-08-27
     weight_search:
       # Weights are optimized on OUT-OF-FOLD probabilities from the inner folds
       # only (T50.5). Touching the outer test fold here would invalidate every
       # headline result in the project.
       method: "SO-05"
       simplex_constrained: true   # weights are non-negative and sum to 1
-      objective: "balanced_accuracy_plus_sensitivity"
+      objective: "balanced_accuracy"
+      # An exhaustive grid over the simplex, not an optimiser. Balanced accuracy
+      # is a step function of the weights, so it has zero gradient almost
+      # everywhere and SLSQP/L-BFGS stall at their starting point. 0.05 over
+      # three members is 231 points, evaluated in vectorised numpy, and is
+      # identical on every machine — rule 5 for free.
+      resolution: 0.05
+      # Weights and threshold are chosen JOINTLY: each weight vector is scored
+      # at its own best threshold. The best weights at 0.5 are not the best
+      # weights at the threshold the model will actually use.
+      joint_with_threshold: true
     search_space: {}
 
   # --- M8 external gradient boosting (Phase 49) -----------------------------
@@ -245,15 +282,25 @@ models:
       colsample_bytree: {type: "uniform", low: 0.5, high: 1.0}
       reg_lambda: {type: "log_uniform", low: 1.0e-2, high: 1.0e+2}
 
-  # --- M9 1D-CNN (Phase 52) — OPTIONAL, scope undecided ---------------------
-  # Listed as Optional in both source documents. This machine is CPU only.
-  # The decision is DEFERRED to a user call against the Phase 75 complexity
-  # timings (T52.1). If dropped, the reason goes in missing_outputs_report.txt
-  # (T52.6) — never silently omitted. Open item 1 in Docs/note.md.
+  # --- M9 1D-CNN (Phase 52) — OPTIONAL, EXCLUDED -----------------------------
+  # DECIDED OUT OF SCOPE by the user on 2026-08-27 (T52.1), against the measured
+  # cost of the classical stack: all eight classical models fit one fold in
+  # 41.1 s, so the full 5x5 map is ~17 min. A 1D-CNN over raw segments is hours
+  # per fold on 4 CPU cores with no GPU, and T52.4 requires it to use the SAME
+  # fold map or its accuracy cannot be placed beside the others'. Listed as
+  # Optional in both source documents.
+  # The exclusion and its technical reason are recorded in
+  # outputs/missing_outputs_report.txt (T52.6). Kept declared here, rather than
+  # deleted, so the registry reports it as an explicit exclusion instead of an
+  # oversight. NO claim may compare PV-MEPCG against a CNN.
   M9:
     name: "1D-CNN"
     estimator: null
     mandatory: false
-    in_scope: null            # null = undecided; set true/false at T52.1
+    in_scope: false           # decided 2026-08-27; see missing_outputs_report.txt
+    exclusion_reason: >-
+      CPU-only hardware (4 logical cores, no CUDA). Days of wall clock for the
+      5x5 fold map against ~17 min for the whole classical stack, and a reduced
+      fold map would break the comparison T52.4 requires.
     defaults: {}
     search_space: {}

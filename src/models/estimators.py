@@ -42,7 +42,10 @@ __all__ = [
     "make_m3",
     "make_m4",
     "make_m5",
+    "make_m6",
+    "make_m7",
     "make_m8",
+    "make_ensemble",
     "Capability",
     "m8_capability",
     "has_predict_proba",
@@ -55,12 +58,18 @@ log = get_logger("models.estimators")
 
 #: Ids this module can build today. Grows as Part V proceeds; a caller asking
 #: for one that is not here gets a clear error naming the phase that adds it.
-IMPLEMENTED_MODELS: tuple[str, ...] = ("M1", "M2", "M3", "M4", "M5", "M8")
+IMPLEMENTED_MODELS: tuple[str, ...] = (
+    "M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8",
+)
 
+#: Ids that are declared in config but cannot be built, and why. M9 is not
+#: "not written yet" -- it is a recorded exclusion (T52.1, decided 2026-08-27),
+#: and the message says so rather than implying someone forgot.
 _ADDED_IN_PHASE: dict[str, str] = {
-    "M6": "Phase 50",
-    "M7": "Phase 50",
-    "M9": "Phase 52 (optional, undecided)",
+    "M9": (
+        "excluded from scope on CPU-only hardware -- see the T52 entry in "
+        "outputs/missing_outputs_report.txt"
+    ),
 }
 
 #: Old name -> new name for parameters scikit-learn has renamed under us.
@@ -522,6 +531,69 @@ def make_m8(**overrides: Any) -> Any:
     )
 
 
+
+# ---------------------------------------------------------------------------
+# M6 and M7 -- the soft-voting ensembles (T50.2, T50.3)
+# ---------------------------------------------------------------------------
+
+
+def make_ensemble(model_id: str, *, groups: Any = None, **overrides: Any) -> Any:
+    """M6 (equal weights) or M7 (optimised weights), built from config.
+
+    ``groups`` carries the **training fold's** subject ids so the ensemble's
+    inner CV -- the one that produces the out-of-fold probabilities its weights
+    and threshold are chosen on -- can be subject-aware. It has to be supplied
+    per fold, in the row order of the matrix that will be passed to ``fit``, and
+    a factory that has never seen the fold cannot construct it. Passing groups
+    taken from the full matrix is a leak, not a convenience.
+
+    Omitting it is safe but weaker: the inner CV falls back to stratified
+    splitting, so two recordings of one subject can land on both sides of it.
+    That never touches the outer test fold -- the reported metric stays honest --
+    but it makes the weights and threshold slightly optimistic about how
+    separable the members' scores are.
+    """
+    from src.ensemble.soft_voting import SoftVotingEnsemble, ensemble_members
+
+    spec = model_spec(model_id)
+    params = model_defaults(model_id)
+    params.update(overrides)
+    params.pop("voting", None)  # soft is the only implementation; asserted below
+
+    if str(spec.get("defaults", {}).get("voting", "soft")) != "soft":
+        raise EstimatorError(model_id + " must be soft voting; hard voting discards confidence")
+
+    search = dict(spec.get("weight_search") or {})
+    return SoftVotingEnsemble(
+        estimators=ensemble_members(model_id),
+        weights=params.pop("weights", "equal"),
+        inner_cv=int(params.pop("inner_cv", 3)),
+        groups=groups,
+        objective=str(
+            params.pop("objective", search.get("objective", "balanced_accuracy_plus_sensitivity"))
+        ),
+        weight_resolution=float(search.get("resolution", 0.05)),
+        tune_threshold=bool(params.pop("tune_threshold", True)),
+        random_state=int(_global_setting("random_state", 42)),
+    )
+
+
+def make_m6(*, groups: Any = None, **overrides: Any) -> Any:
+    """Equal-weight soft voting -- the mandatory ensemble baseline.
+
+    Its job is to answer "did learning the weights actually help?". For that
+    question to mean anything, M6 and M7 must differ **only** in their weights:
+    same members, same calibration, same inner CV, same threshold rule. A
+    baseline that also used a worse decision rule would flatter M7 for free.
+    """
+    return make_ensemble("M6", groups=groups, **overrides)
+
+
+def make_m7(*, groups: Any = None, **overrides: Any) -> Any:
+    """Optimised-weight soft voting -- the proposed model of this project."""
+    return make_ensemble("M7", groups=groups, **overrides)
+
+
 # ---------------------------------------------------------------------------
 # dispatch
 # ---------------------------------------------------------------------------
@@ -532,6 +604,8 @@ _FACTORIES = {
     "M3": make_m3,
     "M4": make_m4,
     "M5": make_m5,
+    "M6": make_m6,
+    "M7": make_m7,
     "M8": make_m8,
 }
 

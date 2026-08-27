@@ -1,0 +1,10 @@
+model_id,name,estimator,mandatory,implemented,is_ensemble,members,calibrated,n_search_dimensions,search_constraints,unavailable_reason
+M1,Logistic Regression,sklearn.linear_model.LogisticRegression,True,True,False,,False,4,M1_SOLVER_PENALTY,
+M2,K-Nearest Neighbours,sklearn.neighbors.KNeighborsClassifier,False,True,False,,False,4,M2_P_ONLY_FOR_MINKOWSKI,
+M3,SVM (RBF kernel),sklearn.svm.SVC,True,True,False,,True,3,,
+M4,Random Forest,sklearn.ensemble.RandomForestClassifier,True,True,False,,False,5,,
+M5,Gradient Boosting,sklearn.ensemble.GradientBoostingClassifier,True,True,False,,False,5,,
+M6,Soft Voting (equal weights),src.ensemble.soft_voting.SoftVotingEnsemble,True,True,True,M3|M4|M5,True,0,,
+M7,Soft Voting (optimized weights),src.ensemble.soft_voting.SoftVotingEnsemble,True,True,True,M3|M4|M5,True,0,,
+M8,XGBoost / LightGBM,xgboost.XGBClassifier,False,True,False,,False,6,,
+M9,1D-CNN,,False,False,False,,False,0,,excluded from scope on CPU-only hardware -- see the T52 entry in outputs/missing_outputs_report.txt

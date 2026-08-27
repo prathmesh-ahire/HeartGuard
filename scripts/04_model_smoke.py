@@ -38,7 +38,7 @@ from src.utils.logging_setup import get_logger
 
 log = get_logger("model_smoke")
 
-DEFAULT_MODELS = ("M1", "M2", "M3", "M4", "M5", "M8")
+DEFAULT_MODELS = ("M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8")
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -143,12 +143,83 @@ def _budget_note(budget: dict[str, float], timings: object) -> str:
     return "\n".join(lines)
 
 
+def _threshold_objectives(result: object, data: object, sv: object) -> object:
+    """Score every threshold objective on the SAME in-fold probabilities.
+
+    One fit, several objectives. The ensemble keeps the out-of-fold fused
+    probabilities it chose its threshold on, so a different objective can be
+    evaluated against exactly the rows the shipped one saw -- no refitting, and
+    no risk of the comparison being run on different data from the decision.
+    """
+    import numpy as np
+    import pandas as pd
+
+    from src.evaluation import metrics as mt
+
+    ensemble = result.pipeline.named_steps["estimator"]  # type: ignore[attr-defined]
+    if getattr(ensemble, "oof_fused_", None) is None:
+        return None
+
+    fold = data.record_uids  # type: ignore[attr-defined]
+    del fold
+    oof = ensemble.oof_fused_[:, 1]
+    oof_targets = ensemble.oof_targets_
+
+    from src.models import smoke as sm
+
+    test_fold = sm._fold_zero(data.task, data)  # type: ignore[attr-defined]
+    test_index = np.asarray(test_fold.test_index, dtype=int)
+    test_proba = result.pipeline.predict_proba(data.X[test_index])[:, 1]  # type: ignore[attr-defined]
+    y_test = data.y[test_index]  # type: ignore[attr-defined]
+
+    rows = []
+    for name in sorted(sv.OBJECTIVES):  # type: ignore[attr-defined]
+        choice = sv.select_threshold(oof_targets, oof, objective=name)  # type: ignore[attr-defined]
+        predicted = (test_proba >= choice.threshold).astype(int)
+        scored = mt.binary_metrics(y_test, predicted, labels=(0, 1), positive_label=1)
+        rows.append(
+            {
+                "model_id": result.model_id,  # type: ignore[attr-defined]
+                "objective": name,
+                "threshold": round(choice.threshold, 4),
+                "infold_sensitivity": round(choice.sensitivity, 4),
+                "infold_specificity": round(choice.specificity, 4),
+                "infold_balanced_accuracy": round(choice.balanced_accuracy, 4),
+                "test_sensitivity": round(scored["sensitivity"], 4),
+                "test_specificity": round(scored["specificity"], 4),
+                "test_balanced_accuracy": round(scored["balanced_accuracy"], 4),
+                "shipped": name == ensemble.objective,
+            }
+        )
+
+    predicted = (test_proba >= 0.5).astype(int)
+    scored = mt.binary_metrics(y_test, predicted, labels=(0, 1), positive_label=1)
+    rows.append(
+        {
+            "model_id": result.model_id,  # type: ignore[attr-defined]
+            "objective": "(fixed 0.5, no tuning)",
+            "threshold": 0.5,
+            "infold_sensitivity": None,
+            "infold_specificity": None,
+            "infold_balanced_accuracy": None,
+            "test_sensitivity": round(scored["sensitivity"], 4),
+            "test_specificity": round(scored["specificity"], 4),
+            "test_balanced_accuracy": round(scored["balanced_accuracy"], 4),
+            "shipped": False,
+        }
+    )
+    return pd.DataFrame(rows)
+
+
+
 def main(argv: list[str] | None = None) -> int:
     import pandas as pd
 
+    from src.ensemble import soft_voting as sv
     from src.models import benchmark as bm
     from src.models import estimators as est
     from src.models import importance as imp
+    from src.models import registry as reg
     from src.models import smoke as sm
     from src.models import spaces
     from src.utils.config import load_config
@@ -330,6 +401,85 @@ def main(argv: list[str] | None = None) -> int:
                     choice_path,
                     metric_or_asset=(
                         "M5 classic vs histogram gradient boosting, weighted and not"
+                    ),
+                    dataset="D1",
+                    command=command,
+                )
+
+        # -- the model registry and persistence (Phase 51) -------------------
+        registry_path = _write(
+            reg.registry_frame(), directory, "model_registry.csv"
+        )
+        run.record_artifact(registry_path)
+        register_evidence(
+            "MD-REGISTRY",
+            registry_path,
+            metric_or_asset="model inventory M1-M9: availability, members, search size",
+            command=command,
+        )
+
+        persisted = []
+        for result in results:
+            if result.pipeline is None:
+                continue
+            saved = reg.save_model(
+                result.pipeline,
+                model_id=result.model_id,
+                task=args.task,
+                feature_names=data.feature_names,
+                fit_seconds=result.fit_seconds,
+                X_sample=data.X[sm._fold_zero(args.task, data).test_index],
+                fold=result.fold_label,
+                extra={"smoke_metrics": result.metrics},
+            )
+            persisted.append(
+                {
+                    "model_id": saved.model_id,
+                    "task": saved.task,
+                    "path": str(saved.path.relative_to(Path.cwd()))
+                    if saved.path.is_relative_to(Path.cwd())
+                    else str(saved.path),
+                    "model_mb": saved.manifest["model_mb"],
+                    "fit_seconds": saved.manifest["fit_seconds"],
+                    "inference_seconds_per_record": saved.manifest.get(
+                        "inference_seconds_per_record"
+                    ),
+                    "inference_seconds_per_record_batched": saved.manifest.get(
+                        "inference_seconds_per_record_batched"
+                    ),
+                    "n_features": saved.manifest["n_features"],
+                }
+            )
+        if persisted:
+            complexity_path = _write(
+                pd.DataFrame(persisted), directory, "model_complexity.csv"
+            )
+            run.record_artifact(complexity_path)
+            register_evidence(
+                "MD-COMPLEXITY",
+                complexity_path,
+                metric_or_asset="per-model size on disk, training time, inference time",
+                dataset="D1",
+                command=command,
+            )
+
+        # -- the threshold objective comparison (T50.4 evidence) -------------
+        ensemble = next(
+            (r for r in results if r.model_id in ("M6", "M7") and r.pipeline is not None),
+            None,
+        )
+        if ensemble is not None:
+            comparison = _threshold_objectives(ensemble, data, sv)
+            if comparison is not None:
+                objective_path = _write(
+                    comparison, directory, "threshold_objective_comparison.csv"
+                )
+                run.record_artifact(objective_path)
+                register_evidence(
+                    "MD-THRESHOLD",
+                    objective_path,
+                    metric_or_asset=(
+                        "in-fold threshold objectives vs the fixed 0.5 rule (T50.4)"
                     ),
                     dataset="D1",
                     command=command,

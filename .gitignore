@@ -29,9 +29,14 @@ report.log
 .coverage.*
 htmlcov/
 
-# Trained model binaries (the directory itself is kept)
-models_saved/*.pkl
-models_saved/*.joblib
+# Trained model binaries (the directory itself is kept).
+# Recursive: Phase 51 writes models_saved/{task}/{model_id}/model.joblib, which
+# the single-level pattern below it does NOT match — M4 alone is 12 MB and M6
+# is 15 MB. The manifests beside them are small JSON and ARE committed: they
+# carry the size, fit time, inference time and feature-name list, which are the
+# actual deliverables. The binaries are reproducible from a seeded run.
+models_saved/**/*.pkl
+models_saved/**/*.joblib
 
 # Python
 __pycache__/

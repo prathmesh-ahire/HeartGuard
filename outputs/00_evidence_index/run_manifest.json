@@ -6234,6 +6234,1274 @@
         },
         "env_overrides": {}
       }
+    },
+    "89a58e454d0634fc": {
+      "paths": {
+        "values": {
+          "project_root": "D:\\Projects\\HeartGuard",
+          "dataset": {
+            "root": "D:\\Projects\\HeartGuard\\dataset",
+            "d1_physionet": {
+              "root": "D:\\Projects\\HeartGuard\\dataset\\archive (3)",
+              "subsets": [
+                "training-a",
+                "training-b",
+                "training-c",
+                "training-d",
+                "training-e",
+                "training-f"
+              ],
+              "validation": "D:\\Projects\\HeartGuard\\dataset\\archive (3)\\validation",
+              "annotations": "D:\\Projects\\HeartGuard\\dataset\\archive (3)\\annotations",
+              "appendix_training": "D:\\Projects\\HeartGuard\\dataset\\archive (3)\\annotations\\Online_Appendix_training_set.csv",
+              "appendix_diagnosis": "D:\\Projects\\HeartGuard\\dataset\\archive (3)\\annotations\\Online_Appendix_Diagnosis_meanings.csv",
+              "reference_filename": "REFERENCE.csv",
+              "reference_sqi_filename": "REFERENCE-SQI.csv"
+            },
+            "d2_pascal_a": {
+              "root": "D:\\Projects\\HeartGuard\\dataset\\archive (2)\\set_a",
+              "csv": "D:\\Projects\\HeartGuard\\dataset\\archive (2)\\set_a.csv",
+              "timing_csv": "D:\\Projects\\HeartGuard\\dataset\\archive (2)\\set_a_timing.csv"
+            },
+            "d3_pascal_b": {
+              "root": "D:\\Projects\\HeartGuard\\dataset\\archive (2)\\set_b",
+              "csv": "D:\\Projects\\HeartGuard\\dataset\\archive (2)\\set_b.csv"
+            },
+            "d4_circor": {
+              "root": "D:\\Projects\\HeartGuard\\dataset\\archive\\training_data\\training_data",
+              "demographics_csv": "D:\\Projects\\HeartGuard\\dataset\\archive\\training_data.csv",
+              "records_index": "D:\\Projects\\HeartGuard\\dataset\\archive\\RECORDS",
+              "checksums": "D:\\Projects\\HeartGuard\\dataset\\archive\\SHA256SUMS.txt",
+              "license": "D:\\Projects\\HeartGuard\\dataset\\archive\\LICENSE.txt"
+            },
+            "heartbeat_sound": {
+              "root": "D:\\Projects\\HeartGuard\\dataset\\Heartbeat_Sound",
+              "classes": [
+                "artifact",
+                "extrahls",
+                "extrastole",
+                "murmur",
+                "normal",
+                "unlabel"
+              ],
+              "is_training_source": false
+            }
+          },
+          "cache": {
+            "root": "D:\\Projects\\HeartGuard\\cache",
+            "preprocessed": "D:\\Projects\\HeartGuard\\cache\\preprocessed",
+            "features": "D:\\Projects\\HeartGuard\\cache\\features",
+            "metadata": "D:\\Projects\\HeartGuard\\cache\\metadata"
+          },
+          "outputs": {
+            "root": "D:\\Projects\\HeartGuard\\outputs",
+            "evidence_index": "D:\\Projects\\HeartGuard\\outputs\\00_evidence_index",
+            "dataset_audit": "D:\\Projects\\HeartGuard\\outputs\\01_dataset_audit",
+            "preprocessing": "D:\\Projects\\HeartGuard\\outputs\\02_preprocessing",
+            "features": "D:\\Projects\\HeartGuard\\outputs\\03_features",
+            "models": "D:\\Projects\\HeartGuard\\outputs\\04_models",
+            "search_optimization": "D:\\Projects\\HeartGuard\\outputs\\05_search_optimization",
+            "binary_results": "D:\\Projects\\HeartGuard\\outputs\\06_binary_results",
+            "multiclass_results": "D:\\Projects\\HeartGuard\\outputs\\07_multiclass_results",
+            "circor_external_validation": "D:\\Projects\\HeartGuard\\outputs\\08_circor_external_validation",
+            "ablation": "D:\\Projects\\HeartGuard\\outputs\\09_ablation",
+            "robustness": "D:\\Projects\\HeartGuard\\outputs\\10_robustness",
+            "complexity": "D:\\Projects\\HeartGuard\\outputs\\11_complexity",
+            "statistics": "D:\\Projects\\HeartGuard\\outputs\\12_statistics",
+            "figures_diagrams": "D:\\Projects\\HeartGuard\\outputs\\13_figures_diagrams",
+            "algorithms": "D:\\Projects\\HeartGuard\\outputs\\14_algorithms",
+            "dashboard_screenshots": "D:\\Projects\\HeartGuard\\outputs\\15_dashboard_screenshots",
+            "paper_assets": "D:\\Projects\\HeartGuard\\outputs\\Q1_PAPER_ASSETS",
+            "thesis_assets": "D:\\Projects\\HeartGuard\\outputs\\THESIS_ASSETS",
+            "logs": "D:\\Projects\\HeartGuard\\outputs\\logs",
+            "configs": "D:\\Projects\\HeartGuard\\outputs\\configs",
+            "missing_outputs_report": "D:\\Projects\\HeartGuard\\outputs\\missing_outputs_report.txt",
+            "run_manifest": "D:\\Projects\\HeartGuard\\outputs\\00_evidence_index\\run_manifest.json"
+          },
+          "models_saved": "D:\\Projects\\HeartGuard\\models_saved",
+          "frontend": {
+            "root": "D:\\Projects\\HeartGuard\\frontend",
+            "generated": "D:\\Projects\\HeartGuard\\frontend\\lib\\generated",
+            "static_export": "D:\\Projects\\HeartGuard\\frontend\\out"
+          }
+        },
+        "env_overrides": {}
+      },
+      "signal": {
+        "values": {
+          "resample": {
+            "target_fs": 2000,
+            "method": "soxr_hq",
+            "native_fs": {
+              "d1_physionet": 2000,
+              "d2_pascal_a": 44100,
+              "d3_pascal_b": 4000,
+              "d4_circor": 4000
+            },
+            "mono": "mean",
+            "dtype": "float32"
+          },
+          "filter": {
+            "enabled": true,
+            "type": "butterworth",
+            "order": 4,
+            "low_hz": 20,
+            "high_hz": 400,
+            "design": "sos",
+            "zero_phase": true,
+            "short_signal_policy": "reduce_padlen",
+            "min_padlen": 12
+          },
+          "normalization": {
+            "enabled": true,
+            "method": "zscore",
+            "remove_dc": true,
+            "zero_variance_epsilon": 1e-10,
+            "zero_variance_policy": "passthrough_and_flag"
+          },
+          "quality": {
+            "clipping_threshold": 0.99,
+            "clipping_ratio_flag": 0.01,
+            "silence_threshold_db": -60.0,
+            "silence_ratio_flag": 0.5,
+            "snr_proxy": {
+              "in_band": [
+                20,
+                400
+              ],
+              "out_of_band": [
+                400,
+                1000
+              ],
+              "low_snr_db_flag": 5.0
+            },
+            "spectral_flatness_flag": 0.5,
+            "drift_ratio_db_flag": 5.0,
+            "short_duration_sec": 2.0,
+            "calibrate_against_sqi": true
+          },
+          "framing": {
+            "frame_length": 512,
+            "hop_length": 256,
+            "window": "hann",
+            "center": true
+          },
+          "cache": {
+            "enabled": true,
+            "format": "npy",
+            "hash_config": true
+          },
+          "integrity": {
+            "silence_peak": 0.001,
+            "constant_variance": 1e-12,
+            "clipping_threshold": 0.99,
+            "clipping_ratio_flag": 0.01,
+            "min_samples": 2,
+            "content_hash_fs": 2000,
+            "content_hash_decimals": 5,
+            "envelope_points": 256,
+            "near_duplicate_correlation": 0.98,
+            "duration_bands": {
+              "short_below": 5.0,
+              "long_above": 20.0
+            }
+          }
+        },
+        "env_overrides": {}
+      },
+      "features": {
+        "values": {
+          "expected_total": 138,
+          "failure_policy": {
+            "on_error": "nan",
+            "log_record_uid": true,
+            "raise_on_error": false
+          },
+          "families": {
+            "time": {
+              "enabled": true,
+              "count": 24,
+              "composition": {
+                "basic_stats": 8,
+                "shape_stats": 2,
+                "energy": 4,
+                "zcr": 2,
+                "complexity": 5,
+                "autocorr_duration": 3
+              },
+              "sample_entropy": {
+                "m": 2,
+                "r_factor": 0.2,
+                "max_samples": 20000
+              },
+              "shannon_entropy_bins": 64,
+              "autocorr_max_lag_sec": 2.0
+            },
+            "frequency": {
+              "enabled": true,
+              "count": 22,
+              "composition": {
+                "spectral_stats": 12,
+                "global_stats": 4,
+                "band_powers": 6
+              },
+              "rolloff_percentiles": [
+                0.85,
+                0.95
+              ],
+              "welch": {
+                "nperseg": 512,
+                "noverlap": 256,
+                "window": "hann",
+                "detrend": "constant",
+                "scaling": "density"
+              },
+              "bands_hz": [
+                [
+                  20,
+                  50
+                ],
+                [
+                  50,
+                  100
+                ],
+                [
+                  100,
+                  150
+                ],
+                [
+                  150,
+                  250
+                ],
+                [
+                  250,
+                  350
+                ],
+                [
+                  350,
+                  400
+                ]
+              ]
+            },
+            "mfcc": {
+              "enabled": true,
+              "count": 39,
+              "composition": {
+                "mean": 13,
+                "std": 13,
+                "delta_mean": 13
+              },
+              "n_mfcc": 13,
+              "n_mels": 40,
+              "fmin": 20,
+              "fmax": 400,
+              "n_fft": 512,
+              "hop_length": 256,
+              "htk": false,
+              "delta_width": 9,
+              "short_signal_policy": "shrink_delta_width_then_pad"
+            },
+            "chroma": {
+              "enabled": true,
+              "count": 24,
+              "composition": {
+                "mean": 12,
+                "std": 12
+              },
+              "n_chroma": 12,
+              "n_fft": 512,
+              "hop_length": 256,
+              "fmin": 20,
+              "tuning": 0.0
+            },
+            "dwt": {
+              "enabled": true,
+              "count": 24,
+              "wavelet": "db4",
+              "level": 5,
+              "mode": "symmetric",
+              "subbands": [
+                "cA5",
+                "cD5",
+                "cD4",
+                "cD3",
+                "cD2",
+                "cD1"
+              ],
+              "stats": [
+                "energy",
+                "std",
+                "entropy",
+                "mean_abs"
+              ],
+              "entropy_bins": 64,
+              "short_signal_policy": "reduce_level_and_flag",
+              "min_level": 1
+            },
+            "envelope": {
+              "enabled": true,
+              "count": 5,
+              "composition": {
+                "mean": 1,
+                "std": 1,
+                "skew": 1,
+                "kurtosis": 1,
+                "peak_rate": 1
+              },
+              "method": "hilbert",
+              "smooth_lowpass_hz": 20,
+              "peak_detection": {
+                "min_distance_sec": 0.25,
+                "prominence_factor": 0.3
+              },
+              "plausible_peak_rate_hz": [
+                0.6,
+                3.5
+              ]
+            }
+          },
+          "extraction": {
+            "n_jobs": -1,
+            "checkpoint_every": 250,
+            "cache_format": "parquet",
+            "timing_per_family": true,
+            "smoke_limit": 20
+          }
+        },
+        "env_overrides": {}
+      },
+      "models": {
+        "values": {
+          "global": {
+            "random_state": 42,
+            "n_jobs": -1,
+            "device": "cpu"
+          },
+          "pipeline": {
+            "imputer": {
+              "strategy": "median"
+            },
+            "scaler": {
+              "kind": "standard",
+              "with_mean": true,
+              "with_std": true
+            },
+            "selector": {
+              "enabled": false,
+              "kind": "none",
+              "k": 60
+            },
+            "class_weight": {
+              "strategy": "balanced"
+            },
+            "resampling": {
+              "enabled": false
+            }
+          },
+          "calibration": {
+            "method": "sigmoid",
+            "cv": 3,
+            "fit_inside_fold": true,
+            "ensemble": true
+          },
+          "models": {
+            "M1": {
+              "name": "Logistic Regression",
+              "estimator": "sklearn.linear_model.LogisticRegression",
+              "mandatory": true,
+              "defaults": {
+                "C": 1.0,
+                "l1_ratio": 0.0,
+                "solver": "lbfgs",
+                "max_iter": 2000,
+                "class_weight": "balanced",
+                "random_state": 42
+              },
+              "search_space": {
+                "C": {
+                  "type": "log_uniform",
+                  "low": 0.001,
+                  "high": 1000.0
+                },
+                "l1_ratio": {
+                  "type": "categorical",
+                  "choices": [
+                    0.0,
+                    0.5,
+                    1.0
+                  ]
+                },
+                "solver": {
+                  "type": "categorical",
+                  "choices": [
+                    "lbfgs",
+                    "liblinear",
+                    "saga"
+                  ]
+                },
+                "max_iter": {
+                  "type": "categorical",
+                  "choices": [
+                    1000,
+                    2000,
+                    5000
+                  ]
+                }
+              },
+              "constraints": [
+                "M1_SOLVER_PENALTY"
+              ]
+            },
+            "M2": {
+              "name": "K-Nearest Neighbours",
+              "estimator": "sklearn.neighbors.KNeighborsClassifier",
+              "mandatory": false,
+              "defaults": {
+                "n_neighbors": 5,
+                "weights": "uniform",
+                "metric": "minkowski",
+                "p": 2
+              },
+              "search_space": {
+                "n_neighbors": {
+                  "type": "int_uniform",
+                  "low": 3,
+                  "high": 31
+                },
+                "weights": {
+                  "type": "categorical",
+                  "choices": [
+                    "uniform",
+                    "distance"
+                  ]
+                },
+                "metric": {
+                  "type": "categorical",
+                  "choices": [
+                    "minkowski",
+                    "manhattan",
+                    "chebyshev"
+                  ]
+                },
+                "p": {
+                  "type": "categorical",
+                  "choices": [
+                    1,
+                    2
+                  ]
+                }
+              },
+              "constraints": [
+                "M2_P_ONLY_FOR_MINKOWSKI"
+              ]
+            },
+            "M3": {
+              "name": "SVM (RBF kernel)",
+              "estimator": "sklearn.svm.SVC",
+              "mandatory": true,
+              "calibrate": true,
+              "defaults": {
+                "C": 1.0,
+                "gamma": "scale",
+                "kernel": "rbf",
+                "probability": false,
+                "class_weight": "balanced",
+                "cache_size": 500,
+                "random_state": 42
+              },
+              "search_space": {
+                "C": {
+                  "type": "log_uniform",
+                  "low": 0.01,
+                  "high": 1000.0
+                },
+                "gamma": {
+                  "type": "log_uniform",
+                  "low": 0.0001,
+                  "high": 10.0
+                },
+                "class_weight": {
+                  "type": "categorical",
+                  "choices": [
+                    "balanced",
+                    null
+                  ]
+                }
+              }
+            },
+            "M4": {
+              "name": "Random Forest",
+              "estimator": "sklearn.ensemble.RandomForestClassifier",
+              "mandatory": true,
+              "defaults": {
+                "n_estimators": 500,
+                "max_depth": null,
+                "min_samples_leaf": 1,
+                "max_features": "sqrt",
+                "class_weight": "balanced",
+                "n_jobs": -1,
+                "random_state": 42
+              },
+              "search_space": {
+                "n_estimators": {
+                  "type": "int_uniform",
+                  "low": 100,
+                  "high": 1000
+                },
+                "max_depth": {
+                  "type": "categorical",
+                  "choices": [
+                    null,
+                    5,
+                    10,
+                    20,
+                    30
+                  ]
+                },
+                "min_samples_leaf": {
+                  "type": "int_uniform",
+                  "low": 1,
+                  "high": 10
+                },
+                "max_features": {
+                  "type": "categorical",
+                  "choices": [
+                    "sqrt",
+                    "log2",
+                    0.3,
+                    0.5
+                  ]
+                },
+                "class_weight": {
+                  "type": "categorical",
+                  "choices": [
+                    "balanced",
+                    "balanced_subsample",
+                    null
+                  ]
+                }
+              }
+            },
+            "M5": {
+              "name": "Gradient Boosting",
+              "estimator": "sklearn.ensemble.GradientBoostingClassifier",
+              "hist_estimator": "sklearn.ensemble.HistGradientBoostingClassifier",
+              "mandatory": true,
+              "implementation": "classic",
+              "defaults": {
+                "n_estimators": 200,
+                "learning_rate": 0.1,
+                "max_depth": 3,
+                "subsample": 1.0,
+                "min_samples_leaf": 1,
+                "class_weight": "balanced",
+                "random_state": 42
+              },
+              "search_space": {
+                "n_estimators": {
+                  "type": "int_uniform",
+                  "low": 100,
+                  "high": 800
+                },
+                "learning_rate": {
+                  "type": "log_uniform",
+                  "low": 0.001,
+                  "high": 0.5
+                },
+                "max_depth": {
+                  "type": "int_uniform",
+                  "low": 2,
+                  "high": 8
+                },
+                "subsample": {
+                  "type": "uniform",
+                  "low": 0.6,
+                  "high": 1.0
+                },
+                "min_samples_leaf": {
+                  "type": "int_uniform",
+                  "low": 1,
+                  "high": 20
+                }
+              }
+            },
+            "M6": {
+              "name": "Soft Voting (equal weights)",
+              "estimator": "src.ensemble.soft_voting.SoftVotingEnsemble",
+              "mandatory": true,
+              "members": [
+                "M3",
+                "M4",
+                "M5"
+              ],
+              "calibrate_members": [
+                "M5"
+              ],
+              "defaults": {
+                "weights": "equal",
+                "voting": "soft",
+                "inner_cv": 3,
+                "tune_threshold": true,
+                "objective": "balanced_accuracy"
+              },
+              "search_space": {}
+            },
+            "M7": {
+              "name": "Soft Voting (optimized weights)",
+              "estimator": "src.ensemble.soft_voting.SoftVotingEnsemble",
+              "mandatory": true,
+              "members": [
+                "M3",
+                "M4",
+                "M5"
+              ],
+              "calibrate_members": [
+                "M5"
+              ],
+              "defaults": {
+                "weights": "optimized",
+                "voting": "soft",
+                "inner_cv": 3,
+                "tune_threshold": true,
+                "objective": "balanced_accuracy"
+              },
+              "weight_search": {
+                "method": "SO-05",
+                "simplex_constrained": true,
+                "objective": "balanced_accuracy",
+                "resolution": 0.05,
+                "joint_with_threshold": true
+              },
+              "search_space": {}
+            },
+            "M8": {
+              "name": "XGBoost / LightGBM",
+              "estimator": "xgboost.XGBClassifier",
+              "fallback_estimator": "lightgbm.LGBMClassifier",
+              "mandatory": false,
+              "capability_check": true,
+              "defaults": {
+                "n_estimators": 400,
+                "learning_rate": 0.1,
+                "max_depth": 6,
+                "subsample": 0.9,
+                "colsample_bytree": 0.9,
+                "reg_lambda": 1.0,
+                "tree_method": "hist",
+                "n_jobs": 4,
+                "random_state": 42,
+                "class_weight": "balanced",
+                "deterministic": true
+              },
+              "search_space": {
+                "n_estimators": {
+                  "type": "int_uniform",
+                  "low": 100,
+                  "high": 1000
+                },
+                "learning_rate": {
+                  "type": "log_uniform",
+                  "low": 0.001,
+                  "high": 0.5
+                },
+                "max_depth": {
+                  "type": "int_uniform",
+                  "low": 2,
+                  "high": 10
+                },
+                "subsample": {
+                  "type": "uniform",
+                  "low": 0.6,
+                  "high": 1.0
+                },
+                "colsample_bytree": {
+                  "type": "uniform",
+                  "low": 0.5,
+                  "high": 1.0
+                },
+                "reg_lambda": {
+                  "type": "log_uniform",
+                  "low": 0.01,
+                  "high": 100.0
+                }
+              }
+            },
+            "M9": {
+              "name": "1D-CNN",
+              "estimator": null,
+              "mandatory": false,
+              "in_scope": false,
+              "exclusion_reason": "CPU-only hardware (4 logical cores, no CUDA). Days of wall clock for the 5x5 fold map against ~17 min for the whole classical stack, and a reduced fold map would break the comparison T52.4 requires.",
+              "defaults": {},
+              "search_space": {}
+            }
+          }
+        },
+        "env_overrides": {}
+      },
+      "experiments": {
+        "values": {
+          "defaults": {
+            "seed": 42,
+            "scoring": {
+              "binary": "balanced_accuracy_plus_sensitivity",
+              "multiclass": "macro_f1"
+            },
+            "report_metrics_binary": [
+              "accuracy",
+              "sensitivity",
+              "specificity",
+              "precision",
+              "f1",
+              "balanced_accuracy",
+              "roc_auc",
+              "pr_auc",
+              "mcc",
+              "brier",
+              "ece"
+            ],
+            "report_metrics_multiclass": [
+              "accuracy",
+              "macro_f1",
+              "weighted_f1",
+              "balanced_accuracy",
+              "per_class_precision",
+              "per_class_recall",
+              "ovr_auc",
+              "mcc"
+            ],
+            "selection_rule": [
+              "sensitivity",
+              "balanced_accuracy"
+            ],
+            "output_contract": [
+              "per_fold_metrics.csv",
+              "aggregate_metrics.csv",
+              "predictions.parquet",
+              "confusion_matrices.json",
+              "config_snapshot.yaml",
+              "run_manifest.json"
+            ]
+          },
+          "cv_schemes": {
+            "repeated_5x5_grouped": {
+              "kind": "RepeatedStratifiedGroupKFold",
+              "n_splits": 5,
+              "n_repeats": 5,
+              "total_folds": 25,
+              "group_key": "subject_id",
+              "shuffle": true,
+              "random_state": 42
+            },
+            "repeated_5x2_stratified": {
+              "kind": "RepeatedStratifiedGroupKFold",
+              "n_splits": 2,
+              "n_repeats": 5,
+              "total_folds": 10,
+              "group_key": "split_group",
+              "shuffle": true,
+              "random_state": 42
+            },
+            "grouped_5fold": {
+              "kind": "StratifiedGroupKFold",
+              "n_splits": 5,
+              "total_folds": 5,
+              "group_key": "subject_id",
+              "shuffle": true,
+              "random_state": 42
+            },
+            "patient_grouped_5fold": {
+              "kind": "StratifiedGroupKFold",
+              "n_splits": 5,
+              "total_folds": 5,
+              "group_key": "patient_id",
+              "shuffle": true,
+              "random_state": 42
+            },
+            "holdout_external": {
+              "kind": "TrainOnAFullTestOnB",
+              "n_splits": 1,
+              "total_folds": 1
+            }
+          },
+          "experiments": {
+            "EXP-A1": {
+              "title": "PhysioNet 2016 binary baseline",
+              "phase": 64,
+              "dataset": "d1_physionet",
+              "task": "binary",
+              "label_space": {
+                "normal": 0,
+                "abnormal": 1
+              },
+              "models": [
+                "M1",
+                "M3",
+                "M4",
+                "M5",
+                "M6",
+                "M8"
+              ],
+              "tuned": false,
+              "cv": "repeated_5x5_grouped",
+              "external_test": null,
+              "output_section": "06_binary_results",
+              "emits": [
+                "T08",
+                "T10"
+              ],
+              "notes": "Every model runs on the IDENTICAL 25 folds so EXP-A2 pairs with it fold-for-fold. Per-fold values are persisted for the paired tests in Phase 81 - aggregating them away would destroy the statistics chapter.\n"
+            },
+            "EXP-A2": {
+              "title": "PhysioNet 2016 binary optimized",
+              "phase": 65,
+              "dataset": "d1_physionet",
+              "task": "binary",
+              "label_space": {
+                "normal": 0,
+                "abnormal": 1
+              },
+              "models": [
+                "M1",
+                "M3",
+                "M4",
+                "M5",
+                "M6",
+                "M7",
+                "M8"
+              ],
+              "tuned": true,
+              "tuning_source": [
+                "SO-01",
+                "SO-02"
+              ],
+              "ensemble_weights_source": "SO-05",
+              "feature_subset_source": "SO-04",
+              "cv": "repeated_5x5_grouped",
+              "nested": true,
+              "external_test": null,
+              "output_section": "06_binary_results",
+              "emits": [
+                "T09"
+              ],
+              "final_model_path": "models_saved/binary/final/",
+              "notes": "Nested CV. The outer fold is never seen by any search. Selection follows the sensitivity-and-balanced-accuracy rule, not accuracy.\n"
+            },
+            "EXP-B1": {
+              "title": "PASCAL set_a four-class",
+              "phase": 66,
+              "dataset": "d2_pascal_a",
+              "task": "pascal_a",
+              "label_space": {
+                "normal": 0,
+                "murmur": 1,
+                "extrahls": 2,
+                "artifact": 3
+              },
+              "n_records": 124,
+              "class_counts": {
+                "normal": 31,
+                "murmur": 34,
+                "extrahls": 19,
+                "artifact": 40
+              },
+              "models": [
+                "M1",
+                "M3",
+                "M4",
+                "M5",
+                "M6",
+                "M7"
+              ],
+              "tuned": true,
+              "cv": "repeated_5x2_stratified",
+              "class_weight": "balanced",
+              "confidence_intervals": true,
+              "output_section": "07_multiclass_results",
+              "emits": [
+                "T11"
+              ],
+              "notes": "`artifact` is a RECORDING-QUALITY label, not a cardiac class. This is not a four-class cardiac classifier and must never be described as one (T66.6). Subject IDs are unavailable, so results are record-level only.\n"
+            },
+            "EXP-B2": {
+              "title": "PASCAL set_b three-class",
+              "phase": 67,
+              "dataset": "d3_pascal_b",
+              "task": "pascal_b",
+              "label_space": {
+                "normal": 0,
+                "murmur": 1,
+                "extrastole": 2
+              },
+              "n_records": 461,
+              "class_counts": {
+                "normal": 320,
+                "murmur": 95,
+                "extrastole": 46
+              },
+              "n_subject_groups": 165,
+              "models": [
+                "M1",
+                "M3",
+                "M4",
+                "M5",
+                "M6",
+                "M7"
+              ],
+              "tuned": true,
+              "cv": "grouped_5fold",
+              "class_weight": "balanced",
+              "output_section": "07_multiclass_results",
+              "emits": [
+                "T12"
+              ],
+              "notes": "Severe imbalance (320/95/46). Report per-class recall, not accuracy. The report must state explicitly that sets A and B were never merged.\n"
+            },
+            "EXP-C1": {
+              "title": "CirCor murmur classification",
+              "phase": 68,
+              "dataset": "d4_circor",
+              "task": "circor_murmur",
+              "level": "recording",
+              "n_patients": 942,
+              "n_recordings": 3163,
+              "variants": {
+                "three_class": {
+                  "headline": true,
+                  "label_space": {
+                    "Absent": 0,
+                    "Present": 1,
+                    "Unknown": 2
+                  },
+                  "class_counts": {
+                    "Absent": 695,
+                    "Present": 179,
+                    "Unknown": 68
+                  },
+                  "n_patients": 942
+                },
+                "two_class": {
+                  "headline": false,
+                  "label_space": {
+                    "Absent": 0,
+                    "Present": 1
+                  },
+                  "n_patients": 874
+                }
+              },
+              "models": [
+                "M3",
+                "M4",
+                "M5",
+                "M6",
+                "M7"
+              ],
+              "tuned": true,
+              "cv": "patient_grouped_5fold",
+              "aggregation_rules": [
+                "max",
+                "mean",
+                "any_present"
+              ],
+              "output_section": "08_circor_external_validation",
+              "emits": [
+                "T13",
+                "T15"
+              ]
+            },
+            "EXP-C2": {
+              "title": "CirCor clinical outcome",
+              "phase": 69,
+              "dataset": "d4_circor",
+              "task": "circor_outcome",
+              "level": "recording",
+              "label_space": {
+                "Normal": 0,
+                "Abnormal": 1
+              },
+              "class_counts": {
+                "Normal": 486,
+                "Abnormal": 456
+              },
+              "label_source": "patient_txt_files",
+              "label_field": "#Outcome",
+              "models": [
+                "M3",
+                "M4",
+                "M5",
+                "M6",
+                "M7"
+              ],
+              "tuned": true,
+              "cv": "patient_grouped_5fold",
+              "aggregation_rules": [
+                "max",
+                "mean",
+                "any_present"
+              ],
+              "output_section": "08_circor_external_validation",
+              "emits": [
+                "T14"
+              ],
+              "notes": "Near-balanced (486/456), unlike every other task here. The patient-level label is propagated to that patient's recordings; the noise this introduces is documented rather than ignored.\n"
+            },
+            "EXP-C3": {
+              "title": "CirCor auscultation-location analysis",
+              "phase": 70,
+              "dataset": "d4_circor",
+              "task": "circor_murmur_and_outcome",
+              "analysis_only": true,
+              "depends_on": [
+                "EXP-C1",
+                "EXP-C2"
+              ],
+              "locations": {
+                "AV": 800,
+                "PV": 766,
+                "TV": 732,
+                "MV": 861,
+                "Phc": 4
+              },
+              "exclude_locations": [
+                "Phc"
+              ],
+              "output_section": "08_circor_external_validation",
+              "emits": [
+                "T22",
+                "G32"
+              ]
+            },
+            "EXP-D1": {
+              "title": "Cross-dataset transfer: PhysioNet binary -> CirCor outcome",
+              "phase": 71,
+              "train_dataset": "d1_physionet",
+              "train_task": "binary",
+              "test_dataset": "d4_circor",
+              "test_task": "circor_outcome",
+              "cv": "holdout_external",
+              "tuned": true,
+              "tuning_source": "EXP-A2",
+              "retuning_allowed": false,
+              "depends_on": [
+                "EXP-A2"
+              ],
+              "output_section": "08_circor_external_validation",
+              "emits": [
+                "T16",
+                "G29"
+              ],
+              "population_note": "This is ADULT-TO-PAEDIATRIC TRANSFER, not a like-for-like test. PhysioNet has a median age of 25 with 0.3% under 18 and is dominated by adult degenerative disease (CAD 287, MVP 134). CirCor is ~98% paediatric (Child 598, Infant 191, Adolescent 66, Neonate 6). A large performance drop is the EXPECTED consequence of that population mismatch and is NOT evidence that PV-MEPCG fails to generalize. Describe it as \"cross-dataset transfer from an adult cohort to a predominantly paediatric cohort\" - never as \"cross-dataset generalization\" unqualified. A write-up claiming otherwise is wrong.\n"
+            },
+            "EXP-E1": {
+              "title": "Noise robustness",
+              "phase": 72,
+              "datasets": [
+                "d1_physionet",
+                "d2_pascal_a",
+                "d3_pascal_b",
+                "d4_circor"
+              ],
+              "analysis_only": true,
+              "depends_on": [
+                "EXP-A2",
+                "EXP-B1",
+                "EXP-B2",
+                "EXP-C1",
+                "EXP-C2"
+              ],
+              "grouping_source": "PP-08",
+              "groups": [
+                "clean",
+                "noisy",
+                "low_confidence"
+              ],
+              "cross_check_source": "REFERENCE-SQI",
+              "synthetic_noise": {
+                "enabled": true,
+                "kind": "awgn",
+                "snr_db": [
+                  20,
+                  15,
+                  10,
+                  5,
+                  0
+                ]
+              },
+              "output_section": "10_robustness",
+              "emits": [
+                "T20",
+                "G30"
+              ]
+            },
+            "EXP-E2": {
+              "title": "Duration robustness",
+              "phase": 73,
+              "datasets": [
+                "d1_physionet",
+                "d2_pascal_a",
+                "d3_pascal_b",
+                "d4_circor"
+              ],
+              "analysis_only": true,
+              "depends_on": [
+                "EXP-A2",
+                "EXP-B1",
+                "EXP-B2",
+                "EXP-C1",
+                "EXP-C2"
+              ],
+              "bands": [
+                "short",
+                "medium",
+                "long"
+              ],
+              "shortest_record_sec": 0.76,
+              "longest_record_sec": 122.0,
+              "truncation_study_sec": [
+                3,
+                5,
+                10
+              ],
+              "output_section": "10_robustness",
+              "emits": [
+                "T21",
+                "G31"
+              ]
+            },
+            "EXP-F1": {
+              "title": "Feature-family ablation A1-A8",
+              "phase": 74,
+              "dataset": "d1_physionet",
+              "task": "binary",
+              "cv": "repeated_5x5_grouped",
+              "identical_folds_as": "EXP-A1",
+              "configurations": {
+                "A1": {
+                  "families": [
+                    "time"
+                  ],
+                  "n_features": 24
+                },
+                "A2": {
+                  "families": [
+                    "frequency"
+                  ],
+                  "n_features": 22
+                },
+                "A3": {
+                  "families": [
+                    "mfcc"
+                  ],
+                  "n_features": 39
+                },
+                "A4": {
+                  "families": [
+                    "dwt"
+                  ],
+                  "n_features": 24
+                },
+                "A5": {
+                  "families": [
+                    "time",
+                    "frequency"
+                  ],
+                  "n_features": 46
+                },
+                "A6": {
+                  "families": [
+                    "mfcc",
+                    "dwt"
+                  ],
+                  "n_features": 63
+                },
+                "A7": {
+                  "families": [
+                    "time",
+                    "frequency",
+                    "mfcc",
+                    "chroma",
+                    "dwt",
+                    "envelope"
+                  ],
+                  "n_features": 138
+                },
+                "A8": {
+                  "families": "selected_subset",
+                  "n_features": "SO-04"
+                }
+              },
+              "output_section": "09_ablation",
+              "emits": [
+                "T17",
+                "T18"
+              ]
+            },
+            "EXP-F2": {
+              "title": "Optimization ablation A9-A10",
+              "phase": 75,
+              "dataset": "d1_physionet",
+              "task": "binary",
+              "cv": "repeated_5x5_grouped",
+              "identical_folds_as": "EXP-A1",
+              "configurations": {
+                "A9": {
+                  "comparison": "best_individual_model_vs_ensemble"
+                },
+                "A10": {
+                  "comparison": "equal_weight_vs_optimized_weight_ensemble"
+                },
+                "three_way": {
+                  "stages": [
+                    "default_params",
+                    "tuned_params",
+                    "tuned_plus_optimized_ensemble"
+                  ]
+                }
+              },
+              "incremental_deltas": true,
+              "output_section": "09_ablation",
+              "emits": [
+                "T19",
+                "G23",
+                "G24"
+              ]
+            },
+            "EXP-G1": {
+              "title": "PhysioNet diagnosis multiclass (supplementary, Objective 6)",
+              "phase": 76,
+              "dataset": "d1_physionet",
+              "task": "diagnosis_multiclass",
+              "supplementary": true,
+              "n_records": 3240,
+              "class_counts": {
+                "CAD": 287,
+                "MVP": 134,
+                "Benign": 118,
+                "Pathologic": 62,
+                "MPC": 23,
+                "AD": 17,
+                "MR": 12,
+                "AS": 12
+              },
+              "merge_rare_classes": true,
+              "models": [
+                "M1",
+                "M3",
+                "M4",
+                "M5",
+                "M6",
+                "M7"
+              ],
+              "cv": "grouped_5fold",
+              "class_weight": "balanced",
+              "confidence_intervals": true,
+              "output_section": "07_multiclass_results",
+              "notes": "Carries Objective 6 properly. PASCAL A cannot: it is 124 records with 19 in one class. Presented as supplementary evidence on a far larger sample, with the small-sample limitation stated and CIs on every per-class metric.\n"
+            }
+          }
+        },
+        "env_overrides": {}
+      }
     }
   },
   "runs": [
@@ -8543,7 +9811,316 @@
         "m8_available": true,
         "m8_backend": "xgboost"
       }
+    },
+    {
+      "run_id": "20260827T143910Z-d3dcf040",
+      "name": "model_smoke",
+      "status": "completed",
+      "started_utc": "2026-08-27T14:39:10.903751+00:00",
+      "finished_utc": "2026-08-27T14:52:27.675424+00:00",
+      "seed": 42,
+      "seed_state": {
+        "global_seed": 42,
+        "applied_seed": 42,
+        "seed_applied": true,
+        "python_hash_seed": {
+          "value_at_interpreter_start": null,
+          "value_now": "42",
+          "hash_randomization_enabled": true,
+          "effective_for_this_process": false,
+          "effective_for_child_processes": true,
+          "note": "PYTHONHASHSEED is read once at interpreter start. Set it in the shell before launching Python if this process's own hash order must be deterministic; code should not depend on it regardless."
+        }
+      },
+      "git": {
+        "available": true,
+        "reason": null,
+        "commit": "e70b624d558adabf1618d359bcdb2129f15b5032",
+        "commit_short": "e70b624d",
+        "branch": "main",
+        "dirty": true,
+        "dirty_files": [
+          ".gitignore",
+          "configs/models.yaml",
+          "outputs/missing_outputs_report.txt",
+          "scripts/04_model_smoke.py",
+          "src/models/estimators.py",
+          "src/models/smoke.py",
+          "src/ensemble/soft_voting.py",
+          "src/models/registry.py"
+        ]
+      },
+      "environment": {
+        "python_version": "3.11.9",
+        "python_executable": "D:\\Projects\\HeartGuard\\.venv\\Scripts\\python.exe",
+        "in_venv": true,
+        "platform": "Windows-10-10.0.19045-SP0",
+        "machine": "AMD64",
+        "processor": "Intel64 Family 6 Model 142 Stepping 9, GenuineIntel",
+        "cpu_count": 4,
+        "hostname": "DESKTOP-DUC8EHD",
+        "user": "prath",
+        "gpu": "none (CPU-only machine)"
+      },
+      "packages": {
+        "numpy": "2.4.6",
+        "scipy": "1.17.1",
+        "pandas": "3.0.5",
+        "scikit-learn": "1.9.0",
+        "joblib": "1.5.3",
+        "threadpoolctl": "3.6.0",
+        "librosa": "0.11.0",
+        "soundfile": "0.14.0",
+        "PyWavelets": "1.9.0",
+        "soxr": "1.1.0",
+        "numba": "0.67.0",
+        "llvmlite": "0.49.0",
+        "matplotlib": "3.11.1",
+        "seaborn": "0.13.2",
+        "pyarrow": "25.0.1",
+        "tqdm": "4.70.0",
+        "PyYAML": "6.0.3",
+        "xgboost": "3.2.0",
+        "lightgbm": "4.7.0",
+        "scikit-optimize": "0.10.2",
+        "deap": "1.4.4",
+        "pyswarms": "1.3.0",
+        "shap": "0.51.0",
+        "statsmodels": "0.14.6",
+        "fastapi": "0.141.1",
+        "uvicorn": "0.52.4",
+        "python-multipart": "0.0.32",
+        "pydantic": "2.13.4",
+        "python-docx": "1.2.0",
+        "openpyxl": "3.1.5",
+        "kaleido": "1.3.0"
+      },
+      "config_hash": "89a58e454d0634fc",
+      "timings_sec": {
+        "M1_fit": 0.217226,
+        "M2_fit": 0.059565,
+        "M3_fit": 0.920706,
+        "M4_fit": 5.267968,
+        "M5_fit": 26.073434,
+        "M6_fit": 163.092702,
+        "M7_fit": 171.958959,
+        "M8_fit": 6.024444,
+        "_total_run": 796.771673
+      },
+      "artifacts": [
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\model_search_spaces.csv",
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\baseline_smoke_metrics.csv",
+        "outputs/04_models/baseline_smoke_metrics.csv",
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\svm_fit_time_benchmark.csv",
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\svm_calibration_benchmark.csv",
+        "outputs/04_models/svm_fit_time_benchmark.csv",
+        "outputs/04_models/svm_calibration_benchmark.csv",
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\feature_importance.csv",
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\feature_importance_by_family.csv",
+        "outputs/04_models/feature_importance.csv",
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\tree_calibration_assessment.csv",
+        "outputs/04_models/tree_calibration_assessment.csv",
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\gradient_boosting_choice.csv",
+        "outputs/04_models/gradient_boosting_choice.csv",
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\model_registry.csv",
+        "outputs/04_models/model_registry.csv",
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\model_complexity.csv",
+        "outputs/04_models/model_complexity.csv",
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\threshold_objective_comparison.csv",
+        "outputs/04_models/threshold_objective_comparison.csv",
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\external_model_capability.csv"
+      ],
+      "extra": {
+        "logging": {
+          "configured": true,
+          "log_file": "D:\\Projects\\HeartGuard\\outputs\\logs\\pvmepcg.log",
+          "max_bytes": 10485760,
+          "backup_count": 5
+        },
+        "task": "binary",
+        "models": [
+          "M1",
+          "M2",
+          "M3",
+          "M4",
+          "M5",
+          "M6",
+          "M7",
+          "M8"
+        ],
+        "n_records": 3240,
+        "n_features": 138,
+        "m3_worst_bare_fit_seconds": 2.4539,
+        "m3_calibration_overhead_x": 2.24,
+        "m3_seconds_per_trial": 16.48,
+        "m3_search_minutes_one_outer_fold": 54.9,
+        "m3_search_hours_all_outer_folds": 22.89,
+        "m8_available": true,
+        "m8_backend": "xgboost"
+      }
+    },
+    {
+      "run_id": "20260827T145714Z-8e5cf81c",
+      "name": "model_smoke",
+      "status": "completed",
+      "started_utc": "2026-08-27T14:57:14.053535+00:00",
+      "finished_utc": "2026-08-27T15:10:15.077913+00:00",
+      "seed": 42,
+      "seed_state": {
+        "global_seed": 42,
+        "applied_seed": 42,
+        "seed_applied": true,
+        "python_hash_seed": {
+          "value_at_interpreter_start": null,
+          "value_now": "42",
+          "hash_randomization_enabled": true,
+          "effective_for_this_process": false,
+          "effective_for_child_processes": true,
+          "note": "PYTHONHASHSEED is read once at interpreter start. Set it in the shell before launching Python if this process's own hash order must be deterministic; code should not depend on it regardless."
+        }
+      },
+      "git": {
+        "available": true,
+        "reason": null,
+        "commit": "e70b624d558adabf1618d359bcdb2129f15b5032",
+        "commit_short": "e70b624d",
+        "branch": "main",
+        "dirty": true,
+        "dirty_files": [
+          ".gitignore",
+          "configs/models.yaml",
+          "outputs/00_evidence_index/evidence_index.csv",
+          "outputs/00_evidence_index/run_manifest.json",
+          "outputs/04_models/baseline_smoke_metrics.csv",
+          "outputs/04_models/gradient_boosting_choice.csv",
+          "outputs/04_models/svm_calibration_benchmark.csv",
+          "outputs/04_models/svm_fit_time_benchmark.csv",
+          "outputs/04_models/svm_search_budget.txt",
+          "outputs/04_models/tree_calibration_assessment.csv",
+          "outputs/missing_outputs_report.txt",
+          "scripts/04_model_smoke.py",
+          "src/models/estimators.py",
+          "src/models/smoke.py",
+          "models_saved/binary/",
+          "outputs/04_models/model_complexity.csv",
+          "outputs/04_models/model_registry.csv",
+          "outputs/04_models/threshold_objective_comparison.csv",
+          "src/ensemble/soft_voting.py",
+          "src/models/registry.py",
+          "tests/test_deep_baseline_decision.py",
+          "tests/test_model_roundtrip.py",
+          "tests/test_soft_voting.py"
+        ]
+      },
+      "environment": {
+        "python_version": "3.11.9",
+        "python_executable": "D:\\Projects\\HeartGuard\\.venv\\Scripts\\python.exe",
+        "in_venv": true,
+        "platform": "Windows-10-10.0.19045-SP0",
+        "machine": "AMD64",
+        "processor": "Intel64 Family 6 Model 142 Stepping 9, GenuineIntel",
+        "cpu_count": 4,
+        "hostname": "DESKTOP-DUC8EHD",
+        "user": "prath",
+        "gpu": "none (CPU-only machine)"
+      },
+      "packages": {
+        "numpy": "2.4.6",
+        "scipy": "1.17.1",
+        "pandas": "3.0.5",
+        "scikit-learn": "1.9.0",
+        "joblib": "1.5.3",
+        "threadpoolctl": "3.6.0",
+        "librosa": "0.11.0",
+        "soundfile": "0.14.0",
+        "PyWavelets": "1.9.0",
+        "soxr": "1.1.0",
+        "numba": "0.67.0",
+        "llvmlite": "0.49.0",
+        "matplotlib": "3.11.1",
+        "seaborn": "0.13.2",
+        "pyarrow": "25.0.1",
+        "tqdm": "4.70.0",
+        "PyYAML": "6.0.3",
+        "xgboost": "3.2.0",
+        "lightgbm": "4.7.0",
+        "scikit-optimize": "0.10.2",
+        "deap": "1.4.4",
+        "pyswarms": "1.3.0",
+        "shap": "0.51.0",
+        "statsmodels": "0.14.6",
+        "fastapi": "0.141.1",
+        "uvicorn": "0.52.4",
+        "python-multipart": "0.0.32",
+        "pydantic": "2.13.4",
+        "python-docx": "1.2.0",
+        "openpyxl": "3.1.5",
+        "kaleido": "1.3.0"
+      },
+      "config_hash": "89a58e454d0634fc",
+      "timings_sec": {
+        "M1_fit": 0.224442,
+        "M2_fit": 0.055141,
+        "M3_fit": 0.952122,
+        "M4_fit": 5.566723,
+        "M5_fit": 27.360972,
+        "M6_fit": 166.480676,
+        "M7_fit": 168.623492,
+        "M8_fit": 5.889321,
+        "_total_run": 781.024378
+      },
+      "artifacts": [
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\model_search_spaces.csv",
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\baseline_smoke_metrics.csv",
+        "outputs/04_models/baseline_smoke_metrics.csv",
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\svm_fit_time_benchmark.csv",
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\svm_calibration_benchmark.csv",
+        "outputs/04_models/svm_fit_time_benchmark.csv",
+        "outputs/04_models/svm_calibration_benchmark.csv",
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\feature_importance.csv",
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\feature_importance_by_family.csv",
+        "outputs/04_models/feature_importance.csv",
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\tree_calibration_assessment.csv",
+        "outputs/04_models/tree_calibration_assessment.csv",
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\gradient_boosting_choice.csv",
+        "outputs/04_models/gradient_boosting_choice.csv",
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\model_registry.csv",
+        "outputs/04_models/model_registry.csv",
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\model_complexity.csv",
+        "outputs/04_models/model_complexity.csv",
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\threshold_objective_comparison.csv",
+        "outputs/04_models/threshold_objective_comparison.csv",
+        "D:\\Projects\\HeartGuard\\outputs\\04_models\\external_model_capability.csv"
+      ],
+      "extra": {
+        "logging": {
+          "configured": true,
+          "log_file": "D:\\Projects\\HeartGuard\\outputs\\logs\\pvmepcg.log",
+          "max_bytes": 10485760,
+          "backup_count": 5
+        },
+        "task": "binary",
+        "models": [
+          "M1",
+          "M2",
+          "M3",
+          "M4",
+          "M5",
+          "M6",
+          "M7",
+          "M8"
+        ],
+        "n_records": 3240,
+        "n_features": 138,
+        "m3_worst_bare_fit_seconds": 2.3198,
+        "m3_calibration_overhead_x": 2.18,
+        "m3_seconds_per_trial": 15.19,
+        "m3_search_minutes_one_outer_fold": 50.6,
+        "m3_search_hours_all_outer_folds": 21.1,
+        "m8_available": true,
+        "m8_backend": "xgboost"
+      }
     }
   ],
-  "updated_utc": "2026-08-27T13:29:20.563653+00:00"
+  "updated_utc": "2026-08-27T15:10:15.122256+00:00"
 }

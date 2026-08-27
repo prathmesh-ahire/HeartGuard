@@ -1,0 +1,6 @@
+model_id,objective,threshold,infold_sensitivity,infold_specificity,infold_balanced_accuracy,test_sensitivity,test_specificity,test_balanced_accuracy,shipped
+M6,balanced_accuracy,0.348,0.8405,0.8786,0.8596,0.8712,0.8,0.8356,True
+M6,balanced_accuracy_plus_sensitivity,0.1532,0.9944,0.6393,0.8168,1.0,0.6194,0.8097,False
+M6,sensitivity,0.1012,1.0,0.534,0.767,1.0,0.5534,0.7767,False
+M6,youden,0.348,0.8405,0.8786,0.8596,0.8712,0.8,0.8356,False
+M6,"(fixed 0.5, no tuning)",0.5,,,,0.6894,0.8835,0.7864,False

@@ -91,6 +91,9 @@ class SmokeResult:
     metrics: dict[str, float] = field(default_factory=dict)
     probability: dict[str, Any] = field(default_factory=dict)
     model_bytes: int = -1
+    #: The decision rule used, and -- for a thresholded model -- the in-fold
+    #: threshold beside its fixed-0.5 counterpart (T50.4).
+    decision: dict[str, Any] = field(default_factory=dict)
     notes: str = ""
     #: The fitted pipeline, when the caller asked to keep it (importances need
     #: it). Never written to the CSV -- it is a model, not a measurement.
@@ -112,6 +115,7 @@ class SmokeResult:
         }
         row.update(self.metrics)
         row.update(self.probability)
+        row.update(self.decision)
         row["notes"] = self.notes
         return row
 
@@ -171,6 +175,40 @@ def load_task_data(task: str, *, matrix: Any = None, master: Any = None) -> Task
         record_uids=tuple(merged["record_uid"].astype(str)),
         feature_names=tuple(names),
     )
+
+
+def _predicts_by_argmax(model: Any) -> bool:
+    """Whether this model's ``predict`` is the argmax of its ``predict_proba``."""
+    final = getattr(model, "named_steps", {}).get("estimator", model)
+    declared = getattr(final, "predicts_by_argmax", None)
+    return bool(declared) if declared is not None else True
+
+
+def _decision_rule(model: Any) -> dict[str, Any]:
+    """The decision rule the model actually used, for the smoke table.
+
+    Recorded on every row, not only the thresholded ones: a column that is
+    present for some models and absent for others is a column nobody can read.
+    """
+    final = getattr(model, "named_steps", {}).get("estimator", model)
+    threshold = getattr(final, "threshold_", None)
+    row: dict[str, Any] = {
+        "decision_rule": "argmax" if threshold is None else "threshold",
+        "threshold": 0.5 if threshold is None else float(threshold),
+    }
+    choice = getattr(final, "threshold_choice_", None)
+    if choice is not None:
+        row.update(choice.as_dict())
+    report = getattr(final, "fit_report_", None)
+    if report is not None:
+        row.update(
+            {
+                key: value
+                for key, value in report.as_dict().items()
+                if key not in row
+            }
+        )
+    return row
 
 
 def _scalar_metrics(scores: dict[str, Any]) -> dict[str, float]:
@@ -270,8 +308,16 @@ def smoke_fold(
 
     probability: dict[str, Any] = {"has_predict_proba": proba is not None}
     if proba is not None:
+        # A thresholded classifier predicts by cut-off, not by argmax, so the
+        # two are SUPPOSED to disagree -- checking agreement there would fail a
+        # working decision rule. Only ask the question of models that do use
+        # argmax; for the rest, `threshold_` records what they use instead.
+        by_argmax = _predicts_by_argmax(built)
         report = est.probability_report(
-            proba, n_classes=len(classes), y_pred=y_pred, classes=classes
+            proba,
+            n_classes=len(classes),
+            y_pred=y_pred if by_argmax else None,
+            classes=classes if by_argmax else None,
         )
         probability.update(report.as_dict())
         scores["brier"] = mt.brier_score(y_true, proba, labels=tuple(classes.tolist()))
@@ -291,6 +337,7 @@ def smoke_fold(
         metrics=_scalar_metrics(scores),
         probability=probability,
         model_bytes=serialized_size(built) if measure_size else -1,
+        decision=_decision_rule(built),
         notes=notes,
         pipeline=built if keep_pipeline else None,
     )
@@ -339,22 +386,44 @@ def run_smoke(
     keep_pipelines: bool = False,
 ) -> tuple[SmokeResult, ...]:
     """Smoke-run several models on the same fold 0 of ``task``."""
-    from src.models import estimators as est
-
     loaded = load_task_data(task) if data is None else data
     fold = _fold_zero(task, loaded)
 
     results = []
     for model_id in model_ids:
-        factory = (factories or {}).get(model_id)
-        if factory is None:
-            def factory(model_id: str = model_id) -> Any:
-                return est.build_estimator(model_id)
-
+        factory = (factories or {}).get(model_id) or _default_factory(
+            model_id, loaded, fold
+        )
         results.append(
             smoke_fold(model_id, factory, loaded, fold, keep_pipeline=keep_pipelines)
         )
     return tuple(results)
+
+
+def _default_factory(model_id: str, data: TaskData, fold: Any) -> Callable[[], Any]:
+    """Build one model, handing the ensembles the fold's own subject groups.
+
+    M6 and M7 run an inner CV over the training fold to get the out-of-fold
+    probabilities their weights and threshold are chosen on, and that inner CV
+    should be subject-aware for the same reason the outer one is. The groups have
+    to be **the training fold's, in the training fold's row order** -- which only
+    something holding the fold can supply, hence the closure rather than a
+    parameter on the factory.
+    """
+    from src.models import estimators as est
+
+    if model_id in {"M6", "M7"}:
+        train_groups = np.asarray(data.groups)[np.asarray(fold.train_index, dtype=int)]
+
+        def build_ensemble() -> Any:
+            return est.make_ensemble(model_id, groups=train_groups)
+
+        return build_ensemble
+
+    def build() -> Any:
+        return est.build_estimator(model_id)
+
+    return build
 
 
 # ---------------------------------------------------------------------------

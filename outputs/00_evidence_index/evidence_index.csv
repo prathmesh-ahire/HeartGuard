@@ -26,9 +26,12 @@ FE-10,,,D1+D2+D3+D4,,138x138 feature correlation heatmap,outputs/03_features/fea
 FE-05,,,D1,,12 class-conditional panels in feature_distribution_plots/,outputs/03_features/feature_distribution_plots/panel_index.csv,outputs/03_features/all_features_matrix.parquet,python scripts/03_feature_reports.py,2026-08-27T11:33:54.444831+00:00,ok
 FE-06,,,D1,,"MFCC heatmap, representative record",outputs/03_features/mfcc_heatmap.png,,python scripts/03_feature_reports.py,2026-08-27T11:34:01.145977+00:00,ok
 G10,,,,,feature-family composition 24/22/39/24/24/5,outputs/13_figures_diagrams/feature_family_count_chart.png,feature registry,python scripts/03_feature_reports.py,2026-08-27T11:34:01.647788+00:00,ok
-MD-SMOKE,,,D1,,"baseline smoke metrics, D1 fold 0 (diagnostic)",outputs/04_models/baseline_smoke_metrics.csv,outputs/03_features/all_features_matrix.parquet,python scripts/04_model_smoke.py,2026-08-27T13:22:51.431800+00:00,ok
-MD-SVMTIME,,,D1,,M3 fit time vs n and cache_size,outputs/04_models/svm_fit_time_benchmark.csv,,python scripts/04_model_smoke.py,2026-08-27T13:23:34.307284+00:00,ok
-MD-SVMCAL,,,D1,,"M3 calibration variants: Brier, ECE, well-formedness",outputs/04_models/svm_calibration_benchmark.csv,,python scripts/04_model_smoke.py,2026-08-27T13:23:34.323426+00:00,ok
-MD-IMPORTANCE,,,D1,M4,M4 impurity (train) and permutation (held-out fold) importance,outputs/04_models/feature_importance.csv,,python scripts/04_model_smoke.py,2026-08-27T13:26:12.190285+00:00,ok
-MD-TREECAL,,,D1,,"M4/M5/M8 raw vs calibrated: Brier, ECE, verdict",outputs/04_models/tree_calibration_assessment.csv,,python scripts/04_model_smoke.py,2026-08-27T13:28:05.036549+00:00,ok
-MD-GBCHOICE,,,D1,,"M5 classic vs histogram gradient boosting, weighted and not",outputs/04_models/gradient_boosting_choice.csv,,python scripts/04_model_smoke.py,2026-08-27T13:29:20.482419+00:00,ok
+MD-SMOKE,,,D1,,"baseline smoke metrics, D1 fold 0 (diagnostic)",outputs/04_models/baseline_smoke_metrics.csv,outputs/03_features/all_features_matrix.parquet,python scripts/04_model_smoke.py,2026-08-27T15:03:37.672405+00:00,ok
+MD-SVMTIME,,,D1,,M3 fit time vs n and cache_size,outputs/04_models/svm_fit_time_benchmark.csv,,python scripts/04_model_smoke.py,2026-08-27T15:04:15.825449+00:00,ok
+MD-SVMCAL,,,D1,,"M3 calibration variants: Brier, ECE, well-formedness",outputs/04_models/svm_calibration_benchmark.csv,,python scripts/04_model_smoke.py,2026-08-27T15:04:15.843456+00:00,ok
+MD-IMPORTANCE,,,D1,M4,M4 impurity (train) and permutation (held-out fold) importance,outputs/04_models/feature_importance.csv,,python scripts/04_model_smoke.py,2026-08-27T15:06:36.357101+00:00,ok
+MD-TREECAL,,,D1,,"M4/M5/M8 raw vs calibrated: Brier, ECE, verdict",outputs/04_models/tree_calibration_assessment.csv,,python scripts/04_model_smoke.py,2026-08-27T15:08:27.278100+00:00,ok
+MD-GBCHOICE,,,D1,,"M5 classic vs histogram gradient boosting, weighted and not",outputs/04_models/gradient_boosting_choice.csv,,python scripts/04_model_smoke.py,2026-08-27T15:09:40.247499+00:00,ok
+MD-REGISTRY,,,,,"model inventory M1-M9: availability, members, search size",outputs/04_models/model_registry.csv,,python scripts/04_model_smoke.py,2026-08-27T15:09:40.290306+00:00,ok
+MD-COMPLEXITY,,,D1,,"per-model size on disk, training time, inference time",outputs/04_models/model_complexity.csv,,python scripts/04_model_smoke.py,2026-08-27T15:10:14.066029+00:00,ok
+MD-THRESHOLD,,,D1,,in-fold threshold objectives vs the fixed 0.5 rule (T50.4),outputs/04_models/threshold_objective_comparison.csv,,python scripts/04_model_smoke.py,2026-08-27T15:10:15.049385+00:00,ok

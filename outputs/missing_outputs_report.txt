@@ -64,3 +64,33 @@ ENTRIES (newest last)
     until that run exists — the justification for the shipped configuration is,
     until then, the design argument in Docs/note.md and the T24/T26 measurements,
     not a measured metric delta.
+
+[2026-08-27] T52.2 / T52.3 / T52.4 / T52.5 — M9, the optional 1D-CNN deep baseline
+  Reason: Decided OUT OF SCOPE by the user on 2026-08-27, against the measured
+    cost of the classical stack rather than against an assumption. This machine
+    is CPU only — 4 logical cores, no CUDA device — and both source documents
+    list the 1D-CNN as Optional.
+    The measurement that settled it: all eight classical models together fit one
+    fold of the 3,240-record PhysioNet track in 41.1 s wall clock (M1 0.23 s,
+    M2 0.05 s, M3 1.34 s, M4 5.84 s, M5 27.37 s, M8 6.31 s; M6/M7 add ~163 s
+    each because they refit their members over an inner CV). The full 5x5
+    grouped fold map is therefore ~17 minutes for the classical stack.
+    A 1D-CNN over fixed-length preprocessed segments is not comparable to that
+    on this hardware: it trains on raw waveform segments rather than on 138
+    precomputed scalars, so a single fold is hours and the full fold map is days,
+    with no GPU to shorten it. Running it on a reduced fold map instead would
+    break the comparison the model exists to support — T52.4 requires it to be
+    trained under the SAME fold map as the classical models, or its accuracy
+    cannot be placed beside theirs.
+    It would also add an unpinned deep-learning dependency (PyTorch or Keras,
+    neither currently in requirements/) that would have to be re-verified to
+    install and run on Windows + Python 3.11.9 with no compiler toolchain.
+  Impact: No deep-learning baseline appears in the model comparison. The
+    complexity trade-off argument (T25/T26, Phase 75) rests on the eight
+    classical models only, and the thesis limitations section must state that a
+    deep baseline was excluded for hardware reasons rather than tested and
+    rejected on performance. No claim anywhere may compare PV-MEPCG against a
+    CNN, or describe the classical stack as outperforming one.
+    M9 remains declared in configs/models.yaml with `in_scope: false` so the
+    exclusion is visible in the model registry (`registry_frame()` reports it as
+    not implemented with this reason) rather than looking like an oversight.
