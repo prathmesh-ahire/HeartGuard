@@ -734,17 +734,80 @@ def test_extra_m9s_exclusion_is_recorded_in_the_missing_outputs_report() -> None
     assert "may compare PV-MEPCG against a CNN" in text
 
 
-def test_extra_every_evidence_row_written_this_part_resolves() -> None:
+def _is_gitignored(path: Path) -> bool:
+    """Whether the repo deliberately does not commit this file.
+
+    ``git check-ignore`` is the authority rather than a hand-maintained list of
+    extensions, so the answer tracks `.gitignore` instead of drifting from it.
+    """
+    import subprocess
+
+    try:
+        completed = subprocess.run(
+            ["git", "check-ignore", "--quiet", str(path)],
+            capture_output=True,
+            check=False,
+        )
+    except (OSError, FileNotFoundError):  # pragma: no cover - git absent
+        return False
+    return completed.returncode == 0
+
+
+def test_extra_every_evidence_row_resolves_or_is_deliberately_uncommitted() -> None:
+    """An evidence row must point at a real file, or at one we chose not to commit.
+
+    The distinction is the whole test. FE-03 is a 10 MB parquet and the model
+    binaries are 48 MB; both are gitignored on purpose, so on a fresh clone or a
+    CI runner they are absent by design and their absence proves nothing. A row
+    pointing at a file that is neither present nor deliberately excluded is a
+    broken index, and that is what this catches.
+
+    Written this way after the first version failed CI on exactly this: it
+    asserted every row resolves, which is true on the machine that generated
+    them and false everywhere else.
+    """
     from src.utils.evidence import read_evidence
 
     rows = read_evidence()
     if not rows:
         pytest.skip("evidence index is empty")
 
+    broken = []
+    checked = 0
     for row in rows:
         if not row.get("evidence_id", "").startswith(("MD-", "FE-")):
             continue
         if (row.get("status") or "ok") != "ok":
             continue
         target = Path(row["filename"])
-        assert target.is_file(), row["evidence_id"] + " -> " + str(target)
+        checked += 1
+        if not target.is_file() and not _is_gitignored(target):
+            broken.append(row["evidence_id"] + " -> " + str(target))
+
+    assert checked, "no MD-/FE- evidence rows found to check"
+    assert not broken, "evidence rows point nowhere: " + str(broken)
+
+
+def test_extra_the_gitignored_evidence_targets_are_the_ones_we_expect() -> None:
+    """Keeps the exemption above honest: only bulk artifacts may be absent.
+
+    Without this, the previous test would quietly pass if someone gitignored a
+    small CSV deliverable to make a failure go away.
+    """
+    from src.utils.evidence import read_evidence
+
+    rows = read_evidence()
+    if not rows:
+        pytest.skip("evidence index is empty")
+
+    allowed_suffixes = {".parquet", ".joblib", ".pkl", ".npy", ".wav"}
+    for row in rows:
+        target = Path(row.get("filename", ""))
+        if not target.name or target.is_file():
+            continue
+        if not _is_gitignored(target):
+            continue
+        assert target.suffix.lower() in allowed_suffixes, (
+            str(target) + " is gitignored but is not a bulk artifact; a CSV, PNG "
+            "or TXT deliverable must be committed, not excluded"
+        )
