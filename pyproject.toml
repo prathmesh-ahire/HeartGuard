@@ -154,6 +154,7 @@ module = [
     "matplotlib.*",
     "seaborn.*",
     "joblib.*",
+    "threadpoolctl.*",
     "tqdm.*",
     "docx.*",
     "kaleido.*",

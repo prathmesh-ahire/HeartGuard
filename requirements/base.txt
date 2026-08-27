@@ -15,6 +15,10 @@ pandas==3.0.5
 # --- machine learning ---
 scikit-learn==1.9.0
 joblib==1.5.3
+# Imported directly by src/feature_extraction/extractor.py to pin BLAS to one
+# thread during extraction: a threaded BLAS changes the last bit of the chroma
+# features, so thread count would otherwise leak into the feature values.
+threadpoolctl==3.6.0
 
 # --- audio / signal processing ---
 librosa==0.11.0

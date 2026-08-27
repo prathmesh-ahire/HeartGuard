@@ -152,11 +152,41 @@ def extract_all(
     back: an omitted family's 24 slots are NaN, flagged ``<family>_not_run``. The
     vector is always 138 wide, because the EXP-F1 ablation subsets columns from a
     complete matrix rather than producing matrices of different shapes.
+
+    **BLAS is pinned to one thread for the whole computation.** This is a
+    correctness requirement, not a performance choice. ``chroma_stft`` multiplies
+    a filterbank by a spectrogram, and a threaded BLAS partitions that summation
+    differently depending on how many threads it has, changing the last bit of
+    the result. Measured on this corpus: extracting one record through
+    ``joblib.Parallel(n_jobs=4)`` and through ``n_jobs=1`` gave
+    ``chroma_05_std`` of 0.151362998902353 and 0.15136299890235297 -- joblib
+    short-circuits ``n_jobs=1`` into the calling process, where BLAS is free to
+    use every core, while loky workers are pinned to one thread each. Two runs of
+    the same command with different ``--workers`` therefore disagreed, which
+    research rule 5 forbids. Pinning here makes every caller -- the batch runner,
+    the reproducibility check, the inference API -- produce the same bits.
+
+    The cost is nil: 98% of extraction time is sample entropy, which is a
+    cKDTree query and never touches BLAS.
     """
+    from threadpoolctl import threadpool_limits
+
     requested = tuple(families) if families is not None else FAMILY_ORDER
     unknown = [name for name in requested if name not in FAMILY_ORDER]
     if unknown:
         raise AssemblyError("unknown family/families: " + ", ".join(unknown))
+
+    with threadpool_limits(limits=1):
+        return _extract_all_inner(signal, fs, record_uid, requested)
+
+
+def _extract_all_inner(
+    signal: np.ndarray,
+    fs: int,
+    record_uid: str | None,
+    requested: tuple[str, ...],
+) -> ExtractionResult:
+    """The body of :func:`extract_all`, run under a single-threaded BLAS."""
 
     values: dict[str, float] = {}
     flags: list[str] = []

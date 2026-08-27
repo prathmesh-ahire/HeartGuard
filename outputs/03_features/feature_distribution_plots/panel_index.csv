@@ -1,0 +1,13 @@
+rank,feature,family,cohens_d,n_class0,n_class1,filename
+1,dwt_cD1_entropy,dwt,-1.4458089940056145,2575,665,01_dwt_cD1_entropy.png
+2,mfcc_04_mean,mfcc,1.2433394410986405,2575,665,02_mfcc_04_mean.png
+3,dwt_cD2_entropy,dwt,-1.226244902918775,2575,665,03_dwt_cD2_entropy.png
+4,time_zcr_mean,time,-0.9595604612990931,2575,665,04_time_zcr_mean.png
+5,dwt_cD3_entropy,dwt,-0.8216364141237279,2575,665,05_dwt_cD3_entropy.png
+6,mfcc_05_mean,mfcc,0.8158185814058686,2575,665,06_mfcc_05_mean.png
+7,time_hjorth_complexity,time,0.8065006445033979,2575,665,07_time_hjorth_complexity.png
+8,dwt_cA5_mean_abs,dwt,0.7867962036431333,2575,665,08_dwt_cA5_mean_abs.png
+9,mfcc_07_mean,mfcc,0.7605467440186362,2575,665,09_mfcc_07_mean.png
+10,mfcc_06_mean,mfcc,0.7453976187189075,2575,665,10_mfcc_06_mean.png
+11,mfcc_08_mean,mfcc,0.7431083171737036,2575,665,11_mfcc_08_mean.png
+12,dwt_cD5_mean_abs,dwt,0.7054510507686846,2575,665,12_dwt_cD5_mean_abs.png

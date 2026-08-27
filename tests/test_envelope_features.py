@@ -385,10 +385,16 @@ def test_fe09_signal_envelope_is_emitted(tmp_path: Path):
 
 
 @pytest.mark.needs_data
-def test_all_three_feature_figures_exist():
+def test_every_declared_feature_figure_exists():
+    """The set is a literal so that adding a figure is a deliberate edit.
+
+    FE-06 joined it in Phase 42; FE-07 through FE-09 arrived in Phases 35-37.
+    Equality is kept rather than relaxed to a subset: a figure declared in
+    FE_FIGURES and never written is exactly the gap this catches.
+    """
     from src.feature_extraction.figures import FE_FIGURES, features_dir
 
-    assert set(FE_FIGURES) == {"FE-07", "FE-08", "FE-09"}
+    assert set(FE_FIGURES) == {"FE-06", "FE-07", "FE-08", "FE-09"}
     for evidence_id, filename in FE_FIGURES.items():
         path = features_dir() / filename
         assert path.is_file(), evidence_id + " missing: " + str(path)

@@ -18,14 +18,25 @@ import numpy as np
 
 __all__ = [
     "FE_FIGURES",
+    "G10_FILENAME",
     "features_dir",
+    "diagrams_dir",
+    "plot_mfcc_heatmap",
+    "plot_family_counts",
     "plot_chroma_heatmap",
     "plot_wavelet_decomposition",
     "plot_signal_envelope",
     "generate_all",
 ]
 
+#: G10 lives in ``outputs/13_figures_diagrams`` -- its permanent home per the
+#: section-17 tree and Phase 91 -- not beside the FE artifacts. Emitting it
+#: twice under two paths would give the evidence index two rows claiming to be
+#: the same figure.
+G10_FILENAME = "feature_family_count_chart.png"
+
 FE_FIGURES: dict[str, str] = {
+    "FE-06": "mfcc_heatmap.png",
     "FE-07": "chroma_heatmap.png",
     "FE-08": "wavelet_decomposition.png",
     "FE-09": "signal_envelope.png",
@@ -290,12 +301,194 @@ def plot_signal_envelope(path: str | Path, record: Any | None = None) -> Path:
     )
 
 
+def diagrams_dir(out_dir: str | Path | None = None) -> Path:
+    from src.utils.config import load_config
+    from src.utils.io import ensure_dir
+
+    if out_dir is not None:
+        return ensure_dir(out_dir)
+    return ensure_dir(load_config("paths").require("outputs.figures_diagrams"))
+
+
+def plot_mfcc_heatmap(path: str | Path, record: Any | None = None) -> Path:
+    """FE-06 -- the 13 MFCCs over time for one representative record (T42.2).
+
+    **c0 and c1 are drawn as lines, not as heatmap rows.** Their ranges do not
+    overlap the rest: on the representative record c0 spans -63 to 49 (frame
+    log-energy) and c1 spans 53 to 109 (overall spectral slope), while c2-c12
+    together sit inside -16 to 42. Putting either into the same colour scale
+    paints its row a saturated yellow and flattens every other coefficient into
+    one uniform block -- arithmetically correct and completely unreadable. The
+    first draft of this figure did exactly that.
+
+    Dropping them instead would be worse: the extractor computes all 13 and the
+    feature vector uses all 13, so a figure showing 11 would misrepresent what
+    the family is. They are shown, on an axis where they are legible.
+    """
+    from src.feature_extraction.mfcc import MFCCExtractor, mfcc_matrix
+    from src.reporting.plot_style import SEQUENTIAL_CMAP, figure, save_figure
+
+    if record is None:
+        record = _representative()
+
+    signal, fs = _preprocessed(record)
+    settings = MFCCExtractor().settings()
+    mfcc = mfcc_matrix(signal, fs, settings)
+    if mfcc.shape[1] == 0:
+        raise ValueError(
+            "MFCC matrix is empty for "
+            + str(record["record_uid"])
+            + "; cannot draw FE-06"
+        )
+
+    duration = signal.size / fs
+    times = np.linspace(0.0, duration, mfcc.shape[1], endpoint=False)
+    fig, axes = figure("tall", nrows=2, height_ratios=[1, 3])
+
+    axes[0].plot(times, mfcc[0], linewidth=0.9, color="#D55E00", label="c0 (log-energy)")
+    if mfcc.shape[0] > 1:
+        axes[0].plot(
+            times, mfcc[1], linewidth=0.9, color="#0072B2", label="c1 (spectral slope)"
+        )
+    axes[0].set_xlim(0.0, duration)
+    axes[0].set_ylabel("Value", fontsize=7)
+    axes[0].tick_params(labelbottom=False, labelsize=7)
+    # Headroom for the legend: c1 runs flat across the top of its own range, so
+    # an in-axes legend lands on the trace without it.
+    low = float(min(mfcc[0].min(), mfcc[1].min() if mfcc.shape[0] > 1 else 0.0))
+    high = float(max(mfcc[0].max(), mfcc[1].max() if mfcc.shape[0] > 1 else 0.0))
+    axes[0].set_ylim(low - 0.05 * (high - low), high + 0.42 * (high - low))
+    axes[0].legend(fontsize=6, loc="upper right", ncol=2, framealpha=0.9)
+    axes[0].set_title(
+        "MFCC representation, "
+        + str(record["record_uid"])
+        + " ("
+        + str(settings.n_mfcc)
+        + " coefficients, "
+        + str(int(settings.fmin))
+        + "-"
+        + str(int(settings.fmax))
+        + " Hz mel filterbank)"
+    )
+
+    rest = mfcc[2:]
+    image = axes[1].imshow(
+        rest,
+        aspect="auto",
+        origin="lower",
+        cmap=SEQUENTIAL_CMAP,
+        extent=(0.0, duration, 1.5, rest.shape[0] + 1.5),
+    )
+    axes[1].set_yticks(range(2, rest.shape[0] + 2))
+    axes[1].set_xlabel("Time (s)")
+    axes[1].set_ylabel("Coefficient index (c2 - c" + str(rest.shape[0] + 1) + ")")
+    bar = fig.colorbar(image, ax=axes[1])
+    bar.set_label("MFCC value")
+
+    return save_figure(
+        fig,
+        path,
+        source=(
+            "FE-06 | "
+            + str(record["record_uid"])
+            + " | c0 ["
+            + format(mfcc[0].min(), ".0f")
+            + ", "
+            + format(mfcc[0].max(), ".0f")
+            + "] and c1 ["
+            + format(mfcc[1].min(), ".0f")
+            + ", "
+            + format(mfcc[1].max(), ".0f")
+            + "] are drawn as lines: their ranges do not overlap\nc2-c12 ["
+            + format(rest.min(), ".0f")
+            + ", "
+            + format(rest.max(), ".0f")
+            + "], and either one in the heatmap flattens the rest to a uniform block.\n"
+            "Log-mel uses ref=1.0 and top_db=None -- librosa's default top_db=80 would\n"
+            "normalize each record against its own maximum (T34.1)."
+        ),
+    )
+
+
+def plot_family_counts(path: str | Path) -> Path:
+    """G10 -- the 24/22/39/24/24/5 composition (T42.3).
+
+    Counts come from the registry, never from a literal. The whole point of the
+    figure is to show what the registry contains; a hand-typed 39 would make it
+    a picture of what someone believed it contained.
+    """
+    from src.feature_extraction.registry import (
+        EXPECTED_FAMILY_COUNTS,
+        FAMILY_ORDER,
+        FEATURE_NAMES,
+        feature_names,
+        registry_fingerprint,
+    )
+    from src.reporting.plot_style import class_color, figure, save_figure
+
+    counts = [len(feature_names(family)) for family in FAMILY_ORDER]
+    expected = [EXPECTED_FAMILY_COUNTS[family] for family in FAMILY_ORDER]
+    if counts != expected:
+        raise ValueError(
+            "registry counts "
+            + str(counts)
+            + " do not match the locked composition "
+            + str(expected)
+            + "; G10 must not be drawn from a registry that disagrees with config"
+        )
+
+    total = len(FEATURE_NAMES)
+    fig, axis = figure("double")
+    positions = range(len(FAMILY_ORDER))
+    bars = axis.bar(
+        positions,
+        counts,
+        color=[class_color(index) for index in positions],
+        edgecolor="black",
+        linewidth=0.6,
+    )
+    for bar_patch, count in zip(bars, counts, strict=True):
+        axis.text(
+            bar_patch.get_x() + bar_patch.get_width() / 2.0,
+            count + 0.6,
+            str(count) + "\n" + format(100.0 * count / total, ".1f") + "%",
+            ha="center",
+            va="bottom",
+            fontsize=7,
+        )
+
+    axis.set_xticks(list(positions))
+    axis.set_xticklabels(list(FAMILY_ORDER))
+    axis.set_ylabel("Features")
+    axis.set_ylim(0, max(counts) * 1.28)
+    axis.set_xlabel("Feature family")
+    axis.set_title("Feature-family composition (" + str(total) + " features)")
+    fig.tight_layout()
+
+    return save_figure(
+        fig,
+        path,
+        source=(
+            "G10 | source: the feature registry (fingerprint "
+            + registry_fingerprint()[:12]
+            + ") | counts are read from the registry, never typed"
+        ),
+    )
+
+
 def generate_all(out_dir: str | Path | None = None) -> dict[str, Path]:
     """Emit every feature figure built so far."""
     directory = features_dir(out_dir)
     record = _representative()
     return {
+        "FE-06": plot_mfcc_heatmap(directory / FE_FIGURES["FE-06"], record),
         "FE-07": plot_chroma_heatmap(directory / FE_FIGURES["FE-07"], record),
         "FE-08": plot_wavelet_decomposition(directory / FE_FIGURES["FE-08"], record),
         "FE-09": plot_signal_envelope(directory / FE_FIGURES["FE-09"], record),
+        # G10's home is outputs/13_figures_diagrams, but an explicit out_dir
+        # (a test's tmp_path) must keep every figure inside it -- otherwise
+        # calling generate_all in a test writes into the real outputs tree.
+        "G10": plot_family_counts(
+            (diagrams_dir() if out_dir is None else directory) / G10_FILENAME
+        ),
     }
