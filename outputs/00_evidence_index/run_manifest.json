@@ -3127,7 +3127,233 @@
           "is_low_quality": 2212
         }
       }
+    },
+    {
+      "run_id": "20260827T075205Z-47f92225",
+      "name": "feature_extraction_smoke",
+      "status": "completed",
+      "started_utc": "2026-08-27T07:52:05.844948+00:00",
+      "finished_utc": "2026-08-27T07:53:57.865940+00:00",
+      "seed": 42,
+      "seed_state": {
+        "global_seed": 42,
+        "applied_seed": 42,
+        "seed_applied": true,
+        "python_hash_seed": {
+          "value_at_interpreter_start": null,
+          "value_now": "42",
+          "hash_randomization_enabled": true,
+          "effective_for_this_process": false,
+          "effective_for_child_processes": true,
+          "note": "PYTHONHASHSEED is read once at interpreter start. Set it in the shell before launching Python if this process's own hash order must be deterministic; code should not depend on it regardless."
+        }
+      },
+      "git": {
+        "available": true,
+        "reason": null,
+        "commit": "cd626702f399629ed8882286f68c623a78814d20",
+        "commit_short": "cd626702",
+        "branch": "main",
+        "dirty": true,
+        "dirty_files": [
+          "outputs/03_features/feature_extraction_timing.csv",
+          "outputs/03_features/feature_family_summary.csv",
+          "outputs/03_features/feature_inventory.csv",
+          "scripts/02_extract_features.py",
+          "src/feature_extraction/batch.py",
+          "src/feature_extraction/extractor.py",
+          "tests/test_extract_all.py"
+        ]
+      },
+      "environment": {
+        "python_version": "3.11.9",
+        "python_executable": "D:\\Projects\\HeartGuard\\.venv\\Scripts\\python.exe",
+        "in_venv": true,
+        "platform": "Windows-10-10.0.19045-SP0",
+        "machine": "AMD64",
+        "processor": "Intel64 Family 6 Model 142 Stepping 9, GenuineIntel",
+        "cpu_count": 4,
+        "hostname": "DESKTOP-DUC8EHD",
+        "user": "prath",
+        "gpu": "none (CPU-only machine)"
+      },
+      "packages": {
+        "numpy": "2.4.6",
+        "scipy": "1.17.1",
+        "pandas": "3.0.5",
+        "scikit-learn": "1.9.0",
+        "joblib": "1.5.3",
+        "librosa": "0.11.0",
+        "soundfile": "0.14.0",
+        "PyWavelets": "1.9.0",
+        "soxr": "1.1.0",
+        "numba": "0.67.0",
+        "llvmlite": "0.49.0",
+        "matplotlib": "3.11.1",
+        "seaborn": "0.13.2",
+        "pyarrow": "25.0.1",
+        "tqdm": "4.70.0",
+        "PyYAML": "6.0.3",
+        "xgboost": "3.2.0",
+        "lightgbm": "4.7.0",
+        "scikit-optimize": "0.10.2",
+        "deap": "1.4.4",
+        "pyswarms": "1.3.0",
+        "shap": "0.51.0",
+        "statsmodels": "0.14.6",
+        "fastapi": "0.141.1",
+        "uvicorn": "0.52.4",
+        "python-multipart": "0.0.32",
+        "pydantic": "2.13.4",
+        "python-docx": "1.2.0",
+        "openpyxl": "3.1.5",
+        "kaleido": "1.3.0"
+      },
+      "config_hash": "c84082cca92722eb",
+      "timings_sec": {
+        "extract:D1": 43.557912,
+        "extract:D2": 14.813194,
+        "extract:D3": 20.225366,
+        "extract:D4": 26.165047,
+        "_total_run": 112.020992
+      },
+      "artifacts": [],
+      "extra": {
+        "logging": {
+          "configured": true,
+          "log_file": "D:\\Projects\\HeartGuard\\outputs\\logs\\pvmepcg.log",
+          "max_bytes": 10485760,
+          "backup_count": 5
+        },
+        "extract_datasets": [
+          "D1",
+          "D2",
+          "D3",
+          "D4"
+        ],
+        "extract_mode": "smoke",
+        "extract_limit": null,
+        "extract_workers": -1,
+        "extract_records": 80,
+        "extract_failures": 0,
+        "extract_digest": "fb81286d2a64",
+        "extract_wall_seconds": 105.328
+      }
+    },
+    {
+      "run_id": "20260827T075846Z-106a0e80",
+      "name": "feature_extraction_smoke",
+      "status": "completed",
+      "started_utc": "2026-08-27T07:58:46.748326+00:00",
+      "finished_utc": "2026-08-27T08:00:21.479877+00:00",
+      "seed": 42,
+      "seed_state": {
+        "global_seed": 42,
+        "applied_seed": 42,
+        "seed_applied": true,
+        "python_hash_seed": {
+          "value_at_interpreter_start": null,
+          "value_now": "42",
+          "hash_randomization_enabled": true,
+          "effective_for_this_process": false,
+          "effective_for_child_processes": true,
+          "note": "PYTHONHASHSEED is read once at interpreter start. Set it in the shell before launching Python if this process's own hash order must be deterministic; code should not depend on it regardless."
+        }
+      },
+      "git": {
+        "available": true,
+        "reason": null,
+        "commit": "cd626702f399629ed8882286f68c623a78814d20",
+        "commit_short": "cd626702",
+        "branch": "main",
+        "dirty": true,
+        "dirty_files": [
+          "outputs/00_evidence_index/run_manifest.json",
+          "outputs/03_features/feature_extraction_timing.csv",
+          "outputs/03_features/feature_family_summary.csv",
+          "outputs/03_features/feature_inventory.csv",
+          "scripts/02_extract_features.py",
+          "src/feature_extraction/batch.py",
+          "src/feature_extraction/extractor.py",
+          "tests/test_extract_all.py",
+          "tests/test_extraction_runner.py"
+        ]
+      },
+      "environment": {
+        "python_version": "3.11.9",
+        "python_executable": "D:\\Projects\\HeartGuard\\.venv\\Scripts\\python.exe",
+        "in_venv": true,
+        "platform": "Windows-10-10.0.19045-SP0",
+        "machine": "AMD64",
+        "processor": "Intel64 Family 6 Model 142 Stepping 9, GenuineIntel",
+        "cpu_count": 4,
+        "hostname": "DESKTOP-DUC8EHD",
+        "user": "prath",
+        "gpu": "none (CPU-only machine)"
+      },
+      "packages": {
+        "numpy": "2.4.6",
+        "scipy": "1.17.1",
+        "pandas": "3.0.5",
+        "scikit-learn": "1.9.0",
+        "joblib": "1.5.3",
+        "librosa": "0.11.0",
+        "soundfile": "0.14.0",
+        "PyWavelets": "1.9.0",
+        "soxr": "1.1.0",
+        "numba": "0.67.0",
+        "llvmlite": "0.49.0",
+        "matplotlib": "3.11.1",
+        "seaborn": "0.13.2",
+        "pyarrow": "25.0.1",
+        "tqdm": "4.70.0",
+        "PyYAML": "6.0.3",
+        "xgboost": "3.2.0",
+        "lightgbm": "4.7.0",
+        "scikit-optimize": "0.10.2",
+        "deap": "1.4.4",
+        "pyswarms": "1.3.0",
+        "shap": "0.51.0",
+        "statsmodels": "0.14.6",
+        "fastapi": "0.141.1",
+        "uvicorn": "0.52.4",
+        "python-multipart": "0.0.32",
+        "pydantic": "2.13.4",
+        "python-docx": "1.2.0",
+        "openpyxl": "3.1.5",
+        "kaleido": "1.3.0"
+      },
+      "config_hash": "c84082cca92722eb",
+      "timings_sec": {
+        "extract:D1": 31.609138,
+        "extract:D2": 15.15207,
+        "extract:D3": 20.002892,
+        "extract:D4": 26.087938,
+        "_total_run": 94.731551
+      },
+      "artifacts": [],
+      "extra": {
+        "logging": {
+          "configured": true,
+          "log_file": "D:\\Projects\\HeartGuard\\outputs\\logs\\pvmepcg.log",
+          "max_bytes": 10485760,
+          "backup_count": 5
+        },
+        "extract_datasets": [
+          "D1",
+          "D2",
+          "D3",
+          "D4"
+        ],
+        "extract_mode": "smoke",
+        "extract_limit": null,
+        "extract_workers": -1,
+        "extract_records": 80,
+        "extract_failures": 0,
+        "extract_digest": "fb81286d2a64",
+        "extract_wall_seconds": 93.498
+      }
     }
   ],
-  "updated_utc": "2026-08-26T16:47:28.069102+00:00"
+  "updated_utc": "2026-08-27T08:00:21.500491+00:00"
 }

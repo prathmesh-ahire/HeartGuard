@@ -1,0 +1,139 @@
+index,name,family,extractor,equation,unit,description
+0,time_mean,time,time_domain,mean(x),,Mean amplitude of the preprocessed signal
+1,time_std,time,time_domain,"std(x), ddof=0",,Standard deviation of amplitude
+2,time_var,time,time_domain,"var(x), ddof=0",,Variance of amplitude
+3,time_min,time,time_domain,min(x),,Most negative sample
+4,time_max,time,time_domain,max(x),,Most positive sample
+5,time_range,time,time_domain,max(x) - min(x),,Full amplitude range
+6,time_median,time,time_domain,median(x),,Median amplitude
+7,time_iqr,time,time_domain,Q3(x) - Q1(x),,Interquartile range of amplitude
+8,time_skewness,time,time_domain,"scipy.stats.skew(x), bias=False",,Asymmetry of the amplitude distribution
+9,time_kurtosis,time,time_domain,"scipy.stats.kurtosis(x), Fisher, bias=False",,Tailedness of the amplitude distribution; excess kurtosis
+10,time_energy,time,time_domain,sum(x^2),,Total signal energy
+11,time_rms,time,time_domain,sqrt(mean(x^2)),,Root-mean-square amplitude
+12,time_peak_to_peak,time,time_domain,max(x) - min(x),,"Peak-to-peak excursion; equals range, kept because the blueprint lists both"
+13,time_crest_factor,time,time_domain,max(|x|) / rms(x),,Peak-to-RMS ratio; high for impulsive sounds
+14,time_zcr_mean,time,time_domain,mean over frames of ZCR(frame),,Mean framed zero-crossing rate
+15,time_zcr_std,time,time_domain,std over frames of ZCR(frame),,Variability of the framed zero-crossing rate
+16,time_shannon_entropy,time,time_domain,-sum(p*log2(p)) over a 64-bin amplitude histogram,bit,Shannon entropy of the amplitude distribution
+17,time_sample_entropy,time,time_domain,"-ln(A/B), m=2, r=0.2*std, Richman & Moorman 2000",,Sample entropy; regularity of the waveform
+18,time_hjorth_activity,time,time_domain,var(x),,Hjorth activity; signal power
+19,time_hjorth_mobility,time,time_domain,sqrt(var(dx)/var(x)),,Hjorth mobility; mean frequency proxy
+20,time_hjorth_complexity,time,time_domain,mobility(dx)/mobility(x),,Hjorth complexity; bandwidth proxy
+21,time_autocorr_peak_value,time,time_domain,max of normalized autocorrelation beyond its first zero crossing,,Strength of the dominant periodicity; a rhythm-regularity proxy
+22,time_autocorr_peak_lag,time,time_domain,"argmax lag of the same search, in seconds",s,Period of the dominant periodicity; a cardiac-cycle proxy
+23,time_duration,time,time_domain,n_samples / fs,s,Recording duration
+24,freq_centroid_mean,frequency,frequency,mean over frames of sum(f*S)/sum(S),Hz,Mean spectral centre of mass
+25,freq_centroid_std,frequency,frequency,std over frames of the same,Hz,Variability of the spectral centroid
+26,freq_bandwidth_mean,frequency,frequency,mean over frames of sqrt(sum(S*(f-centroid)^2)/sum(S)),Hz,Mean spectral spread about the centroid
+27,freq_bandwidth_std,frequency,frequency,std over frames of the same,Hz,Variability of the spectral bandwidth
+28,freq_rolloff85_mean,frequency,frequency,mean over frames of min f with cumsum(S) >= 0.85*sum(S),Hz,Mean 85% spectral rolloff
+29,freq_rolloff85_std,frequency,frequency,std over frames of the same,Hz,Variability of the 85% rolloff
+30,freq_rolloff95_mean,frequency,frequency,mean over frames of min f with cumsum(S) >= 0.95*sum(S),Hz,Mean 95% spectral rolloff
+31,freq_rolloff95_std,frequency,frequency,std over frames of the same,Hz,Variability of the 95% rolloff
+32,freq_flatness_mean,frequency,frequency,mean over frames of geometric_mean(S)/arithmetic_mean(S),,"Mean Wiener entropy; 1 is noise-like, 0 is tonal"
+33,freq_flatness_std,frequency,frequency,std over frames of the same,,Variability of spectral flatness
+34,freq_flux_mean,frequency,frequency,"mean over frame pairs of ||S_t - S_{t-1}||_2, S L1-normalized per frame",,Mean spectral change between consecutive frames
+35,freq_flux_std,frequency,frequency,std over frame pairs of the same,,Variability of spectral flux
+36,freq_spectral_entropy,frequency,frequency,"-sum(p*log2(p))/log2(n_bins), p = PSD/sum(PSD)",,"Normalized spectral entropy of the Welch PSD, in [0, 1]"
+37,freq_dominant,frequency,frequency,f at argmax(PSD),Hz,Frequency carrying the most power
+38,freq_peak_power,frequency,frequency,max(PSD),1/Hz,Power spectral density at the dominant frequency
+39,freq_total_power,frequency,frequency,"trapezoid(PSD, f) over 0-Nyquist",,Total power of the Welch PSD
+40,freq_band_power_20_50,frequency,frequency,"trapezoid(PSD, f) over 20-50 Hz / total_power",,"Relative power, 20-50 Hz"
+41,freq_band_power_50_100,frequency,frequency,"trapezoid(PSD, f) over 50-100 Hz / total_power",,"Relative power, 50-100 Hz"
+42,freq_band_power_100_150,frequency,frequency,"trapezoid(PSD, f) over 100-150 Hz / total_power",,"Relative power, 100-150 Hz"
+43,freq_band_power_150_250,frequency,frequency,"trapezoid(PSD, f) over 150-250 Hz / total_power",,"Relative power, 150-250 Hz"
+44,freq_band_power_250_350,frequency,frequency,"trapezoid(PSD, f) over 250-350 Hz / total_power",,"Relative power, 250-350 Hz"
+45,freq_band_power_350_400,frequency,frequency,"trapezoid(PSD, f) over 350-400 Hz / total_power",,"Relative power, 350-400 Hz"
+46,mfcc_01_mean,mfcc,mfcc,mean over frames of MFCC_1,,Mean of MFCC coefficient 1
+47,mfcc_02_mean,mfcc,mfcc,mean over frames of MFCC_2,,Mean of MFCC coefficient 2
+48,mfcc_03_mean,mfcc,mfcc,mean over frames of MFCC_3,,Mean of MFCC coefficient 3
+49,mfcc_04_mean,mfcc,mfcc,mean over frames of MFCC_4,,Mean of MFCC coefficient 4
+50,mfcc_05_mean,mfcc,mfcc,mean over frames of MFCC_5,,Mean of MFCC coefficient 5
+51,mfcc_06_mean,mfcc,mfcc,mean over frames of MFCC_6,,Mean of MFCC coefficient 6
+52,mfcc_07_mean,mfcc,mfcc,mean over frames of MFCC_7,,Mean of MFCC coefficient 7
+53,mfcc_08_mean,mfcc,mfcc,mean over frames of MFCC_8,,Mean of MFCC coefficient 8
+54,mfcc_09_mean,mfcc,mfcc,mean over frames of MFCC_9,,Mean of MFCC coefficient 9
+55,mfcc_10_mean,mfcc,mfcc,mean over frames of MFCC_10,,Mean of MFCC coefficient 10
+56,mfcc_11_mean,mfcc,mfcc,mean over frames of MFCC_11,,Mean of MFCC coefficient 11
+57,mfcc_12_mean,mfcc,mfcc,mean over frames of MFCC_12,,Mean of MFCC coefficient 12
+58,mfcc_13_mean,mfcc,mfcc,mean over frames of MFCC_13,,Mean of MFCC coefficient 13
+59,mfcc_01_std,mfcc,mfcc,std over frames of MFCC_1,,Standard deviation of MFCC coefficient 1
+60,mfcc_02_std,mfcc,mfcc,std over frames of MFCC_2,,Standard deviation of MFCC coefficient 2
+61,mfcc_03_std,mfcc,mfcc,std over frames of MFCC_3,,Standard deviation of MFCC coefficient 3
+62,mfcc_04_std,mfcc,mfcc,std over frames of MFCC_4,,Standard deviation of MFCC coefficient 4
+63,mfcc_05_std,mfcc,mfcc,std over frames of MFCC_5,,Standard deviation of MFCC coefficient 5
+64,mfcc_06_std,mfcc,mfcc,std over frames of MFCC_6,,Standard deviation of MFCC coefficient 6
+65,mfcc_07_std,mfcc,mfcc,std over frames of MFCC_7,,Standard deviation of MFCC coefficient 7
+66,mfcc_08_std,mfcc,mfcc,std over frames of MFCC_8,,Standard deviation of MFCC coefficient 8
+67,mfcc_09_std,mfcc,mfcc,std over frames of MFCC_9,,Standard deviation of MFCC coefficient 9
+68,mfcc_10_std,mfcc,mfcc,std over frames of MFCC_10,,Standard deviation of MFCC coefficient 10
+69,mfcc_11_std,mfcc,mfcc,std over frames of MFCC_11,,Standard deviation of MFCC coefficient 11
+70,mfcc_12_std,mfcc,mfcc,std over frames of MFCC_12,,Standard deviation of MFCC coefficient 12
+71,mfcc_13_std,mfcc,mfcc,std over frames of MFCC_13,,Standard deviation of MFCC coefficient 13
+72,mfcc_01_delta_mean,mfcc,mfcc,mean over frames of librosa.feature.delta(MFCC_1),,Mean first-order delta of MFCC coefficient 1
+73,mfcc_02_delta_mean,mfcc,mfcc,mean over frames of librosa.feature.delta(MFCC_2),,Mean first-order delta of MFCC coefficient 2
+74,mfcc_03_delta_mean,mfcc,mfcc,mean over frames of librosa.feature.delta(MFCC_3),,Mean first-order delta of MFCC coefficient 3
+75,mfcc_04_delta_mean,mfcc,mfcc,mean over frames of librosa.feature.delta(MFCC_4),,Mean first-order delta of MFCC coefficient 4
+76,mfcc_05_delta_mean,mfcc,mfcc,mean over frames of librosa.feature.delta(MFCC_5),,Mean first-order delta of MFCC coefficient 5
+77,mfcc_06_delta_mean,mfcc,mfcc,mean over frames of librosa.feature.delta(MFCC_6),,Mean first-order delta of MFCC coefficient 6
+78,mfcc_07_delta_mean,mfcc,mfcc,mean over frames of librosa.feature.delta(MFCC_7),,Mean first-order delta of MFCC coefficient 7
+79,mfcc_08_delta_mean,mfcc,mfcc,mean over frames of librosa.feature.delta(MFCC_8),,Mean first-order delta of MFCC coefficient 8
+80,mfcc_09_delta_mean,mfcc,mfcc,mean over frames of librosa.feature.delta(MFCC_9),,Mean first-order delta of MFCC coefficient 9
+81,mfcc_10_delta_mean,mfcc,mfcc,mean over frames of librosa.feature.delta(MFCC_10),,Mean first-order delta of MFCC coefficient 10
+82,mfcc_11_delta_mean,mfcc,mfcc,mean over frames of librosa.feature.delta(MFCC_11),,Mean first-order delta of MFCC coefficient 11
+83,mfcc_12_delta_mean,mfcc,mfcc,mean over frames of librosa.feature.delta(MFCC_12),,Mean first-order delta of MFCC coefficient 12
+84,mfcc_13_delta_mean,mfcc,mfcc,mean over frames of librosa.feature.delta(MFCC_13),,Mean first-order delta of MFCC coefficient 13
+85,chroma_01_mean,chroma,chroma,mean over frames of chroma_1,,Mean of chroma bin 1 (harmonic-distribution descriptor; see T35.4 caveat)
+86,chroma_02_mean,chroma,chroma,mean over frames of chroma_2,,Mean of chroma bin 2 (harmonic-distribution descriptor; see T35.4 caveat)
+87,chroma_03_mean,chroma,chroma,mean over frames of chroma_3,,Mean of chroma bin 3 (harmonic-distribution descriptor; see T35.4 caveat)
+88,chroma_04_mean,chroma,chroma,mean over frames of chroma_4,,Mean of chroma bin 4 (harmonic-distribution descriptor; see T35.4 caveat)
+89,chroma_05_mean,chroma,chroma,mean over frames of chroma_5,,Mean of chroma bin 5 (harmonic-distribution descriptor; see T35.4 caveat)
+90,chroma_06_mean,chroma,chroma,mean over frames of chroma_6,,Mean of chroma bin 6 (harmonic-distribution descriptor; see T35.4 caveat)
+91,chroma_07_mean,chroma,chroma,mean over frames of chroma_7,,Mean of chroma bin 7 (harmonic-distribution descriptor; see T35.4 caveat)
+92,chroma_08_mean,chroma,chroma,mean over frames of chroma_8,,Mean of chroma bin 8 (harmonic-distribution descriptor; see T35.4 caveat)
+93,chroma_09_mean,chroma,chroma,mean over frames of chroma_9,,Mean of chroma bin 9 (harmonic-distribution descriptor; see T35.4 caveat)
+94,chroma_10_mean,chroma,chroma,mean over frames of chroma_10,,Mean of chroma bin 10 (harmonic-distribution descriptor; see T35.4 caveat)
+95,chroma_11_mean,chroma,chroma,mean over frames of chroma_11,,Mean of chroma bin 11 (harmonic-distribution descriptor; see T35.4 caveat)
+96,chroma_12_mean,chroma,chroma,mean over frames of chroma_12,,Mean of chroma bin 12 (harmonic-distribution descriptor; see T35.4 caveat)
+97,chroma_01_std,chroma,chroma,std over frames of chroma_1,,Standard deviation of chroma bin 1 (harmonic-distribution descriptor; see T35.4 caveat)
+98,chroma_02_std,chroma,chroma,std over frames of chroma_2,,Standard deviation of chroma bin 2 (harmonic-distribution descriptor; see T35.4 caveat)
+99,chroma_03_std,chroma,chroma,std over frames of chroma_3,,Standard deviation of chroma bin 3 (harmonic-distribution descriptor; see T35.4 caveat)
+100,chroma_04_std,chroma,chroma,std over frames of chroma_4,,Standard deviation of chroma bin 4 (harmonic-distribution descriptor; see T35.4 caveat)
+101,chroma_05_std,chroma,chroma,std over frames of chroma_5,,Standard deviation of chroma bin 5 (harmonic-distribution descriptor; see T35.4 caveat)
+102,chroma_06_std,chroma,chroma,std over frames of chroma_6,,Standard deviation of chroma bin 6 (harmonic-distribution descriptor; see T35.4 caveat)
+103,chroma_07_std,chroma,chroma,std over frames of chroma_7,,Standard deviation of chroma bin 7 (harmonic-distribution descriptor; see T35.4 caveat)
+104,chroma_08_std,chroma,chroma,std over frames of chroma_8,,Standard deviation of chroma bin 8 (harmonic-distribution descriptor; see T35.4 caveat)
+105,chroma_09_std,chroma,chroma,std over frames of chroma_9,,Standard deviation of chroma bin 9 (harmonic-distribution descriptor; see T35.4 caveat)
+106,chroma_10_std,chroma,chroma,std over frames of chroma_10,,Standard deviation of chroma bin 10 (harmonic-distribution descriptor; see T35.4 caveat)
+107,chroma_11_std,chroma,chroma,std over frames of chroma_11,,Standard deviation of chroma bin 11 (harmonic-distribution descriptor; see T35.4 caveat)
+108,chroma_12_std,chroma,chroma,std over frames of chroma_12,,Standard deviation of chroma bin 12 (harmonic-distribution descriptor; see T35.4 caveat)
+109,dwt_cA5_energy,dwt,wavelet,sum(cA5^2),,Sub-band energy (cA5)
+110,dwt_cD5_energy,dwt,wavelet,sum(cD5^2),,Sub-band energy (cD5)
+111,dwt_cD4_energy,dwt,wavelet,sum(cD4^2),,Sub-band energy (cD4)
+112,dwt_cD3_energy,dwt,wavelet,sum(cD3^2),,Sub-band energy (cD3)
+113,dwt_cD2_energy,dwt,wavelet,sum(cD2^2),,Sub-band energy (cD2)
+114,dwt_cD1_energy,dwt,wavelet,sum(cD1^2),,Sub-band energy (cD1)
+115,dwt_cA5_std,dwt,wavelet,"std(cA5), ddof=0",,Sub-band standard deviation (cA5)
+116,dwt_cD5_std,dwt,wavelet,"std(cD5), ddof=0",,Sub-band standard deviation (cD5)
+117,dwt_cD4_std,dwt,wavelet,"std(cD4), ddof=0",,Sub-band standard deviation (cD4)
+118,dwt_cD3_std,dwt,wavelet,"std(cD3), ddof=0",,Sub-band standard deviation (cD3)
+119,dwt_cD2_std,dwt,wavelet,"std(cD2), ddof=0",,Sub-band standard deviation (cD2)
+120,dwt_cD1_std,dwt,wavelet,"std(cD1), ddof=0",,Sub-band standard deviation (cD1)
+121,dwt_cA5_entropy,dwt,wavelet,-sum(p*log2(p)) over a 64-bin histogram of c,bit,Sub-band Shannon entropy (cA5)
+122,dwt_cD5_entropy,dwt,wavelet,-sum(p*log2(p)) over a 64-bin histogram of c,bit,Sub-band Shannon entropy (cD5)
+123,dwt_cD4_entropy,dwt,wavelet,-sum(p*log2(p)) over a 64-bin histogram of c,bit,Sub-band Shannon entropy (cD4)
+124,dwt_cD3_entropy,dwt,wavelet,-sum(p*log2(p)) over a 64-bin histogram of c,bit,Sub-band Shannon entropy (cD3)
+125,dwt_cD2_entropy,dwt,wavelet,-sum(p*log2(p)) over a 64-bin histogram of c,bit,Sub-band Shannon entropy (cD2)
+126,dwt_cD1_entropy,dwt,wavelet,-sum(p*log2(p)) over a 64-bin histogram of c,bit,Sub-band Shannon entropy (cD1)
+127,dwt_cA5_mean_abs,dwt,wavelet,mean(|c|),,Sub-band mean absolute coefficient (cA5)
+128,dwt_cD5_mean_abs,dwt,wavelet,mean(|c|),,Sub-band mean absolute coefficient (cD5)
+129,dwt_cD4_mean_abs,dwt,wavelet,mean(|c|),,Sub-band mean absolute coefficient (cD4)
+130,dwt_cD3_mean_abs,dwt,wavelet,mean(|c|),,Sub-band mean absolute coefficient (cD3)
+131,dwt_cD2_mean_abs,dwt,wavelet,mean(|c|),,Sub-band mean absolute coefficient (cD2)
+132,dwt_cD1_mean_abs,dwt,wavelet,mean(|c|),,Sub-band mean absolute coefficient (cD1)
+133,env_mean,envelope,envelope,"mean(e), e = smoothed |hilbert(x)|",,Mean amplitude envelope
+134,env_std,envelope,envelope,std(e),,Envelope variability
+135,env_skew,envelope,envelope,"scipy.stats.skew(e), bias=False",,Envelope asymmetry
+136,env_kurtosis,envelope,envelope,"scipy.stats.kurtosis(e), Fisher, bias=False",,Envelope peakedness
+137,env_peak_rate,envelope,envelope,n_peaks(e) / duration,Hz,Envelope peaks per second; a heart-rate proxy
