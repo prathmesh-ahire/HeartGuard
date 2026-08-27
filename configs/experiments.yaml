@@ -13,8 +13,17 @@
 
 defaults:
   seed: 42
+  # CHANGED 2026-08-28 by the user, from "balanced_accuracy_plus_sensitivity".
+  # That objective expands to 1.5*sensitivity + 0.5*specificity, weighting
+  # sensitivity three to one. Measured over the first SO-01/SO-02 runs it chose a
+  # DIFFERENT winning point than balanced accuracy would in 7 of 8 searches, and
+  # the point it chose was 3-9 points higher on sensitivity but 1.0-1.9 points
+  # LOWER on balanced accuracy. Phase 50 had already rejected the same objective
+  # for the M6/M7 decision threshold on the same evidence; the search now agrees
+  # with the threshold instead of pulling against it. See the 2026-08-28 entry in
+  # Docs/note.md. `youden` is the same ranking under another name.
   scoring:
-    binary: "balanced_accuracy_plus_sensitivity"
+    binary: "balanced_accuracy"
     multiclass: "macro_f1"
   # Rule 6 — never accuracy alone. These are reported for EVERY binary run.
   report_metrics_binary:

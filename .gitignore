@@ -66,3 +66,9 @@ junit.xml
 # NOTE: they remain in commits f440a24..b817e84 on the remote; this rule stops
 # future pushes only. CLAUDE.md at the repo root stays tracked.
 Docs/
+
+# Search results produced under an objective that was subsequently changed
+# (2026-08-28). Kept on disk as the evidence behind that decision -- see the
+# README.txt inside and the 2026-08-28 entry in Docs/note.md -- but never
+# committed: no number in them matches configs/experiments.yaml as it stands.
+outputs/05_search_optimization/_superseded_*/
