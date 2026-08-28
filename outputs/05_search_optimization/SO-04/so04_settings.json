@@ -1,0 +1,118 @@
+{
+  "experiment": "SO-04",
+  "task": "binary",
+  "settings": {
+    "task": "binary",
+    "evaluation_model": "M4",
+    "rankers": [
+      "mutual_info",
+      "anova_f",
+      "rf_importance",
+      "gb_importance"
+    ],
+    "k_grid": [
+      10,
+      20,
+      30,
+      40,
+      50,
+      60,
+      70,
+      80,
+      100,
+      120,
+      138
+    ],
+    "repeats": [
+      0
+    ],
+    "inner_splits": 3,
+    "selection_rule": "one_standard_error",
+    "n_standard_errors": 1.0,
+    "rfecv": {
+      "estimator": "logistic_regression",
+      "step": 5,
+      "min_features_to_select": 10,
+      "inner_cv": 3
+    }
+  },
+  "reused_sweep": true,
+  "outer_folds": [
+    "r0f0",
+    "r0f1",
+    "r0f2",
+    "r0f3",
+    "r0f4"
+  ],
+  "j_weights": {
+    "alpha": 0.7,
+    "beta": 0.2,
+    "gamma": 0.1,
+    "n_features_total": 138,
+    "performance_metric": "macro_f1"
+  },
+  "cost_model": {
+    "source": "D:\\Projects\\HeartGuard\\outputs\\03_features\\feature_extraction_timing.csv#min_seconds",
+    "total_seconds": 1.0261934999143705,
+    "seconds": {
+      "chroma": 0.0026759000029414,
+      "dwt": 0.0022132999729365,
+      "envelope": 0.0048958999686874,
+      "frequency": 0.0078467999701388,
+      "mfcc": 0.0039191999821923,
+      "time": 1.0046424000174738
+    }
+  },
+  "chosen": {
+    "ranker": "gb_importance",
+    "k": 20,
+    "n_selected": 20,
+    "families_needed": [
+      "chroma",
+      "dwt",
+      "frequency",
+      "mfcc",
+      "time"
+    ],
+    "normalized_inference_time": 0.9952290674525848,
+    "mean_j": 0.2460321544348328,
+    "mean_macro_f1": 0.8323070641442019,
+    "se_macro_f1": 0.008146202183466197,
+    "selection_rule": "min_j_within_1.0_se_of_best_macro_f1",
+    "performance_guard": 0.8298204920852609,
+    "n_eligible": 26,
+    "n_configurations": 44,
+    "best_performance_ranker": "gb_importance",
+    "best_performance_k": 60,
+    "best_performance_macro_f1": 0.8369947368501383,
+    "best_performance_se": 0.007174244764877422,
+    "unguarded_j_ranker": "gb_importance",
+    "unguarded_j_k": 10,
+    "unguarded_j_macro_f1": 0.8190839106829236
+  },
+  "selection_frequency": {
+    "time_iqr": 5,
+    "time_energy": 3,
+    "time_zcr_mean": 5,
+    "time_hjorth_complexity": 4,
+    "time_duration": 5,
+    "freq_band_power_250_350": 3,
+    "mfcc_02_mean": 4,
+    "mfcc_04_mean": 5,
+    "mfcc_05_mean": 4,
+    "mfcc_01_std": 3,
+    "mfcc_05_std": 3,
+    "chroma_07_std": 3,
+    "dwt_cA5_energy": 3,
+    "dwt_cD5_energy": 5,
+    "dwt_cD4_energy": 3,
+    "dwt_cD1_energy": 5,
+    "dwt_cD1_entropy": 5,
+    "dwt_cD5_mean_abs": 5,
+    "dwt_cD4_mean_abs": 3,
+    "dwt_cD3_mean_abs": 3
+  },
+  "seconds": 253.46323280001525,
+  "seed": 42,
+  "n_features_total": 138
+}

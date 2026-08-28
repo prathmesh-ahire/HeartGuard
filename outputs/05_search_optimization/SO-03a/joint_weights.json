@@ -1,0 +1,99 @@
+{
+  "experiment": "SO-03a",
+  "task": "binary",
+  "note": "T58.5. Reduced member set and budget: nothing caches across masks, and the M7 member set costs 347 s per evaluation on this fold. Demonstrates the joint encoding; NOT comparable to M7.",
+  "by_fold": {
+    "r0f0": {
+      "method": "ga_joint",
+      "model_id": "M1+M3+M4",
+      "task": "binary",
+      "outer_fold": "r0f0",
+      "best_fitness": 0.2846309010485703,
+      "best_macro_f1": 0.8252684850444855,
+      "n_selected": 43,
+      "features": [
+        "time_var",
+        "time_iqr",
+        "time_rms",
+        "time_peak_to_peak",
+        "time_zcr_mean",
+        "time_hjorth_mobility",
+        "time_autocorr_peak_value",
+        "freq_centroid_std",
+        "freq_rolloff85_mean",
+        "freq_rolloff95_std",
+        "freq_flatness_std",
+        "freq_band_power_20_50",
+        "freq_band_power_150_250",
+        "mfcc_03_mean",
+        "mfcc_06_mean",
+        "mfcc_12_mean",
+        "mfcc_13_mean",
+        "mfcc_02_std",
+        "mfcc_05_std",
+        "mfcc_07_std",
+        "mfcc_10_std",
+        "mfcc_11_std",
+        "mfcc_01_delta_mean",
+        "mfcc_02_delta_mean",
+        "mfcc_04_delta_mean",
+        "mfcc_06_delta_mean",
+        "mfcc_08_delta_mean",
+        "mfcc_13_delta_mean",
+        "chroma_02_mean",
+        "chroma_05_mean",
+        "chroma_08_mean",
+        "chroma_04_std",
+        "chroma_11_std",
+        "chroma_12_std",
+        "dwt_cA5_energy",
+        "dwt_cA5_entropy",
+        "dwt_cD5_entropy",
+        "dwt_cD1_entropy",
+        "dwt_cA5_mean_abs",
+        "dwt_cD5_mean_abs",
+        "dwt_cD3_mean_abs",
+        "env_kurtosis",
+        "env_peak_rate"
+      ],
+      "generations": 10,
+      "seconds": 1509.3728859000257,
+      "config": {
+        "members": [
+          "M1",
+          "M3",
+          "M4"
+        ],
+        "population_size": 16,
+        "generations": 10,
+        "crossover_rate": 0.8,
+        "mutation_rate": 0.02,
+        "tournament_size": 3,
+        "elitism": 2,
+        "min_features": 10,
+        "weight_mutation_sigma": 0.15,
+        "max_evaluations": 160
+      },
+      "evaluator": {
+        "members": [
+          "M1",
+          "M3",
+          "M4"
+        ],
+        "outer_fold": "r0f0",
+        "n_inner_splits": 3,
+        "evaluations": 160,
+        "seed": 42,
+        "outer_test_rows_touched": 0
+      },
+      "best_metrics": {
+        "macro_f1": 0.8252684850444855
+      },
+      "best_weights": [
+        0.19597248146099996,
+        0.46142035261703607,
+        0.34260716592196394
+      ]
+    }
+  }
+}

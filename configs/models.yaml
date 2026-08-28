@@ -320,3 +320,154 @@ models:
       fold map would break the comparison T52.4 requires.
     defaults: {}
     search_space: {}
+
+# =============================================================================
+# SUBSET AND POPULATION SEARCH — SO-03a (GA), SO-03b (PSO), SO-04 (selection),
+# and the multi-objective score J they all optimise. Phases 57-61.
+#
+# The hyperparameter spaces above are searched by SO-01/SO-02. THIS block is
+# about a different question: which of the 138 features to keep. Nothing here
+# changes a model's hyperparameters.
+# =============================================================================
+optimization:
+
+  # --- the multi-objective score J (T57.5, T58.2, T61.1) ---------------------
+  # J = alpha*(1 - MacroF1) + beta*(SelectedFeatures/138) + gamma*NormalizedInferenceTime
+  # MINIMISED. All three terms are bounded in [0, 1], so J is too.
+  multi_objective:
+    alpha: 0.70               # performance
+    beta: 0.20                # compactness
+    gamma: 0.10               # inference cost
+    # Justification (recorded here per T61.2; Phase 61 sweeps the weighting to
+    # trace the Pareto front and may move the operating point):
+    #   alpha dominates because this is a screening prototype and rule 6 selects
+    #   on detection quality, not on cost. beta is twice gamma because feature
+    #   count is the term a reader can verify from the subset file itself, while
+    #   the time term depends on this machine. Together beta+gamma = 0.30, so a
+    #   subset must not give up more than ~0.43 of macro-F1 per unit of saved
+    #   cost to be preferred -- a real but bounded discount.
+    performance_metric: "macro_f1"   # as documented in the blueprint
+    n_features_total: 138
+
+    # THE INFERENCE-TIME TERM IS EXTRACTION TIME, NOT PREDICT TIME (T61.3).
+    # Measured in outputs/03_features/feature_extraction_timing.csv: the whole
+    # per-record extraction is ~2.14 s and the `time` family alone is 2.10 s of
+    # it -- 98%. Model predict is microseconds by comparison. So the cost of a
+    # feature subset is decided almost entirely by WHICH FAMILIES it still needs
+    # computed, and a term based on predict time would be measuring noise.
+    #
+    # A family costs its full extraction time if the subset keeps ANY feature
+    # from it, and nothing if the subset keeps none: extraction is per family,
+    # not per feature.
+    inference_time:
+      basis: "extraction_family_time"
+      source: "outputs/03_features/feature_extraction_timing.csv"
+      # Normalised against the slowest configuration -- all 138 features, which
+      # needs every family -- so the term is bounded in [0, 1] by construction.
+      normalize_against: "all_features"
+
+  # --- SO-04 feature selection (Phase 57) ------------------------------------
+  feature_selection:
+    task: "binary"
+    # The estimator every ranker's subsets are scored with. One estimator for
+    # the whole sweep, or the curves would compare rankers AND models at once.
+    # M4 is a Random Forest: an M6/M7 member, so the subset transfers to the
+    # proposed ensemble, and tolerant of correlated survivors in a way a linear
+    # model is not.
+    evaluation_model: "M4"
+    rankers: ["mutual_info", "anova_f", "rf_importance", "gb_importance"]
+    k_grid: [10, 20, 30, 40, 50, 60, 70, 80, 100, 120, 138]
+    repeats: [0]              # repeat 0 of DA-07: five outer folds
+    inner_splits: 3
+    # THE PERFORMANCE GUARD ON J. Decided by the user on 2026-08-28 against the
+    # measured sweep, and it is the same one-standard-error rule Phase 50 applies
+    # to M7's weights.
+    #
+    # J's weighting fixes an exchange rate between macro-F1 and compactness, and
+    # at ANY weighting that rate is a judgement rather than a measurement. At the
+    # configured 0.70/0.20/0.10 it works out at 26.5 macro-F1 points to go from
+    # 138 features to 10, and 40.5 if the `time` family is dropped as well --
+    # which is how unguarded J came to choose a 10-feature subset scoring 0.8191
+    # when all 138 score 0.8313 and the best k scores 0.8370.
+    #
+    # So J chooses, but only among the configurations whose mean macro-F1 is
+    # within `n_standard_errors` of the best. Below that band a subset is not
+    # cheaper, it is worse. With the guard the choice is gb_importance at k=20:
+    # 0.8323 inner macro-F1 on 20 features, which beats all 138 on both.
+    #
+    # This is a SELECTION RULE and must never be adjusted in response to a
+    # result. See the 2026-08-28 Phases 57-59 entry in Docs/note.md.
+    selection_rule: "one_standard_error"
+    n_standard_errors: 1.0
+    # T57.3. Logistic regression, not the evaluation model: RFECV refits its
+    # estimator once per elimination step per CV fold, so a 10 s estimator makes
+    # it hours. `step` removes 5 features at a time for the same reason.
+    rfecv:
+      estimator: "logistic_regression"
+      step: 5
+      min_features_to_select: 10
+      inner_cv: 3
+
+  # --- SO-03a genetic algorithm (Phase 58) -----------------------------------
+  genetic_algorithm:
+    # A compact custom implementation, not DEAP: T58.1 allows either, and DEAP
+    # would add a dependency for a ~150-line algorithm whose determinism under
+    # seed 42 we have to prove either way.
+    population_size: 30
+    generations: 25
+    crossover_rate: 0.8
+    mutation_rate: 0.02       # PER BIT, so ~2.8 of 138 bits flip per child
+    tournament_size: 3
+    elitism: 2
+    # A chromosome with nothing switched on cannot be scored, and one with two
+    # features on is not a candidate anyone would ship. Repaired, not discarded,
+    # so the population size stays what it says it is.
+    min_features: 10
+    init_density: 0.5         # expected fraction of bits on in generation 0
+    # M3 SVM-RBF, not the M4 used by SO-04: the GA needs ~750 fitness
+    # evaluations against SO-04's ~200, and M3 costs 2.5 s against M4's 10.5 s
+    # on this fold. Measured in Phase 58; see Docs/note.md.
+    fitness_model: "M3"
+    # SO-03a/b are a SEARCH STUDY on one outer fold, like SO-01/SO-02. Their
+    # score is a single-fold estimate and is never quoted as cross-validated.
+    repeats: [0]
+    folds: [0]
+    inner_splits: 3
+    # T58.5. The joint chromosome appends one real-valued weight gene per
+    # ensemble member to the 138 mask bits. It is far more expensive per
+    # evaluation than the mask-only GA -- every evaluation fits every member --
+    # so it runs at its own reduced budget.
+    joint_weights:
+      enabled: true
+      members: ["M1", "M3", "M4"]
+      population_size: 16
+      generations: 10
+      weight_mutation_sigma: 0.15
+
+  # --- SO-03b particle swarm optimization (Phase 59) -------------------------
+  # Budget matched to the GA at 30 x 25 = 750 evaluations, because T59.5
+  # compares them at identical folds, budget and seed.
+  particle_swarm:
+    swarm_size: 30
+    iterations: 25
+    # Clerc-Kennedy constriction, the standard convergent parameterisation:
+    # phi = 2.05 + 2.05 = 4.1, chi = 2/|2 - phi - sqrt(phi^2 - 4phi)| = 0.7298,
+    # and the reported coefficients are chi*2.05 = 1.49445. Picked because they
+    # converge without an inertia schedule, which would be one more knob to
+    # justify and one more thing to keep identical between GA and PSO.
+    inertia: 0.729
+    cognitive: 1.49445
+    social: 1.49445
+    velocity_clamp: 4.0       # on the binary variant, |v| <= 4 keeps sigmoid(v) off 0/1
+    min_features: 10
+    fitness_model: "M3"
+    repeats: [0]
+    folds: [0]
+    inner_splits: 3
+    # T59.1 optimises the continuous ensemble-weight simplex; T59.2 the binary
+    # feature mask. Both run; they answer different questions.
+    weight_simplex:
+      enabled: true
+      members: ["M3", "M4", "M5"]   # the M7 member set
+      swarm_size: 20
+      iterations: 30

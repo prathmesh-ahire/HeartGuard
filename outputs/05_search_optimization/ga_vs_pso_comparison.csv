@@ -1,0 +1,2 @@
+outer_fold,budget_evaluations,seed,fitness_model,inner_splits,ga_fitness,pso_fitness,fitness_delta_pso_minus_ga,ga_macro_f1,pso_macro_f1,macro_f1_delta_pso_minus_ga,ga_n_selected,pso_n_selected,ga_distinct_fitted,pso_distinct_fitted,ga_seconds,pso_seconds,winner
+r0f0,750,42,M3,3,0.2669404082739569,0.30402047992563025,0.037080071651673374,0.8298366838322355,0.8099914468971328,-0.01984523693510276,33,49,683,750,1133.2546483000042,1333.4632260999642,ga

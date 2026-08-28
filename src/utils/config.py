@@ -319,7 +319,7 @@ ALLOWED_TOP_LEVEL: dict[str, set[str]] = {
     "paths": {"project_root", "dataset", "cache", "outputs", "models_saved", "frontend"},
     "signal": {"resample", "filter", "normalization", "quality", "framing", "cache", "integrity"},
     "features": {"expected_total", "failure_policy", "families", "extraction"},
-    "models": {"global", "pipeline", "calibration", "models"},
+    "models": {"global", "pipeline", "calibration", "models", "optimization"},
     "experiments": {"defaults", "cv_schemes", "experiments"},
 }
 
@@ -377,6 +377,16 @@ REQUIRED: dict[str, list[tuple[str, type | tuple[type, ...]]]] = {
         ("models.M3.estimator", str),
         ("models.M4.estimator", str),
         ("models.M5.estimator", str),
+        # Phases 57-61: the multi-objective score J and the subset searches that
+        # minimise it. Required, not optional, because a run that silently fell
+        # back to hard-coded alpha/beta/gamma would produce a J nobody could
+        # trace to a config file.
+        ("optimization.multi_objective.alpha", (int, float)),
+        ("optimization.multi_objective.beta", (int, float)),
+        ("optimization.multi_objective.gamma", (int, float)),
+        ("optimization.feature_selection.k_grid", list),
+        ("optimization.genetic_algorithm.population_size", int),
+        ("optimization.particle_swarm.swarm_size", int),
     ],
     "experiments": [
         ("defaults.seed", int),

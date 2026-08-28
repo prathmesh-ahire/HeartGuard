@@ -1,0 +1,70 @@
+{
+  "experiment": "SO-03b",
+  "task": "binary",
+  "by_fold": {
+    "r0f0": {
+      "method": "pso_weights",
+      "members": [
+        "M3",
+        "M4",
+        "M5"
+      ],
+      "task": "binary",
+      "outer_fold": "r0f0",
+      "objective": "balanced_accuracy",
+      "best_weights": [
+        0.11417281110811571,
+        0.6249902198448029,
+        0.26083696904708137
+      ],
+      "weights_sum": 1.0,
+      "best_score": 0.8464953824295525,
+      "metrics": {
+        "accuracy": 0.8997300424219051,
+        "balanced_accuracy": 0.8464953824295525,
+        "sensitivity": 0.7560975609756098,
+        "specificity": 0.9368932038834952,
+        "precision": 0.7560975609756098,
+        "f1": 0.7560975609756098,
+        "mcc": 0.6929907648591049,
+        "roc_auc": null,
+        "pr_auc": null,
+        "tp": 403.0,
+        "fp": 130.0,
+        "tn": 1930.0,
+        "fn": 130.0,
+        "support": 2593.0,
+        "n_positive": 533.0,
+        "n_negative": 2060.0
+      },
+      "config": {
+        "members": [
+          "M3",
+          "M4",
+          "M5"
+        ],
+        "swarm_size": 20,
+        "iterations": 30,
+        "inertia": 0.729,
+        "cognitive": 1.49445,
+        "social": 1.49445,
+        "max_evaluations": 600
+      },
+      "detail": {
+        "members": [
+          "M3",
+          "M4",
+          "M5"
+        ],
+        "outer_fold": "r0f0",
+        "n_inner_splits": 3,
+        "n_out_of_fold_rows": 2593,
+        "n_features": 138,
+        "fit_seconds": 60.32358369999565,
+        "seed": 42,
+        "outer_test_rows_touched": 0
+      },
+      "seconds": 11.19558280002093
+    }
+  }
+}
