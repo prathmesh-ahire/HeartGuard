@@ -203,6 +203,7 @@ class Objective:
         """
         from src.evaluation import metrics as mt
 
+        keep: tuple[str, ...]
         if self.kind == "binary":
             scored = mt.binary_metrics(y_true, y_pred, labels=list(labels), positive_label=1)
             keep = ("sensitivity", "specificity", "balanced_accuracy", "f1", "accuracy")

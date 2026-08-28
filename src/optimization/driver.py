@@ -288,22 +288,29 @@ def run_search(
     if objective is None:
         objective = objective_for(data.task)
     splits = int(n_inner_splits or DEFAULT_INNER_SPLITS)
-    budgets = budget if isinstance(budget, dict) else {}
-    default_budget = budget if isinstance(budget, Budget) else None
-    if default_budget is None:
-        missing = [model_id for model_id in model_ids if model_id not in budgets]
+    if not model_ids:
+        raise SearchError("no models to search")
+
+    # Resolved to a complete mapping here rather than looked up per model in the
+    # loop: an absent budget must fail before any fitting happens, not after the
+    # first model has already spent an hour.
+    if isinstance(budget, Budget):
+        budgets: dict[str, Budget] = dict.fromkeys(model_ids, budget)
+    else:
+        missing = [model_id for model_id in model_ids if model_id not in budget]
         if missing:
             raise SearchError(
                 "no budget given for " + ", ".join(missing) + "; a per-model mapping must "
                 + "name every model it is asked to search"
             )
+        budgets = {model_id: budget[model_id] for model_id in model_ids}
 
     run = SearchRun(
         method=method,
         exp=METHODS.get(method, method),
         task=data.task,
         objective=objective.name,
-        budget=default_budget or budgets[next(iter(model_ids))],
+        budget=budgets[next(iter(model_ids))],
     )
     started = time.perf_counter()
 
@@ -313,7 +320,7 @@ def run_search(
         )
 
     for model_id in model_ids:
-        model_budget = budgets.get(model_id, default_budget)
+        model_budget = budgets[model_id]
         for fold in outer:
             search = build_search(
                 method,
