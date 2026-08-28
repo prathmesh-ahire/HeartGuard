@@ -35,3 +35,8 @@ MD-GBCHOICE,,,D1,,"M5 classic vs histogram gradient boosting, weighted and not",
 MD-REGISTRY,,,,,"model inventory M1-M9: availability, members, search size",outputs/04_models/model_registry.csv,,python scripts/04_model_smoke.py,2026-08-27T16:40:00.067182+00:00,ok
 MD-COMPLEXITY,,,D1,,"per-model size on disk, training time, inference time",outputs/04_models/model_complexity.csv,,python scripts/04_model_smoke.py,2026-08-27T16:40:29.672206+00:00,ok
 MD-THRESHOLD,,,D1,,in-fold threshold objectives vs the fixed 0.5 rule (T50.4),outputs/04_models/threshold_objective_comparison.csv,,python scripts/04_model_smoke.py,2026-08-27T16:40:30.691721+00:00,ok
+SO-01,,,D1,,SO-01 trial history (random search),outputs/05_search_optimization/SO-01/trials.csv,outputs/03_features/all_features_matrix.parquet,python scripts/05_run_search.py --method random,2026-08-28T06:36:07.383829+00:00,ok
+SO-01-BEST,,,D1,,SO-01 best hyperparameters per model and outer fold,outputs/05_search_optimization/SO-01/best_parameters.json,,python scripts/05_run_search.py --method random,2026-08-28T06:36:07.415081+00:00,ok
+SO-02,,,D1,,SO-02 trial history (bayes search),outputs/05_search_optimization/SO-02/trials.csv,outputs/03_features/all_features_matrix.parquet,python scripts/05_run_search.py --method bayes,2026-08-28T07:23:27.306900+00:00,ok
+SO-02-BEST,,,D1,,SO-02 best hyperparameters per model and outer fold,outputs/05_search_optimization/SO-02/best_parameters.json,,python scripts/05_run_search.py --method bayes,2026-08-28T07:23:27.328356+00:00,ok
+SO-COMPARE,,,D1,,"SO-01 vs SO-02 at equal budget, matched by model and outer fold",outputs/05_search_optimization/search_method_comparison.csv,,python scripts/05_run_search.py --compare,2026-08-28T07:23:29.202964+00:00,ok

@@ -1,0 +1,6 @@
+{
+  "available": true,
+  "version": "0.10.2",
+  "reason": "",
+  "note": "scikit-optimize 0.10.2 imports and completes an ask/tell round trip on this machine; SO-02 runs with a Gaussian-process surrogate and the EI acquisition function."
+}

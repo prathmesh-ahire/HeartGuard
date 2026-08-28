@@ -1,0 +1,6 @@
+method,model_id,task,outer_fold,repeat,fold,inner_best_score,outer_score,n_train,n_test,refit_seconds,outer_accuracy,outer_balanced_accuracy,outer_f1,outer_sensitivity,outer_specificity,best_C,best_l1_ratio,best_max_iter,best_solver,best_class_weight,best_gamma,best_max_depth,best_max_features,best_min_samples_leaf,best_n_estimators,best_learning_rate,best_subsample,best_colsample_bytree,best_reg_lambda
+random,M1,binary,r0f0,0,0,0.853236,0.799382,2593,647,4.628,0.788253,0.799382,0.611898,0.818182,0.780583,0.41967346752031676,0.0,2000.0,saga,,,,,,,,,,
+random,M3,binary,r0f0,0,0,0.801297,0.779744,2593,647,1.3501,0.837713,0.779744,0.631579,0.681818,0.87767,129.95951034240832,,,,,0.01648431838721491,,,,,,,,
+random,M4,binary,r0f0,0,0,0.848788,0.827538,2593,647,4.8016,0.833076,0.827538,0.666667,0.818182,0.836893,,,,,,,,0.3,8.0,195.0,,,,
+random,M5,binary,r0f0,0,0,0.844525,0.81724,2593,647,16.7942,0.834621,0.81724,0.660317,0.787879,0.846602,,,,,,,3.0,,13.0,144.0,0.17129776945584144,0.9032350960341495,,
+random,M8,binary,r0f0,0,0,0.84998,0.844535,2593,647,6.7101,0.837713,0.844535,0.682779,0.856061,0.83301,,,,,,,3.0,,,985.0,0.012665039695654063,0.9413612293072664,0.6169697429326704,0.017108461891527735

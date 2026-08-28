@@ -1,0 +1,4 @@
+model_id,task,outer_fold,inner_best_score_random,inner_best_score_bayes,inner_delta_bayes_minus_random,outer_score_random,outer_score_bayes,outer_delta_bayes_minus_random
+M3,binary,r0f0,0.801297,0.805669,0.004372,0.779744,0.782561,0.002817
+M4,binary,r0f0,0.848788,0.846834,-0.001954,0.827538,0.832105,0.004567
+M5,binary,r0f0,0.844525,0.846453,0.001928,0.81724,0.818513,0.001273

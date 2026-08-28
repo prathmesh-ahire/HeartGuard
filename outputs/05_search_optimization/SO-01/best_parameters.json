@@ -1,0 +1,185 @@
+{
+  "experiment": "SO-01",
+  "searches": [
+    {
+      "method": "random",
+      "model_id": "M1",
+      "task": "binary",
+      "outer_fold": "r0f0",
+      "repeat": 0,
+      "fold": 0,
+      "objective": "balanced_accuracy",
+      "seed": 42,
+      "n_trials": 40,
+      "n_trials_ok": 40,
+      "n_inner_folds": 3,
+      "best_score": 0.853236,
+      "best_params": {
+        "C": 0.41967346752031676,
+        "l1_ratio": 0.0,
+        "solver": "saga",
+        "max_iter": 2000
+      },
+      "seconds": 417.232,
+      "stop_reason": "trial budget exhausted (40 trials)",
+      "budget": {
+        "max_trials": 40,
+        "max_seconds": null
+      },
+      "n_rows_touched": 2593,
+      "n_outer_test_rows": 647,
+      "outer_test_rows_touched": 0
+    },
+    {
+      "method": "random",
+      "model_id": "M3",
+      "task": "binary",
+      "outer_fold": "r0f0",
+      "repeat": 0,
+      "fold": 0,
+      "objective": "balanced_accuracy",
+      "seed": 42,
+      "n_trials": 40,
+      "n_trials_ok": 40,
+      "n_inner_folds": 3,
+      "best_score": 0.801297,
+      "best_params": {
+        "C": 129.95951034240832,
+        "gamma": 0.01648431838721491,
+        "class_weight": null
+      },
+      "seconds": 189.076,
+      "stop_reason": "trial budget exhausted (40 trials)",
+      "budget": {
+        "max_trials": 40,
+        "max_seconds": null
+      },
+      "n_rows_touched": 2593,
+      "n_outer_test_rows": 647,
+      "outer_test_rows_touched": 0
+    },
+    {
+      "method": "random",
+      "model_id": "M4",
+      "task": "binary",
+      "outer_fold": "r0f0",
+      "repeat": 0,
+      "fold": 0,
+      "objective": "balanced_accuracy",
+      "seed": 42,
+      "n_trials": 40,
+      "n_trials_ok": 40,
+      "n_inner_folds": 3,
+      "best_score": 0.848788,
+      "best_params": {
+        "n_estimators": 195,
+        "max_depth": null,
+        "min_samples_leaf": 8,
+        "max_features": 0.3,
+        "class_weight": null
+      },
+      "seconds": 899.746,
+      "stop_reason": "trial budget exhausted (40 trials)",
+      "budget": {
+        "max_trials": 40,
+        "max_seconds": null
+      },
+      "n_rows_touched": 2593,
+      "n_outer_test_rows": 647,
+      "outer_test_rows_touched": 0
+    },
+    {
+      "method": "random",
+      "model_id": "M5",
+      "task": "binary",
+      "outer_fold": "r0f0",
+      "repeat": 0,
+      "fold": 0,
+      "objective": "balanced_accuracy",
+      "seed": 42,
+      "n_trials": 15,
+      "n_trials_ok": 15,
+      "n_inner_folds": 3,
+      "best_score": 0.844525,
+      "best_params": {
+        "n_estimators": 144,
+        "learning_rate": 0.17129776945584144,
+        "max_depth": 3,
+        "subsample": 0.9032350960341495,
+        "min_samples_leaf": 13
+      },
+      "seconds": 2270.633,
+      "stop_reason": "trial budget exhausted (15 trials)",
+      "budget": {
+        "max_trials": 15,
+        "max_seconds": null
+      },
+      "n_rows_touched": 2593,
+      "n_outer_test_rows": 647,
+      "outer_test_rows_touched": 0
+    },
+    {
+      "method": "random",
+      "model_id": "M8",
+      "task": "binary",
+      "outer_fold": "r0f0",
+      "repeat": 0,
+      "fold": 0,
+      "objective": "balanced_accuracy",
+      "seed": 42,
+      "n_trials": 40,
+      "n_trials_ok": 40,
+      "n_inner_folds": 3,
+      "best_score": 0.84998,
+      "best_params": {
+        "n_estimators": 985,
+        "learning_rate": 0.012665039695654063,
+        "max_depth": 3,
+        "subsample": 0.9413612293072664,
+        "colsample_bytree": 0.6169697429326704,
+        "reg_lambda": 0.017108461891527735
+      },
+      "seconds": 865.609,
+      "stop_reason": "trial budget exhausted (40 trials)",
+      "budget": {
+        "max_trials": 40,
+        "max_seconds": null
+      },
+      "n_rows_touched": 2593,
+      "n_outer_test_rows": 647,
+      "outer_test_rows_touched": 0
+    }
+  ],
+  "method": "random",
+  "task": "binary",
+  "objective": "balanced_accuracy",
+  "budget": {
+    "M1": {
+      "max_trials": 40,
+      "max_seconds": null
+    },
+    "M3": {
+      "max_trials": 40,
+      "max_seconds": null
+    },
+    "M4": {
+      "max_trials": 40,
+      "max_seconds": null
+    },
+    "M5": {
+      "max_trials": 15,
+      "max_seconds": null
+    },
+    "M8": {
+      "max_trials": 40,
+      "max_seconds": null
+    }
+  },
+  "n_inner_splits": 3,
+  "outer_folds": [
+    "r0f0"
+  ],
+  "smoke": false,
+  "total_seconds": 4677.64,
+  "skopt": null
+}

@@ -1,0 +1,4 @@
+method,model_id,task,outer_fold,repeat,fold,inner_best_score,outer_score,n_train,n_test,refit_seconds,outer_accuracy,outer_balanced_accuracy,outer_f1,outer_sensitivity,outer_specificity,best_C,best_class_weight,best_gamma,best_max_depth,best_max_features,best_min_samples_leaf,best_n_estimators,best_learning_rate,best_subsample
+bayes,M3,binary,r0f0,0,0,0.805669,0.782561,2593,647,1.0167,0.837713,0.782561,0.634146,0.689394,0.875728,6.080853138876636,,0.012310376665498595,,,,,,
+bayes,M4,binary,r0f0,0,0,0.846834,0.832105,2593,647,14.4317,0.826893,0.832105,0.664671,0.840909,0.823301,,balanced,,30.0,0.5,10.0,383.0,,
+bayes,M5,binary,r0f0,0,0,0.846453,0.818513,2593,647,29.8762,0.805255,0.818513,0.637931,0.840909,0.796117,,,,2.0,,20.0,532.0,0.01831652669337469,0.6622684228490661

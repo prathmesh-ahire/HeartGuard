@@ -1,0 +1,121 @@
+{
+  "experiment": "SO-02",
+  "searches": [
+    {
+      "method": "bayes",
+      "model_id": "M3",
+      "task": "binary",
+      "outer_fold": "r0f0",
+      "repeat": 0,
+      "fold": 0,
+      "objective": "balanced_accuracy",
+      "seed": 42,
+      "n_trials": 40,
+      "n_trials_ok": 40,
+      "n_inner_folds": 3,
+      "best_score": 0.805669,
+      "best_params": {
+        "C": 6.080853138876636,
+        "gamma": 0.012310376665498595,
+        "class_weight": null
+      },
+      "seconds": 166.502,
+      "stop_reason": "trial budget exhausted (40 trials)",
+      "budget": {
+        "max_trials": 40,
+        "max_seconds": null
+      },
+      "n_rows_touched": 2593,
+      "n_outer_test_rows": 647,
+      "outer_test_rows_touched": 0
+    },
+    {
+      "method": "bayes",
+      "model_id": "M4",
+      "task": "binary",
+      "outer_fold": "r0f0",
+      "repeat": 0,
+      "fold": 0,
+      "objective": "balanced_accuracy",
+      "seed": 42,
+      "n_trials": 40,
+      "n_trials_ok": 40,
+      "n_inner_folds": 3,
+      "best_score": 0.846834,
+      "best_params": {
+        "n_estimators": 383,
+        "max_depth": 30,
+        "min_samples_leaf": 10,
+        "max_features": 0.5,
+        "class_weight": "balanced"
+      },
+      "seconds": 935.744,
+      "stop_reason": "trial budget exhausted (40 trials)",
+      "budget": {
+        "max_trials": 40,
+        "max_seconds": null
+      },
+      "n_rows_touched": 2593,
+      "n_outer_test_rows": 647,
+      "outer_test_rows_touched": 0
+    },
+    {
+      "method": "bayes",
+      "model_id": "M5",
+      "task": "binary",
+      "outer_fold": "r0f0",
+      "repeat": 0,
+      "fold": 0,
+      "objective": "balanced_accuracy",
+      "seed": 42,
+      "n_trials": 15,
+      "n_trials_ok": 15,
+      "n_inner_folds": 3,
+      "best_score": 0.846453,
+      "best_params": {
+        "n_estimators": 532,
+        "learning_rate": 0.01831652669337469,
+        "max_depth": 2,
+        "subsample": 0.6622684228490661,
+        "min_samples_leaf": 20
+      },
+      "seconds": 1666.904,
+      "stop_reason": "trial budget exhausted (15 trials)",
+      "budget": {
+        "max_trials": 15,
+        "max_seconds": null
+      },
+      "n_rows_touched": 2593,
+      "n_outer_test_rows": 647,
+      "outer_test_rows_touched": 0
+    }
+  ],
+  "method": "bayes",
+  "task": "binary",
+  "objective": "balanced_accuracy",
+  "budget": {
+    "M3": {
+      "max_trials": 40,
+      "max_seconds": null
+    },
+    "M4": {
+      "max_trials": 40,
+      "max_seconds": null
+    },
+    "M5": {
+      "max_trials": 15,
+      "max_seconds": null
+    }
+  },
+  "n_inner_splits": 3,
+  "outer_folds": [
+    "r0f0"
+  ],
+  "smoke": false,
+  "total_seconds": 2816.29,
+  "skopt": {
+    "available": true,
+    "version": "0.10.2",
+    "reason": ""
+  }
+}
