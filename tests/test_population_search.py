@@ -25,16 +25,30 @@ TINY = {"population_size": 6, "generations": 3, "elitism": 1, "tournament_size":
 
 @pytest.fixture(scope="module")
 def data() -> Any:
+    """The real D1 matrix, or a skip.
+
+    Skipped rather than failed when the matrix is absent: it is a parquet file
+    and `*.parquet` is gitignored, so it never reaches CI. Every test below
+    depends on this fixture, so the skip cascades and CI reports "skipped"
+    instead of erroring on a file it was never going to have. Same guard as
+    ``real_d1`` in tests/test_search_no_leakage.py.
+    """
     from src.models import smoke as sm
 
-    return sm.load_task_data("binary")
+    try:
+        return sm.load_task_data("binary")
+    except Exception as error:  # noqa: BLE001 - any missing input is a skip
+        pytest.skip("D1 matrix unavailable (" + type(error).__name__ + "): " + str(error))
 
 
 @pytest.fixture(scope="module")
 def fold(data: Any) -> Any:
     from src.optimization import driver as od
 
-    return od.outer_folds_for("binary", data, repeats=[0], folds=[0])[0]
+    try:
+        return od.outer_folds_for("binary", data, repeats=[0], folds=[0])[0]
+    except Exception as error:  # noqa: BLE001 - a missing DA-07 map is a skip
+        pytest.skip("DA-07 fold 0 unavailable (" + type(error).__name__ + "): " + str(error))
 
 
 def _evaluator(data: Any, fold: Any) -> Any:
