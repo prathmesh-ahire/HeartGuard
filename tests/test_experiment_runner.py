@@ -413,3 +413,69 @@ def test_committed_run_used_the_full_fold_map(exp_id: str) -> None:
             "r" + str(r) + "f" + str(f) for r in range(5) for f in range(5)
         )
     assert set(frame["model_id"]) == set(exp.models)
+
+
+def test_the_physionet_validation_set_skip_is_on_the_record() -> None:
+    """T64.7 asks for the 301-record validation set to be evaluated. It cannot be.
+
+    The folder holds 301 byte-identical copies of training records (Phase 09,
+    Phase 17), so scoring EXP-A1 on it would report training accuracy under a
+    name that reads as external validation. The clause is therefore discharged
+    by a **documented skip**, and this test is what makes that a checked fact
+    rather than a decision someone remembers making: the declaration must say
+    there is no external test, and the reason must be in the missing-outputs
+    report. Weakening either would make the gate pass while the project quietly
+    lost the explanation.
+    """
+    from pathlib import Path as _Path
+
+    from src.utils.config import load_config
+
+    experiments = load_config("experiments").require("experiments")
+    for exp_id in ("EXP-A1", "EXP-A2"):
+        assert experiments[exp_id].get("external_test") is None, (
+            exp_id + " declares an external test set; there is none for D1"
+        )
+
+    report = _Path(load_config("paths").require("outputs.missing_outputs_report"))
+    assert report.is_file(), "missing_outputs_report.txt does not exist"
+    text = report.read_text(encoding="utf-8")
+    assert "T64.5" in text, "the T64.5 skip is not recorded in missing_outputs_report.txt"
+    assert "T20.5" in text
+    assert "byte-identical" in text
+
+
+def test_committed_exp_a1_produced_t08_and_t10() -> None:
+    """T64.6 -- both tables exist, and T08's numbers re-derive from T10's."""
+    import pandas as pd
+
+    from src.evaluation.experiment import Experiment
+    from src.reporting.experiment_report import (
+        T08_FILENAME,
+        T10_FILENAME,
+        format_mean_sd,
+    )
+
+    section = Experiment.load("EXP-A1").output_dir().parent
+    if not (section / T08_FILENAME).is_file():
+        pytest.skip("run scripts/14_binary_tables.py --exp EXP-A1")
+
+    t08 = pd.read_csv(section / T08_FILENAME)
+    t10 = pd.read_csv(section / T10_FILENAME)
+    assert set(t08["model_id"]) == set(t10["model_id"])
+    assert (t08["n_folds"] == 25).all()
+
+    for _, row in t08.iterrows():
+        block = t10[t10["model_id"] == row["model_id"]]
+        assert len(block) == 25
+        for metric in ("sensitivity", "specificity", "balanced_accuracy", "roc_auc"):
+            values = block[metric].to_numpy(dtype=float)
+            assert row[metric] == format_mean_sd(
+                float(np.mean(values)), float(np.std(values, ddof=1))
+            ), row["model_id"] + " " + metric + " does not re-derive from T10"
+
+    # Rule 6, made visible: the rule's winner and accuracy's winner may differ,
+    # and the table must be ranked by the rule.
+    assert t08["ranked_by"].iloc[0] == "sensitivity, balanced_accuracy"
+    assert t08["rank"].tolist() == sorted(t08["rank"].tolist())
+    assert t08.iloc[0]["sensitivity_mean"] == t08["sensitivity_mean"].max()

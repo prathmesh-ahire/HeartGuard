@@ -16,6 +16,12 @@ cache/*
 # Feature matrices and other columnar dumps
 *.parquet
 
+# Experiment resume state (Phase 63). One JSON + one parquet per (model, fold),
+# ~4 MB for a 25-fold six-model run and pure working state: every number in it
+# is already in the committed per_fold_metrics.csv and aggregate_metrics.csv.
+# It exists so an interrupted run resumes, not as a deliverable.
+outputs/**/_checkpoints/
+
 # Run logs — rotating, machine-local, regenerated on every run. The directory
 # itself is kept (outputs/logs/.gitkeep). run_manifest.json and
 # evidence_index.csv are NOT ignored: both are named deliverables (T102.5).

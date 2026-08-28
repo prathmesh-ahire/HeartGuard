@@ -94,3 +94,20 @@ ENTRIES (newest last)
     M9 remains declared in configs/models.yaml with `in_scope: false` so the
     exclusion is visible in the model registry (`registry_frame()` reports it as
     not implemented with this reason) rather than looking like an oversight.
+
+
+[2026-08-28] T64.5 — EXP-A1 evaluation on the 301-record PhysioNet validation set
+  Reason: The set does not exist as a held-out test set. See the T20.5 entry
+    above: all 301 records in `dataset/archive (3)/validation/` are byte-identical
+    duplicates of records already in training-a..f, belonging to 205 subjects
+    that carry 1,108 of the 3,240 training records. Scoring EXP-A1's models on
+    them would report performance on rows those models were trained on, for 25
+    of 25 folds — a number that would look like external validation and would be
+    training accuracy. `external_test` is null for EXP-A1 and EXP-A2 in
+    configs/experiments.yaml, and the runner has no path that would score one.
+  Impact: T08 and T10 carry repeated 5x5 subject-grouped cross-validation only.
+    No "validation set" column exists in either table and no such figure may be
+    quoted. The requirement T64.5 was written to satisfy — an evaluation on data
+    the models never saw — is carried by EXP-D1 (PhysioNet -> CirCor, Phase 71).
+    Decision confirmed with the user 2026-08-26; restated here because T64.5
+    asks for the run by name.
