@@ -908,7 +908,9 @@ def _align_columns(
 # ---------------------------------------------------------------------------
 
 
-def ensemble_members(model_id: str = "M6") -> list[tuple[str, Any]]:
+def ensemble_members(
+    model_id: str = "M6", member_params: dict[str, dict[str, Any]] | None = None
+) -> list[tuple[str, Any]]:
     """The member estimators declared for M6/M7, calibrated per the Phase 48-49 verdicts.
 
     The members do **not** all get the same treatment, and that is deliberate.
@@ -918,6 +920,13 @@ def ensemble_members(model_id: str = "M6") -> list[tuple[str, Any]]:
     measured that it improves gradient boosting's substantially (0.088 -> 0.029).
     Applying one policy to all three would knowingly degrade one member to keep
     the code symmetrical.
+
+    ``member_params`` overrides a member's hyperparameters -- ``{"M3": {"C": 6.1}}``
+    -- and is how EXP-A2 gives the ensemble tuned members (T65.2). Added in
+    Phase 65: an "optimized ensemble" whose members ran on config defaults would
+    be optimized in its weights only, which is not what the comparison claims.
+    The override is applied **before** calibration, so a calibrated member wraps
+    the tuned estimator rather than a default one.
     """
     from src.models import estimators as est
     from src.utils.config import load_config
@@ -927,10 +936,21 @@ def ensemble_members(model_id: str = "M6") -> list[tuple[str, Any]]:
     if not names:
         raise EnsembleError(model_id + " declares no members in configs/models.yaml")
 
+    overrides = dict(member_params or {})
+    unknown = sorted(set(overrides) - set(names))
+    if unknown:
+        raise EnsembleError(
+            model_id
+            + " has no member(s) "
+            + ", ".join(unknown)
+            + "; declared members are "
+            + ", ".join(names)
+        )
+
     to_calibrate = {str(name) for name in (spec.get("calibrate_members") or [])}
     members: list[tuple[str, Any]] = []
     for name in names:
-        estimator = est.build_estimator(name)
+        estimator = est.build_estimator(name, **dict(overrides.get(name, {})))
         if name in to_calibrate:
             from src.models.calibration import CalibratedSVM, calibration_settings
 

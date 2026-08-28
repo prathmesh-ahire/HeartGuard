@@ -44,6 +44,7 @@ __all__ = [
     "index_for_artifact",
     "read_evidence",
     "evidence_index_path",
+    "is_inside_project",
     "verify_evidence",
 ]
 
@@ -74,8 +75,13 @@ def evidence_index_path() -> Path:
         return PROJECT_ROOT / "outputs" / "00_evidence_index" / "evidence_index.csv"
 
 
-def _is_inside_project(path: str | os.PathLike) -> bool:
-    """True when ``path`` lives under the project root."""
+def is_inside_project(path: str | os.PathLike) -> bool:
+    """True when ``path`` lives under the project root.
+
+    Public because more than the evidence index needs the rule: a run written
+    to a scratch directory must not leave rows in the project's index *or* its
+    run manifest, and both call this to decide.
+    """
     try:
         Path(path).resolve().relative_to(PROJECT_ROOT)
     except (ValueError, OSError):
@@ -101,7 +107,7 @@ def _index_for(artifact: str | os.PathLike) -> Path:
     Putting the rule here rather than in each caller means a future phase cannot
     reintroduce the leak by writing one more ``register_evidence`` call.
     """
-    if _is_inside_project(artifact):
+    if is_inside_project(artifact):
         return evidence_index_path()
     return Path(artifact).resolve().parent / "evidence_index.csv"
 

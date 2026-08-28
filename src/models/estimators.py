@@ -537,7 +537,13 @@ def make_m8(**overrides: Any) -> Any:
 # ---------------------------------------------------------------------------
 
 
-def make_ensemble(model_id: str, *, groups: Any = None, **overrides: Any) -> Any:
+def make_ensemble(
+    model_id: str,
+    *,
+    groups: Any = None,
+    member_params: dict[str, dict[str, Any]] | None = None,
+    **overrides: Any,
+) -> Any:
     """M6 (equal weights) or M7 (optimised weights), built from config.
 
     ``groups`` carries the **training fold's** subject ids so the ensemble's
@@ -565,7 +571,7 @@ def make_ensemble(model_id: str, *, groups: Any = None, **overrides: Any) -> Any
 
     search = dict(spec.get("weight_search") or {})
     return SoftVotingEnsemble(
-        estimators=ensemble_members(model_id),
+        estimators=ensemble_members(model_id, member_params),
         weights=params.pop("weights", "equal"),
         inner_cv=int(params.pop("inner_cv", 3)),
         groups=groups,
