@@ -1,0 +1,34 @@
+{
+  "experiment": "SO-06",
+  "formula": "J = alpha*(1 - MacroF1) + beta*(SelectedFeatures/138) + gamma*NormalizedInferenceTime",
+  "minimised": true,
+  "implemented_in": "src/optimization/multi_objective.py",
+  "weights": {
+    "alpha": 0.7,
+    "beta": 0.2,
+    "gamma": 0.1,
+    "n_features_total": 138,
+    "performance_metric": "macro_f1"
+  },
+  "cost_model": {
+    "source": "D:\\Projects\\HeartGuard\\outputs\\03_features\\feature_extraction_timing.csv#min_seconds",
+    "total_seconds": 1.0261934999143705,
+    "seconds": {
+      "chroma": 0.0026759000029414,
+      "dwt": 0.0022132999729365,
+      "envelope": 0.0048958999686874,
+      "frequency": 0.0078467999701388,
+      "mfcc": 0.0039191999821923,
+      "time": 1.0046424000174738
+    }
+  },
+  "inference_time_basis": "per-family extraction seconds; a subset pays a family in full if it keeps any feature from it. Normalised against all families, so the term is bounded in [0, 1] by construction (T61.3).",
+  "inference_time_span_across_configurations": 0.007378530435303454,
+  "inference_time_is_effectively_inert": true,
+  "n_configurations": 44,
+  "n_on_front": 6,
+  "weighting_lattice_resolution": 0.05,
+  "n_weightings_sampled": 231,
+  "seed": 42,
+  "seconds": 2.927631600003224
+}

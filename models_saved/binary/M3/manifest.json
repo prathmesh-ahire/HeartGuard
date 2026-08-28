@@ -145,8 +145,8 @@
   ],
   "model_bytes": 2214025,
   "model_mb": 2.111459,
-  "fit_seconds": 0.99877,
-  "saved_at": "2026-08-27T22:10:01+0530",
+  "fit_seconds": 1.018684,
+  "saved_at": "2026-08-28T17:22:04+0530",
   "package_versions": {
     "numpy": "2.4.6",
     "scipy": "1.17.1",
@@ -181,9 +181,9 @@
     "kaleido": "1.3.0"
   },
   "estimator_class": "Pipeline",
-  "inference_seconds_per_record": 0.00630611,
-  "inference_seconds_per_record_batched": 0.0008279,
-  "inference_batch_speedup": 7.62,
+  "inference_seconds_per_record": 0.00584842,
+  "inference_seconds_per_record_batched": 0.00074489,
+  "inference_batch_speedup": 7.85,
   "inference_n_records": 20,
   "inference_repeats": 3,
   "smoke_metrics": {

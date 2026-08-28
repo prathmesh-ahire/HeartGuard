@@ -1,0 +1,28 @@
+model_id,parameter,distribution,range_or_choices,so_01_selected,so_01_score,so_01_searched,so_02_selected,so_02_score,so_02_searched,final_selected,final_source
+M1,C,log_uniform,"[0.001, 1000.0]",0.41967346752031676,0.853236,True,not searched,,False,0.41967346752031676,SO-01
+M1,l1_ratio,categorical,"{0.0, 0.5, 1.0}",0.0,0.853236,True,not searched,,False,0.0,SO-01
+M1,solver,categorical,"{lbfgs, liblinear, saga}",saga,0.853236,True,not searched,,False,saga,SO-01
+M1,max_iter,categorical,"{1000, 2000, 5000}",2000,0.853236,True,not searched,,False,2000,SO-01
+M2,n_neighbors,int_uniform,"[3.0, 31.0]",not searched,,False,not searched,,False,not searched,not searched
+M2,weights,categorical,"{uniform, distance}",not searched,,False,not searched,,False,not searched,not searched
+M2,metric,categorical,"{minkowski, manhattan, chebyshev}",not searched,,False,not searched,,False,not searched,not searched
+M2,p,categorical,"{1, 2}",not searched,,False,not searched,,False,not searched,not searched
+M3,C,log_uniform,"[0.01, 1000.0]",129.95951034240832,0.801297,True,6.080853138876636,0.805669,True,6.080853138876636,SO-02
+M3,gamma,log_uniform,"[0.0001, 10.0]",0.01648431838721491,0.801297,True,0.012310376665498595,0.805669,True,0.012310376665498595,SO-02
+M3,class_weight,categorical,"{balanced, None}",None,0.801297,True,None,0.805669,True,None,SO-02
+M4,n_estimators,int_uniform,"[100.0, 1000.0]",195,0.848788,True,383,0.846834,True,383,SO-02
+M4,max_depth,categorical,"{None, 5, 10, 20, 30}",None,0.848788,True,30,0.846834,True,30,SO-02
+M4,min_samples_leaf,int_uniform,"[1.0, 10.0]",8,0.848788,True,10,0.846834,True,10,SO-02
+M4,max_features,categorical,"{sqrt, log2, 0.3, 0.5}",0.3,0.848788,True,0.5,0.846834,True,0.5,SO-02
+M4,class_weight,categorical,"{balanced, balanced_subsample, None}",None,0.848788,True,balanced,0.846834,True,balanced,SO-02
+M5,n_estimators,int_uniform,"[100.0, 800.0]",144,0.844525,True,532,0.846453,True,532,SO-02
+M5,learning_rate,log_uniform,"[0.001, 0.5]",0.17129776945584144,0.844525,True,0.01831652669337469,0.846453,True,0.01831652669337469,SO-02
+M5,max_depth,int_uniform,"[2.0, 8.0]",3,0.844525,True,2,0.846453,True,2,SO-02
+M5,subsample,uniform,"[0.6, 1.0]",0.9032350960341495,0.844525,True,0.6622684228490661,0.846453,True,0.6622684228490661,SO-02
+M5,min_samples_leaf,int_uniform,"[1.0, 20.0]",13,0.844525,True,20,0.846453,True,20,SO-02
+M8,n_estimators,int_uniform,"[100.0, 1000.0]",985,0.84998,True,not searched,,False,985,SO-01
+M8,learning_rate,log_uniform,"[0.001, 0.5]",0.012665039695654063,0.84998,True,not searched,,False,0.012665039695654063,SO-01
+M8,max_depth,int_uniform,"[2.0, 10.0]",3,0.84998,True,not searched,,False,3,SO-01
+M8,subsample,uniform,"[0.6, 1.0]",0.9413612293072664,0.84998,True,not searched,,False,0.9413612293072664,SO-01
+M8,colsample_bytree,uniform,"[0.5, 1.0]",0.6169697429326704,0.84998,True,not searched,,False,0.6169697429326704,SO-01
+M8,reg_lambda,log_uniform,"[0.01, 100.0]",0.017108461891527735,0.84998,True,not searched,,False,0.017108461891527735,SO-01

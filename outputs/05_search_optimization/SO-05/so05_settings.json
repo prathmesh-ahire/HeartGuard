@@ -1,0 +1,46 @@
+{
+  "experiment": "SO-05",
+  "methods": {
+    "equal": "equal weights (M6 baseline, not optimized)",
+    "grid": "exhaustive simplex lattice (T60.1)",
+    "slsqp": "SciPy SLSQP on the objective itself (T60.2)",
+    "slsqp_logloss": "SciPy SLSQP on a differentiable log-loss surrogate (T60.2)"
+  },
+  "members": [
+    "M3",
+    "M4",
+    "M5"
+  ],
+  "objective": "balanced_accuracy",
+  "inner_splits": 3,
+  "outer_folds": [
+    "r0f0",
+    "r0f1",
+    "r0f2",
+    "r0f3",
+    "r0f4",
+    "r1f0",
+    "r1f1",
+    "r1f2",
+    "r1f3",
+    "r1f4",
+    "r2f0",
+    "r2f1",
+    "r2f2",
+    "r2f3",
+    "r2f4",
+    "r3f0",
+    "r3f1",
+    "r3f2",
+    "r3f3",
+    "r3f4",
+    "r4f0",
+    "r4f1",
+    "r4f2",
+    "r4f3",
+    "r4f4"
+  ],
+  "grid_resolution": 0.05,
+  "n_standard_errors": 1.0,
+  "seed": 42
+}

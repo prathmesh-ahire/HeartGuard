@@ -245,9 +245,19 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         # -- the declared search spaces (T46.2, T46.4, T47.3) ----------------
+        #
+        # Built from EVERY declared model, not from `--models`. This table is a
+        # registry of what the config declares, not a record of what this run
+        # fitted, and T07 (Phase 62) reads it. Building it from the subset meant
+        # that re-running two models to fix one of them silently truncated it to
+        # those two -- which is exactly what happened on 2026-08-28 when M6 and M7
+        # were re-run alone and the table went from 28 rows to 0, because those
+        # two declare no hyperparameters at all.
+        from src.models import registry as model_registry
+
         described = []
         constraint_notes: list[str] = []
-        for model_id in args.models:
+        for model_id in model_registry.model_ids():
             space = spaces.load_space(model_id)
             frame = spaces.describe_space(space)
             described.append(frame)

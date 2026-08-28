@@ -64,6 +64,7 @@ __all__ = [
     "ThresholdChoice",
     "fuse_probabilities",
     "simplex_grid",
+    "weight_candidates",
     "select_threshold",
     "ensemble_members",
 ]
@@ -143,6 +144,32 @@ def simplex_grid(n_members: int, resolution: float = 0.05) -> np.ndarray:
 # ---------------------------------------------------------------------------
 # the objective and the threshold (T50.4)
 # ---------------------------------------------------------------------------
+
+
+def weight_candidates(n_members: int, resolution: float = 0.05) -> np.ndarray:
+    """``simplex_grid`` with the exact equal-weight vector guaranteed present.
+
+    FIXED 2026-08-28, on measurement. The one-standard-error rule below shrinks
+    toward "the candidate closest to equal weights, which is M6" -- but equal
+    weights was not in the candidate set. For three members it is
+    (1/3, 1/3, 1/3), and 1/3 is not a multiple of any decimal resolution: at
+    0.05 the nearest lattice point is (0.30, 0.35, 0.35), 0.0408 away, and
+    refining to 0.01 only closes it to 0.0082. It is never exactly representable.
+
+    Measured consequence on D1 fold 0, where 181 of 231 candidates sat inside the
+    margin -- so the rule was firmly in fall-back mode: M7 returned
+    (0.30, 0.35, 0.35) scoring 0.859130, while equal weights scores 0.859583.
+    The shrinkage landed BELOW the baseline it was shrinking toward, and the
+    published weight vector was an artifact of lattice spacing rather than of
+    evidence. With the exact point present, M7 returns equal weights whenever the
+    evidence does not exceed the noise -- which is what the rule always claimed
+    to do. See the 2026-08-28 Phases 60-62 entry in Docs/note.md.
+    """
+    lattice = simplex_grid(int(n_members), float(resolution))
+    centre = np.full(int(n_members), 1.0 / float(n_members), dtype=float)
+    if np.isclose(np.linalg.norm(lattice - centre, axis=1), 0.0).any():
+        return lattice
+    return np.vstack([centre[None, :], lattice])
 
 
 def _sensitivity_specificity(
@@ -704,7 +731,7 @@ class SoftVotingEnsemble(BaseEstimator, ClassifierMixin):
         threshold the model will actually use, and on an imbalanced task the two
         can differ substantially.
         """
-        grid = simplex_grid(len(self._declared_members()), self.weight_resolution)
+        grid = weight_candidates(len(self._declared_members()), self.weight_resolution)
         score_function = OBJECTIVES[self.objective]
 
         if self.classes_.size != 2:

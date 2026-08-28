@@ -1,0 +1,22 @@
+{
+  "ranker": "gb_importance",
+  "k": 20,
+  "macro_f1": 0.8323070641442019,
+  "macro_f1_se": 0.008146202183466197,
+  "n_selected": 20.0,
+  "normalized_inference_time": 0.9999999999999998,
+  "families": "chroma;dwt;envelope;frequency;mfcc;time",
+  "on_pareto_front": true,
+  "source": "SO-04 T57.5; SO-06 places it, it does not re-choose it",
+  "share_of_weight_space": 0.9090909090909091,
+  "n_weightings_sampled": 231,
+  "selection_rule": "min_j_within_1.0_se_of_best_macro_f1",
+  "configured_weights": {
+    "alpha": 0.7,
+    "beta": 0.2,
+    "gamma": 0.1,
+    "n_features_total": 138,
+    "performance_metric": "macro_f1"
+  },
+  "j_at_configured_weights": 0.24637056234543547
+}
