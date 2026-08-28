@@ -20,6 +20,22 @@ gate has actually passed.
 
 ---
 
+## Phase 64 — EXP-A1 PhysioNet binary baseline
+**Gate:** T64.7 — all six mandatory models run on the **identical 25-fold map** (150 units, zero train/test group overlap in any fold), per-fold values persisted for the paired tests in Phase 81, and T08 and T10 produced with mean ± SD and re-derivable from each other; the 301-record validation-set clause discharged by a **documented skip** with its reason asserted by a test — PASS (30 tests)
+**Added:** `outputs/06_binary_results/EXP-A1/` (the six-file contract: per-fold and aggregate metrics, predictions, confusion matrices, config snapshot, embedded run manifest), `outputs/06_binary_results/T08_individual_model_comparison.csv`, `T10_fold_wise_results.csv`, `T10_fold_wise_summary.csv`, `src/reporting/experiment_report.py`, `scripts/14_binary_tables.py`
+**Changed:** `outputs/missing_outputs_report.txt` (T64.5), `tests/test_experiment_runner.py`, `.gitignore` (`_checkpoints/`), `Docs/todo.md`, `Docs/note.md`
+**Notes:** 88 minutes, default hyperparameters throughout. Ranked by the documented rule — M6 soft voting sens **0.8791 ± 0.0612** / bal **0.8588 ± 0.0255**, then M1, M5, M8, M4, M3. **Raw accuracy would have ranked M4 first (0.8978) where the rule ranks it fifth**, 13.2 sensitivity points behind M6 — rule 6 changing a real decision for the first time. T64.5 is `[-]`: the 301 "validation" records are byte-identical copies of training records, so scoring them would report training accuracy under a heading that reads as external validation.
+
+---
+
+## Phase 63 — Experiment runner and the output contract
+**Gate:** T63.7 — one experiment run end to end through `scripts/11_run_experiment.py`, its six-file contract complete and non-empty, the aggregate re-derivable from the per-fold table, predictions covering every record once per repeat, and resume-on-restart skipping five completed folds while a **key-mismatched** checkpoint is recomputed rather than reused — PASS (27 tests)
+**Added:** `src/evaluation/experiment.py` (`Experiment` from `configs/experiments.yaml`, the `ModelPlanner` seam, per-(model, fold) checkpointing), `src/evaluation/tuned.py` (the T07, nested-search and SO-04-subset planners, and the selection rule), `scripts/11_run_experiment.py`, `scripts/12_run_all_experiments.py` (dependency order computed from `depends_on`, never typed), `scripts/13_finalize_binary_model.py`, `tests/test_experiment_runner.py`, `tests/test_experiment_tuned.py`
+**Changed:** `src/ensemble/soft_voting.py` and `src/models/estimators.py` (`member_params`, so a tuned ensemble has tuned members), `src/utils/evidence.py` (`is_inside_project` made public), `Docs/todo.md`, `Docs/note.md`
+**Notes:** Resume is keyed on a hash of fold **membership**, planner recipe, pipeline config, registry fingerprint and seed — not on the file existing — so a checkpoint written under a different configuration is recomputed. A scratch `--out-dir` smoke was found writing six temp paths into the real run manifest; `write_outputs` now records nothing in the project's manifest or evidence index for a run outside the project root. Script numbering drifts from `todo.md` (11/12/13 for 03/04); see `Docs/note.md`.
+
+---
+
 ## Phases 60-62 — Ensemble weight optimization (SO-05), the Pareto front (SO-06), and Part VI reporting
 **Gate:** T60.7 / T61.7 / T62.7 — every emitted weight vector non-negative and summing to 1, with per-fold weight variance reported over **25 outer folds**; J implemented exactly as the blueprint documents it, its inference-time term bounded in [0,1] over every reachable family subset, and the Pareto data exported; T07, G20, G21 and G22 present with their source CSVs, and every SO artifact registered in the evidence index — PASS (21 + 17 + 24 tests)
 **Added:** `src/optimization/weights.py` (SO-05: simplex grid, SLSQP on the objective and on a smooth surrogate, the stability table), `src/optimization/pareto.py` (SO-06: domination, the weighting sweep, the operating point), `src/reporting/search_report.py` (T07, G20, G21, G22), `scripts/08_run_weight_optimization.py`, `scripts/09_run_multi_objective.py`, `scripts/10_search_reports.py`, `tests/test_weight_optimization.py`, `tests/test_multi_objective.py`, `tests/test_search_reports.py`; `outputs/05_search_optimization/{SO-05,SO-06}/`, T07, and G20-G22 in `outputs/13_figures_diagrams/`
