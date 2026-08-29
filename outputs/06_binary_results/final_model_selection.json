@@ -1,0 +1,56 @@
+{
+  "model_id": "M1",
+  "rule": [
+    "sensitivity",
+    "balanced_accuracy"
+  ],
+  "ranking": [
+    {
+      "rank": 1,
+      "model_id": "M1",
+      "sensitivity_mean": 0.8648233891627352,
+      "balanced_accuracy_mean": 0.8468043977525701
+    },
+    {
+      "rank": 2,
+      "model_id": "M6",
+      "sensitivity_mean": 0.8615469513693752,
+      "balanced_accuracy_mean": 0.8558631699470313
+    },
+    {
+      "rank": 3,
+      "model_id": "M7",
+      "sensitivity_mean": 0.8615380387134037,
+      "balanced_accuracy_mean": 0.8555880661827883
+    },
+    {
+      "rank": 4,
+      "model_id": "M8",
+      "sensitivity_mean": 0.8218651609921878,
+      "balanced_accuracy_mean": 0.8482519737790061
+    },
+    {
+      "rank": 5,
+      "model_id": "M4",
+      "sensitivity_mean": 0.8193179675801403,
+      "balanced_accuracy_mean": 0.8523598911722676
+    },
+    {
+      "rank": 6,
+      "model_id": "M5",
+      "sensitivity_mean": 0.8130747740507671,
+      "balanced_accuracy_mean": 0.8471607213499192
+    },
+    {
+      "rank": 7,
+      "model_id": "M3",
+      "sensitivity_mean": 0.6671634033396946,
+      "balanced_accuracy_mean": 0.7997979696844384
+    }
+  ],
+  "accuracy_would_have_chosen": "M3",
+  "rule_and_accuracy_agree": false,
+  "exp_id": "EXP-A2",
+  "n_folds": 25,
+  "note": "Research rule 6: selection prioritises sensitivity and balanced accuracy, never raw accuracy. `accuracy_would_have_chosen` records what a raw-accuracy rule would have picked instead."
+}

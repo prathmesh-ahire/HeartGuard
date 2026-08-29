@@ -1,0 +1,119 @@
+exp_id: EXP-A2
+run_id: EXP-A2-so04_subset
+variant: so04_subset
+title: PhysioNet 2016 binary optimized
+phase: 65
+task: binary
+dataset: d1_physionet
+models:
+- M1
+- M3
+- M4
+- M5
+- M6
+- M7
+- M8
+cv: repeated_5x5_grouped
+cv_scheme:
+  kind: RepeatedStratifiedGroupKFold
+  n_splits: 5
+  n_repeats: 5
+  total_folds: 25
+  group_key: subject_id
+  shuffle: true
+  random_state: 42
+tuned: true
+nested: true
+emits:
+- T09
+label_space:
+  normal: 0
+  abnormal: 1
+scoring: balanced_accuracy
+report_metrics:
+- accuracy
+- sensitivity
+- specificity
+- precision
+- f1
+- balanced_accuracy
+- roc_auc
+- pr_auc
+- mcc
+- brier
+- ece
+selection_rule:
+- sensitivity
+- balanced_accuracy
+seed: 42
+output_section: 06_binary_results
+declaration:
+  title: PhysioNet 2016 binary optimized
+  phase: 65
+  dataset: d1_physionet
+  task: binary
+  label_space:
+    normal: 0
+    abnormal: 1
+  models:
+  - M1
+  - M3
+  - M4
+  - M5
+  - M6
+  - M7
+  - M8
+  tuned: true
+  tuning_source:
+  - SO-01
+  - SO-02
+  ensemble_weights_source: SO-05
+  feature_subset_source: SO-04
+  cv: repeated_5x5_grouped
+  nested: true
+  external_test: null
+  output_section: 06_binary_results
+  emits:
+  - T09
+  final_model_path: models_saved/binary/final/
+  notes: 'Nested CV. The outer fold is never seen by any search. Selection follows
+    the sensitivity-and-balanced-accuracy rule, not accuracy.
+
+    '
+run:
+  models_run:
+  - M6
+  - M7
+  folds_run:
+  - r0f0
+  - r0f1
+  - r0f2
+  - r0f3
+  - r0f4
+  - r1f0
+  - r1f1
+  - r1f2
+  - r1f3
+  - r1f4
+  - r2f0
+  - r2f1
+  - r2f2
+  - r2f3
+  - r2f4
+  - r3f0
+  - r3f1
+  - r3f2
+  - r3f3
+  - r3f4
+  - r4f0
+  - r4f1
+  - r4f2
+  - r4f3
+  - r4f4
+  n_folds_run: 25
+  n_units: 50
+  n_computed: 50
+  n_resumed: 0
+  seconds: 4000.92
+  command: python scripts/11_run_experiment.py --exp EXP-A2 --planner nested_subset
+    --variant so04_subset

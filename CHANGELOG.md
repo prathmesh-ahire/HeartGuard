@@ -20,6 +20,14 @@ gate has actually passed.
 
 ---
 
+## Phase 65 — EXP-A2 PhysioNet binary optimized
+**Gate:** T65.7 — every one of the 175 units tuned by a search run **inside its own outer training fold** (`planner_tuning = nested-bayes` on all 175 rows, zero outer-test rows touched by any search), the outer map identical to EXP-A1's so the two pair fold-for-fold, selection following the sensitivity-then-balanced-accuracy rule, and the final model persisted with its 138 feature names — PASS (49 tests, none skipped)
+**Added:** `outputs/06_binary_results/EXP-A2/` and `EXP-A2-so04_subset/` (six-file contracts), `T09_ensemble_weight_comparison.csv`, `T09_ensemble_weight_summary.csv`, `final_model_selection.csv`/`.json`, `models_saved/binary/final/` (model + manifest)
+**Changed:** `Docs/todo.md`, `Docs/note.md`
+**Notes:** 12 Bayesian trials per model per outer fold (5 for M5) — a **reduced** budget against the ~31 h full-budget alternative, and it must be described that way rather than as "tuned" unqualified. **The final model is M1, a regularised logistic regression, and it is statistically tied with the M6 ensemble** (sensitivity 0.8648 vs 0.8615, p = 0.797, M1 winning 13 of 25 folds); the lexicographic rule stopped at that noise-level lead. The rule was **deliberately not changed** — a one-standard-error tie-band would select M6 but would have been adopted after seeing it flips the winner. M1 is also 190× faster at inference, which is what SO-06's complexity principle independently selects. Tuning improved every individual model (M4 +7.2, M8 +6.6 sensitivity points) but made **the ensembles slightly worse**. M7 equals M6 on 23 of 25 folds, reproducing SO-05's negative result at full scale. Full reasoning in `Docs/note.md`.
+
+---
+
 ## Phase 64 — EXP-A1 PhysioNet binary baseline
 **Gate:** T64.7 — all six mandatory models run on the **identical 25-fold map** (150 units, zero train/test group overlap in any fold), per-fold values persisted for the paired tests in Phase 81, and T08 and T10 produced with mean ± SD and re-derivable from each other; the 301-record validation-set clause discharged by a **documented skip** with its reason asserted by a test — PASS (30 tests)
 **Added:** `outputs/06_binary_results/EXP-A1/` (the six-file contract: per-fold and aggregate metrics, predictions, confusion matrices, config snapshot, embedded run manifest), `outputs/06_binary_results/T08_individual_model_comparison.csv`, `T10_fold_wise_results.csv`, `T10_fold_wise_summary.csv`, `src/reporting/experiment_report.py`, `scripts/14_binary_tables.py`

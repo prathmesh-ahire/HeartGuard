@@ -22,6 +22,12 @@ cache/*
 # It exists so an interrupted run resumes, not as a deliverable.
 outputs/**/_checkpoints/
 
+# Nested-search cache (Phase 65). One JSON per (method, model, outer fold): the
+# best point that fold's inner search chose. Working state, so M6/M7 do not
+# re-search their members and a restart does not redo nine hours of search. The
+# points themselves are recorded per fold in EXP-A2's per_fold_metrics.csv.
+outputs/05_search_optimization/_nested_search_cache/
+
 # Run logs — rotating, machine-local, regenerated on every run. The directory
 # itself is kept (outputs/logs/.gitkeep). run_manifest.json and
 # evidence_index.csv are NOT ignored: both are named deliverables (T102.5).
