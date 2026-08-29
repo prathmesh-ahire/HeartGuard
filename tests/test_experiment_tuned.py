@@ -381,7 +381,49 @@ def test_the_final_model_is_persisted_with_its_feature_list() -> None:
     assert manifest["selection_rule"] == ["sensitivity", "balanced_accuracy"]
     assert manifest["hyperparameter_source"]
     assert "screening" in manifest["disclaimer"].lower()
-    assert (directory / "model.joblib").is_file()
+    # The .joblib itself is NOT asserted here: `models_saved/**/*.joblib` is
+    # gitignored on purpose (Phase 51), so the binary never reaches CI while the
+    # manifest -- which is the actual deliverable -- always does. Asserting the
+    # binary made this test fail on CI for a file it was never going to have.
+    # The binary is checked by the test below, which skips when it is absent.
+
+
+def test_the_persisted_model_loads_and_predicts() -> None:
+    """The saved pipeline round-trips: it loads, keeps its columns, and predicts.
+
+    Skips where the gitignored binary is absent (CI, a fresh clone), like every
+    other test over a gitignored artifact. Where it *is* present this is a
+    stronger check than asserting the file exists -- a corrupt or
+    wrong-shaped pipeline would pass a file-exists assertion and fail here.
+    """
+    from pathlib import Path as _Path
+
+    from src.utils.config import load_config
+
+    directory = _Path(load_config("paths").require("models_saved")) / "binary" / "final"
+    if not (directory / "model.joblib").is_file():
+        pytest.skip(
+            str(directory / "model.joblib")
+            + " is absent; models_saved/**/*.joblib is gitignored, so this is "
+            "expected on CI and on a fresh clone"
+        )
+
+    import joblib
+
+    from src.feature_extraction.registry import feature_names
+
+    pipeline = joblib.load(directory / "model.joblib")
+    names = list(feature_names())
+    assert pipeline.n_features_in_ == len(names)
+
+    rng = np.random.default_rng(42)
+    sample = rng.normal(size=(8, len(names)))
+    predicted = np.asarray(pipeline.predict(sample))
+    assert predicted.shape == (8,)
+    assert set(predicted.tolist()) <= {0, 1}
+    proba = np.asarray(pipeline.predict_proba(sample))
+    assert proba.shape == (8, 2)
+    assert np.allclose(proba.sum(axis=1), 1.0, atol=1e-6)
 
 
 def test_t09_compares_the_two_ensembles_fold_by_fold() -> None:
