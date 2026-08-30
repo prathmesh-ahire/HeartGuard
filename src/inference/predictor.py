@@ -65,7 +65,7 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal, overload
 
 import numpy as np
 
@@ -81,6 +81,7 @@ __all__ = [
     "ModelBundle",
     "ModelUnavailableError",
     "PredictionResult",
+    "RecordingDetail",
     "TaskSpec",
     "available_tasks",
     "clear_bundle_cache",
@@ -209,6 +210,25 @@ class ModelBundle:
     @property
     def classes(self) -> tuple[str, ...]:
         return TASKS[self.task].classes
+
+
+@dataclass(frozen=True)
+class RecordingDetail:
+    """The intermediates a prediction passed through, for a caller that renders them.
+
+    Phase 107's report has to draw the waveform and the spectrogram of the signal
+    that was scored, and decompose the vector that was scored. Recomputing either
+    from the same path would be a second copy of the most expensive half of the
+    pipeline, and a second copy can drift; this hands back the arrays
+    `predict_recording` actually used. It is deliberately not part of
+    `PredictionResult` — it is large, it is not JSON, and no API response wants it.
+    """
+
+    signal: np.ndarray
+    fs: int
+    vector: np.ndarray
+    feature_names: tuple[str, ...]
+    bundle: ModelBundle
 
 
 @dataclass
@@ -459,6 +479,30 @@ def validate_recording(path: str | Path) -> dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 
+@overload
+def predict_recording(
+    path: str | Path,
+    *,
+    task: str = ...,
+    bundle: ModelBundle | None = ...,
+    record_uid: str | None = ...,
+    use_cache: bool = ...,
+    with_detail: Literal[False] = ...,
+) -> PredictionResult: ...
+
+
+@overload
+def predict_recording(
+    path: str | Path,
+    *,
+    task: str = ...,
+    bundle: ModelBundle | None = ...,
+    record_uid: str | None = ...,
+    use_cache: bool = ...,
+    with_detail: Literal[True],
+) -> tuple[PredictionResult, RecordingDetail]: ...
+
+
 def predict_recording(
     path: str | Path,
     *,
@@ -466,12 +510,17 @@ def predict_recording(
     bundle: ModelBundle | None = None,
     record_uid: str | None = None,
     use_cache: bool = False,
-) -> PredictionResult:
+    with_detail: bool = False,
+) -> PredictionResult | tuple[PredictionResult, RecordingDetail]:
     """Score one recording. The public entry point for every task.
 
     `record_uid` is for corpus records only: it lets the preprocessing cache be
     reused when re-scoring something already in the audit. An upload has no uid
     and must not invent one, so `use_cache` defaults to False.
+
+    `with_detail=True` additionally returns the signal and the feature vector
+    that were scored, for a caller that has to render them (Phase 107's report).
+    It changes nothing about the prediction.
     """
     from src.feature_extraction.extractor import extract_all
     from src.preprocessing.pipeline import preprocess
@@ -534,7 +583,7 @@ def predict_recording(
             + " probabilities"
         )
 
-    return PredictionResult(
+    result = PredictionResult(
         task=loaded.task,
         predicted_class=classes[top],
         predicted_index=top,
@@ -569,11 +618,24 @@ def predict_recording(
             "saved_at": loaded.manifest.get("saved_at"),
             "n_records_fitted": loaded.manifest.get("n_records_fitted"),
             "selection_rule": loaded.manifest.get("selection_rule"),
+            # The deployed bundle's own caveat about what its fit does and does
+            # not estimate. A report that says "fitted on 3,240 records" without
+            # it invites exactly the in-sample reading this project refuses.
+            "note": loaded.manifest.get("note"),
             "package_versions": loaded.manifest.get("package_versions", {}),
             "path": str(loaded.path),
         },
         source=info["name"],
         warnings=warnings,
+    )
+    if not with_detail:
+        return result
+    return result, RecordingDetail(
+        signal=prepared.signal,
+        fs=int(prepared.fs),
+        vector=vector,
+        feature_names=loaded.feature_names,
+        bundle=loaded,
     )
 
 
