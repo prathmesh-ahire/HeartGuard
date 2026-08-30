@@ -1,0 +1,42 @@
+{
+  "figure_id": "G08",
+  "figure_number": 8,
+  "title": "Chroma Heatmap",
+  "caption": "The 12 chroma bins over the first 6 seconds of D1_training-e_e02008 (PhysioNet 2016, 17.6 s). Chroma is a musical-pitch construct with no physiological meaning for heart sounds; it is used here purely as a generic harmonic-distribution descriptor. The colour scale spans the actual range rather than a nominal 0-1, because the real dynamic range on this corpus is narrow and that flatness is itself the point.",
+  "exp_id": "n/a (not experiment-bound)",
+  "objective": "O4 (feature engineering)",
+  "dataset": "D1",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-08-30T10:49:04.741672+00:00",
+  "command": "python scripts/19_data_graphs.py --figures G01 G02 G03 G04 G05 G06 G07 G08 G09 G10",
+  "plotted_rows": 12,
+  "plotted_csv": "G08_chroma_heatmap.csv",
+  "plotted_csv_sha256": "497d0d403353235c0284a7ec4dea7226e03257462d149d3f01ff603d43558a70",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "dataset/ (read-only) via src/preprocessing/pipeline.py",
+      "exists": false,
+      "bytes": null,
+      "sha256": null,
+      "digest_method": null,
+      "modified_utc": null
+    },
+    {
+      "path": "outputs/03_features/feature_inventory.csv",
+      "exists": true,
+      "bytes": 15053,
+      "sha256": "c8ef5eba74006474ac11c45db487aebdc4ef1cbd9fdce0366ba612e4b61c876a",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-27T07:49:03.936944+00:00"
+    }
+  ],
+  "written": {
+    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G08_chroma_heatmap.csv",
+    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G08_chroma_heatmap.png"
+  },
+  "notes": []
+}

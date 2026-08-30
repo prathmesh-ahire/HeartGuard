@@ -1,0 +1,42 @@
+{
+  "figure_id": "G06",
+  "figure_number": 6,
+  "title": "Normal Versus Abnormal Spectrogram",
+  "caption": "Spectrograms of one normal and one abnormal PhysioNet recording over the same 6-second window, on a shared colour scale so the two panels are comparable. Both records are the ones nearest their class median duration under the Phase 28 selection rule. The y-axis is limited to the 20-400 Hz passband the preprocessing keeps.",
+  "exp_id": "n/a (not experiment-bound)",
+  "objective": "O3 (preprocessing pipeline)",
+  "dataset": "D1",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-08-30T10:48:59.810756+00:00",
+  "command": "python scripts/19_data_graphs.py --figures G01 G02 G03 G04 G05 G06 G07 G08 G09 G10",
+  "plotted_rows": 514,
+  "plotted_csv": "G06_normal_versus_abnormal_spectrogram.csv",
+  "plotted_csv_sha256": "39bd32b4831ea0c6f416c3c5b40fee4d18ce3d8b8f7a64026d91476821e2db64",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "dataset/ (read-only) via src/preprocessing/pipeline.py",
+      "exists": false,
+      "bytes": null,
+      "sha256": null,
+      "digest_method": null,
+      "modified_utc": null
+    },
+    {
+      "path": "outputs/01_dataset_audit/metadata_master.csv",
+      "exists": true,
+      "bytes": 1995833,
+      "sha256": "1ef1284faeba8b6428691fea92077e203e549b9895e85f821d562da5c6cd1371",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-25T19:31:02.054015+00:00"
+    }
+  ],
+  "written": {
+    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G06_normal_versus_abnormal_spectrogram.csv",
+    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G06_normal_versus_abnormal_spectrogram.png"
+  },
+  "notes": []
+}

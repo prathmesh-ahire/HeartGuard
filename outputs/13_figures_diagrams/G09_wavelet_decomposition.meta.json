@@ -1,0 +1,42 @@
+{
+  "figure_id": "G09",
+  "figure_number": 9,
+  "title": "Wavelet Decomposition",
+  "caption": "The 5-level db4 sub-bands of the first 6 seconds of D1_training-e_e02008 (PhysioNet 2016, 17.6 s). The y-axes are independent: sub-band amplitudes span three orders of magnitude and a shared scale would draw most of them as flat lines. Only cD1 lies wholly outside the 20-400 Hz passband, and it carries a median 0.2% of the decomposition energy across the corpus.",
+  "exp_id": "n/a (not experiment-bound)",
+  "objective": "O4 (feature engineering)",
+  "dataset": "D1",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-08-30T10:49:09.156708+00:00",
+  "command": "python scripts/19_data_graphs.py --figures G01 G02 G03 G04 G05 G06 G07 G08 G09 G10",
+  "plotted_rows": 12032,
+  "plotted_csv": "G09_wavelet_decomposition.csv",
+  "plotted_csv_sha256": "746c07360349ee6de7b9d17cd9cf621a2b315510329b791d0a490ac6b81ba6bd",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "dataset/ (read-only) via src/preprocessing/pipeline.py",
+      "exists": false,
+      "bytes": null,
+      "sha256": null,
+      "digest_method": null,
+      "modified_utc": null
+    },
+    {
+      "path": "outputs/03_features/feature_inventory.csv",
+      "exists": true,
+      "bytes": 15053,
+      "sha256": "c8ef5eba74006474ac11c45db487aebdc4ef1cbd9fdce0366ba612e4b61c876a",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-27T07:49:03.936944+00:00"
+    }
+  ],
+  "written": {
+    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G09_wavelet_decomposition.csv",
+    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G09_wavelet_decomposition.png"
+  },
+  "notes": []
+}

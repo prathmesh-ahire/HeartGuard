@@ -1,0 +1,52 @@
+{
+  "figure_id": "G05",
+  "figure_number": 5,
+  "title": "Before And After Filtering",
+  "caption": "The first 6 seconds of D1_training-b_b0406 (PhysioNet 2016, 8.0 s), raw against bandpass-filtered. The y-axes are shared, so the amplitude reduction is the filter removing baseline wander rather than a change of scale. The record is the D1 recording with the largest sub-20 Hz power relative to the passband, selected by the deterministic Phase 28 rule.",
+  "exp_id": "n/a (not experiment-bound)",
+  "objective": "O3 (preprocessing pipeline)",
+  "dataset": "D1",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-08-30T10:48:57.155178+00:00",
+  "command": "python scripts/19_data_graphs.py --figures G01 G02 G03 G04 G05 G06 G07 G08 G09 G10",
+  "plotted_rows": 12000,
+  "plotted_csv": "G05_before_and_after_filtering.csv",
+  "plotted_csv_sha256": "88e122c6c1cd72f79a74e058c53beccf851aa371fc12d52f9a9ddef04b3c216a",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "dataset/ (read-only) via src/preprocessing/pipeline.py",
+      "exists": false,
+      "bytes": null,
+      "sha256": null,
+      "digest_method": null,
+      "modified_utc": null
+    },
+    {
+      "path": "outputs/01_dataset_audit/metadata_master.csv",
+      "exists": true,
+      "bytes": 1995833,
+      "sha256": "1ef1284faeba8b6428691fea92077e203e549b9895e85f821d562da5c6cd1371",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-25T19:31:02.054015+00:00"
+    },
+    {
+      "path": "outputs/02_preprocessing/signal_quality_flags.csv",
+      "exists": true,
+      "bytes": 1876922,
+      "sha256": "1b8f004435ef0f8787f46520ad4f0883d93113ca75e04a3f59df682e2084d1f2",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-26T11:46:51.948505+00:00"
+    }
+  ],
+  "written": {
+    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G05_before_and_after_filtering.csv",
+    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G05_before_and_after_filtering.png"
+  },
+  "notes": [
+    "Raw here is resampled to the 2 kHz working rate but otherwise untouched: no filter, no normalization."
+  ]
+}

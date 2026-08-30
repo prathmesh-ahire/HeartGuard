@@ -1,0 +1,34 @@
+{
+  "figure_id": "G03",
+  "figure_number": 3,
+  "title": "Class Distribution Shares",
+  "caption": "The same counts as G02 as within-task shares. Percentages are of the task's own supervised total, never of the whole corpus: the five label spaces cover different record sets and a share across them would be meaningless.",
+  "exp_id": "n/a (not experiment-bound)",
+  "objective": "O1 (corpus definition)",
+  "dataset": null,
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-08-30T10:48:49.856133+00:00",
+  "command": "python scripts/19_data_graphs.py --figures G01 G02 G03 G04 G05 G06 G07 G08 G09 G10",
+  "plotted_rows": 14,
+  "plotted_csv": "G03_class_distribution_shares.csv",
+  "plotted_csv_sha256": "ce9643fbf85947c6da4694a172c31887b9dbbb3119866547b4a591bb90bade0b",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "outputs/01_dataset_audit/class_distribution.csv",
+      "exists": true,
+      "bytes": 2021,
+      "sha256": "88704a2605a2bb42abe28b499284406af82e0de240e3549d5d98e6b1ffd89e0e",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-25T19:30:59.183621+00:00"
+    }
+  ],
+  "written": {
+    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G03_class_distribution_shares.csv",
+    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G03_class_distribution_shares.png"
+  },
+  "notes": []
+}

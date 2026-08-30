@@ -1,0 +1,34 @@
+{
+  "figure_id": "G04",
+  "figure_number": 4,
+  "title": "Recording Duration Histogram",
+  "caption": "Duration of every supervised recording, per corpus, on fixed bin edges: 2 s bins to 30 s, then coarser out to the 122 s maximum. Bin edges are declared in code rather than derived from the data, so a regeneration cannot silently rebin a published histogram. The extremes are real -- PASCAL set_b reaches 0.76 s and PhysioNet reaches 122.0 s -- and both are handled by the extractor.",
+  "exp_id": "n/a (not experiment-bound)",
+  "objective": "O1 (corpus definition)",
+  "dataset": null,
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-08-30T10:48:54.133271+00:00",
+  "command": "python scripts/19_data_graphs.py --figures G01 G02 G03 G04 G05 G06 G07 G08 G09 G10",
+  "plotted_rows": 80,
+  "plotted_csv": "G04_recording_duration_histogram.csv",
+  "plotted_csv_sha256": "1b6d660efa71c051f037a7a9192fd43d4eceb90a8da284d880beaff9c89c53be",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "outputs/01_dataset_audit/metadata_master.csv",
+      "exists": true,
+      "bytes": 1995833,
+      "sha256": "1ef1284faeba8b6428691fea92077e203e549b9895e85f821d562da5c6cd1371",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-25T19:31:02.054015+00:00"
+    }
+  ],
+  "written": {
+    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G04_recording_duration_histogram.csv",
+    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G04_recording_duration_histogram.png"
+  },
+  "notes": []
+}

@@ -1,0 +1,42 @@
+{
+  "figure_id": "G07",
+  "figure_number": 7,
+  "title": "MFCC Heatmap",
+  "caption": "The 13 mel-frequency cepstral coefficients over the first 6 seconds of D1_training-e_e02008 (PhysioNet 2016, 17.6 s). c0 (frame log-energy) and c1 (spectral slope) are drawn as lines rather than heatmap rows: their ranges sit tens of dB away from c2-c12, and either one inside the shared colour scale flattens every other coefficient into a uniform block. All 13 are shown because the feature vector uses all 13. The mel spectrogram uses an ABSOLUTE dB reference (ref=1.0, top_db=None), not librosa's default, which clips 80 dB below each record's own maximum and would normalise every record against itself inside a feature meant to be compared across records.",
+  "exp_id": "n/a (not experiment-bound)",
+  "objective": "O4 (feature engineering)",
+  "dataset": "D1",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-08-30T10:49:03.078667+00:00",
+  "command": "python scripts/19_data_graphs.py --figures G01 G02 G03 G04 G05 G06 G07 G08 G09 G10",
+  "plotted_rows": 13,
+  "plotted_csv": "G07_mfcc_heatmap.csv",
+  "plotted_csv_sha256": "528a204b606b8cc491306fb900e50bee4766fc1c8698f74fcd797709a5710965",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "dataset/ (read-only) via src/preprocessing/pipeline.py",
+      "exists": false,
+      "bytes": null,
+      "sha256": null,
+      "digest_method": null,
+      "modified_utc": null
+    },
+    {
+      "path": "outputs/03_features/feature_inventory.csv",
+      "exists": true,
+      "bytes": 15053,
+      "sha256": "c8ef5eba74006474ac11c45db487aebdc4ef1cbd9fdce0366ba612e4b61c876a",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-27T07:49:03.936944+00:00"
+    }
+  ],
+  "written": {
+    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G07_mfcc_heatmap.csv",
+    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G07_mfcc_heatmap.png"
+  },
+  "notes": []
+}

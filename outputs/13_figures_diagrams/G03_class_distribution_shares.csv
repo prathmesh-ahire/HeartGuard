@@ -1,0 +1,15 @@
+dataset_source,dataset_name,task,class,n_records,share
+D1,PhysioNet 2016,binary,abnormal,665,0.205247
+D1,PhysioNet 2016,binary,normal,2575,0.794753
+D2,PASCAL set_a,pascal_a,artifact,40,0.322581
+D2,PASCAL set_a,pascal_a,extrahls,19,0.153226
+D2,PASCAL set_a,pascal_a,murmur,34,0.274194
+D2,PASCAL set_a,pascal_a,normal,31,0.25
+D3,PASCAL set_b,pascal_b,extrastole,46,0.099783
+D3,PASCAL set_b,pascal_b,murmur,95,0.206074
+D3,PASCAL set_b,pascal_b,normal,320,0.694143
+D4,CirCor 2022,circor_murmur,Absent,2391,0.755928
+D4,CirCor 2022,circor_murmur,Present,616,0.194752
+D4,CirCor 2022,circor_murmur,Unknown,156,0.04932
+D4,CirCor 2022,circor_outcome,Abnormal,1531,0.484034
+D4,CirCor 2022,circor_outcome,Normal,1632,0.515966
