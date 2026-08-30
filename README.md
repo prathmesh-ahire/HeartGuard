@@ -45,6 +45,23 @@ committed (1.3 GB, gitignored).
 | D3 | PASCAL set_b | 461 labeled + 195 unlabelled | 4000 Hz |
 | D4 | CirCor DigiScope 2022 | 942 patients / 3,163 recordings | 4000 Hz |
 
+### Redistributed sample and attribution
+
+One 93 KB recording is the exception to "never committed":
+`frontend/public/85197_TV.wav`, together with its expert cardiac-cycle
+segmentation, so the dashboard can show a real S1 / systole / S2 / diastole
+overlay rather than a synthetic animation.
+
+Contains information from
+[The CirCor DigiScope Phonocardiogram Dataset](https://physionet.org/content/circor-heart-sound/1.0.3/),
+which is made available under the
+[Open Data Commons Attribution License v1.0 (ODC-By 1.0)](https://opendatacommons.org/licenses/by/1-0/).
+
+The full notice — record id, checksum, and which licence clause requires what —
+is in `frontend/public/NOTICE.md`, beside the audio, and the attribution is also
+rendered in the dashboard wherever that recording plays. The recording is a
+**de-identified dataset sample**, not a patient and not a case.
+
 ## Repository layout
 
 ```

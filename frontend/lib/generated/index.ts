@@ -5,19 +5,23 @@
 // the exporter is a compile error here rather than a blank chart in the browser.
 
 import ensembleJson from './ensemble.json';
+import equationsJson from './equations.json';
 import evidenceJson from './evidence.json';
 import figuresJson from './figures.json';
 import manifestJson from './manifest.json';
 import pipelineJson from './pipeline.json';
+import segmentationJson from './segmentation.json';
 import tablesJson from './tables.json';
 import themeJson from './theme.json';
 
 import type {
   GeneratedEnsemble,
+  GeneratedEquations,
   GeneratedEvidenceEntry,
   GeneratedFigure,
   GeneratedManifest,
   GeneratedPipeline,
+  GeneratedSegmentation,
   GeneratedTable,
   GeneratedTheme,
 } from './types';
@@ -32,17 +36,25 @@ export const theme: GeneratedTheme = themeJson;
 export const pipeline: GeneratedPipeline = pipelineJson;
 /** SO-05's searched voting weights, or a stated absence. */
 export const ensemble: GeneratedEnsemble = ensembleJson;
+/** Blueprint section 11, each equation cross-checked against its module. */
+export const equations: GeneratedEquations = equationsJson;
+/** One real CirCor recording and its expert cardiac-cycle segmentation. */
+export const segmentation: GeneratedSegmentation = segmentationJson;
 
 export type {
   ColumnKind,
   GeneratedColumn,
   GeneratedEnsemble,
   GeneratedEnsembleMember,
+  GeneratedEquation,
+  GeneratedEquations,
   GeneratedEvidenceEntry,
   GeneratedFigure,
   GeneratedManifest,
   GeneratedPipeline,
   GeneratedPipelineStep,
+  GeneratedSegment,
+  GeneratedSegmentation,
   GeneratedSource,
   GeneratedTable,
   GeneratedTheme,

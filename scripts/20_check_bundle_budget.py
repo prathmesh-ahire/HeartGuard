@@ -56,6 +56,35 @@ ROUTE_BUDGET_KB = 260.0
 LAZY_MARKERS = {
     "three.js": "WebGLRenderer",
     "gsap ScrollTrigger": "scrollerProxy",
+    # ECharts is ~300 kB. `zrender` is its rendering engine and appears only
+    # where the library itself is bundled.
+    "echarts": "zrender",
+    # WaveSurfer's exported class name. Present in its own chunk, nowhere else.
+    "wavesurfer.js": "WaveSurfer",
+}
+
+#: Libraries that must not reach the browser AT ALL, with the evidence that
+#: they nevertheless ran.
+#:
+#: KaTeX is a build-time dependency: `Equations.tsx` renders to HTML during the
+#: static export. If a page marks itself `'use client'` and imports it, the
+#: library follows across the boundary and 74 kB lands in the browser -- which
+#: is exactly what happened the first time /design was written, and what the
+#: server/client split of that page exists to prevent.
+#:
+#: "absent from every chunk" alone would also pass if the equations stopped
+#: rendering entirely, so each entry names a string its OUTPUT leaves in the
+#: exported HTML. Both halves have to hold.
+SERVER_ONLY: dict[str, dict[str, str]] = {
+    "katex": {
+        "chunk_marker": "katex",
+        "html_marker": "katex-html",
+        "why": (
+            "Equations render at build time so the page ships finished HTML, the "
+            "library never reaches the browser, and a malformed formula fails the "
+            "build rather than printing red text on a page nobody re-checks."
+        ),
+    },
 }
 
 #: One `<script>` tag, captured whole so its attributes can be inspected.
@@ -178,6 +207,32 @@ def main(argv: list[str] | None = None) -> int:
                 "check is measuring nothing -- or minification renamed the marker."
             )
 
+    html_text = "\n".join(
+        path.read_text(encoding="utf-8", errors="ignore") for path in OUT_DIR.rglob("*.html")
+    )
+    server_only_report: dict[str, dict[str, object]] = {}
+    for label, rule in SERVER_ONLY.items():
+        bundled = sorted(files_containing(rule["chunk_marker"]))
+        rendered = rule["html_marker"] in html_text
+        server_only_report[label] = {"chunks_containing": bundled, "rendered": rendered}
+        if bundled:
+            failures.append(
+                label
+                + " reached the browser: it is bundled in "
+                + ", ".join(bundled)
+                + ". "
+                + rule["why"]
+                + " A page that imports it must not be a client component."
+            )
+        if not rendered:
+            failures.append(
+                label
+                + " left no output in the exported HTML (looked for "
+                + rule["html_marker"]
+                + "). It is absent from the client bundle, but it does not appear "
+                "to have run at build time either."
+            )
+
     if shared_kb > args.shared_budget_kb:
         failures.append(
             "the shared script set is "
@@ -207,6 +262,7 @@ def main(argv: list[str] | None = None) -> int:
         "n_pages": len(pages),
         "routes": routes,
         "lazy": lazy_report,
+        "server_only": server_only_report,
         "failures": failures,
     }
 
@@ -229,6 +285,14 @@ def main(argv: list[str] | None = None) -> int:
                 + str(entry["route"]).ljust(30)
                 + format(float(entry["first_load_kb"]), "7.1f")  # type: ignore[arg-type]
                 + " kB"
+            )
+        for label, report in server_only_report.items():
+            print(
+                "  server-only: "
+                + label.ljust(13)
+                + ("in the client bundle" if report["chunks_containing"] else "not in any chunk")
+                + ", "
+                + ("rendered into the HTML" if report["rendered"] else "NO OUTPUT IN HTML")
             )
         for label, report in lazy_report.items():
             state = "LEAKED into first load" if report["in_first_load"] else "not in first load"

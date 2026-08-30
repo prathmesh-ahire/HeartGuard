@@ -111,3 +111,52 @@ ENTRIES (newest last)
     the models never saw — is carried by EXP-D1 (PhysioNet -> CirCor, Phase 71).
     Decision confirmed with the user 2026-08-26; restated here because T64.5
     asks for the run by name.
+
+
+[2026-08-30] T113.2 — ROC, precision-recall, confusion-matrix and calibration charts have no data bound
+  Reason: The components exist, are typed, and are on the design reference page,
+    but the four that read experiment results render their absence rather than
+    marks. `outputs/06_binary_results/` and `outputs/07_multiclass_results/` are
+    excluded from the frontend export (`RESULT_DIRS`, opt-in behind
+    `--include-results`) while a parallel session is still writing to them. A
+    CSV being rewritten reads as a valid CSV with a truncated row count, and no
+    gate would see it — so binding a chart to one tonight would risk publishing
+    a figure drawn from half an experiment.
+  Impact: On the design page these four render `EmptyState` with the reason,
+    never an empty axis: an empty axis is indistinguishable from a real result
+    of zero. Grouped bars and the scatter ARE bound, to G01 and G04, so the
+    chart layer is demonstrated against real generated data. Binding the
+    remaining four is Phase 116's work (T116.1-T116.3), by which time the
+    experiments have settled and the exporter runs with `--include-results`.
+    Nothing is missing from `outputs/`; this records only that the dashboard
+    does not yet display it.
+
+[2026-08-30] Phases 114-117 displayed-value audits — cannot run tonight
+  Reason: T114.6/T114.7, T115.7, T116.7 and T117.7 each cross-check every number
+    displayed on a page against its source CSV. Those pages are scaffolding: the
+    eleven document routes render `PagePlaceholder`, which states in the
+    interface that the page is not built and that nothing on it is a result. An
+    audit of a page with no values would pass vacuously, which is worse than not
+    running it — it would put a green check against a check that examined
+    nothing.
+  Impact: The audits run when the pages carry values, in their own phases. The
+    machinery they need is already in place and tested:
+    `scripts/16_check_no_hardcoded_metrics.py` fails the build on a hand-typed
+    metric literal, and `frontend/lib/generated/` carries `display` (formatted
+    in Python, rendered) separately from `values` (numeric, chart geometry
+    only), so the audit compares strings rather than re-deriving numbers.
+
+[2026-08-30] Part X (Phases 109-113) was built before Part IX and MEGA TEST 4
+  Reason: A deliberate, user-authorized deviation on 2026-08-30, not an
+    oversight. Two sessions worked the repository in parallel: one on Phases
+    68-84, one on Part X. `todo.md` and `CLAUDE.md` both say the dashboard
+    starts only after Part IX; the user overrode that for this session rather
+    than leave the frontend idle behind multi-hour CirCor jobs.
+  Impact: Recorded here because it changes what a later reader should expect,
+    not because anything is missing. Two consequences are known and tracked in
+    `Docs/note_window2.md`: the twelve architecture steps (T112.3) and the
+    fifteen equations (T113.5) were declared in `src/reporting/architecture.py`
+    and `src/reporting/equations.py` ahead of Phase 95's F01 diagram and Phase
+    100's equations reference, which should read those declarations rather than
+    restate them; and Phase 84 may later define a canonical cardiac-cycle form,
+    which the T113.6 overlay would then follow.

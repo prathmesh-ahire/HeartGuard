@@ -1,0 +1,640 @@
+{
+  "record_id": "85197_TV",
+  "label": "Dataset sample 85197_TV",
+  "audio_url": "/85197_TV.wav",
+  "duration_seconds": 11.648,
+  "duration_display": "11.65 s",
+  "sample_rate_hz": 4000,
+  "channels": 1,
+  "n_segments": 81,
+  "segments": [
+    {
+      "start": 0.0,
+      "end": 0.103633,
+      "label": 1,
+      "key": "s1",
+      "name": "S1"
+    },
+    {
+      "start": 0.103633,
+      "end": 0.26025,
+      "label": 2,
+      "key": "systole",
+      "name": "Systole"
+    },
+    {
+      "start": 0.26025,
+      "end": 0.40025,
+      "label": 3,
+      "key": "s2",
+      "name": "S2"
+    },
+    {
+      "start": 0.40025,
+      "end": 0.560988,
+      "label": 4,
+      "key": "diastole",
+      "name": "Diastole"
+    },
+    {
+      "start": 0.560988,
+      "end": 0.70025,
+      "label": 1,
+      "key": "s1",
+      "name": "S1"
+    },
+    {
+      "start": 0.70025,
+      "end": 0.82025,
+      "label": 2,
+      "key": "systole",
+      "name": "Systole"
+    },
+    {
+      "start": 0.82025,
+      "end": 0.96025,
+      "label": 3,
+      "key": "s2",
+      "name": "S2"
+    },
+    {
+      "start": 0.96025,
+      "end": 1.12025,
+      "label": 4,
+      "key": "diastole",
+      "name": "Diastole"
+    },
+    {
+      "start": 1.12025,
+      "end": 1.26025,
+      "label": 1,
+      "key": "s1",
+      "name": "S1"
+    },
+    {
+      "start": 1.26025,
+      "end": 1.38025,
+      "label": 2,
+      "key": "systole",
+      "name": "Systole"
+    },
+    {
+      "start": 1.38025,
+      "end": 1.50025,
+      "label": 3,
+      "key": "s2",
+      "name": "S2"
+    },
+    {
+      "start": 1.50025,
+      "end": 1.66025,
+      "label": 4,
+      "key": "diastole",
+      "name": "Diastole"
+    },
+    {
+      "start": 1.66025,
+      "end": 1.78025,
+      "label": 1,
+      "key": "s1",
+      "name": "S1"
+    },
+    {
+      "start": 1.78025,
+      "end": 1.906504,
+      "label": 2,
+      "key": "systole",
+      "name": "Systole"
+    },
+    {
+      "start": 1.906504,
+      "end": 2.015275,
+      "label": 3,
+      "key": "s2",
+      "name": "S2"
+    },
+    {
+      "start": 2.015275,
+      "end": 2.190852,
+      "label": 4,
+      "key": "diastole",
+      "name": "Diastole"
+    },
+    {
+      "start": 2.190852,
+      "end": 2.32025,
+      "label": 1,
+      "key": "s1",
+      "name": "S1"
+    },
+    {
+      "start": 2.32025,
+      "end": 2.464922,
+      "label": 2,
+      "key": "systole",
+      "name": "Systole"
+    },
+    {
+      "start": 2.464922,
+      "end": 2.558278,
+      "label": 3,
+      "key": "s2",
+      "name": "S2"
+    },
+    {
+      "start": 2.558278,
+      "end": 2.756979,
+      "label": 4,
+      "key": "diastole",
+      "name": "Diastole"
+    },
+    {
+      "start": 2.756979,
+      "end": 2.88025,
+      "label": 1,
+      "key": "s1",
+      "name": "S1"
+    },
+    {
+      "start": 2.88025,
+      "end": 3.04025,
+      "label": 2,
+      "key": "systole",
+      "name": "Systole"
+    },
+    {
+      "start": 3.04025,
+      "end": 3.126118,
+      "label": 3,
+      "key": "s2",
+      "name": "S2"
+    },
+    {
+      "start": 3.126118,
+      "end": 3.38025,
+      "label": 4,
+      "key": "diastole",
+      "name": "Diastole"
+    },
+    {
+      "start": 3.38025,
+      "end": 3.48025,
+      "label": 1,
+      "key": "s1",
+      "name": "S1"
+    },
+    {
+      "start": 3.48025,
+      "end": 3.64025,
+      "label": 2,
+      "key": "systole",
+      "name": "Systole"
+    },
+    {
+      "start": 3.64025,
+      "end": 3.76025,
+      "label": 3,
+      "key": "s2",
+      "name": "S2"
+    },
+    {
+      "start": 3.76025,
+      "end": 3.96025,
+      "label": 4,
+      "key": "diastole",
+      "name": "Diastole"
+    },
+    {
+      "start": 3.96025,
+      "end": 4.10025,
+      "label": 1,
+      "key": "s1",
+      "name": "S1"
+    },
+    {
+      "start": 4.10025,
+      "end": 4.24025,
+      "label": 2,
+      "key": "systole",
+      "name": "Systole"
+    },
+    {
+      "start": 4.24025,
+      "end": 4.38025,
+      "label": 3,
+      "key": "s2",
+      "name": "S2"
+    },
+    {
+      "start": 4.38025,
+      "end": 4.54025,
+      "label": 4,
+      "key": "diastole",
+      "name": "Diastole"
+    },
+    {
+      "start": 4.54025,
+      "end": 4.664339,
+      "label": 1,
+      "key": "s1",
+      "name": "S1"
+    },
+    {
+      "start": 4.664339,
+      "end": 4.80025,
+      "label": 2,
+      "key": "systole",
+      "name": "Systole"
+    },
+    {
+      "start": 4.80025,
+      "end": 4.94025,
+      "label": 3,
+      "key": "s2",
+      "name": "S2"
+    },
+    {
+      "start": 4.94025,
+      "end": 5.10025,
+      "label": 4,
+      "key": "diastole",
+      "name": "Diastole"
+    },
+    {
+      "start": 5.10025,
+      "end": 5.22025,
+      "label": 1,
+      "key": "s1",
+      "name": "S1"
+    },
+    {
+      "start": 5.22025,
+      "end": 5.361506,
+      "label": 2,
+      "key": "systole",
+      "name": "Systole"
+    },
+    {
+      "start": 5.361506,
+      "end": 5.453148,
+      "label": 3,
+      "key": "s2",
+      "name": "S2"
+    },
+    {
+      "start": 5.453148,
+      "end": 5.646711,
+      "label": 4,
+      "key": "diastole",
+      "name": "Diastole"
+    },
+    {
+      "start": 5.646711,
+      "end": 5.759765,
+      "label": 1,
+      "key": "s1",
+      "name": "S1"
+    },
+    {
+      "start": 5.759765,
+      "end": 5.92025,
+      "label": 2,
+      "key": "systole",
+      "name": "Systole"
+    },
+    {
+      "start": 5.92025,
+      "end": 6.019275,
+      "label": 3,
+      "key": "s2",
+      "name": "S2"
+    },
+    {
+      "start": 6.019275,
+      "end": 6.193139,
+      "label": 4,
+      "key": "diastole",
+      "name": "Diastole"
+    },
+    {
+      "start": 6.193139,
+      "end": 6.294202,
+      "label": 1,
+      "key": "s1",
+      "name": "S1"
+    },
+    {
+      "start": 6.294202,
+      "end": 6.456075,
+      "label": 2,
+      "key": "systole",
+      "name": "Systole"
+    },
+    {
+      "start": 6.456075,
+      "end": 6.58025,
+      "label": 3,
+      "key": "s2",
+      "name": "S2"
+    },
+    {
+      "start": 6.58025,
+      "end": 6.78025,
+      "label": 4,
+      "key": "diastole",
+      "name": "Diastole"
+    },
+    {
+      "start": 6.78025,
+      "end": 6.92025,
+      "label": 1,
+      "key": "s1",
+      "name": "S1"
+    },
+    {
+      "start": 6.92025,
+      "end": 7.082155,
+      "label": 2,
+      "key": "systole",
+      "name": "Systole"
+    },
+    {
+      "start": 7.082155,
+      "end": 7.179793,
+      "label": 3,
+      "key": "s2",
+      "name": "S2"
+    },
+    {
+      "start": 7.179793,
+      "end": 7.441016,
+      "label": 4,
+      "key": "diastole",
+      "name": "Diastole"
+    },
+    {
+      "start": 7.441016,
+      "end": 7.543793,
+      "label": 1,
+      "key": "s1",
+      "name": "S1"
+    },
+    {
+      "start": 7.543793,
+      "end": 7.715944,
+      "label": 2,
+      "key": "systole",
+      "name": "Systole"
+    },
+    {
+      "start": 7.715944,
+      "end": 7.805016,
+      "label": 3,
+      "key": "s2",
+      "name": "S2"
+    },
+    {
+      "start": 7.805016,
+      "end": 8.044828,
+      "label": 4,
+      "key": "diastole",
+      "name": "Diastole"
+    },
+    {
+      "start": 8.044828,
+      "end": 8.148461,
+      "label": 1,
+      "key": "s1",
+      "name": "S1"
+    },
+    {
+      "start": 8.148461,
+      "end": 8.32025,
+      "label": 2,
+      "key": "systole",
+      "name": "Systole"
+    },
+    {
+      "start": 8.32025,
+      "end": 8.391699,
+      "label": 3,
+      "key": "s2",
+      "name": "S2"
+    },
+    {
+      "start": 8.391699,
+      "end": 8.605816,
+      "label": 4,
+      "key": "diastole",
+      "name": "Diastole"
+    },
+    {
+      "start": 8.605816,
+      "end": 8.70688,
+      "label": 1,
+      "key": "s1",
+      "name": "S1"
+    },
+    {
+      "start": 8.70688,
+      "end": 8.86025,
+      "label": 2,
+      "key": "systole",
+      "name": "Systole"
+    },
+    {
+      "start": 8.86025,
+      "end": 9.00025,
+      "label": 3,
+      "key": "s2",
+      "name": "S2"
+    },
+    {
+      "start": 9.00025,
+      "end": 9.20025,
+      "label": 4,
+      "key": "diastole",
+      "name": "Diastole"
+    },
+    {
+      "start": 9.20025,
+      "end": 9.32025,
+      "label": 1,
+      "key": "s1",
+      "name": "S1"
+    },
+    {
+      "start": 9.32025,
+      "end": 9.46025,
+      "label": 2,
+      "key": "systole",
+      "name": "Systole"
+    },
+    {
+      "start": 9.46025,
+      "end": 9.60025,
+      "label": 3,
+      "key": "s2",
+      "name": "S2"
+    },
+    {
+      "start": 9.60025,
+      "end": 9.798024,
+      "label": 4,
+      "key": "diastole",
+      "name": "Diastole"
+    },
+    {
+      "start": 9.798024,
+      "end": 9.94025,
+      "label": 1,
+      "key": "s1",
+      "name": "S1"
+    },
+    {
+      "start": 9.94025,
+      "end": 10.09008,
+      "label": 2,
+      "key": "systole",
+      "name": "Systole"
+    },
+    {
+      "start": 10.09008,
+      "end": 10.22025,
+      "label": 3,
+      "key": "s2",
+      "name": "S2"
+    },
+    {
+      "start": 10.22025,
+      "end": 10.40025,
+      "label": 4,
+      "key": "diastole",
+      "name": "Diastole"
+    },
+    {
+      "start": 10.40025,
+      "end": 10.54025,
+      "label": 1,
+      "key": "s1",
+      "name": "S1"
+    },
+    {
+      "start": 10.54025,
+      "end": 10.66025,
+      "label": 2,
+      "key": "systole",
+      "name": "Systole"
+    },
+    {
+      "start": 10.66025,
+      "end": 10.80025,
+      "label": 3,
+      "key": "s2",
+      "name": "S2"
+    },
+    {
+      "start": 10.80025,
+      "end": 10.96025,
+      "label": 4,
+      "key": "diastole",
+      "name": "Diastole"
+    },
+    {
+      "start": 10.96025,
+      "end": 11.10025,
+      "label": 1,
+      "key": "s1",
+      "name": "S1"
+    },
+    {
+      "start": 11.10025,
+      "end": 11.220621,
+      "label": 2,
+      "key": "systole",
+      "name": "Systole"
+    },
+    {
+      "start": 11.220621,
+      "end": 11.340527,
+      "label": 3,
+      "key": "s2",
+      "name": "S2"
+    },
+    {
+      "start": 11.340527,
+      "end": 11.52025,
+      "label": 4,
+      "key": "diastole",
+      "name": "Diastole"
+    },
+    {
+      "start": 11.52025,
+      "end": 11.648,
+      "label": 1,
+      "key": "s1",
+      "name": "S1"
+    }
+  ],
+  "legend": [
+    {
+      "label": 0,
+      "key": "unannotated",
+      "name": "Unannotated",
+      "description": "The segmentation did not label this span. Not a cardiac phase.",
+      "n_segments": 0,
+      "seconds": 0.0,
+      "seconds_display": "0.00 s"
+    },
+    {
+      "label": 1,
+      "key": "s1",
+      "name": "S1",
+      "description": "First heart sound: mitral and tricuspid valve closure.",
+      "n_segments": 21,
+      "seconds": 2.571219999999998,
+      "seconds_display": "2.57 s"
+    },
+    {
+      "label": 2,
+      "key": "systole",
+      "name": "Systole",
+      "description": "Ventricular ejection, between S1 and S2.",
+      "n_segments": 20,
+      "seconds": 2.9164839999999996,
+      "seconds_display": "2.92 s"
+    },
+    {
+      "label": 3,
+      "key": "s2",
+      "name": "S2",
+      "description": "Second heart sound: aortic and pulmonary valve closure.",
+      "n_segments": 20,
+      "seconds": 2.331071999999999,
+      "seconds_display": "2.33 s"
+    },
+    {
+      "label": 4,
+      "key": "diastole",
+      "name": "Diastole",
+      "description": "Ventricular filling, between S2 and the next S1.",
+      "n_segments": 20,
+      "seconds": 3.8292240000000026,
+      "seconds_display": "3.83 s"
+    }
+  ],
+  "provenance": {
+    "dataset": "The CirCor DigiScope Phonocardiogram Dataset",
+    "source_url": "https://physionet.org/content/circor-heart-sound/1.0.3/",
+    "licence": "Open Data Commons Attribution License v1.0 (ODC-By 1.0)",
+    "licence_uri": "https://opendatacommons.org/licenses/by/1-0/",
+    "attribution": "Contains information from The CirCor DigiScope Phonocardiogram Dataset (record 85197_TV), which is made available under the Open Data Commons Attribution License v1.0 (ODC-By 1.0).",
+    "wav_source": "dataset/archive/training_data/training_data/85197_TV.wav",
+    "wav_sha256": "c4d3ef2a01c5fb919edb6ef6699e146467e5177106b16f391485c42987c59f79",
+    "tsv_source": "dataset/archive/training_data/training_data/85197_TV.tsv",
+    "tsv_sha256": "60a004e577395cf413a7dbb32c8122077d91f1411484fdc78b78e5e0b1f658ed",
+    "tsv_digest_method": "sha256/lf",
+    "notice": "/NOTICE.md"
+  },
+  "scope_note": "A de-identified recording from a public research corpus, shown to demonstrate the segmentation overlay. It is a dataset sample, not a patient, and nothing on this page is a diagnosis."
+}

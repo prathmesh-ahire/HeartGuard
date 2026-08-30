@@ -181,6 +181,77 @@ export interface GeneratedEnsemble {
   interpretation?: string;
 }
 
+export interface GeneratedEquation {
+  number: number;
+  key: string;
+  name: string;
+  /** KaTeX source, display mode. */
+  latex: string;
+  use: string;
+  /** Repository-relative module implementing it. Verified at export. */
+  implemented_in: string;
+  /** A symbol verified to appear in that module. */
+  implements: string;
+  symbols: { symbol: string; meaning: string }[];
+  /** Set where the rendering departs from the blueprint's typography. */
+  transcription_note: string | null;
+}
+
+export interface GeneratedEquations {
+  source: string;
+  n_equations: number;
+  note: string;
+  equations: GeneratedEquation[];
+}
+
+export interface GeneratedSegment {
+  start: number;
+  end: number;
+  /** CirCor's own code: 0 unannotated, 1 S1, 2 systole, 3 S2, 4 diastole. */
+  label: number;
+  key: string;
+  name: string;
+}
+
+export interface GeneratedSegmentation {
+  available?: boolean;
+  reason?: string;
+  record_id: string;
+  /** "Dataset sample <id>". Never a patient, never a case. */
+  label?: string;
+  audio_url?: string;
+  duration_seconds?: number;
+  duration_display?: string;
+  sample_rate_hz?: number;
+  channels?: number;
+  n_segments?: number;
+  segments: GeneratedSegment[];
+  legend: {
+    label: number;
+    key: string;
+    name: string;
+    description: string;
+    n_segments: number;
+    seconds: number;
+    seconds_display: string;
+  }[];
+  provenance?: {
+    dataset: string;
+    source_url: string;
+    licence: string;
+    licence_uri: string;
+    /** The ODC-By 4.3 notice. Render it wherever the audio plays. */
+    attribution: string;
+    wav_source: string;
+    wav_sha256: string;
+    tsv_source: string;
+    tsv_sha256: string;
+    tsv_digest_method: string;
+    notice: string;
+  };
+  scope_note?: string;
+}
+
 export interface GeneratedEvidenceEntry {
   key: string;
   kind: string;

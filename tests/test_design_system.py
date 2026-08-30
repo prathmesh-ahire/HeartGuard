@@ -242,8 +242,26 @@ def test_the_stat_tile_requires_a_display_string_not_a_number(scaffolded: None) 
 # ---------------------------------------------------------------------------
 
 
+def design_page_source() -> str:
+    """The design reference, both halves.
+
+    Phase 113 split the route: `page.tsx` stays a SERVER component so KaTeX
+    renders at build time instead of shipping 74 kB to the browser, and
+    everything with state moved to `DesignClient.tsx`. These assertions are
+    about the reference page as a whole, so they read both files rather than
+    following the interactive half around.
+    """
+    parts = []
+    for name in ("page.tsx", "DesignClient.tsx"):
+        path = FRONTEND / "app" / "design" / name
+        if path.is_file():
+            parts.append(path.read_text(encoding="utf-8"))
+    return "\n".join(parts)
+
+
 def test_the_design_page_exists_and_is_a_declared_route(scaffolded: None) -> None:
     assert (FRONTEND / "app" / "design" / "page.tsx").is_file()
+    assert (FRONTEND / "app" / "design" / "DesignClient.tsx").is_file()
     routes = (FRONTEND / "lib" / "routes.ts").read_text(encoding="utf-8")
     assert "UTILITY_ROUTES" in routes
     assert "'/design/'" in routes
@@ -253,13 +271,13 @@ def test_the_design_page_reads_real_payloads_rather_than_placeholder_numbers(
     scaffolded: None,
 ) -> None:
     """A placeholder literal is how a fabricated result reaches a page."""
-    page = (FRONTEND / "app" / "design" / "page.tsx").read_text(encoding="utf-8")
+    page = design_page_source()
     assert "from '@/lib/generated'" in page
     assert "display={" in page
     assert "PALETTE_CONTRAST" in page
 
 
 def test_the_design_page_renders_all_three_request_states(scaffolded: None) -> None:
-    page = (FRONTEND / "app" / "design" / "page.tsx").read_text(encoding="utf-8")
+    page = design_page_source()
     for state in ("<LoadingState", "<EmptyState", "<ErrorState", "<FileUpload"):
         assert state in page, state + " is not on the design reference page"

@@ -1,0 +1,343 @@
+{
+  "source": "Developer Blueprint, section 11 -- Equations and Optimization Formulas",
+  "n_equations": 15,
+  "note": "Declared in src/reporting/equations.py and verified at export time: every equation below names a module that exists and a symbol that appears in it. Two entries depart from the blueprint's typography; each says so and why.",
+  "equations": [
+    {
+      "number": 1,
+      "key": "butterworth",
+      "name": "Butterworth response",
+      "latex": "\\left|H(j\\omega)\\right|^{2} = \\frac{1}{1 + \\left(\\dfrac{\\omega}{\\omega_c}\\right)^{2n}}",
+      "use": "Preprocessing",
+      "implemented_in": "src/preprocessing/filters.py",
+      "implements": "butterworth_bandpass_magnitude",
+      "symbols": [
+        {
+          "symbol": "H(j\\omega)",
+          "meaning": "frequency response of the filter"
+        },
+        {
+          "symbol": "\\omega",
+          "meaning": "angular frequency, in radians per second"
+        },
+        {
+          "symbol": "\\omega_c",
+          "meaning": "cut-off angular frequency"
+        },
+        {
+          "symbol": "n",
+          "meaning": "filter order"
+        }
+      ],
+      "transcription_note": null
+    },
+    {
+      "number": 2,
+      "key": "zscore",
+      "name": "Z-score",
+      "latex": "z = \\frac{x - \\mu}{\\sigma}",
+      "use": "Signal normalization",
+      "implemented_in": "src/preprocessing/normalize.py",
+      "implements": "zscore_normalize",
+      "symbols": [
+        {
+          "symbol": "x",
+          "meaning": "a sample of the signal"
+        },
+        {
+          "symbol": "\\mu",
+          "meaning": "mean of the signal"
+        },
+        {
+          "symbol": "\\sigma",
+          "meaning": "standard deviation of the signal"
+        }
+      ],
+      "transcription_note": null
+    },
+    {
+      "number": 3,
+      "key": "energy",
+      "name": "Energy",
+      "latex": "E = \\sum_{n} x[n]^{2}",
+      "use": "Time-domain feature",
+      "implemented_in": "src/feature_extraction/time_domain.py",
+      "implements": "energy",
+      "symbols": [
+        {
+          "symbol": "E",
+          "meaning": "total signal energy"
+        },
+        {
+          "symbol": "x[n]",
+          "meaning": "the n-th sample"
+        }
+      ],
+      "transcription_note": null
+    },
+    {
+      "number": 4,
+      "key": "rms",
+      "name": "RMS",
+      "latex": "\\mathrm{RMS} = \\sqrt{\\frac{1}{N}\\sum_{n} x[n]^{2}}",
+      "use": "Effective amplitude",
+      "implemented_in": "src/feature_extraction/time_domain.py",
+      "implements": "rms",
+      "symbols": [
+        {
+          "symbol": "N",
+          "meaning": "number of samples"
+        },
+        {
+          "symbol": "x[n]",
+          "meaning": "the n-th sample"
+        }
+      ],
+      "transcription_note": "Section 11 prints the radical after the bracket rather than over it. Rendered as the root of the mean square, which is what the name, the use column and the implementation all describe."
+    },
+    {
+      "number": 5,
+      "key": "spectral_centroid",
+      "name": "Spectral centroid",
+      "latex": "C = \\frac{\\sum_{k} f_k X_k}{\\sum_{k} X_k}",
+      "use": "Spectral centre of mass",
+      "implemented_in": "src/feature_extraction/frequency.py",
+      "implements": "spectral_centroid",
+      "symbols": [
+        {
+          "symbol": "C",
+          "meaning": "spectral centroid, in hertz"
+        },
+        {
+          "symbol": "f_k",
+          "meaning": "frequency of the k-th bin"
+        },
+        {
+          "symbol": "X_k",
+          "meaning": "magnitude of the k-th bin"
+        }
+      ],
+      "transcription_note": "Bracketed here. The blueprint's unparenthesised form reads as a sum of ratios, which is not a centre of mass."
+    },
+    {
+      "number": 6,
+      "key": "spectral_entropy",
+      "name": "Spectral entropy",
+      "latex": "H_s = -\\sum_{k} p_k \\log p_k",
+      "use": "Spectral irregularity",
+      "implemented_in": "src/feature_extraction/frequency.py",
+      "implements": "spectral_entropy",
+      "symbols": [
+        {
+          "symbol": "H_s",
+          "meaning": "spectral entropy"
+        },
+        {
+          "symbol": "p_k",
+          "meaning": "normalized power in the k-th bin, summing to one"
+        }
+      ],
+      "transcription_note": null
+    },
+    {
+      "number": 7,
+      "key": "soft_voting",
+      "name": "Soft voting",
+      "latex": "P_{\\text{final}}(c) = \\frac{\\sum_{m} w_m P_m(c)}{\\sum_{m} w_m}",
+      "use": "Weighted ensemble probability",
+      "implemented_in": "src/ensemble/soft_voting.py",
+      "implements": "fuse_probabilities",
+      "symbols": [
+        {
+          "symbol": "c",
+          "meaning": "a class"
+        },
+        {
+          "symbol": "m",
+          "meaning": "an ensemble member: SVM, Random Forest or Gradient Boosting"
+        },
+        {
+          "symbol": "w_m",
+          "meaning": "the weight of member m, non-negative"
+        },
+        {
+          "symbol": "P_m(c)",
+          "meaning": "member m's probability for class c"
+        }
+      ],
+      "transcription_note": null
+    },
+    {
+      "number": 8,
+      "key": "prediction",
+      "name": "Prediction",
+      "latex": "\\hat{y} = \\arg\\max_{c} P_{\\text{final}}(c)",
+      "use": "Final class",
+      "implemented_in": "src/evaluation/metrics.py",
+      "implements": "argmax",
+      "symbols": [
+        {
+          "symbol": "\\hat{y}",
+          "meaning": "the predicted class"
+        },
+        {
+          "symbol": "P_{\\text{final}}(c)",
+          "meaning": "the fused probability for class c"
+        }
+      ],
+      "transcription_note": "For the binary task the deployed rule is not argmax at 0.5: T50.4 selects the decision threshold inside the training fold against sensitivity and balanced accuracy. This equation describes the multiclass rule and the fixed-threshold binary reference."
+    },
+    {
+      "number": 9,
+      "key": "accuracy",
+      "name": "Accuracy",
+      "latex": "\\mathrm{Accuracy} = \\frac{TP + TN}{TP + TN + FP + FN}",
+      "use": "Overall correctness",
+      "implemented_in": "src/evaluation/metrics.py",
+      "implements": "binary_metrics",
+      "symbols": [
+        {
+          "symbol": "TP",
+          "meaning": "true positives: abnormal, predicted abnormal"
+        },
+        {
+          "symbol": "TN",
+          "meaning": "true negatives: normal, predicted normal"
+        },
+        {
+          "symbol": "FP",
+          "meaning": "false positives: normal, predicted abnormal"
+        },
+        {
+          "symbol": "FN",
+          "meaning": "false negatives: abnormal, predicted normal"
+        }
+      ],
+      "transcription_note": null
+    },
+    {
+      "number": 10,
+      "key": "sensitivity",
+      "name": "Sensitivity",
+      "latex": "\\mathrm{Sensitivity} = \\frac{TP}{TP + FN}",
+      "use": "Abnormal-case detection",
+      "implemented_in": "src/evaluation/metrics.py",
+      "implements": "binary_metrics",
+      "symbols": [
+        {
+          "symbol": "TP",
+          "meaning": "true positives"
+        },
+        {
+          "symbol": "FN",
+          "meaning": "false negatives: the abnormal cases that were missed"
+        }
+      ],
+      "transcription_note": null
+    },
+    {
+      "number": 11,
+      "key": "specificity",
+      "name": "Specificity",
+      "latex": "\\mathrm{Specificity} = \\frac{TN}{TN + FP}",
+      "use": "Normal-case detection",
+      "implemented_in": "src/evaluation/metrics.py",
+      "implements": "specificity_score",
+      "symbols": [
+        {
+          "symbol": "TN",
+          "meaning": "true negatives"
+        },
+        {
+          "symbol": "FP",
+          "meaning": "false positives"
+        }
+      ],
+      "transcription_note": null
+    },
+    {
+      "number": 12,
+      "key": "f1",
+      "name": "F1-score",
+      "latex": "F_1 = \\frac{2PR}{P + R}",
+      "use": "Precision-recall balance",
+      "implemented_in": "src/evaluation/metrics.py",
+      "implements": "binary_metrics",
+      "symbols": [
+        {
+          "symbol": "P",
+          "meaning": "precision, $TP/(TP+FP)$"
+        },
+        {
+          "symbol": "R",
+          "meaning": "recall, which is sensitivity, $TP/(TP+FN)$"
+        }
+      ],
+      "transcription_note": null
+    },
+    {
+      "number": 13,
+      "key": "balanced_accuracy",
+      "name": "Balanced accuracy",
+      "latex": "\\mathrm{BA} = \\frac{\\mathrm{Sensitivity} + \\mathrm{Specificity}}{2}",
+      "use": "Imbalance-aware binary metric",
+      "implemented_in": "src/evaluation/metrics.py",
+      "implements": "binary_metrics",
+      "symbols": [
+        {
+          "symbol": "\\mathrm{BA}",
+          "meaning": "balanced accuracy"
+        }
+      ],
+      "transcription_note": null
+    },
+    {
+      "number": 14,
+      "key": "macro_f1",
+      "name": "Macro-F1",
+      "latex": "\\text{Macro-}F_1 = \\frac{1}{|C|}\\sum_{c \\in C} F_1(c)",
+      "use": "Multiclass evaluation",
+      "implemented_in": "src/optimization/multi_objective.py",
+      "implements": "macro_f1",
+      "symbols": [
+        {
+          "symbol": "C",
+          "meaning": "the set of classes"
+        },
+        {
+          "symbol": "F_1(c)",
+          "meaning": "the F1 score of class c taken as positive"
+        }
+      ],
+      "transcription_note": null
+    },
+    {
+      "number": 15,
+      "key": "objective_j",
+      "name": "Multi-objective score",
+      "latex": "J = \\alpha\\left(1 - \\text{Macro-}F_1\\right) + \\beta\\left(\\frac{\\text{SelectedFeatures}}{138}\\right) + \\gamma\\left(\\text{NormalizedInferenceTime}\\right)",
+      "use": "Optimization objective",
+      "implemented_in": "src/optimization/multi_objective.py",
+      "implements": "score_j",
+      "symbols": [
+        {
+          "symbol": "J",
+          "meaning": "the cost being minimised"
+        },
+        {
+          "symbol": "\\alpha, \\beta, \\gamma",
+          "meaning": "weights on accuracy, compactness and speed"
+        },
+        {
+          "symbol": "\\text{SelectedFeatures}",
+          "meaning": "size of the selected subset, out of 138"
+        },
+        {
+          "symbol": "\\text{NormalizedInferenceTime}",
+          "meaning": "inference time scaled against the cost model"
+        }
+      ],
+      "transcription_note": null
+    }
+  ]
+}

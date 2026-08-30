@@ -317,7 +317,13 @@ def test_the_heart_animation_is_labelled_as_decoration(scaffolded: None) -> None
     """Nothing on the page may read the beat as a measurement."""
     scene = (COMPONENTS / "three" / "HeartScene.tsx").read_text(encoding="utf-8")
     assert "no data behind it" in scene
-    page = (APP / "design" / "page.tsx").read_text(encoding="utf-8")
+    # Phase 113 split /design: the server half renders the equations, the client
+    # half everything with state. The hero copy lives in the client half.
+    page = "".join(
+        (APP / "design" / name).read_text(encoding="utf-8")
+        for name in ("page.tsx", "DesignClient.tsx")
+        if (APP / "design" / name).is_file()
+    )
     assert "decoration with no " in page
 
 
