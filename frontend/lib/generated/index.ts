@@ -4,16 +4,20 @@
 // assigned to its declared type WITHOUT a cast, so a shape change emitted by
 // the exporter is a compile error here rather than a blank chart in the browser.
 
+import ensembleJson from './ensemble.json';
 import evidenceJson from './evidence.json';
 import figuresJson from './figures.json';
 import manifestJson from './manifest.json';
+import pipelineJson from './pipeline.json';
 import tablesJson from './tables.json';
 import themeJson from './theme.json';
 
 import type {
+  GeneratedEnsemble,
   GeneratedEvidenceEntry,
   GeneratedFigure,
   GeneratedManifest,
+  GeneratedPipeline,
   GeneratedTable,
   GeneratedTheme,
 } from './types';
@@ -24,13 +28,21 @@ export const figures: Record<string, GeneratedFigure> = figuresJson;
 export const evidence: GeneratedEvidenceEntry[] = evidenceJson;
 /** The matplotlib palette, so a browser chart and its 300 dpi PNG agree. */
 export const theme: GeneratedTheme = themeJson;
+/** The twelve architecture steps, each verified against the repository. */
+export const pipeline: GeneratedPipeline = pipelineJson;
+/** SO-05's searched voting weights, or a stated absence. */
+export const ensemble: GeneratedEnsemble = ensembleJson;
 
 export type {
   ColumnKind,
   GeneratedColumn,
+  GeneratedEnsemble,
+  GeneratedEnsembleMember,
   GeneratedEvidenceEntry,
   GeneratedFigure,
   GeneratedManifest,
+  GeneratedPipeline,
+  GeneratedPipelineStep,
   GeneratedSource,
   GeneratedTable,
   GeneratedTheme,

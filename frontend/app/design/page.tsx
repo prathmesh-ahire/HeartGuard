@@ -5,6 +5,10 @@ import { useState } from 'react';
 import { cn } from '@/lib/cn';
 import { tables, theme } from '@/lib/generated';
 import { PALETTE_CONTRAST, SERIES_COLORS, SURFACE, TYPE_SCALE } from '@/lib/tokens';
+import { EnsembleVote } from '@/components/ensemble/EnsembleVote';
+import { Reveal } from '@/components/motion/Reveal';
+import { PipelineWalkthrough } from '@/components/pipeline/PipelineWalkthrough';
+import { Hero3D } from '@/components/three/Hero3D';
 import { Badge } from '@/components/ui/Badge';
 import { FileUpload } from '@/components/ui/FileUpload';
 import { GlassCard } from '@/components/ui/GlassCard';
@@ -348,6 +352,78 @@ export default function DesignPage() {
               </p>
             </GlassCard>
           </div>
+        </section>
+
+        {/* ------------------------------------------------------------------
+            Phase 112 -- the 3D and motion layer, on the same QA surface.
+
+            T112.7 asks for three things a person has to look at: that the
+            scene loads without an SSR error, that reduced motion is honoured,
+            and that the fallback is a designed panel rather than a broken
+            box. All three are visible here.
+        ------------------------------------------------------------------- */}
+        <section className="space-y-4">
+          <SectionHeader
+            level={2}
+            title="3D layer"
+            description={
+              'Lazy-loaded behind a dynamic import with ssr: false, so three.js is in ' +
+              'its own chunk and never runs during the static export. Under ' +
+              'prefers-reduced-motion the model is posed rather than beating; with no ' +
+              'WebGL context it is replaced by a designed panel, because an absent GPU ' +
+              'is an ordinary outcome and not an error. The beat is decoration with no ' +
+              'data behind it.'
+            }
+          />
+          <Hero3D className="rounded-lg border border-slate-200 dark:border-slate-800" />
+        </section>
+
+        <section className="space-y-4">
+          <SectionHeader
+            level={2}
+            title="Ensemble vote"
+            description={
+              'SVM, Random Forest and Gradient Boosting weights from SO-05. The bars ' +
+              'sit almost on the equal-weight line because that is what the search ' +
+              'found; the caption says so rather than letting the picture imply ' +
+              'otherwise.'
+            }
+          />
+          <EnsembleVote />
+        </section>
+
+        <section className="space-y-4">
+          <SectionHeader
+            level={2}
+            title="Pipeline walkthrough"
+            description={
+              'The twelve architecture steps, read from generated/pipeline.json. Every ' +
+              'step names a module and an outputs/ directory that the exporter ' +
+              'confirmed exists. Scroll-linked highlighting is off entirely under ' +
+              'reduced motion, where this renders as a plain ordered list.'
+            }
+          />
+          <PipelineWalkthrough />
+        </section>
+
+        <section className="space-y-4">
+          <SectionHeader
+            level={2}
+            title="Reveal"
+            description={
+              'Framer Motion card reveal. Content is never gated on the animation: if ' +
+              'the viewport callback never fires, the card is still there and still ' +
+              'readable.'
+            }
+          />
+          <Reveal>
+            <GlassCard className="p-5">
+              <p className={cn(TYPE_SCALE.body)}>
+                This card faded in on scroll, or did not, depending on the motion
+                setting. Either way it says the same thing.
+              </p>
+            </GlassCard>
+          </Reveal>
         </section>
       </div>
     </TooltipProvider>

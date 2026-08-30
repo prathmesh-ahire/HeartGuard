@@ -1,0 +1,10 @@
+# Frontend-local ignores. The repository-root .gitignore stays the authority on
+# everything else; this file only covers artifacts npm and tsc drop in here.
+#
+# `out/` is deliberately NOT ignored -- T01.4 requires the exported static site
+# to be committed so a grader without Node can serve the dashboard. It is
+# committed once the pages carry real content rather than scaffolding, so that
+# 4 MB of placeholder HTML is not rewritten on every phase.
+
+# TypeScript incremental build state. Machine-local, changes on every tsc run.
+tsconfig.tsbuildinfo

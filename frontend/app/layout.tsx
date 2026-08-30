@@ -4,6 +4,7 @@ import './globals.css';
 
 import { DisclaimerBanner } from '@/components/Disclaimer';
 import { Footer } from '@/components/Footer';
+import { SmoothScroll } from '@/components/motion/SmoothScroll';
 import { Navbar } from '@/components/Navbar';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -35,13 +36,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body className="flex min-h-screen flex-col">
         <ThemeProvider>
-          <DisclaimerBanner />
-          <Navbar />
-          <div className="mx-auto flex w-full max-w-7xl justify-end px-4 pt-3">
-            <ThemeToggle />
-          </div>
-          <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8">{children}</main>
-          <Footer />
+          <SmoothScroll>
+            <DisclaimerBanner />
+            <Navbar />
+            <div className="mx-auto flex w-full max-w-7xl justify-end px-4 pt-3">
+              <ThemeToggle />
+            </div>
+            <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8">{children}</main>
+            <Footer />
+          </SmoothScroll>
         </ThemeProvider>
       </body>
     </html>

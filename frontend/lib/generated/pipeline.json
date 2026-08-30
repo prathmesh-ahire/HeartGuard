@@ -1,0 +1,114 @@
+{
+  "n_steps": 12,
+  "note": "Declared in src/reporting/architecture.py and verified at export time: every step below names a module that exists and an outputs/ directory that exists.",
+  "steps": [
+    {
+      "index": 1,
+      "key": "ingest",
+      "title": "Corpus ingest and audit",
+      "summary": "Four public corpora are opened, counted and checksummed against what their documentation claims. Where the two disagree, the files win and the discrepancy is recorded rather than reconciled quietly.",
+      "module": "src/data_loader/inventory.py",
+      "evidence_dir": "outputs/01_dataset_audit",
+      "rule": null
+    },
+    {
+      "index": 2,
+      "key": "grouping",
+      "title": "Label harmonisation and subject grouping",
+      "summary": "Five label spaces are kept separate, never merged, and every recording is attached to a subject where one can be derived. The subject, not the recording, is what a fold splits on.",
+      "module": "src/data_loader/splits.py",
+      "evidence_dir": "outputs/01_dataset_audit",
+      "rule": "No subject leakage: a subject never appears in both train and test."
+    },
+    {
+      "index": 3,
+      "key": "resample",
+      "title": "Mono conversion and resampling to 2 kHz",
+      "summary": "Recordings arrive at 44.1 kHz, 4 kHz and 2 kHz. All are reduced to mono and resampled to a common 2 kHz, which retains the whole diagnostic band of a heart sound and discards the rest.",
+      "module": "src/preprocessing/io.py",
+      "evidence_dir": "outputs/02_preprocessing",
+      "rule": null
+    },
+    {
+      "index": 4,
+      "key": "quality",
+      "title": "Signal quality assessment",
+      "summary": "Clipping, silence and a signal-to-noise proxy are measured here, in the middle of the chain, because the band-pass deletes the out-of-band term the proxy needs and normalisation deletes the levels the other two are defined against.",
+      "module": "src/preprocessing/quality.py",
+      "evidence_dir": "outputs/02_preprocessing",
+      "rule": null
+    },
+    {
+      "index": 5,
+      "key": "filter",
+      "title": "Band-pass filtering",
+      "summary": "A zero-phase band-pass keeps the murmur band and removes mains hum, handling noise and the low-frequency wander that breathing and handling put into a chest recording.",
+      "module": "src/preprocessing/filters.py",
+      "evidence_dir": "outputs/02_preprocessing",
+      "rule": null
+    },
+    {
+      "index": 6,
+      "key": "normalize",
+      "title": "Amplitude normalisation",
+      "summary": "Recordings differ by stethoscope, gain and chest wall. Normalisation removes the loudness difference so that a feature describes the sound rather than the microphone.",
+      "module": "src/preprocessing/normalize.py",
+      "evidence_dir": "outputs/02_preprocessing",
+      "rule": null
+    },
+    {
+      "index": 7,
+      "key": "features",
+      "title": "Feature extraction, 138 across six families",
+      "summary": "Time-domain, spectral, MFCC, chroma, wavelet and envelope descriptors are computed per recording. The registry is fixed: the same 138 columns in the same order for every corpus and every experiment.",
+      "module": "src/feature_extraction/extractor.py",
+      "evidence_dir": "outputs/03_features",
+      "rule": null
+    },
+    {
+      "index": 8,
+      "key": "fold_local",
+      "title": "Fold-local imputation and scaling",
+      "summary": "The imputer and the scaler are fitted on the training fold only and then applied to the held-out fold. Fitting either on the full matrix would leak the test fold's distribution into training.",
+      "module": "src/models/pipeline.py",
+      "evidence_dir": "outputs/04_models",
+      "rule": "Fold safety: nothing is fitted on data the outer test fold contributed to."
+    },
+    {
+      "index": 9,
+      "key": "selection",
+      "title": "Feature selection inside the training fold",
+      "summary": "Which of the 138 features survive is itself decided per fold, from the training rows only. A selector chosen once on the whole matrix is one of the commonest ways a published result becomes unreproducible.",
+      "module": "src/feature_selection/ranking.py",
+      "evidence_dir": "outputs/05_search_optimization",
+      "rule": "Fold safety: the selector never sees the outer test fold."
+    },
+    {
+      "index": 10,
+      "key": "search",
+      "title": "Hyperparameter search, nested",
+      "summary": "Genetic, swarm, Bayesian and randomised search run in an inner loop over the training fold. The outer fold is never scored during the search, so the reported number is not the number that was optimised.",
+      "module": "src/optimization/driver.py",
+      "evidence_dir": "outputs/05_search_optimization",
+      "rule": "Fold safety: the search is scored on inner splits only."
+    },
+    {
+      "index": 11,
+      "key": "ensemble",
+      "title": "Weighted soft-voting ensemble",
+      "summary": "SVM, Random Forest and Gradient Boosting each produce a class probability, and a weighted average of the three produces the vote. The weights are searched per fold under the same fold safety rule.",
+      "module": "src/ensemble/soft_voting.py",
+      "evidence_dir": "outputs/05_search_optimization",
+      "rule": null
+    },
+    {
+      "index": 12,
+      "key": "evaluate",
+      "title": "Repeated nested cross-validation and reporting",
+      "summary": "Every experiment reports sensitivity, specificity, F1, balanced accuracy and AUC across repeated subject-grouped folds. Accuracy alone is never the headline, and model selection prioritises sensitivity and balanced accuracy.",
+      "module": "src/evaluation/experiment.py",
+      "evidence_dir": "outputs/06_binary_results",
+      "rule": "Never accuracy alone: five metrics per binary experiment, always."
+    }
+  ]
+}

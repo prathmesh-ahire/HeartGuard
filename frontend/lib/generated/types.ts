@@ -117,6 +117,70 @@ export interface GeneratedManifest {
   omissions: { artifact: string; reason: string }[];
 }
 
+export interface GeneratedPipelineStep {
+  index: number;
+  key: string;
+  title: string;
+  summary: string;
+  /** Repository-relative module implementing this step. Verified at export. */
+  module: string;
+  /** `outputs/` directory holding this step's evidence. Verified at export. */
+  evidence_dir: string;
+  /** The research rule this step is where we keep, if it is one of them. */
+  rule: string | null;
+}
+
+export interface GeneratedPipeline {
+  n_steps: number;
+  note: string;
+  steps: GeneratedPipelineStep[];
+}
+
+export interface GeneratedEnsembleMember {
+  model_id: string;
+  name: string;
+  short_name: string;
+  /** For bar geometry only. Render `weight_display`. */
+  weight: number;
+  weight_display: string;
+  weight_std: number;
+  weight_std_display: string;
+}
+
+export interface GeneratedEnsemble {
+  available: boolean;
+  reason?: string;
+  source: string;
+  sha256?: string;
+  digest_method?: string;
+  experiment?: string;
+  task?: string;
+  objective?: string;
+  selection_rule?: string;
+  n_folds?: number;
+  seed?: number | null;
+  equal_weight?: number;
+  equal_weight_display?: string;
+  folds_identical_to_equal?: number;
+  folds_identical_display?: string;
+  constraint?: string;
+  members: GeneratedEnsembleMember[];
+  /** A fixed illustration. Not a prediction, not a result. */
+  demonstration: {
+    note: string;
+    inputs: {
+      model_id: string;
+      short_name: string;
+      probability: number;
+      probability_display: string;
+    }[];
+    vote: number;
+    vote_display: string;
+  } | null;
+  /** Why the bars look nearly equal. Render it beside them, not instead. */
+  interpretation?: string;
+}
+
 export interface GeneratedEvidenceEntry {
   key: string;
   kind: string;

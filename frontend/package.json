@@ -2,13 +2,15 @@
   "name": "pv-mepcg-dashboard",
   "version": "0.1.0",
   "private": true,
-  "description": "PV-MEPCG / PulseVision — PCG heart-sound classification dashboard. Academic screening and decision-support prototype, never a diagnostic tool.",
+  "description": "PV-MEPCG / PulseVision \u2014 PCG heart-sound classification dashboard. Academic screening and decision-support prototype, never a diagnostic tool.",
   "scripts": {
+    "dev": "next dev",
     "export-data": "python ../scripts/17_export_frontend_data.py",
     "check-metrics": "python ../scripts/16_check_no_hardcoded_metrics.py",
+    "check-bundle": "python ../scripts/20_check_bundle_budget.py",
     "prebuild": "npm run export-data",
     "build": "next build",
-    "dev": "next dev",
+    "postbuild": "npm run check-bundle",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit"
@@ -16,12 +18,18 @@
   "dependencies": {
     "@radix-ui/react-tabs": "1.1.1",
     "@radix-ui/react-tooltip": "1.1.3",
+    "@react-three/drei": "9.114.3",
+    "@react-three/fiber": "8.17.10",
     "clsx": "2.1.1",
+    "framer-motion": "11.11.9",
+    "gsap": "3.12.5",
+    "lenis": "1.1.14",
     "next": "14.2.35",
     "next-themes": "0.3.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "tailwind-merge": "2.5.4"
+    "tailwind-merge": "2.5.4",
+    "three": "0.169.0"
   },
   "devDependencies": {
     "@types/node": "20.14.10",

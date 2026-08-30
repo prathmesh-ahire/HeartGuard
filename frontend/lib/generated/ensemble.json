@@ -1,0 +1,72 @@
+{
+  "available": true,
+  "source": "outputs/05_search_optimization/SO-05/final_weights.json",
+  "sha256": "1c0c3494702aa0361678ae9479bcdafaf9e2b126e7a29e9a7d79bfeaf8d81dfc",
+  "digest_method": "sha256/lf",
+  "experiment": "SO-05",
+  "task": "binary",
+  "objective": "balanced_accuracy",
+  "selection_rule": "one_standard_error",
+  "n_folds": 25,
+  "seed": 42,
+  "equal_weight": 0.3333333333333333,
+  "equal_weight_display": "0.333",
+  "folds_identical_to_equal": 21,
+  "folds_identical_display": "21 of 25",
+  "constraint": "non-negative and summing to 1; enforced as SLSQP bounds plus a linear equality for the continuous methods, and by construction for the simplex lattice. See src/optimization/weights.normalize_weights.",
+  "members": [
+    {
+      "model_id": "M3",
+      "name": "SVM (RBF kernel)",
+      "short_name": "SVM",
+      "weight": 0.32799999999999996,
+      "weight_display": "0.328",
+      "weight_std": 0.02793842435706701,
+      "weight_std_display": "0.028"
+    },
+    {
+      "model_id": "M4",
+      "name": "Random Forest",
+      "short_name": "RF",
+      "weight": 0.33999999999999997,
+      "weight_display": "0.340",
+      "weight_std": 0.018633899812498255,
+      "weight_std_display": "0.019"
+    },
+    {
+      "model_id": "M5",
+      "name": "Gradient Boosting",
+      "short_name": "GB",
+      "weight": 0.332,
+      "weight_display": "0.332",
+      "weight_std": 0.023033791601808754,
+      "weight_std_display": "0.023"
+    }
+  ],
+  "demonstration": {
+    "note": "Three fixed demonstration probabilities, not predictions. No recording is involved: this shows how the members combine, and nothing here is a result. The vote is computed in Python from the searched weights above, so the browser renders text rather than arithmetic.",
+    "inputs": [
+      {
+        "model_id": "M3",
+        "short_name": "SVM",
+        "probability": 0.71,
+        "probability_display": "0.71"
+      },
+      {
+        "model_id": "M4",
+        "short_name": "RF",
+        "probability": 0.58,
+        "probability_display": "0.58"
+      },
+      {
+        "model_id": "M5",
+        "short_name": "GB",
+        "probability": 0.64,
+        "probability_display": "0.64"
+      }
+    ],
+    "vote": 0.6425599999999999,
+    "vote_display": "0.643"
+  },
+  "interpretation": "The searched weights sit close to equal weighting: 21 of the 25 outer folds chose weights identical to 1/3 each. The optimised vote is a small refinement of an equal vote on this corpus, not a large reweighting, and reading a big difference into the bars below would overstate what the search found."
+}
