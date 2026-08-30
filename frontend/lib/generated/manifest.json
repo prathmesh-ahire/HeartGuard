@@ -1,0 +1,219 @@
+{
+  "framework": "PV-MEPCG / PulseVision",
+  "run_id": "20260830T110733Z-e8f92585",
+  "git_commit": "342fb2f36f0c14e090792208e79b97b735948b98",
+  "git_branch": "main",
+  "git_dirty": true,
+  "exported_utc": "2026-08-30T11:07:37.845243+00:00",
+  "exporter": "python scripts/17_export_frontend_data.py",
+  "source_dirs": [
+    "dataset_audit",
+    "preprocessing",
+    "features",
+    "models",
+    "search_optimization",
+    "figures_diagrams"
+  ],
+  "excluded_dirs": [
+    {
+      "dir": "binary_results",
+      "reason": "results directories are opt-in: a CSV being rewritten by another process reads as a valid CSV with a truncated row count, and no gate would see it. Re-run with --include-results once the experiments are settled."
+    },
+    {
+      "dir": "multiclass_results",
+      "reason": "results directories are opt-in: a CSV being rewritten by another process reads as a valid CSV with a truncated row count, and no gate would see it. Re-run with --include-results once the experiments are settled."
+    }
+  ],
+  "n_tables": 7,
+  "n_figures": 10,
+  "sources": [
+    {
+      "path": "outputs/01_dataset_audit/T01_dataset_inventory.csv",
+      "sha256": "6fbc3ffba2c5e6a6affba2906689ad5500ddff0076bf4db10516dbfe2857c679",
+      "digest_method": "sha256/lf",
+      "bytes": 992
+    },
+    {
+      "path": "outputs/01_dataset_audit/T02_class_distribution_and_imbalance_ratio.csv",
+      "sha256": "1c011e62b7da2858d25277d66ba2f7cfd4a072d20c71029aee688f5ff9805045",
+      "digest_method": "sha256/lf",
+      "bytes": 888
+    },
+    {
+      "path": "outputs/01_dataset_audit/T03_recording_duration_and_sampling_summary.csv",
+      "sha256": "124b7c003af62473842027db2a1f7edddaa84e7b50fa903aac23b9380f078673",
+      "digest_method": "sha256/lf",
+      "bytes": 459
+    },
+    {
+      "path": "outputs/01_dataset_audit/class_distribution.csv",
+      "sha256": "88704a2605a2bb42abe28b499284406af82e0de240e3549d5d98e6b1ffd89e0e",
+      "digest_method": "sha256/lf",
+      "bytes": 2021
+    },
+    {
+      "path": "outputs/01_dataset_audit/dataset_inventory.csv",
+      "sha256": "ba7c2e23339a2971c0fe6b9eeceab0cf7dc93861a64d76c8f83ddc9b89c44409",
+      "digest_method": "sha256/lf",
+      "bytes": 1365
+    },
+    {
+      "path": "outputs/01_dataset_audit/metadata_master.csv",
+      "sha256": "1ef1284faeba8b6428691fea92077e203e549b9895e85f821d562da5c6cd1371",
+      "digest_method": "sha256/lf",
+      "bytes": 1995833
+    },
+    {
+      "path": "outputs/01_dataset_audit/recording_duration_summary.csv",
+      "sha256": "e99cdbc5d93ee4f7c829c3e794e96f675a8476f084f9d9eb52d014007b782df9",
+      "digest_method": "sha256/lf",
+      "bytes": 5473
+    },
+    {
+      "path": "outputs/01_dataset_audit/sampling_rate_summary.csv",
+      "sha256": "55efc79bbf7c455d5e3621ad6167c785d3a8cd808c4f22135534aa4aa05964ce",
+      "digest_method": "sha256/lf",
+      "bytes": 338
+    },
+    {
+      "path": "outputs/02_preprocessing/T04_preprocessing_configuration.csv",
+      "sha256": "1c8e098bc6c4ef6ef13c6599ae0100342868c40beab778d17694f5fca3de8895",
+      "digest_method": "sha256/lf",
+      "bytes": 1892
+    },
+    {
+      "path": "outputs/02_preprocessing/preprocessing_settings.csv",
+      "sha256": "1c8e098bc6c4ef6ef13c6599ae0100342868c40beab778d17694f5fca3de8895",
+      "digest_method": "sha256/lf",
+      "bytes": 1892
+    },
+    {
+      "path": "outputs/02_preprocessing/signal_quality_flags.csv",
+      "sha256": "1b8f004435ef0f8787f46520ad4f0883d93113ca75e04a3f59df682e2084d1f2",
+      "digest_method": "sha256/lf",
+      "bytes": 1876922
+    },
+    {
+      "path": "outputs/03_features/T05_feature_inventory_and_counts.csv",
+      "sha256": "ba69ff1904852ba3bc574d74573782b9fdc7996d81a13339d12fb2b442f8d989",
+      "digest_method": "sha256/lf",
+      "bytes": 259
+    },
+    {
+      "path": "outputs/03_features/feature_family_summary.csv",
+      "sha256": "4a64e1bcde12b9939b0733eb48fc77a483dced7c06ca3c6eedd7dec2d2a26b7c",
+      "digest_method": "sha256/lf",
+      "bytes": 276
+    },
+    {
+      "path": "outputs/03_features/feature_inventory.csv",
+      "sha256": "c8ef5eba74006474ac11c45db487aebdc4ef1cbd9fdce0366ba612e4b61c876a",
+      "digest_method": "sha256/lf",
+      "bytes": 15053
+    },
+    {
+      "path": "outputs/04_models/T06_model_hyperparameter_configuration.csv",
+      "sha256": "3b13097d8a205d65dbac96630383ef8fbbf9ec6f1672142279c99810f2eee733",
+      "digest_method": "sha256/lf",
+      "bytes": 2064
+    },
+    {
+      "path": "outputs/04_models/model_registry.csv",
+      "sha256": "a7ad7b76822088bcb99067110bbc424a344436dd7123bb3bb66cfbb93601cf55",
+      "digest_method": "sha256/lf",
+      "bytes": 1035
+    },
+    {
+      "path": "outputs/04_models/model_search_spaces.csv",
+      "sha256": "0be80a89a712910f9f6a683140614a33b2f11c1bac35cf975c572d400115d252",
+      "digest_method": "sha256/lf",
+      "bytes": 1135
+    },
+    {
+      "path": "outputs/05_search_optimization/T07_search_space_and_best_parameters.csv",
+      "sha256": "e3b8f2d7908531fcabd6d1e605e5ce3d33a51decbed555cd471446ccb752220c",
+      "digest_method": "sha256/lf",
+      "bytes": 2707
+    },
+    {
+      "path": "outputs/05_search_optimization/search_space_and_best_parameters.csv",
+      "sha256": "9858d3d5d85433d2f58078ca4e6319f3718a29f15100a0246d8f06abc9e7af88",
+      "digest_method": "sha256/lf",
+      "bytes": 3045
+    },
+    {
+      "path": "outputs/13_figures_diagrams/G01_dataset_recording_counts.csv",
+      "sha256": "6347d1a23740322372f036b0fd08ad14bd0015809510804628e3c91c0731fb23",
+      "digest_method": "sha256/lf",
+      "bytes": 189
+    },
+    {
+      "path": "outputs/13_figures_diagrams/G02_class_distribution.csv",
+      "sha256": "ce9643fbf85947c6da4694a172c31887b9dbbb3119866547b4a591bb90bade0b",
+      "digest_method": "sha256/lf",
+      "bytes": 729
+    },
+    {
+      "path": "outputs/13_figures_diagrams/G03_class_distribution_shares.csv",
+      "sha256": "ce9643fbf85947c6da4694a172c31887b9dbbb3119866547b4a591bb90bade0b",
+      "digest_method": "sha256/lf",
+      "bytes": 729
+    },
+    {
+      "path": "outputs/13_figures_diagrams/G04_recording_duration_histogram.csv",
+      "sha256": "1b6d660efa71c051f037a7a9192fd43d4eceb90a8da284d880beaff9c89c53be",
+      "digest_method": "sha256/lf",
+      "bytes": 2437
+    },
+    {
+      "path": "outputs/13_figures_diagrams/G05_before_and_after_filtering.csv",
+      "sha256": "88e122c6c1cd72f79a74e058c53beccf851aa371fc12d52f9a9ddef04b3c216a",
+      "digest_method": "sha256/lf",
+      "bytes": 555760
+    },
+    {
+      "path": "outputs/13_figures_diagrams/G06_normal_versus_abnormal_spectrogram.csv",
+      "sha256": "39bd32b4831ea0c6f416c3c5b40fee4d18ce3d8b8f7a64026d91476821e2db64",
+      "digest_method": "sha256/lf",
+      "bytes": 357211
+    },
+    {
+      "path": "outputs/13_figures_diagrams/G07_mfcc_heatmap.csv",
+      "sha256": "528a204b606b8cc491306fb900e50bee4766fc1c8698f74fcd797709a5710965",
+      "digest_method": "sha256/lf",
+      "bytes": 11886
+    },
+    {
+      "path": "outputs/13_figures_diagrams/G08_chroma_heatmap.csv",
+      "sha256": "497d0d403353235c0284a7ec4dea7226e03257462d149d3f01ff603d43558a70",
+      "digest_method": "sha256/lf",
+      "bytes": 10370
+    },
+    {
+      "path": "outputs/13_figures_diagrams/G09_wavelet_decomposition.csv",
+      "sha256": "746c07360349ee6de7b9d17cd9cf621a2b315510329b791d0a490ac6b81ba6bd",
+      "digest_method": "sha256/lf",
+      "bytes": 594544
+    },
+    {
+      "path": "outputs/13_figures_diagrams/G10_feature_family_counts.csv",
+      "sha256": "2d20a8872d86bbce4bee56694ead0e4262c37dff40dd20ae87bc6d8ccc23296d",
+      "digest_method": "sha256/lf",
+      "bytes": 174
+    }
+  ],
+  "omissions": [
+    {
+      "artifact": "G05",
+      "reason": "12000 rows x 3 columns exceeds the 2000-row inline budget; this figure is served as its canonical 300 dpi PNG and its full data is at outputs/13_figures_diagrams/G05_before_and_after_filtering.csv"
+    },
+    {
+      "artifact": "G06",
+      "reason": "514 rows x 47 columns exceeds the 20000-cell inline budget; this figure is served as its canonical 300 dpi PNG and its full data is at outputs/13_figures_diagrams/G06_normal_versus_abnormal_spectrogram.csv"
+    },
+    {
+      "artifact": "G09",
+      "reason": "12032 rows x 4 columns exceeds the 2000-row inline budget; this figure is served as its canonical 300 dpi PNG and its full data is at outputs/13_figures_diagrams/G09_wavelet_decomposition.csv"
+    }
+  ]
+}

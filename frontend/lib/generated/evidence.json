@@ -1,0 +1,808 @@
+[
+  {
+    "key": "tables.T01.dataset_source",
+    "kind": "table_column",
+    "artifact": "T01",
+    "generated_from": "outputs/01_dataset_audit/T01_dataset_inventory.csv",
+    "generated_from_sha256": "6fbc3ffba2c5e6a6affba2906689ad5500ddff0076bf4db10516dbfe2857c679",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/dataset_inventory.csv"
+    ]
+  },
+  {
+    "key": "tables.T01.dataset_name",
+    "kind": "table_column",
+    "artifact": "T01",
+    "generated_from": "outputs/01_dataset_audit/T01_dataset_inventory.csv",
+    "generated_from_sha256": "6fbc3ffba2c5e6a6affba2906689ad5500ddff0076bf4db10516dbfe2857c679",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/dataset_inventory.csv"
+    ]
+  },
+  {
+    "key": "tables.T01.version",
+    "kind": "table_column",
+    "artifact": "T01",
+    "generated_from": "outputs/01_dataset_audit/T01_dataset_inventory.csv",
+    "generated_from_sha256": "6fbc3ffba2c5e6a6affba2906689ad5500ddff0076bf4db10516dbfe2857c679",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/dataset_inventory.csv"
+    ]
+  },
+  {
+    "key": "tables.T01.folder",
+    "kind": "table_column",
+    "artifact": "T01",
+    "generated_from": "outputs/01_dataset_audit/T01_dataset_inventory.csv",
+    "generated_from_sha256": "6fbc3ffba2c5e6a6affba2906689ad5500ddff0076bf4db10516dbfe2857c679",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/dataset_inventory.csv"
+    ]
+  },
+  {
+    "key": "tables.T01.total_files",
+    "kind": "table_column",
+    "artifact": "T01",
+    "generated_from": "outputs/01_dataset_audit/T01_dataset_inventory.csv",
+    "generated_from_sha256": "6fbc3ffba2c5e6a6affba2906689ad5500ddff0076bf4db10516dbfe2857c679",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/dataset_inventory.csv"
+    ]
+  },
+  {
+    "key": "tables.T01.usable_files",
+    "kind": "table_column",
+    "artifact": "T01",
+    "generated_from": "outputs/01_dataset_audit/T01_dataset_inventory.csv",
+    "generated_from_sha256": "6fbc3ffba2c5e6a6affba2906689ad5500ddff0076bf4db10516dbfe2857c679",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/dataset_inventory.csv"
+    ]
+  },
+  {
+    "key": "tables.T01.n_classes",
+    "kind": "table_column",
+    "artifact": "T01",
+    "generated_from": "outputs/01_dataset_audit/T01_dataset_inventory.csv",
+    "generated_from_sha256": "6fbc3ffba2c5e6a6affba2906689ad5500ddff0076bf4db10516dbfe2857c679",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/dataset_inventory.csv"
+    ]
+  },
+  {
+    "key": "tables.T01.n_subjects",
+    "kind": "table_column",
+    "artifact": "T01",
+    "generated_from": "outputs/01_dataset_audit/T01_dataset_inventory.csv",
+    "generated_from_sha256": "6fbc3ffba2c5e6a6affba2906689ad5500ddff0076bf4db10516dbfe2857c679",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/dataset_inventory.csv"
+    ]
+  },
+  {
+    "key": "tables.T01.subject_id_origin",
+    "kind": "table_column",
+    "artifact": "T01",
+    "generated_from": "outputs/01_dataset_audit/T01_dataset_inventory.csv",
+    "generated_from_sha256": "6fbc3ffba2c5e6a6affba2906689ad5500ddff0076bf4db10516dbfe2857c679",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/dataset_inventory.csv"
+    ]
+  },
+  {
+    "key": "tables.T01.original_fs",
+    "kind": "table_column",
+    "artifact": "T01",
+    "generated_from": "outputs/01_dataset_audit/T01_dataset_inventory.csv",
+    "generated_from_sha256": "6fbc3ffba2c5e6a6affba2906689ad5500ddff0076bf4db10516dbfe2857c679",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/dataset_inventory.csv"
+    ]
+  },
+  {
+    "key": "tables.T01.target_fs",
+    "kind": "table_column",
+    "artifact": "T01",
+    "generated_from": "outputs/01_dataset_audit/T01_dataset_inventory.csv",
+    "generated_from_sha256": "6fbc3ffba2c5e6a6affba2906689ad5500ddff0076bf4db10516dbfe2857c679",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/dataset_inventory.csv"
+    ]
+  },
+  {
+    "key": "tables.T01.total_hours",
+    "kind": "table_column",
+    "artifact": "T01",
+    "generated_from": "outputs/01_dataset_audit/T01_dataset_inventory.csv",
+    "generated_from_sha256": "6fbc3ffba2c5e6a6affba2906689ad5500ddff0076bf4db10516dbfe2857c679",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/dataset_inventory.csv"
+    ]
+  },
+  {
+    "key": "tables.T01.role",
+    "kind": "table_column",
+    "artifact": "T01",
+    "generated_from": "outputs/01_dataset_audit/T01_dataset_inventory.csv",
+    "generated_from_sha256": "6fbc3ffba2c5e6a6affba2906689ad5500ddff0076bf4db10516dbfe2857c679",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/dataset_inventory.csv"
+    ]
+  },
+  {
+    "key": "tables.T02.dataset_source",
+    "kind": "table_column",
+    "artifact": "T02",
+    "generated_from": "outputs/01_dataset_audit/T02_class_distribution_and_imbalance_ratio.csv",
+    "generated_from_sha256": "1c011e62b7da2858d25277d66ba2f7cfd4a072d20c71029aee688f5ff9805045",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/class_distribution.csv"
+    ]
+  },
+  {
+    "key": "tables.T02.dataset_name",
+    "kind": "table_column",
+    "artifact": "T02",
+    "generated_from": "outputs/01_dataset_audit/T02_class_distribution_and_imbalance_ratio.csv",
+    "generated_from_sha256": "1c011e62b7da2858d25277d66ba2f7cfd4a072d20c71029aee688f5ff9805045",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/class_distribution.csv"
+    ]
+  },
+  {
+    "key": "tables.T02.task",
+    "kind": "table_column",
+    "artifact": "T02",
+    "generated_from": "outputs/01_dataset_audit/T02_class_distribution_and_imbalance_ratio.csv",
+    "generated_from_sha256": "1c011e62b7da2858d25277d66ba2f7cfd4a072d20c71029aee688f5ff9805045",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/class_distribution.csv"
+    ]
+  },
+  {
+    "key": "tables.T02.class",
+    "kind": "table_column",
+    "artifact": "T02",
+    "generated_from": "outputs/01_dataset_audit/T02_class_distribution_and_imbalance_ratio.csv",
+    "generated_from_sha256": "1c011e62b7da2858d25277d66ba2f7cfd4a072d20c71029aee688f5ff9805045",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/class_distribution.csv"
+    ]
+  },
+  {
+    "key": "tables.T02.n_records",
+    "kind": "table_column",
+    "artifact": "T02",
+    "generated_from": "outputs/01_dataset_audit/T02_class_distribution_and_imbalance_ratio.csv",
+    "generated_from_sha256": "1c011e62b7da2858d25277d66ba2f7cfd4a072d20c71029aee688f5ff9805045",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/class_distribution.csv"
+    ]
+  },
+  {
+    "key": "tables.T02.share",
+    "kind": "table_column",
+    "artifact": "T02",
+    "generated_from": "outputs/01_dataset_audit/T02_class_distribution_and_imbalance_ratio.csv",
+    "generated_from_sha256": "1c011e62b7da2858d25277d66ba2f7cfd4a072d20c71029aee688f5ff9805045",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/class_distribution.csv"
+    ]
+  },
+  {
+    "key": "tables.T02.imbalance_ratio",
+    "kind": "table_column",
+    "artifact": "T02",
+    "generated_from": "outputs/01_dataset_audit/T02_class_distribution_and_imbalance_ratio.csv",
+    "generated_from_sha256": "1c011e62b7da2858d25277d66ba2f7cfd4a072d20c71029aee688f5ff9805045",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/class_distribution.csv"
+    ]
+  },
+  {
+    "key": "tables.T02.n_subjects",
+    "kind": "table_column",
+    "artifact": "T02",
+    "generated_from": "outputs/01_dataset_audit/T02_class_distribution_and_imbalance_ratio.csv",
+    "generated_from_sha256": "1c011e62b7da2858d25277d66ba2f7cfd4a072d20c71029aee688f5ff9805045",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/class_distribution.csv"
+    ]
+  },
+  {
+    "key": "tables.T03.dataset_source",
+    "kind": "table_column",
+    "artifact": "T03",
+    "generated_from": "outputs/01_dataset_audit/T03_recording_duration_and_sampling_summary.csv",
+    "generated_from_sha256": "124b7c003af62473842027db2a1f7edddaa84e7b50fa903aac23b9380f078673",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/recording_duration_summary.csv",
+      "outputs/01_dataset_audit/sampling_rate_summary.csv"
+    ]
+  },
+  {
+    "key": "tables.T03.dataset_name",
+    "kind": "table_column",
+    "artifact": "T03",
+    "generated_from": "outputs/01_dataset_audit/T03_recording_duration_and_sampling_summary.csv",
+    "generated_from_sha256": "124b7c003af62473842027db2a1f7edddaa84e7b50fa903aac23b9380f078673",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/recording_duration_summary.csv",
+      "outputs/01_dataset_audit/sampling_rate_summary.csv"
+    ]
+  },
+  {
+    "key": "tables.T03.n",
+    "kind": "table_column",
+    "artifact": "T03",
+    "generated_from": "outputs/01_dataset_audit/T03_recording_duration_and_sampling_summary.csv",
+    "generated_from_sha256": "124b7c003af62473842027db2a1f7edddaa84e7b50fa903aac23b9380f078673",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/recording_duration_summary.csv",
+      "outputs/01_dataset_audit/sampling_rate_summary.csv"
+    ]
+  },
+  {
+    "key": "tables.T03.min",
+    "kind": "table_column",
+    "artifact": "T03",
+    "generated_from": "outputs/01_dataset_audit/T03_recording_duration_and_sampling_summary.csv",
+    "generated_from_sha256": "124b7c003af62473842027db2a1f7edddaa84e7b50fa903aac23b9380f078673",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/recording_duration_summary.csv",
+      "outputs/01_dataset_audit/sampling_rate_summary.csv"
+    ]
+  },
+  {
+    "key": "tables.T03.p25",
+    "kind": "table_column",
+    "artifact": "T03",
+    "generated_from": "outputs/01_dataset_audit/T03_recording_duration_and_sampling_summary.csv",
+    "generated_from_sha256": "124b7c003af62473842027db2a1f7edddaa84e7b50fa903aac23b9380f078673",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/recording_duration_summary.csv",
+      "outputs/01_dataset_audit/sampling_rate_summary.csv"
+    ]
+  },
+  {
+    "key": "tables.T03.median",
+    "kind": "table_column",
+    "artifact": "T03",
+    "generated_from": "outputs/01_dataset_audit/T03_recording_duration_and_sampling_summary.csv",
+    "generated_from_sha256": "124b7c003af62473842027db2a1f7edddaa84e7b50fa903aac23b9380f078673",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/recording_duration_summary.csv",
+      "outputs/01_dataset_audit/sampling_rate_summary.csv"
+    ]
+  },
+  {
+    "key": "tables.T03.p75",
+    "kind": "table_column",
+    "artifact": "T03",
+    "generated_from": "outputs/01_dataset_audit/T03_recording_duration_and_sampling_summary.csv",
+    "generated_from_sha256": "124b7c003af62473842027db2a1f7edddaa84e7b50fa903aac23b9380f078673",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/recording_duration_summary.csv",
+      "outputs/01_dataset_audit/sampling_rate_summary.csv"
+    ]
+  },
+  {
+    "key": "tables.T03.max",
+    "kind": "table_column",
+    "artifact": "T03",
+    "generated_from": "outputs/01_dataset_audit/T03_recording_duration_and_sampling_summary.csv",
+    "generated_from_sha256": "124b7c003af62473842027db2a1f7edddaa84e7b50fa903aac23b9380f078673",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/recording_duration_summary.csv",
+      "outputs/01_dataset_audit/sampling_rate_summary.csv"
+    ]
+  },
+  {
+    "key": "tables.T03.mean",
+    "kind": "table_column",
+    "artifact": "T03",
+    "generated_from": "outputs/01_dataset_audit/T03_recording_duration_and_sampling_summary.csv",
+    "generated_from_sha256": "124b7c003af62473842027db2a1f7edddaa84e7b50fa903aac23b9380f078673",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/recording_duration_summary.csv",
+      "outputs/01_dataset_audit/sampling_rate_summary.csv"
+    ]
+  },
+  {
+    "key": "tables.T03.sd",
+    "kind": "table_column",
+    "artifact": "T03",
+    "generated_from": "outputs/01_dataset_audit/T03_recording_duration_and_sampling_summary.csv",
+    "generated_from_sha256": "124b7c003af62473842027db2a1f7edddaa84e7b50fa903aac23b9380f078673",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/recording_duration_summary.csv",
+      "outputs/01_dataset_audit/sampling_rate_summary.csv"
+    ]
+  },
+  {
+    "key": "tables.T03.original_fs",
+    "kind": "table_column",
+    "artifact": "T03",
+    "generated_from": "outputs/01_dataset_audit/T03_recording_duration_and_sampling_summary.csv",
+    "generated_from_sha256": "124b7c003af62473842027db2a1f7edddaa84e7b50fa903aac23b9380f078673",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/recording_duration_summary.csv",
+      "outputs/01_dataset_audit/sampling_rate_summary.csv"
+    ]
+  },
+  {
+    "key": "tables.T03.converted_fs",
+    "kind": "table_column",
+    "artifact": "T03",
+    "generated_from": "outputs/01_dataset_audit/T03_recording_duration_and_sampling_summary.csv",
+    "generated_from_sha256": "124b7c003af62473842027db2a1f7edddaa84e7b50fa903aac23b9380f078673",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/recording_duration_summary.csv",
+      "outputs/01_dataset_audit/sampling_rate_summary.csv"
+    ]
+  },
+  {
+    "key": "tables.T03.conversion",
+    "kind": "table_column",
+    "artifact": "T03",
+    "generated_from": "outputs/01_dataset_audit/T03_recording_duration_and_sampling_summary.csv",
+    "generated_from_sha256": "124b7c003af62473842027db2a1f7edddaa84e7b50fa903aac23b9380f078673",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/recording_duration_summary.csv",
+      "outputs/01_dataset_audit/sampling_rate_summary.csv"
+    ]
+  },
+  {
+    "key": "tables.T04.stage",
+    "kind": "table_column",
+    "artifact": "T04",
+    "generated_from": "outputs/02_preprocessing/T04_preprocessing_configuration.csv",
+    "generated_from_sha256": "1c8e098bc6c4ef6ef13c6599ae0100342868c40beab778d17694f5fca3de8895",
+    "upstream_sources": [
+      "outputs/02_preprocessing/preprocessing_settings.csv"
+    ]
+  },
+  {
+    "key": "tables.T04.setting",
+    "kind": "table_column",
+    "artifact": "T04",
+    "generated_from": "outputs/02_preprocessing/T04_preprocessing_configuration.csv",
+    "generated_from_sha256": "1c8e098bc6c4ef6ef13c6599ae0100342868c40beab778d17694f5fca3de8895",
+    "upstream_sources": [
+      "outputs/02_preprocessing/preprocessing_settings.csv"
+    ]
+  },
+  {
+    "key": "tables.T04.value",
+    "kind": "table_column",
+    "artifact": "T04",
+    "generated_from": "outputs/02_preprocessing/T04_preprocessing_configuration.csv",
+    "generated_from_sha256": "1c8e098bc6c4ef6ef13c6599ae0100342868c40beab778d17694f5fca3de8895",
+    "upstream_sources": [
+      "outputs/02_preprocessing/preprocessing_settings.csv"
+    ]
+  },
+  {
+    "key": "tables.T04.unit",
+    "kind": "table_column",
+    "artifact": "T04",
+    "generated_from": "outputs/02_preprocessing/T04_preprocessing_configuration.csv",
+    "generated_from_sha256": "1c8e098bc6c4ef6ef13c6599ae0100342868c40beab778d17694f5fca3de8895",
+    "upstream_sources": [
+      "outputs/02_preprocessing/preprocessing_settings.csv"
+    ]
+  },
+  {
+    "key": "tables.T04.config_key",
+    "kind": "table_column",
+    "artifact": "T04",
+    "generated_from": "outputs/02_preprocessing/T04_preprocessing_configuration.csv",
+    "generated_from_sha256": "1c8e098bc6c4ef6ef13c6599ae0100342868c40beab778d17694f5fca3de8895",
+    "upstream_sources": [
+      "outputs/02_preprocessing/preprocessing_settings.csv"
+    ]
+  },
+  {
+    "key": "tables.T04.notes",
+    "kind": "table_column",
+    "artifact": "T04",
+    "generated_from": "outputs/02_preprocessing/T04_preprocessing_configuration.csv",
+    "generated_from_sha256": "1c8e098bc6c4ef6ef13c6599ae0100342868c40beab778d17694f5fca3de8895",
+    "upstream_sources": [
+      "outputs/02_preprocessing/preprocessing_settings.csv"
+    ]
+  },
+  {
+    "key": "tables.T05.family",
+    "kind": "table_column",
+    "artifact": "T05",
+    "generated_from": "outputs/03_features/T05_feature_inventory_and_counts.csv",
+    "generated_from_sha256": "ba69ff1904852ba3bc574d74573782b9fdc7996d81a13339d12fb2b442f8d989",
+    "upstream_sources": [
+      "outputs/03_features/feature_inventory.csv",
+      "outputs/03_features/feature_family_summary.csv"
+    ]
+  },
+  {
+    "key": "tables.T05.extractor",
+    "kind": "table_column",
+    "artifact": "T05",
+    "generated_from": "outputs/03_features/T05_feature_inventory_and_counts.csv",
+    "generated_from_sha256": "ba69ff1904852ba3bc574d74573782b9fdc7996d81a13339d12fb2b442f8d989",
+    "upstream_sources": [
+      "outputs/03_features/feature_inventory.csv",
+      "outputs/03_features/feature_family_summary.csv"
+    ]
+  },
+  {
+    "key": "tables.T05.counted_features",
+    "kind": "table_column",
+    "artifact": "T05",
+    "generated_from": "outputs/03_features/T05_feature_inventory_and_counts.csv",
+    "generated_from_sha256": "ba69ff1904852ba3bc574d74573782b9fdc7996d81a13339d12fb2b442f8d989",
+    "upstream_sources": [
+      "outputs/03_features/feature_inventory.csv",
+      "outputs/03_features/feature_family_summary.csv"
+    ]
+  },
+  {
+    "key": "tables.T05.expected_count",
+    "kind": "table_column",
+    "artifact": "T05",
+    "generated_from": "outputs/03_features/T05_feature_inventory_and_counts.csv",
+    "generated_from_sha256": "ba69ff1904852ba3bc574d74573782b9fdc7996d81a13339d12fb2b442f8d989",
+    "upstream_sources": [
+      "outputs/03_features/feature_inventory.csv",
+      "outputs/03_features/feature_family_summary.csv"
+    ]
+  },
+  {
+    "key": "tables.T05.matches_expected",
+    "kind": "table_column",
+    "artifact": "T05",
+    "generated_from": "outputs/03_features/T05_feature_inventory_and_counts.csv",
+    "generated_from_sha256": "ba69ff1904852ba3bc574d74573782b9fdc7996d81a13339d12fb2b442f8d989",
+    "upstream_sources": [
+      "outputs/03_features/feature_inventory.csv",
+      "outputs/03_features/feature_family_summary.csv"
+    ]
+  },
+  {
+    "key": "tables.T05.first_index",
+    "kind": "table_column",
+    "artifact": "T05",
+    "generated_from": "outputs/03_features/T05_feature_inventory_and_counts.csv",
+    "generated_from_sha256": "ba69ff1904852ba3bc574d74573782b9fdc7996d81a13339d12fb2b442f8d989",
+    "upstream_sources": [
+      "outputs/03_features/feature_inventory.csv",
+      "outputs/03_features/feature_family_summary.csv"
+    ]
+  },
+  {
+    "key": "tables.T06.model_id",
+    "kind": "table_column",
+    "artifact": "T06",
+    "generated_from": "outputs/04_models/T06_model_hyperparameter_configuration.csv",
+    "generated_from_sha256": "3b13097d8a205d65dbac96630383ef8fbbf9ec6f1672142279c99810f2eee733",
+    "upstream_sources": [
+      "outputs/04_models/model_registry.csv",
+      "outputs/04_models/model_search_spaces.csv"
+    ]
+  },
+  {
+    "key": "tables.T06.name",
+    "kind": "table_column",
+    "artifact": "T06",
+    "generated_from": "outputs/04_models/T06_model_hyperparameter_configuration.csv",
+    "generated_from_sha256": "3b13097d8a205d65dbac96630383ef8fbbf9ec6f1672142279c99810f2eee733",
+    "upstream_sources": [
+      "outputs/04_models/model_registry.csv",
+      "outputs/04_models/model_search_spaces.csv"
+    ]
+  },
+  {
+    "key": "tables.T06.estimator",
+    "kind": "table_column",
+    "artifact": "T06",
+    "generated_from": "outputs/04_models/T06_model_hyperparameter_configuration.csv",
+    "generated_from_sha256": "3b13097d8a205d65dbac96630383ef8fbbf9ec6f1672142279c99810f2eee733",
+    "upstream_sources": [
+      "outputs/04_models/model_registry.csv",
+      "outputs/04_models/model_search_spaces.csv"
+    ]
+  },
+  {
+    "key": "tables.T06.mandatory",
+    "kind": "table_column",
+    "artifact": "T06",
+    "generated_from": "outputs/04_models/T06_model_hyperparameter_configuration.csv",
+    "generated_from_sha256": "3b13097d8a205d65dbac96630383ef8fbbf9ec6f1672142279c99810f2eee733",
+    "upstream_sources": [
+      "outputs/04_models/model_registry.csv",
+      "outputs/04_models/model_search_spaces.csv"
+    ]
+  },
+  {
+    "key": "tables.T06.implemented",
+    "kind": "table_column",
+    "artifact": "T06",
+    "generated_from": "outputs/04_models/T06_model_hyperparameter_configuration.csv",
+    "generated_from_sha256": "3b13097d8a205d65dbac96630383ef8fbbf9ec6f1672142279c99810f2eee733",
+    "upstream_sources": [
+      "outputs/04_models/model_registry.csv",
+      "outputs/04_models/model_search_spaces.csv"
+    ]
+  },
+  {
+    "key": "tables.T06.is_ensemble",
+    "kind": "table_column",
+    "artifact": "T06",
+    "generated_from": "outputs/04_models/T06_model_hyperparameter_configuration.csv",
+    "generated_from_sha256": "3b13097d8a205d65dbac96630383ef8fbbf9ec6f1672142279c99810f2eee733",
+    "upstream_sources": [
+      "outputs/04_models/model_registry.csv",
+      "outputs/04_models/model_search_spaces.csv"
+    ]
+  },
+  {
+    "key": "tables.T06.members",
+    "kind": "table_column",
+    "artifact": "T06",
+    "generated_from": "outputs/04_models/T06_model_hyperparameter_configuration.csv",
+    "generated_from_sha256": "3b13097d8a205d65dbac96630383ef8fbbf9ec6f1672142279c99810f2eee733",
+    "upstream_sources": [
+      "outputs/04_models/model_registry.csv",
+      "outputs/04_models/model_search_spaces.csv"
+    ]
+  },
+  {
+    "key": "tables.T06.calibrated",
+    "kind": "table_column",
+    "artifact": "T06",
+    "generated_from": "outputs/04_models/T06_model_hyperparameter_configuration.csv",
+    "generated_from_sha256": "3b13097d8a205d65dbac96630383ef8fbbf9ec6f1672142279c99810f2eee733",
+    "upstream_sources": [
+      "outputs/04_models/model_registry.csv",
+      "outputs/04_models/model_search_spaces.csv"
+    ]
+  },
+  {
+    "key": "tables.T06.n_search_dimensions",
+    "kind": "table_column",
+    "artifact": "T06",
+    "generated_from": "outputs/04_models/T06_model_hyperparameter_configuration.csv",
+    "generated_from_sha256": "3b13097d8a205d65dbac96630383ef8fbbf9ec6f1672142279c99810f2eee733",
+    "upstream_sources": [
+      "outputs/04_models/model_registry.csv",
+      "outputs/04_models/model_search_spaces.csv"
+    ]
+  },
+  {
+    "key": "tables.T06.search_space",
+    "kind": "table_column",
+    "artifact": "T06",
+    "generated_from": "outputs/04_models/T06_model_hyperparameter_configuration.csv",
+    "generated_from_sha256": "3b13097d8a205d65dbac96630383ef8fbbf9ec6f1672142279c99810f2eee733",
+    "upstream_sources": [
+      "outputs/04_models/model_registry.csv",
+      "outputs/04_models/model_search_spaces.csv"
+    ]
+  },
+  {
+    "key": "tables.T06.unavailable_reason",
+    "kind": "table_column",
+    "artifact": "T06",
+    "generated_from": "outputs/04_models/T06_model_hyperparameter_configuration.csv",
+    "generated_from_sha256": "3b13097d8a205d65dbac96630383ef8fbbf9ec6f1672142279c99810f2eee733",
+    "upstream_sources": [
+      "outputs/04_models/model_registry.csv",
+      "outputs/04_models/model_search_spaces.csv"
+    ]
+  },
+  {
+    "key": "tables.T07.model_id",
+    "kind": "table_column",
+    "artifact": "T07",
+    "generated_from": "outputs/05_search_optimization/T07_search_space_and_best_parameters.csv",
+    "generated_from_sha256": "e3b8f2d7908531fcabd6d1e605e5ce3d33a51decbed555cd471446ccb752220c",
+    "upstream_sources": [
+      "outputs/05_search_optimization/search_space_and_best_parameters.csv"
+    ]
+  },
+  {
+    "key": "tables.T07.parameter",
+    "kind": "table_column",
+    "artifact": "T07",
+    "generated_from": "outputs/05_search_optimization/T07_search_space_and_best_parameters.csv",
+    "generated_from_sha256": "e3b8f2d7908531fcabd6d1e605e5ce3d33a51decbed555cd471446ccb752220c",
+    "upstream_sources": [
+      "outputs/05_search_optimization/search_space_and_best_parameters.csv"
+    ]
+  },
+  {
+    "key": "tables.T07.distribution",
+    "kind": "table_column",
+    "artifact": "T07",
+    "generated_from": "outputs/05_search_optimization/T07_search_space_and_best_parameters.csv",
+    "generated_from_sha256": "e3b8f2d7908531fcabd6d1e605e5ce3d33a51decbed555cd471446ccb752220c",
+    "upstream_sources": [
+      "outputs/05_search_optimization/search_space_and_best_parameters.csv"
+    ]
+  },
+  {
+    "key": "tables.T07.range_or_choices",
+    "kind": "table_column",
+    "artifact": "T07",
+    "generated_from": "outputs/05_search_optimization/T07_search_space_and_best_parameters.csv",
+    "generated_from_sha256": "e3b8f2d7908531fcabd6d1e605e5ce3d33a51decbed555cd471446ccb752220c",
+    "upstream_sources": [
+      "outputs/05_search_optimization/search_space_and_best_parameters.csv"
+    ]
+  },
+  {
+    "key": "tables.T07.so_01_selected",
+    "kind": "table_column",
+    "artifact": "T07",
+    "generated_from": "outputs/05_search_optimization/T07_search_space_and_best_parameters.csv",
+    "generated_from_sha256": "e3b8f2d7908531fcabd6d1e605e5ce3d33a51decbed555cd471446ccb752220c",
+    "upstream_sources": [
+      "outputs/05_search_optimization/search_space_and_best_parameters.csv"
+    ]
+  },
+  {
+    "key": "tables.T07.so_01_score",
+    "kind": "table_column",
+    "artifact": "T07",
+    "generated_from": "outputs/05_search_optimization/T07_search_space_and_best_parameters.csv",
+    "generated_from_sha256": "e3b8f2d7908531fcabd6d1e605e5ce3d33a51decbed555cd471446ccb752220c",
+    "upstream_sources": [
+      "outputs/05_search_optimization/search_space_and_best_parameters.csv"
+    ]
+  },
+  {
+    "key": "tables.T07.so_02_selected",
+    "kind": "table_column",
+    "artifact": "T07",
+    "generated_from": "outputs/05_search_optimization/T07_search_space_and_best_parameters.csv",
+    "generated_from_sha256": "e3b8f2d7908531fcabd6d1e605e5ce3d33a51decbed555cd471446ccb752220c",
+    "upstream_sources": [
+      "outputs/05_search_optimization/search_space_and_best_parameters.csv"
+    ]
+  },
+  {
+    "key": "tables.T07.so_02_score",
+    "kind": "table_column",
+    "artifact": "T07",
+    "generated_from": "outputs/05_search_optimization/T07_search_space_and_best_parameters.csv",
+    "generated_from_sha256": "e3b8f2d7908531fcabd6d1e605e5ce3d33a51decbed555cd471446ccb752220c",
+    "upstream_sources": [
+      "outputs/05_search_optimization/search_space_and_best_parameters.csv"
+    ]
+  },
+  {
+    "key": "tables.T07.final_selected",
+    "kind": "table_column",
+    "artifact": "T07",
+    "generated_from": "outputs/05_search_optimization/T07_search_space_and_best_parameters.csv",
+    "generated_from_sha256": "e3b8f2d7908531fcabd6d1e605e5ce3d33a51decbed555cd471446ccb752220c",
+    "upstream_sources": [
+      "outputs/05_search_optimization/search_space_and_best_parameters.csv"
+    ]
+  },
+  {
+    "key": "tables.T07.final_source",
+    "kind": "table_column",
+    "artifact": "T07",
+    "generated_from": "outputs/05_search_optimization/T07_search_space_and_best_parameters.csv",
+    "generated_from_sha256": "e3b8f2d7908531fcabd6d1e605e5ce3d33a51decbed555cd471446ccb752220c",
+    "upstream_sources": [
+      "outputs/05_search_optimization/search_space_and_best_parameters.csv"
+    ]
+  },
+  {
+    "key": "figures.G01",
+    "kind": "figure",
+    "artifact": "G01",
+    "generated_from": "outputs/13_figures_diagrams/G01_dataset_recording_counts.csv",
+    "generated_from_sha256": "6347d1a23740322372f036b0fd08ad14bd0015809510804628e3c91c0731fb23",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/dataset_inventory.csv"
+    ]
+  },
+  {
+    "key": "figures.G02",
+    "kind": "figure",
+    "artifact": "G02",
+    "generated_from": "outputs/13_figures_diagrams/G02_class_distribution.csv",
+    "generated_from_sha256": "ce9643fbf85947c6da4694a172c31887b9dbbb3119866547b4a591bb90bade0b",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/class_distribution.csv"
+    ]
+  },
+  {
+    "key": "figures.G03",
+    "kind": "figure",
+    "artifact": "G03",
+    "generated_from": "outputs/13_figures_diagrams/G03_class_distribution_shares.csv",
+    "generated_from_sha256": "ce9643fbf85947c6da4694a172c31887b9dbbb3119866547b4a591bb90bade0b",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/class_distribution.csv"
+    ]
+  },
+  {
+    "key": "figures.G04",
+    "kind": "figure",
+    "artifact": "G04",
+    "generated_from": "outputs/13_figures_diagrams/G04_recording_duration_histogram.csv",
+    "generated_from_sha256": "1b6d660efa71c051f037a7a9192fd43d4eceb90a8da284d880beaff9c89c53be",
+    "upstream_sources": [
+      "outputs/01_dataset_audit/metadata_master.csv"
+    ]
+  },
+  {
+    "key": "figures.G05",
+    "kind": "figure",
+    "artifact": "G05",
+    "generated_from": "outputs/13_figures_diagrams/G05_before_and_after_filtering.csv",
+    "generated_from_sha256": "88e122c6c1cd72f79a74e058c53beccf851aa371fc12d52f9a9ddef04b3c216a",
+    "upstream_sources": [
+      "dataset/ (read-only) via src/preprocessing/pipeline.py",
+      "outputs/01_dataset_audit/metadata_master.csv",
+      "outputs/02_preprocessing/signal_quality_flags.csv"
+    ]
+  },
+  {
+    "key": "figures.G06",
+    "kind": "figure",
+    "artifact": "G06",
+    "generated_from": "outputs/13_figures_diagrams/G06_normal_versus_abnormal_spectrogram.csv",
+    "generated_from_sha256": "39bd32b4831ea0c6f416c3c5b40fee4d18ce3d8b8f7a64026d91476821e2db64",
+    "upstream_sources": [
+      "dataset/ (read-only) via src/preprocessing/pipeline.py",
+      "outputs/01_dataset_audit/metadata_master.csv"
+    ]
+  },
+  {
+    "key": "figures.G07",
+    "kind": "figure",
+    "artifact": "G07",
+    "generated_from": "outputs/13_figures_diagrams/G07_mfcc_heatmap.csv",
+    "generated_from_sha256": "528a204b606b8cc491306fb900e50bee4766fc1c8698f74fcd797709a5710965",
+    "upstream_sources": [
+      "dataset/ (read-only) via src/preprocessing/pipeline.py",
+      "outputs/03_features/feature_inventory.csv"
+    ]
+  },
+  {
+    "key": "figures.G08",
+    "kind": "figure",
+    "artifact": "G08",
+    "generated_from": "outputs/13_figures_diagrams/G08_chroma_heatmap.csv",
+    "generated_from_sha256": "497d0d403353235c0284a7ec4dea7226e03257462d149d3f01ff603d43558a70",
+    "upstream_sources": [
+      "dataset/ (read-only) via src/preprocessing/pipeline.py",
+      "outputs/03_features/feature_inventory.csv"
+    ]
+  },
+  {
+    "key": "figures.G09",
+    "kind": "figure",
+    "artifact": "G09",
+    "generated_from": "outputs/13_figures_diagrams/G09_wavelet_decomposition.csv",
+    "generated_from_sha256": "746c07360349ee6de7b9d17cd9cf621a2b315510329b791d0a490ac6b81ba6bd",
+    "upstream_sources": [
+      "dataset/ (read-only) via src/preprocessing/pipeline.py",
+      "outputs/03_features/feature_inventory.csv"
+    ]
+  },
+  {
+    "key": "figures.G10",
+    "kind": "figure",
+    "artifact": "G10",
+    "generated_from": "outputs/13_figures_diagrams/G10_feature_family_counts.csv",
+    "generated_from_sha256": "2d20a8872d86bbce4bee56694ead0e4262c37dff40dd20ae87bc6d8ccc23296d",
+    "upstream_sources": [
+      "outputs/03_features/feature_family_summary.csv"
+    ]
+  }
+]
