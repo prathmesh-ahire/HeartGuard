@@ -65,6 +65,35 @@ export interface GeneratedFigure {
   data_omitted_reason: string | null;
 }
 
+export interface GeneratedTheme {
+  palette: {
+    name: string;
+    colourblind_safe: boolean;
+    order_is_meaningful: boolean;
+    /** Okabe-Ito, in the fixed order every figure uses. Index 0 is series 1. */
+    series: string[];
+    roles: Record<string, string>;
+  };
+  contrast: {
+    standard: string;
+    light_ground: string;
+    dark_ground: string;
+    threshold: number;
+    /** Measured WCAG ratio per series colour on each page ground. */
+    series: {
+      index: number;
+      colour: string;
+      on_light: number;
+      on_dark: number;
+      /** Grounds where this fill is too close to the page and needs a stroke. */
+      needs_outline_on: string[];
+    }[];
+  };
+  colormaps: { sequential: string; diverging: string };
+  figure: { dpi: number; sizes_inches: Record<string, number[]> };
+  typography: { family: string; note: string };
+}
+
 export interface GeneratedSource {
   path: string;
   sha256: string;

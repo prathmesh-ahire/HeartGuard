@@ -117,3 +117,20 @@ export const GROUP_LABELS: Record<RouteDefinition['group'], string> = {
 export function routeFor(href: string): RouteDefinition | undefined {
   return ROUTES.find((route) => route.href === href);
 }
+
+/**
+ * Routes that exist but are not document pages: they carry no results and are
+ * not in the primary navigation. Declared here anyway so that "every route has
+ * a page and every page is declared" stays an assertion rather than a hope.
+ */
+export const UTILITY_ROUTES: readonly RouteDefinition[] = [
+  {
+    href: '/design/',
+    label: 'Design reference',
+    summary:
+      'Every design-system component in every state, for visual QA. Not a results page.',
+    group: 'overview',
+  },
+];
+
+export const ALL_ROUTES: readonly RouteDefinition[] = [...ROUTES, ...UTILITY_ROUTES];

@@ -63,6 +63,13 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from src.reporting.plot_style import (
+    DIVERGING_CMAP,
+    DPI,
+    FIGSIZE,
+    OKABE_ITO,
+    SEQUENTIAL_CMAP,
+)
 from src.reporting.tables import (
     PLACES,
     content_digest,
@@ -85,6 +92,9 @@ __all__ = [
     "export_all",
     "column_payload",
     "verify_strict_json",
+    "theme_payload",
+    "contrast_ratio",
+    "palette_contrast",
 ]
 
 log = get_logger("reporting.frontend_export")
@@ -114,6 +124,7 @@ READABLE_SUFFIXES: frozenset[str] = frozenset({".csv", ".json", ".yaml", ".yml"}
 
 GENERATED_FILES: tuple[str, ...] = (
     "manifest.json",
+    "theme.json",
     "evidence.json",
     "tables.json",
     "figures.json",
@@ -215,9 +226,7 @@ def column_payload(name: str, series: Any, kind: str | None = None) -> dict[str,
     # a bool. Shipping it as `values` produced an array of nulls sitting under a
     # text column -- which reads as "we had numbers and lost them" rather than
     # "this was never numeric". A bool is a category; it belongs in `display`.
-    if pd.api.types.is_numeric_dtype(series_view) and not pd.api.types.is_bool_dtype(
-        series_view
-    ):
+    if pd.api.types.is_numeric_dtype(series_view) and not pd.api.types.is_bool_dtype(series_view):
         numeric = [_json_number(v) for v in raw]
 
     return {
@@ -398,6 +407,130 @@ def _export_figure(
 
 
 # ---------------------------------------------------------------------------
+# T111.1 -- the figure palette, exported rather than retyped
+# ---------------------------------------------------------------------------
+
+
+#: The two page grounds the dashboard renders on: Tailwind `white` and
+#: `slate-950`, which `app/globals.css` sets on <body> in each theme.
+LIGHT_GROUND = "#FFFFFF"
+DARK_GROUND = "#020617"
+
+#: WCAG 2.2 SC 1.4.11 (non-text contrast). A chart mark, a border or an icon
+#: needs 3:1 against its background to be distinguishable. Text needs 4.5:1
+#: (SC 1.4.3), which is checked separately for the UI chrome.
+NON_TEXT_CONTRAST = 3.0
+
+
+def _relative_luminance(hex_colour: str) -> float:
+    """WCAG relative luminance of an ``#RRGGBB`` colour."""
+    value = hex_colour.lstrip("#")
+    channels = [int(value[i : i + 2], 16) / 255.0 for i in (0, 2, 4)]
+    linear = [c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4 for c in channels]
+    return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2]
+
+
+def contrast_ratio(foreground: str, background: str) -> float:
+    """WCAG contrast ratio, 1.0 to 21.0."""
+    a = _relative_luminance(foreground)
+    b = _relative_luminance(background)
+    lighter, darker = max(a, b), min(a, b)
+    return (lighter + 0.05) / (darker + 0.05)
+
+
+def palette_contrast() -> list[dict[str, Any]]:
+    """Measured contrast for every series colour on both grounds (T111.5).
+
+    Reported rather than asserted away. Okabe-Ito is designed for colourblind
+    *discriminability* -- the eight hues stay apart under protanopia,
+    deuteranopia and tritanopia -- which is a different property from luminance
+    contrast against a page. The yellow in particular is nearly as bright as
+    white, so a yellow mark on a white ground is real data the reader cannot
+    see.
+
+    The fix is not to drop the colour, which would break the fixed series order
+    the figures depend on. It is to give marks a stroke on the ground where
+    their fill is too close to it, and `needs_outline_on` is what tells the
+    chart layer where.
+    """
+    rows: list[dict[str, Any]] = []
+    for index, colour in enumerate(OKABE_ITO):
+        on_light = contrast_ratio(colour, LIGHT_GROUND)
+        on_dark = contrast_ratio(colour, DARK_GROUND)
+        needs = []
+        if on_light < NON_TEXT_CONTRAST:
+            needs.append("light")
+        if on_dark < NON_TEXT_CONTRAST:
+            needs.append("dark")
+        rows.append(
+            {
+                "index": index,
+                "colour": colour,
+                "on_light": round(on_light, 3),
+                "on_dark": round(on_dark, 3),
+                "needs_outline_on": needs,
+            }
+        )
+    return rows
+
+
+def theme_payload() -> dict[str, Any]:
+    """The matplotlib style, as data the browser can read.
+
+    T111.1 asks the dashboard's design tokens to match the figure palette "so
+    charts and pages agree". The obvious way to do that is to copy eight hex
+    strings into a TypeScript file, and the obvious way for it to go wrong is
+    for somebody to change one of them in one place. So the palette is exported
+    from ``src/reporting/plot_style.py`` -- the module every figure already
+    draws through -- and the frontend imports it like any other generated value.
+
+    Okabe & Ito's eight colours stay distinguishable under protanopia,
+    deuteranopia and tritanopia (about one man in twelve has one of them), and
+    the ORDER is meaningful: index 0 is the first series in every figure, so a
+    bar chart in the browser and the 300 dpi PNG beside it colour the same
+    series the same way.
+    """
+    return {
+        "palette": {
+            "name": "Okabe-Ito (Color Universal Design, 2008)",
+            "colourblind_safe": True,
+            "order_is_meaningful": True,
+            "series": list(OKABE_ITO),
+            "roles": {
+                "series_1": OKABE_ITO[0],
+                "series_2": OKABE_ITO[1],
+                "series_3": OKABE_ITO[2],
+                "normal": OKABE_ITO[0],
+                "abnormal": OKABE_ITO[1],
+            },
+        },
+        "contrast": {
+            "standard": "WCAG 2.2 SC 1.4.11 (non-text), 3:1",
+            "light_ground": LIGHT_GROUND,
+            "dark_ground": DARK_GROUND,
+            "threshold": NON_TEXT_CONTRAST,
+            "series": palette_contrast(),
+        },
+        "colormaps": {
+            "sequential": SEQUENTIAL_CMAP,
+            "diverging": DIVERGING_CMAP,
+        },
+        "figure": {
+            "dpi": DPI,
+            "sizes_inches": {name: list(size) for name, size in FIGSIZE.items()},
+        },
+        "typography": {
+            "family": "serif",
+            "note": (
+                "Figures are set in DejaVu Serif because the thesis and paper are "
+                "serif documents. The dashboard uses its own UI face; only the "
+                "colours are shared."
+            ),
+        },
+    }
+
+
+# ---------------------------------------------------------------------------
 # T109.6 -- TypeScript declarations
 # ---------------------------------------------------------------------------
 
@@ -462,6 +595,35 @@ export interface GeneratedFigure {{
   data_omitted_reason: string | null;
 }}
 
+export interface GeneratedTheme {{
+  palette: {{
+    name: string;
+    colourblind_safe: boolean;
+    order_is_meaningful: boolean;
+    /** Okabe-Ito, in the fixed order every figure uses. Index 0 is series 1. */
+    series: string[];
+    roles: Record<string, string>;
+  }};
+  contrast: {{
+    standard: string;
+    light_ground: string;
+    dark_ground: string;
+    threshold: number;
+    /** Measured WCAG ratio per series colour on each page ground. */
+    series: {{
+      index: number;
+      colour: string;
+      on_light: number;
+      on_dark: number;
+      /** Grounds where this fill is too close to the page and needs a stroke. */
+      needs_outline_on: string[];
+    }}[];
+  }};
+  colormaps: {{ sequential: string; diverging: string }};
+  figure: {{ dpi: number; sizes_inches: Record<string, number[]> }};
+  typography: {{ family: string; note: string }};
+}}
+
 export interface GeneratedSource {{
   path: string;
   sha256: string;
@@ -505,18 +667,22 @@ import evidenceJson from './evidence.json';
 import figuresJson from './figures.json';
 import manifestJson from './manifest.json';
 import tablesJson from './tables.json';
+import themeJson from './theme.json';
 
 import type {
   GeneratedEvidenceEntry,
   GeneratedFigure,
   GeneratedManifest,
   GeneratedTable,
+  GeneratedTheme,
 } from './types';
 
 export const manifest: GeneratedManifest = manifestJson;
 export const tables: Record<string, GeneratedTable> = tablesJson;
 export const figures: Record<string, GeneratedFigure> = figuresJson;
 export const evidence: GeneratedEvidenceEntry[] = evidenceJson;
+/** The matplotlib palette, so a browser chart and its 300 dpi PNG agree. */
+export const theme: GeneratedTheme = themeJson;
 
 export type {
   ColumnKind,
@@ -526,6 +692,7 @@ export type {
   GeneratedManifest,
   GeneratedSource,
   GeneratedTable,
+  GeneratedTheme,
 } from './types';
 
 /** One table by id, or undefined. Pages should handle undefined explicitly. */
@@ -669,6 +836,7 @@ def export_all(
 
     written = [
         save_json(manifest, target / "manifest.json"),
+        save_json(theme_payload(), target / "theme.json"),
         save_json(evidence, target / "evidence.json"),
         save_json(tables, target / "tables.json"),
         save_json(figures, target / "figures.json"),

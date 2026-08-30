@@ -8,18 +8,22 @@ import evidenceJson from './evidence.json';
 import figuresJson from './figures.json';
 import manifestJson from './manifest.json';
 import tablesJson from './tables.json';
+import themeJson from './theme.json';
 
 import type {
   GeneratedEvidenceEntry,
   GeneratedFigure,
   GeneratedManifest,
   GeneratedTable,
+  GeneratedTheme,
 } from './types';
 
 export const manifest: GeneratedManifest = manifestJson;
 export const tables: Record<string, GeneratedTable> = tablesJson;
 export const figures: Record<string, GeneratedFigure> = figuresJson;
 export const evidence: GeneratedEvidenceEntry[] = evidenceJson;
+/** The matplotlib palette, so a browser chart and its 300 dpi PNG agree. */
+export const theme: GeneratedTheme = themeJson;
 
 export type {
   ColumnKind,
@@ -29,6 +33,7 @@ export type {
   GeneratedManifest,
   GeneratedSource,
   GeneratedTable,
+  GeneratedTheme,
 } from './types';
 
 /** One table by id, or undefined. Pages should handle undefined explicitly. */

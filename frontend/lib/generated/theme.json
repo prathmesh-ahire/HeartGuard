@@ -1,0 +1,129 @@
+{
+  "palette": {
+    "name": "Okabe-Ito (Color Universal Design, 2008)",
+    "colourblind_safe": true,
+    "order_is_meaningful": true,
+    "series": [
+      "#0072B2",
+      "#D55E00",
+      "#009E73",
+      "#CC79A7",
+      "#E69F00",
+      "#56B4E9",
+      "#F0E442",
+      "#000000"
+    ],
+    "roles": {
+      "series_1": "#0072B2",
+      "series_2": "#D55E00",
+      "series_3": "#009E73",
+      "normal": "#0072B2",
+      "abnormal": "#D55E00"
+    }
+  },
+  "contrast": {
+    "standard": "WCAG 2.2 SC 1.4.11 (non-text), 3:1",
+    "light_ground": "#FFFFFF",
+    "dark_ground": "#020617",
+    "threshold": 3.0,
+    "series": [
+      {
+        "index": 0,
+        "colour": "#0072B2",
+        "on_light": 5.185,
+        "on_dark": 3.89,
+        "needs_outline_on": []
+      },
+      {
+        "index": 1,
+        "colour": "#D55E00",
+        "on_light": 3.867,
+        "on_dark": 5.216,
+        "needs_outline_on": []
+      },
+      {
+        "index": 2,
+        "colour": "#009E73",
+        "on_light": 3.421,
+        "on_dark": 5.897,
+        "needs_outline_on": []
+      },
+      {
+        "index": 3,
+        "colour": "#CC79A7",
+        "on_light": 3.061,
+        "on_dark": 6.59,
+        "needs_outline_on": []
+      },
+      {
+        "index": 4,
+        "colour": "#E69F00",
+        "on_light": 2.252,
+        "on_dark": 8.957,
+        "needs_outline_on": [
+          "light"
+        ]
+      },
+      {
+        "index": 5,
+        "colour": "#56B4E9",
+        "on_light": 2.307,
+        "on_dark": 8.742,
+        "needs_outline_on": [
+          "light"
+        ]
+      },
+      {
+        "index": 6,
+        "colour": "#F0E442",
+        "on_light": 1.322,
+        "on_dark": 15.256,
+        "needs_outline_on": [
+          "light"
+        ]
+      },
+      {
+        "index": 7,
+        "colour": "#000000",
+        "on_light": 21.0,
+        "on_dark": 1.041,
+        "needs_outline_on": [
+          "dark"
+        ]
+      }
+    ]
+  },
+  "colormaps": {
+    "sequential": "viridis",
+    "diverging": "RdBu_r"
+  },
+  "figure": {
+    "dpi": 300,
+    "sizes_inches": {
+      "single": [
+        3.5,
+        2.6
+      ],
+      "double": [
+        7.2,
+        3.2
+      ],
+      "wide": [
+        10.0,
+        4.0
+      ],
+      "tall": [
+        7.2,
+        6.0
+      ],
+      "square": [
+        5.0,
+        5.0
+      ]
+    }
+  },
+  "typography": {
+    "family": "serif",
+    "note": "Figures are set in DejaVu Serif because the thesis and paper are serif documents. The dashboard uses its own UI face; only the colours are shared."
+  }
+}
