@@ -41,11 +41,11 @@ Pin every version in `requirements/` and commit `package-lock.json`. Before addi
 
 ## The frontend rule that matters more than any other
 
-**The client never computes, and never declares, a metric.** Every precomputed number reaches the browser through build-time codegen: `scripts/06_export_frontend_data.py` reads `outputs/`, formats the numbers in Python, and writes `frontend/lib/generated/`. Pages import from `generated/` and nothing else.
+**The client never computes, and never declares, a metric.** Every precomputed number reaches the browser through build-time codegen: `scripts/17_export_frontend_data.py` reads `outputs/`, formats the numbers in Python, and writes `frontend/lib/generated/`. (The `06_` and `07_` numbers this section originally used were taken by `06_run_feature_selection.py` and `07_run_population_search.py` in Part VI; the script *names* are as specified, only the numbers drifted. See `Docs/note.md`.) Pages import from `generated/` and nothing else.
 
 No hand-typed metric literal in a page. No client-side rounding. No runtime fetch for anything that already exists on disk. Only live inference (`POST /predict`) crosses the wire at runtime.
 
-This is enforced, not trusted: `scripts/07_check_no_hardcoded_metrics.py` fails the build on any numeric metric literal in `frontend/app/` or `frontend/components/`, and T119.3's displayed-value audit is a hard gate before any screenshot is taken. This rule exists because of a parallel implementation of this same brief that displayed a 95.82% PhysioNet result its pipeline never produced, and a CirCor validation it never ran — analysed in the 2026-08-23 entries in `note.md`.
+This is enforced, not trusted: `scripts/16_check_no_hardcoded_metrics.py` fails the build on any numeric metric literal in `frontend/app/` or `frontend/components/`, and T119.3's displayed-value audit is a hard gate before any screenshot is taken. This rule exists because of a parallel implementation of this same brief that displayed a 95.82% PhysioNet result its pipeline never produced, and a CirCor validation it never ran — analysed in the 2026-08-23 entries in `note.md`.
 
 ## The seven non-negotiable research rules
 These override convenience, speed, and any instinct to make a result look better. They are the whole reason this project is credible.
