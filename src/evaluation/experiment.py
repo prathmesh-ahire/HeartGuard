@@ -51,6 +51,7 @@ __all__ = [
     "DefaultPlanner",
     "UnitResult",
     "ExperimentResult",
+    "assert_declared_class_weight",
     "run_experiment",
     "write_outputs",
     "load_per_fold_metrics",
@@ -80,6 +81,64 @@ MEMBERSHIP_FILENAME = "fold_membership.parquet"
 
 class ExperimentError(RuntimeError):
     """The experiment cannot be assembled or run as declared."""
+
+
+#: Sentinel for "the members do not agree, so the ensemble has no single value".
+_MIXED = object()
+
+
+def _resolved_class_weight(model_id: str) -> tuple[str, Any]:
+    """One model's effective ``class_weight``, following M6/M7 down to its members.
+
+    Returns ``(source, value)`` where ``source`` names what was inspected, so a
+    failure says *which* member disagreed rather than only that the ensemble did.
+    """
+    from src.models.estimators import model_spec
+
+    spec = model_spec(model_id)
+    members = [str(name) for name in (spec.get("members") or [])]
+    if members:
+        values = {name: _resolved_class_weight(name)[1] for name in members}
+        if len({repr(value) for value in values.values()}) != 1:
+            described = ", ".join(
+                name + "=" + repr(value) for name, value in values.items()
+            )
+            return model_id + " members " + described, _MIXED
+        return model_id + " members", next(iter(values.values()))
+    return model_id + " defaults", (spec.get("defaults") or {}).get("class_weight")
+
+
+def assert_declared_class_weight(experiment: Experiment) -> None:
+    """``class_weight`` in experiments.yaml is a claim about the models -- check it.
+
+    The field is **not** applied as an override, deliberately. ``class_weight`` is
+    a *searchable* dimension for M3 and M4 (``choices: ["balanced", null]``), so
+    forcing it would silently delete half of those spaces from every nested run.
+    It is verified against ``configs/models.yaml`` instead: if an experiment
+    declares ``class_weight: balanced`` and any model it runs does not carry it,
+    the run stops.
+
+    Before Phase 66 the field was read into ``Experiment.class_weight`` and never
+    used again -- decorative config, which is worse than no config, because
+    editing it looked like it did something. See ``Docs/note.md``.
+    """
+    declared = experiment.class_weight
+    if declared is None:
+        return
+    wrong = []
+    for model_id in experiment.models:
+        source, value = _resolved_class_weight(model_id)
+        if value is _MIXED or value != declared:
+            wrong.append(source + " -> " + repr(value))
+    if wrong:
+        raise ExperimentError(
+            experiment.exp_id
+            + " declares class_weight="
+            + repr(declared)
+            + " but configs/models.yaml disagrees: "
+            + "; ".join(wrong)
+        )
+
 
 
 # ---------------------------------------------------------------------------
@@ -841,6 +900,8 @@ def run_experiment(
             + "; declared: "
             + ", ".join(experiment.models)
         )
+
+    assert_declared_class_weight(experiment)
 
     loaded = sm.load_task_data(experiment.task) if data is None else data
     resolved = cv_module.resolve_folds(

@@ -20,6 +20,22 @@ gate has actually passed.
 
 ---
 
+## Phase 67 — EXP-B2 PASCAL B three-class
+**Gate:** T67.7 — subject-grouped CV run over the DA-07 map's **165** subject groups (not the 167 sessions T67.2 names) with no subject on both sides of any fold, and the report stating explicitly, and verifying against the fold map, that sets A and B were never merged — PASS (37 tests, none skipped)
+**Added:** `outputs/07_multiclass_results/EXP-B2/` and `EXP-B2-defaults/` (six-file contracts), `T12_pascal_b_results.csv` + `_per_class.csv` + `_caveats.md` + `_tuning_comparison.csv`
+**Changed:** `src/reporting/multiclass_report.py` (`coverage`), `src/reporting/pascal_statements.py`, `tests/test_multiclass_experiments.py`, `Docs/todo.md`, `Docs/note.md`
+**Notes:** Ranked by macro-F1 — M1 **0.4704**, then M5, M4, M6, M7, M3. **M6 has the highest accuracy of the six (0.7462) and never predicts `extrastole` once in 461 records**; M1 has the lowest accuracy (0.5661) and is the only model that detects it (recall 0.302). Always predicting `normal` scores 0.6941 accuracy, above three of the six models — no EXP-B2 accuracy may be quoted without it. **Untuned M3 is a constant predictor over all 461 records**, its macro-F1 matching the trivial baseline to four decimals; tuning rescued it (+0.1165, 5 of 5 folds), the largest tuning effect measured in the project. Class coverage is now measured per model and named in the caveats. n=5 folds, so Phase 81's paired tests here are underpowered and must say so. Full reasoning in `Docs/note.md`.
+
+---
+
+## Phase 66 — EXP-B1 PASCAL A four-class
+**Gate:** T66.7 — repeated 5x2 CV run over all 10 folds of the DA-07 map, per-class recall present and finite for all four classes with non-empty support in every fold, and **two** confidence intervals (fold-level and record-level bootstrap) on every headline metric given n=124 — PASS (37 tests, none skipped)
+**Added:** `src/reporting/multiclass_report.py` (T11/T12 builders, the fast confusion-matrix metrics, the per-repeat record bootstrap, class coverage), `src/reporting/pascal_statements.py` (generated caveats, rule 4 verified against the fold map), `scripts/15_multiclass_tables.py`, `tests/test_multiclass_experiments.py`, `outputs/07_multiclass_results/EXP-B1/` and `EXP-B1-defaults/` (six-file contracts), `T11_pascal_a_results.csv` + `_per_class.csv` + `_caveats.md` + `_tuning_comparison.csv`
+**Changed:** `src/evaluation/experiment.py` (`assert_declared_class_weight`), `Docs/todo.md`, `Docs/note.md`
+**Notes:** Ranked by macro-F1 — M4 **0.6263**, then M1, M5, M7, M6, M3 — but **every model's record-level interval overlaps every other's**, so the ranking orders models that are not distinguishable at n=124. **The best-detected class is `artifact` (recall 0.875–0.960), which is a recording-quality label, not cardiac**; `normal` is worst at 0.245–0.409. Nested tuning cost 5 of 6 models macro-F1 here, the opposite of Phase 65's finding on 3,240 records; the tuned run is still the headline because `experiments.yaml` pre-registers it, with `EXP-B1-defaults` beside it (user decision, 2026-08-30). `class_weight` in the experiment config was found to be parsed and never read, and is now verified against `configs/models.yaml` before every run.
+
+---
+
 ## Phase 65 — EXP-A2 PhysioNet binary optimized
 **Gate:** T65.7 — every one of the 175 units tuned by a search run **inside its own outer training fold** (`planner_tuning = nested-bayes` on all 175 rows, zero outer-test rows touched by any search), the outer map identical to EXP-A1's so the two pair fold-for-fold, selection following the sensitivity-then-balanced-accuracy rule, and the final model persisted with its 138 feature names — PASS (49 tests, none skipped)
 **Added:** `outputs/06_binary_results/EXP-A2/` and `EXP-A2-so04_subset/` (six-file contracts), `T09_ensemble_weight_comparison.csv`, `T09_ensemble_weight_summary.csv`, `final_model_selection.csv`/`.json`, `models_saved/binary/final/` (model + manifest)

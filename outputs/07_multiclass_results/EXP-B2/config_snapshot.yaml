@@ -1,0 +1,97 @@
+exp_id: EXP-B2
+run_id: EXP-B2
+variant: ''
+title: PASCAL set_b three-class
+phase: 67
+task: pascal_b
+dataset: d3_pascal_b
+models:
+- M1
+- M3
+- M4
+- M5
+- M6
+- M7
+cv: grouped_5fold
+cv_scheme:
+  kind: StratifiedGroupKFold
+  n_splits: 5
+  total_folds: 5
+  group_key: subject_id
+  shuffle: true
+  random_state: 42
+tuned: true
+nested: false
+emits:
+- T12
+label_space:
+  normal: 0
+  murmur: 1
+  extrastole: 2
+scoring: macro_f1
+report_metrics:
+- accuracy
+- macro_f1
+- weighted_f1
+- balanced_accuracy
+- per_class_precision
+- per_class_recall
+- ovr_auc
+- mcc
+selection_rule:
+- sensitivity
+- balanced_accuracy
+seed: 42
+output_section: 07_multiclass_results
+declaration:
+  title: PASCAL set_b three-class
+  phase: 67
+  dataset: d3_pascal_b
+  task: pascal_b
+  label_space:
+    normal: 0
+    murmur: 1
+    extrastole: 2
+  n_records: 461
+  class_counts:
+    normal: 320
+    murmur: 95
+    extrastole: 46
+  n_subject_groups: 165
+  models:
+  - M1
+  - M3
+  - M4
+  - M5
+  - M6
+  - M7
+  tuned: true
+  cv: grouped_5fold
+  class_weight: balanced
+  output_section: 07_multiclass_results
+  emits:
+  - T12
+  notes: 'Severe imbalance (320/95/46). Report per-class recall, not accuracy. The
+    report must state explicitly that sets A and B were never merged.
+
+    '
+run:
+  models_run:
+  - M1
+  - M3
+  - M4
+  - M5
+  - M6
+  - M7
+  folds_run:
+  - r0f0
+  - r0f1
+  - r0f2
+  - r0f3
+  - r0f4
+  n_folds_run: 5
+  n_units: 30
+  n_computed: 30
+  n_resumed: 0
+  seconds: 2411.54
+  command: python scripts/11_run_experiment.py --exp EXP-B2 --planner nested

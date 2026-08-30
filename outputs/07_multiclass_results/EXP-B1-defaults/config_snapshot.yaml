@@ -1,0 +1,107 @@
+exp_id: EXP-B1
+run_id: EXP-B1-defaults
+variant: defaults
+title: PASCAL set_a four-class
+phase: 66
+task: pascal_a
+dataset: d2_pascal_a
+models:
+- M1
+- M3
+- M4
+- M5
+- M6
+- M7
+cv: repeated_5x2_stratified
+cv_scheme:
+  kind: RepeatedStratifiedGroupKFold
+  n_splits: 2
+  n_repeats: 5
+  total_folds: 10
+  group_key: split_group
+  shuffle: true
+  random_state: 42
+tuned: true
+nested: false
+emits:
+- T11
+label_space:
+  normal: 0
+  murmur: 1
+  extrahls: 2
+  artifact: 3
+scoring: macro_f1
+report_metrics:
+- accuracy
+- macro_f1
+- weighted_f1
+- balanced_accuracy
+- per_class_precision
+- per_class_recall
+- ovr_auc
+- mcc
+selection_rule:
+- sensitivity
+- balanced_accuracy
+seed: 42
+output_section: 07_multiclass_results
+declaration:
+  title: PASCAL set_a four-class
+  phase: 66
+  dataset: d2_pascal_a
+  task: pascal_a
+  label_space:
+    normal: 0
+    murmur: 1
+    extrahls: 2
+    artifact: 3
+  n_records: 124
+  class_counts:
+    normal: 31
+    murmur: 34
+    extrahls: 19
+    artifact: 40
+  models:
+  - M1
+  - M3
+  - M4
+  - M5
+  - M6
+  - M7
+  tuned: true
+  cv: repeated_5x2_stratified
+  class_weight: balanced
+  confidence_intervals: true
+  output_section: 07_multiclass_results
+  emits:
+  - T11
+  notes: '`artifact` is a RECORDING-QUALITY label, not a cardiac class. This is not
+    a four-class cardiac classifier and must never be described as one (T66.6). Subject
+    IDs are unavailable, so results are record-level only.
+
+    '
+run:
+  models_run:
+  - M1
+  - M3
+  - M4
+  - M5
+  - M6
+  - M7
+  folds_run:
+  - r0f0
+  - r0f1
+  - r1f0
+  - r1f1
+  - r2f0
+  - r2f1
+  - r3f0
+  - r3f1
+  - r4f0
+  - r4f1
+  n_folds_run: 10
+  n_units: 60
+  n_computed: 60
+  n_resumed: 0
+  seconds: 350.45
+  command: python scripts/11_run_experiment.py --exp EXP-B1 --variant defaults
