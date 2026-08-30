@@ -114,6 +114,6 @@ run:
   n_units: 50
   n_computed: 50
   n_resumed: 0
-  seconds: 4000.92
+  seconds: 4419.63
   command: python scripts/11_run_experiment.py --exp EXP-A2 --planner nested_subset
     --variant so04_subset

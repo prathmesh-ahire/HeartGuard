@@ -117,7 +117,7 @@ run:
   - r4f4
   n_folds_run: 25
   n_units: 175
-  n_computed: 0
-  n_resumed: 175
-  seconds: 5.23
+  n_computed: 175
+  n_resumed: 0
+  seconds: 30380.15
   command: python scripts/11_run_experiment.py --exp EXP-A2 --planner nested

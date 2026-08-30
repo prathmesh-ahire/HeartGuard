@@ -112,5 +112,5 @@ run:
   n_units: 150
   n_computed: 150
   n_resumed: 0
-  seconds: 5274.31
+  seconds: 6603.33
   command: python scripts/11_run_experiment.py --exp EXP-A1
