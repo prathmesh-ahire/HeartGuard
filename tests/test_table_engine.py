@@ -68,9 +68,7 @@ def written(
     sample_spec: tb.TableSpec, sample_frame: pd.DataFrame, tmp_path: Path
 ) -> dict[str, Path]:
     table = tb.build_table(sample_spec, sample_frame)
-    return tb.write_table(
-        table, tmp_path, evidence_index=tmp_path / "evidence_index.csv"
-    )
+    return tb.write_table(table, tmp_path, evidence_index=tmp_path / "evidence_index.csv")
 
 
 # ---------------------------------------------------------------------------
@@ -120,9 +118,7 @@ def test_declared_places_override_the_kind_default() -> None:
 # ---------------------------------------------------------------------------
 
 
-def test_csv_preserves_full_precision(
-    written: dict[str, Path], sample_frame: pd.DataFrame
-) -> None:
+def test_csv_preserves_full_precision(written: dict[str, Path], sample_frame: pd.DataFrame) -> None:
     back = pd.read_csv(written["csv"])
     assert back["sensitivity"].iloc[0] == pytest.approx(0.856789, abs=0.0)
     assert back["share_pct"].iloc[1] == pytest.approx(20.52468, abs=0.0)
@@ -158,7 +154,7 @@ def test_all_four_writers_agree_cell_for_cell(
 
 
 def test_rendered_values_are_the_csv_values_under_the_rounding_rules(
-    written: dict[str, Path]
+    written: dict[str, Path],
 ) -> None:
     """The renderings are re-derived from the CSV itself, not from the fixture."""
     source = pd.read_csv(written["csv"])
@@ -168,9 +164,7 @@ def test_rendered_values_are_the_csv_values_under_the_rounding_rules(
     for row_index, row in enumerate(body):
         for column_index, column in enumerate(source.columns):
             expected = tb.format_value(source[column].iloc[row_index], kinds[column])
-            assert row[column_index] == expected, (
-                "row " + str(row_index) + " column " + str(column)
-            )
+            assert row[column_index] == expected, "row " + str(row_index) + " column " + str(column)
 
 
 def test_a_nan_survives_as_na_in_every_rendering(written: dict[str, Path]) -> None:
@@ -184,9 +178,7 @@ def test_a_nan_survives_as_na_in_every_rendering(written: dict[str, Path]) -> No
         assert "0.000" not in flat, key + " rendered a NaN as a number"
 
 
-def test_latex_metacharacters_are_escaped_and_round_trip(
-    written: dict[str, Path]
-) -> None:
+def test_latex_metacharacters_are_escaped_and_round_trip(written: dict[str, Path]) -> None:
     raw = written["latex"].read_text(encoding="utf-8")
     assert "Gradient\\_Boosting \\& co." in raw
     assert "\\toprule" in raw and "\\bottomrule" in raw
@@ -199,7 +191,7 @@ def test_latex_metacharacters_are_escaped_and_round_trip(
 
 
 def test_every_writer_records_the_experiment_id_and_the_source_file(
-    written: dict[str, Path]
+    written: dict[str, Path],
 ) -> None:
     latex = written["latex"].read_text(encoding="utf-8")
     markdown = written["md"].read_text(encoding="utf-8")

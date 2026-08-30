@@ -1,0 +1,19 @@
+stage,setting,value,unit,config_key,notes
+resample,target sampling rate,2000,Hz,resample.target_fs,all four datasets are brought to this rate
+resample,resampling method,soxr_hq,,resample.method,band-limited rational resampler; naive decimation aliases at 44.1 kHz
+resample,native rates encountered,2000; 4000; 44100,Hz,resample.native_fs,"D1 2 kHz (no-op), D3/D4 4 kHz, D2 44.1 kHz"
+resample,channel handling,mean,,resample.mono,"all 7,536 corpus files are already mono; no-op fast path"
+filter,type,butterworth,,filter.type,designed in second-order sections for numerical stability
+filter,design order,4,,filter.order,prototype order
+filter,effective order applied,16,,filter.order + filter.zero_phase,bandpass transform doubles the prototype to 8 poles; sosfiltfilt doubles it again
+filter,low cutoff,20,Hz,filter.low_hz,"-6.02 dB here, not -3.01, because the filter runs forwards and backwards"
+filter,high cutoff,400,Hz,filter.high_hz,-6.02 dB here; well below the 1000 Hz Nyquist at the target rate
+filter,phase,zero,,filter.zero_phase,zero group delay; S1/S2 timings survive filtering
+filter,filter enabled,True,,filter.enabled,ablation arms PP-C and PP-D set this false
+normalization,normalization method,zscore,,normalization.method,per record; no statistic is shared between records
+normalization,DC offset removed,True,,normalization.remove_dc,applied before normalization
+normalization,zero-variance policy,passthrough_and_flag,,normalization.zero_variance_policy,a constant record passes through unchanged and is flagged
+normalization,normalization enabled,True,,normalization.enabled,ablation arms PP-B and PP-D set this false
+framing,frame length,512,samples,framing.frame_length,256 ms at 2 kHz; shared by quality analysis and the spectral features
+framing,hop length,256,samples,framing.hop_length,"128 ms, 50% overlap"
+framing,window,hann,,framing.window,

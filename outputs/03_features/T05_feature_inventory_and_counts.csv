@@ -1,0 +1,7 @@
+family,extractor,counted_features,expected_count,matches_expected,first_index
+time,time_domain,24,24,True,0
+frequency,frequency,22,22,True,24
+mfcc,mfcc,39,39,True,46
+chroma,chroma,24,24,True,85
+dwt,wavelet,24,24,True,109
+envelope,envelope,5,5,True,133

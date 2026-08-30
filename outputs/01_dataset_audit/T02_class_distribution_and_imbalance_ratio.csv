@@ -1,0 +1,15 @@
+dataset_source,dataset_name,task,class,n_records,share,imbalance_ratio,n_subjects
+D1,PhysioNet 2016,binary,abnormal,665,0.205247,3.8722,348
+D1,PhysioNet 2016,binary,normal,2575,0.794753,1.0,520
+D2,PASCAL set_a,pascal_a,artifact,40,0.322581,1.0,40
+D2,PASCAL set_a,pascal_a,extrahls,19,0.153226,2.1053,19
+D2,PASCAL set_a,pascal_a,murmur,34,0.274194,1.1765,34
+D2,PASCAL set_a,pascal_a,normal,31,0.25,1.2903,31
+D3,PASCAL set_b,pascal_b,extrastole,46,0.099783,6.9565,39
+D3,PASCAL set_b,pascal_b,murmur,95,0.206074,3.3684,37
+D3,PASCAL set_b,pascal_b,normal,320,0.694143,1.0,124
+D4,CirCor 2022,circor_murmur,Absent,2391,0.755928,1.0,695
+D4,CirCor 2022,circor_murmur,Present,616,0.194752,3.8815,179
+D4,CirCor 2022,circor_murmur,Unknown,156,0.04932,15.3269,68
+D4,CirCor 2022,circor_outcome,Abnormal,1531,0.484034,1.066,456
+D4,CirCor 2022,circor_outcome,Normal,1632,0.515966,1.0,486

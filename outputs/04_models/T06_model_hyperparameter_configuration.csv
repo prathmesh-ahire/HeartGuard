@@ -1,0 +1,10 @@
+model_id,name,estimator,mandatory,implemented,is_ensemble,members,calibrated,n_search_dimensions,search_space,unavailable_reason
+M1,Logistic Regression,sklearn.linear_model.LogisticRegression,True,True,False,n/a,False,4,"C in log_uniform[0.001, 1000.0]; l1_ratio in {0.0, 0.5, 1.0}; solver in {lbfgs, liblinear, saga}; max_iter in {1000, 2000, 5000}",
+M2,K-Nearest Neighbours,sklearn.neighbors.KNeighborsClassifier,False,True,False,n/a,False,4,"n_neighbors in int_uniform[3.0, 31.0]; weights in {uniform, distance}; metric in {minkowski, manhattan, chebyshev}; p in {1, 2}",
+M3,SVM (RBF kernel),sklearn.svm.SVC,True,True,False,n/a,True,3,"C in log_uniform[0.01, 1000.0]; gamma in log_uniform[0.0001, 10.0]; class_weight in {balanced, None}",
+M4,Random Forest,sklearn.ensemble.RandomForestClassifier,True,True,False,n/a,False,5,"n_estimators in int_uniform[100.0, 1000.0]; max_depth in {None, 5, 10, 20, 30}; min_samples_leaf in int_uniform[1.0, 10.0]; max_features in {sqrt, log2, 0.3, 0.5}; class_weight in {balanced, balanced_subsample, None}",
+M5,Gradient Boosting,sklearn.ensemble.GradientBoostingClassifier,True,True,False,n/a,False,5,"n_estimators in int_uniform[100.0, 800.0]; learning_rate in log_uniform[0.001, 0.5]; max_depth in int_uniform[2.0, 8.0]; subsample in uniform[0.6, 1.0]; min_samples_leaf in int_uniform[1.0, 20.0]",
+M6,Soft Voting (equal weights),src.ensemble.soft_voting.SoftVotingEnsemble,True,True,True,M3 + M4 + M5,True,0,not searched,
+M7,Soft Voting (optimized weights),src.ensemble.soft_voting.SoftVotingEnsemble,True,True,True,M3 + M4 + M5,True,0,not searched,
+M8,XGBoost / LightGBM,xgboost.XGBClassifier,False,True,False,n/a,False,6,"n_estimators in int_uniform[100.0, 1000.0]; learning_rate in log_uniform[0.001, 0.5]; max_depth in int_uniform[2.0, 10.0]; subsample in uniform[0.6, 1.0]; colsample_bytree in uniform[0.5, 1.0]; reg_lambda in log_uniform[0.01, 100.0]",
+M9,1D-CNN,,False,False,False,n/a,False,0,not searched,excluded from scope on CPU-only hardware -- see the T52 entry in outputs/missing_outputs_report.txt
