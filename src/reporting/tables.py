@@ -87,6 +87,8 @@ __all__ = [
     "read_latex_table",
     "read_markdown_table",
     "source_fingerprint",
+    "content_digest",
+    "TEXT_SUFFIXES",
 ]
 
 log = get_logger("reporting.tables")
@@ -289,13 +291,48 @@ def formatted_frame(table: Table) -> Any:
 # ---------------------------------------------------------------------------
 
 
+#: Suffixes whose bytes are line-ending sensitive and therefore normalized
+#: before hashing. Anything else is hashed raw -- normalizing a .docx or a .png
+#: would rewrite its actual content.
+TEXT_SUFFIXES: frozenset[str] = frozenset(
+    {".csv", ".json", ".yaml", ".yml", ".txt", ".md", ".tex", ".tsv"}
+)
+
+
+def content_digest(path: str | Path) -> tuple[str, str]:
+    """``(sha256, method)`` for one file, stable across Windows and Linux.
+
+    **Why newlines are normalized first.** The obvious implementation --
+    ``sha256(path.read_bytes())`` -- is not portable, and it failed on CI within
+    an hour of being written. ``.gitattributes`` declares ``*.csv text eol=lf``,
+    so the repository stores LF; a CSV written by pandas on Windows has CRLF in
+    the working tree. The same committed file therefore hashes to two different
+    values depending on which machine is looking at it, and every table's
+    recorded source digest came out "stale" on CI while passing locally.
+
+    Normalizing CRLF to LF for text files makes the digest a **content**
+    identity rather than a byte identity, which is what "was this table built
+    from this data?" actually asks. A real edit still changes it; a checkout on
+    a different platform does not. Binary suffixes are hashed raw, because for
+    those the bytes *are* the content.
+    """
+    candidate = Path(path)
+    raw = candidate.read_bytes()
+    if candidate.suffix.lower() in TEXT_SUFFIXES:
+        return hashlib.sha256(raw.replace(b"\r\n", b"\n")).hexdigest(), "sha256/lf"
+    return hashlib.sha256(raw).hexdigest(), "sha256/raw"
+
+
 def source_fingerprint(path: str | Path) -> dict[str, Any]:
-    """Path, size, mtime and sha256 of one source file.
+    """Path, size, mtime and content digest of one source file.
 
     The digest is what makes a stale table detectable: results CSVs get
     rewritten when an experiment is re-run, and without a content hash a table
     built from the superseded file looks exactly like one built from the
-    current one.
+    current one. See :func:`content_digest` for why it is not a raw byte hash.
+
+    ``bytes`` is the raw on-disk size and is informational only -- it differs
+    between a CRLF and an LF checkout of the same file, so nothing compares it.
     """
     candidate = Path(path)
     if not candidate.is_file():
@@ -304,15 +341,17 @@ def source_fingerprint(path: str | Path) -> dict[str, Any]:
             "exists": False,
             "bytes": None,
             "sha256": None,
+            "digest_method": None,
             "modified_utc": None,
         }
-    digest = hashlib.sha256(candidate.read_bytes()).hexdigest()
+    digest, method = content_digest(candidate)
     stat = candidate.stat()
     return {
         "path": str(candidate).replace("\\", "/"),
         "exists": True,
         "bytes": stat.st_size,
         "sha256": digest,
+        "digest_method": method,
         "modified_utc": datetime.fromtimestamp(stat.st_mtime, tz=UTC).isoformat(),
     }
 

@@ -311,3 +311,61 @@ def test_engine_round_trips_a_real_audit_csv(tmp_path: Path) -> None:
     # And the counts are not quietly transformed on the way through.
     rendered = pd.read_csv(out["csv"])
     assert rendered["n_records"].sum() == frame["n_records"].sum()
+
+
+# ---------------------------------------------------------------------------
+# the source digest must mean the same thing on Windows and on CI
+# ---------------------------------------------------------------------------
+
+
+def test_content_digest_ignores_line_endings_for_text(tmp_path: Path) -> None:
+    """The regression test for a red build.
+
+    `.gitattributes` declares `*.csv text eol=lf`, so the repository stores LF
+    while a CSV written by pandas on Windows has CRLF in the working tree. A raw
+    byte digest therefore reports every table "stale" on CI and clean locally,
+    which is exactly what happened. The digest is a CONTENT identity.
+    """
+    lf = tmp_path / "lf.csv"
+    crlf = tmp_path / "crlf.csv"
+    lf.write_bytes(b"a,b\n1,2\n3,4\n")
+    crlf.write_bytes(b"a,b\r\n1,2\r\n3,4\r\n")
+
+    assert lf.read_bytes() != crlf.read_bytes()
+    assert tb.content_digest(lf)[0] == tb.content_digest(crlf)[0]
+    assert tb.content_digest(lf)[1] == "sha256/lf"
+
+
+def test_content_digest_still_detects_a_real_edit(tmp_path: Path) -> None:
+    original = tmp_path / "a.csv"
+    edited = tmp_path / "b.csv"
+    original.write_bytes(b"a,b\n1,2\n")
+    edited.write_bytes(b"a,b\n1,3\n")
+    assert tb.content_digest(original)[0] != tb.content_digest(edited)[0]
+
+
+def test_content_digest_does_not_normalize_a_binary_file(tmp_path: Path) -> None:
+    """Rewriting CRLF inside a .docx or a .png would change its actual content."""
+    raw = tmp_path / "figure.png"
+    raw.write_bytes(b"\x89PNG\r\n\x1a\n\x00\x01\r\n\x02")
+    digest, method = tb.content_digest(raw)
+    assert method == "sha256/raw"
+    import hashlib
+
+    assert digest == hashlib.sha256(raw.read_bytes()).hexdigest()
+
+
+def test_source_fingerprint_records_which_digest_method_it_used(
+    tmp_path: Path,
+) -> None:
+    source = tmp_path / "source.csv"
+    source.write_bytes(b"a,b\r\n1,2\r\n")
+    fingerprint = tb.source_fingerprint(source)
+    assert fingerprint["exists"] is True
+    assert fingerprint["digest_method"] == "sha256/lf"
+    assert fingerprint["sha256"] == tb.content_digest(source)[0]
+
+    missing = tb.source_fingerprint(tmp_path / "nope.csv")
+    assert missing["exists"] is False
+    assert missing["sha256"] is None
+    assert missing["digest_method"] is None

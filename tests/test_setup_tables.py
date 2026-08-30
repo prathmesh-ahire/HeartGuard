@@ -20,7 +20,6 @@ as much as a literal in a table.
 
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
@@ -144,7 +143,8 @@ def test_recorded_sources_exist_and_are_not_stale(
         assert source.is_file(), (
             table_id + " names a source that does not exist: " + fingerprint["path"]
         )
-        current = hashlib.sha256(source.read_bytes()).hexdigest()
+        current, method = tb.content_digest(source)
+        assert method == fingerprint["digest_method"]
         assert current == fingerprint["sha256"], (
             table_id + " was built from an older " + fingerprint["path"] + ". The"
             " table is stale: regenerate it with"
