@@ -222,6 +222,31 @@ jobs:
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 
+      # Python is set up BEFORE the build, not after it. T110.5 wires
+      # `npm run build` to run the frontend data exporter first, so the site can
+      # never build against stale data -- and the exporter is Python. With the
+      # interpreter installed afterwards the hook could only fail here, and the
+      # tempting fix (let CI fall back to the committed `generated/`) would
+      # reopen exactly the hole the guard rail below exists to close: a change
+      # to `outputs/` with a forgotten re-export would pass CI showing stale
+      # numbers. Everything the exporter reads is committed -- 105 CSVs and 29
+      # JSONs under `outputs/` -- so it runs here identically to a local build.
+      # Only `*.parquet` and working state are gitignored, and the exporter must
+      # never read those.
+      - name: Set up Python for the exporter and the guard rail
+        if: steps.detect.outputs.present == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: requirements/base.txt
+
+      - name: Install Python requirements for the exporter
+        if: steps.detect.outputs.present == 'true'
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements/base.txt
+
       - name: Install and build
         if: steps.detect.outputs.present == 'true'
         working-directory: frontend
@@ -229,20 +254,26 @@ jobs:
           npm ci
           npm run build
 
-      - name: Set up Python for the guard rail
-        if: steps.detect.outputs.present == 'true'
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
       - name: No hard-coded metrics
         # The rule that matters more than any other: the client never computes
         # and never declares a metric. This grep-based check fails the build on
         # any numeric metric literal in frontend/app/ or frontend/components/.
         # It exists because a parallel implementation of this same brief shipped
         # a 95.82% PhysioNet result its pipeline never produced.
+        #
+        # `todo.md` and CLAUDE.md name this `scripts/07_check_no_hardcoded_metrics.py`.
+        # The `07` slot was taken by `07_run_population_search.py` long before
+        # Part X started, so it lands as `16_` -- the same numbering drift already
+        # recorded for scripts 11-15 in Docs/note.md. The step fails loudly if the
+        # script is absent rather than passing a frontend nobody checked.
         if: steps.detect.outputs.present == 'true'
-        run: python scripts/07_check_no_hardcoded_metrics.py
+        run: |
+          if [ ! -f scripts/16_check_no_hardcoded_metrics.py ]; then
+            echo "::error::scripts/16_check_no_hardcoded_metrics.py is missing — the" \
+                 "frontend metric guard rail did not run. Part X must not ship without it."
+            exit 1
+          fi
+          python scripts/16_check_no_hardcoded_metrics.py
 
       - name: Report skip
         if: steps.detect.outputs.present != 'true'
