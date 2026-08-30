@@ -1,0 +1,16 @@
+{
+  "extends": ["next/core-web-vitals"],
+  "rules": {
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": ["**/lib/generated/*.json", "**/generated/*.json"],
+            "message": "Import from '@/lib/generated' instead. The index re-exports each payload with its declared type, so a schema change is a compile error rather than a blank page."
+          }
+        ]
+      }
+    ]
+  }
+}

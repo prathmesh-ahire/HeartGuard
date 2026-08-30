@@ -7,7 +7,9 @@
 # ---------------------------------------------------------------------------
 
 # Raw datasets — read-only input, 1.3 GB, never committed
-dataset/
+# Anchored with a leading slash: an unanchored `dataset/` matches a directory
+# of that name at ANY depth, so it silently swallowed frontend/app/dataset/.
+/dataset/
 
 # Derived / regenerable artifacts (directory kept, contents ignored)
 cache/*
@@ -39,7 +41,7 @@ report.log
 # Coverage
 .coverage
 .coverage.*
-htmlcov/
+/htmlcov/
 
 # Trained model binaries (the directory itself is kept).
 # Recursive: Phase 51 writes models_saved/{task}/{model_id}/model.joblib, which
@@ -77,7 +79,11 @@ junit.xml
 # (2026-08-23). todo.md, note.md and the two source documents are NOT pushed.
 # NOTE: they remain in commits f440a24..b817e84 on the remote; this rule stops
 # future pushes only. CLAUDE.md at the repo root stays tracked.
-Docs/
+# Anchored for the same reason as /dataset/ -- and this one also matched
+# frontend/app/docs/ (lowercase) on Windows, where git compares case-
+# insensitively. That would commit fine here and vanish on the Linux CI
+# checkout, or the reverse. Anchoring removes the platform dependence.
+/Docs/
 
 # Search results produced under an objective that was subsequently changed
 # (2026-08-28). Kept on disk as the evidence behind that decision -- see the

@@ -1,0 +1,36 @@
+{
+  "name": "pv-mepcg-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "description": "PV-MEPCG / PulseVision — PCG heart-sound classification dashboard. Academic screening and decision-support prototype, never a diagnostic tool.",
+  "scripts": {
+    "export-data": "python ../scripts/17_export_frontend_data.py",
+    "check-metrics": "python ../scripts/16_check_no_hardcoded_metrics.py",
+    "prebuild": "npm run export-data",
+    "build": "next build",
+    "dev": "next dev",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "14.2.35",
+    "next-themes": "0.3.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "20.14.10",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
+    "autoprefixer": "10.4.19",
+    "eslint": "8.57.0",
+    "eslint-config-next": "14.2.35",
+    "postcss": "8.5.26",
+    "tailwindcss": "3.4.6",
+    "typescript": "5.5.3"
+  },
+  "engines": {
+    "node": ">=18.17"
+  }
+}
