@@ -176,12 +176,31 @@ def test_the_ui_is_named_pv_mepcg_never_the_repository(scaffolded: None) -> None
 # ---------------------------------------------------------------------------
 
 
+def _route_block(name: str) -> str:
+    """The body of one `export const <name>` array literal, and only that one.
+
+    Slicing to the end of the file was correct while ROUTES was the last
+    declaration in routes.ts. Phase 111 added UTILITY_ROUTES below it, and the
+    open-ended slice quietly counted `/design/` as a twelfth document page --
+    a helper that broadens itself whenever the file grows.
+    """
+    source = (FRONTEND / "lib" / "routes.ts").read_text(encoding="utf-8")
+    start = source.index("export const " + name)
+    return source[start : source.index("\n];", start)]
+
+
 def _declared_routes() -> list[str]:
+    """The document pages: home plus the eleven results pages."""
     import re
 
-    source = (FRONTEND / "lib" / "routes.ts").read_text(encoding="utf-8")
-    block = source[source.index("export const ROUTES") :]
-    return re.findall(r"href:\s*'([^']+)'", block)
+    return re.findall(r"href:\s*'([^']+)'", _route_block("ROUTES"))
+
+
+def _utility_routes() -> list[str]:
+    """Real routes that are not document pages -- /design/, and later ones."""
+    import re
+
+    return re.findall(r"href:\s*'([^']+)'", _route_block("UTILITY_ROUTES"))
 
 
 def _page_routes() -> list[str]:
@@ -202,18 +221,17 @@ def test_home_plus_eleven_document_pages_are_declared(scaffolded: None) -> None:
 def test_every_declared_route_has_a_page_and_every_page_is_declared(
     scaffolded: None,
 ) -> None:
-    declared = set(_declared_routes())
+    declared = set(_declared_routes()) | set(_utility_routes())
     built = set(_page_routes())
     assert declared - built == set(), "declared but not built: " + str(sorted(declared - built))
     assert built - declared == set(), "built but not declared: " + str(sorted(built - declared))
 
 
 def test_every_route_carries_a_summary_used_as_its_description(scaffolded: None) -> None:
-    source = (FRONTEND / "lib" / "routes.ts").read_text(encoding="utf-8")
     # Counted inside the ROUTES literal only: `summary:` also appears once in
-    # the RouteDefinition interface above it.
-    block = source[source.index("export const ROUTES") :]
-    assert block.count("summary:") == len(_declared_routes())
+    # the RouteDefinition interface above it, and once per utility route below.
+    assert _route_block("ROUTES").count("summary:") == len(_declared_routes())
+    assert _route_block("UTILITY_ROUTES").count("summary:") == len(_utility_routes())
 
 
 def test_a_scaffold_page_says_it_is_a_scaffold(scaffolded: None) -> None:
