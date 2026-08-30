@@ -8,10 +8,15 @@ lawful.
 
 ## Reading `dataset/` and writing beside it
 
-`dataset/` is read-only input and nothing here writes into it. One `.wav` is
-**copied out** into `frontend/public/`, byte for byte, and its sha256 is
-recorded on both sides so the file in the repository can be shown to be the file
-in the corpus.
+`dataset/` is read-only input and nothing here writes into it. The `.wav` and
+its `.tsv` are **copied out** into `frontend/public/`, byte for byte, with both
+sha256s recorded so the files in the repository can be shown to be the files in
+the corpus.
+
+Both are committed, not just the audio, so the overlay can be rebuilt on a
+machine that has no corpus -- which is every fresh clone and every CI checkout.
+See :func:`resolve_sources` for why exporting an "unavailable" payload beside a
+perfectly good audio file would have been the worse failure.
 
 ## The notices, and why there are four of them
 
@@ -65,6 +70,7 @@ __all__ = [
     "export_sample",
     "notice_markdown",
     "read_segmentation",
+    "resolve_sources",
     "segmentation_payload",
 ]
 
@@ -189,17 +195,49 @@ def _wav_info(path: Path) -> tuple[float, int, int]:
     return frames / float(rate), rate, channels
 
 
-def load_sample(record_id: str = SAMPLE_RECORD_ID) -> SegmentationSample:
-    """Read the pinned recording and its segmentation from `dataset/`."""
-    root = _project_root() / CIRCOR_ROOT
-    wav_path = root / (record_id + ".wav")
-    tsv_path = root / (record_id + ".tsv")
-    for path in (wav_path, tsv_path):
-        if not path.is_file():
-            raise FileNotFoundError(
-                str(path) + " is missing; the CirCor corpus must be present to export "
-                "the cardiac-cycle sample"
-            )
+def resolve_sources(
+    record_id: str = SAMPLE_RECORD_ID, *, public_dir: Path | None = None
+) -> tuple[Path, Path, str]:
+    """``(wav, tsv, origin)`` -- the corpus if it is here, else the committed copy.
+
+    `dataset/` is 1.3 GB and is not in the repository, so a fresh clone and every
+    CI checkout have no corpus. Both files are therefore committed under
+    `frontend/public/` and the export falls back to them.
+
+    That fallback is not a convenience. Without it, `npm run build` on a machine
+    with no corpus would write a `segmentation.json` saying the sample is
+    unavailable **while the audio sat in `public/` beside it**, and the dashboard
+    a grader builds would silently lose the one figure T113.6 exists to produce.
+
+    The corpus wins wherever it is present, so the committed copies cannot drift
+    from it unnoticed: `export_sample` re-copies and re-checksums on every run.
+    """
+    corpus = _project_root() / CIRCOR_ROOT
+    corpus_wav = corpus / (record_id + ".wav")
+    corpus_tsv = corpus / (record_id + ".tsv")
+    if corpus_wav.is_file() and corpus_tsv.is_file():
+        return corpus_wav, corpus_tsv, "corpus"
+
+    committed = public_dir if public_dir is not None else _project_root() / "frontend" / "public"
+    committed_wav = committed / (record_id + ".wav")
+    committed_tsv = committed / (record_id + ".tsv")
+    if committed_wav.is_file() and committed_tsv.is_file():
+        return committed_wav, committed_tsv, "committed"
+
+    raise FileNotFoundError(
+        "neither the corpus file "
+        + str(corpus_wav)
+        + " nor the committed copy at "
+        + str(committed_wav)
+        + " is present, so no cardiac-cycle sample can be exported"
+    )
+
+
+def load_sample(
+    record_id: str = SAMPLE_RECORD_ID, *, public_dir: Path | None = None
+) -> SegmentationSample:
+    """Read the pinned recording and its segmentation."""
+    wav_path, tsv_path, _origin = resolve_sources(record_id, public_dir=public_dir)
     duration, rate, channels = _wav_info(wav_path)
     segments = read_segmentation(tsv_path)
     covered = segments[-1]["end"]
@@ -346,17 +384,22 @@ def segmentation_payload(
 
 
 def export_sample(public_dir: Path, *, record_id: str = SAMPLE_RECORD_ID) -> dict[str, Any]:
-    """Copy the audio into `public/`, write `NOTICE.md`, return the payload."""
-    sample = load_sample(record_id)
+    """Copy the audio and its TSV into `public/`, write `NOTICE.md`, return the payload."""
     target_dir = ensure_dir(public_dir)
+    sample = load_sample(record_id, public_dir=target_dir)
     destination = target_dir / (record_id + ".wav")
 
     source_digest, _ = content_digest(sample.wav_source)
-    if not destination.is_file() or content_digest(destination)[0] != source_digest:
-        shutil.copyfile(sample.wav_source, destination)
-    copied_digest, _ = content_digest(destination)
-    if copied_digest != source_digest:
-        raise ValueError("the copied audio does not match the corpus file byte for byte")
+    # Both files travel: the TSV is what makes the overlay rebuildable on a
+    # machine with no corpus, and it is the artifact the notice checksums.
+    for source in (sample.wav_source, sample.tsv_source):
+        copy = target_dir / source.name
+        if copy.resolve() == source.resolve():
+            continue  # already reading the committed copy
+        if not copy.is_file() or content_digest(copy)[0] != content_digest(source)[0]:
+            shutil.copyfile(source, copy)
+        if content_digest(copy)[0] != content_digest(source)[0]:
+            raise ValueError("the copied " + source.name + " does not match its source")
 
     (target_dir / "NOTICE.md").write_text(
         notice_markdown(sample, source_digest), encoding="utf-8", newline="\n"
