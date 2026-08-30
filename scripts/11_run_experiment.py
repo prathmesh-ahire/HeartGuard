@@ -146,7 +146,33 @@ def main(argv: list[str] | None = None) -> int:
         # A variant keeps its own contract-complete folder rather than adding
         # columns to the headline run: T09 compares two runs, and a table that
         # silently mixed 138-feature and 20-feature rows would be unreadable.
-        exp = dataclasses.replace(exp, variant=args.variant)
+        # Two kinds land here. A variant DECLARED in experiments.yaml (EXP-C1's
+        # three_class / two_class) carries its own label_space and is resolved
+        # through `for_variant`, which also restricts the run to those labels.
+        # Any other name is a free-form side run of the same declaration --
+        # EXP-A2's so04_subset -- and only renames the output folder. Falling
+        # through the wrong way is silent and wrong: EXP-C1 declares no
+        # top-level label_space, so a "two_class" run would score all three
+        # classes into a folder named two_class.
+        if args.variant in exp.variants:
+            exp = exp.for_variant(args.variant)
+            log.info(
+                "%s: declared variant %r, %d class(es): %s",
+                args.exp,
+                args.variant,
+                exp.n_classes,
+                ", ".join(exp.class_names),
+            )
+        else:
+            if exp.variants:
+                log.warning(
+                    "%s declares variants %s; %r is not one of them and is treated "
+                    "as a free-form side run with the parent's label space",
+                    args.exp,
+                    ", ".join(sorted(exp.variants)),
+                    args.variant,
+                )
+            exp = dataclasses.replace(exp, variant=args.variant)
         command += " --variant " + args.variant
     out_dir = args.out_dir
 

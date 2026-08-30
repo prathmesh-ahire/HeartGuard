@@ -52,6 +52,7 @@ __all__ = [
     "UnitResult",
     "ExperimentResult",
     "assert_declared_class_weight",
+    "restrict_to_label_space",
     "run_experiment",
     "write_outputs",
     "load_per_fold_metrics",
@@ -274,6 +275,46 @@ class Experiment:
     @property
     def seed(self) -> int:
         return int(self.defaults.get("seed", 42))
+
+    @property
+    def variants(self) -> dict[str, Any]:
+        """Declared sub-runs of one experiment, e.g. EXP-C1's three_class/two_class.
+
+        A *variant* here is stronger than the ``variant`` string used for a side
+        run like EXP-A2's SO-04 subset: it carries its own ``label_space``, so
+        the two runs answer different questions on overlapping data and must
+        never share an output folder or a results table.
+        """
+        return dict(self.spec.get("variants") or {})
+
+    def for_variant(self, name: str) -> Experiment:
+        """This experiment reconfigured as one of its declared variants.
+
+        The variant's ``label_space`` replaces the parent's -- EXP-C1 declares
+        none at top level, so without this the runner would see zero classes and
+        emit per-class columns for nothing.
+        """
+        import dataclasses
+
+        table = self.variants
+        if name not in table:
+            raise ExperimentError(
+                self.exp_id
+                + " declares no variant "
+                + repr(name)
+                + (
+                    "; known: " + ", ".join(sorted(table))
+                    if table
+                    else "; it declares no variants at all"
+                )
+            )
+        spec = dict(table[name] or {})
+        label_space = dict(spec.get("label_space") or {})
+        if not label_space:
+            raise ExperimentError(
+                self.exp_id + " variant " + repr(name) + " declares no label_space"
+            )
+        return dataclasses.replace(self, variant=name, label_space=label_space)
 
     @property
     def class_names(self) -> tuple[str, ...]:
@@ -865,6 +906,56 @@ class ExperimentResult:
         return payload
 
 
+def restrict_to_label_space(data: Any, experiment: Experiment) -> Any:
+    """Drop rows whose label is outside the experiment's declared label space.
+
+    EXP-C1's ``two_class`` variant evaluates 874 of the 942 patients: the 68
+    ``Unknown`` ones are excluded by design, not by accident. The DA-07 fold map
+    is built for the full three-class task, so the folds name records this run
+    must not score.
+
+    The drop is **verified, never assumed**. It refuses unless the rows removed
+    are exactly the rows carrying a label the variant does not declare -- so a
+    matrix that lost records for some unrelated reason raises here rather than
+    quietly producing a fold that shrank on its own. ``resolve_folds`` warns
+    about precisely this in its own docstring.
+    """
+    import numpy as np
+
+    keep_labels = set(experiment.labels)
+    if not keep_labels:
+        return data
+    y = np.asarray(data.y, dtype=int)
+    keep = np.isin(y, list(keep_labels))
+    if keep.all():
+        return data
+
+    dropped_labels = sorted(set(y[~keep].tolist()))
+    stray = [label for label in dropped_labels if label in keep_labels]
+    if stray:  # cannot happen by construction; asserted because it would be silent
+        raise ExperimentError(
+            experiment.run_id + ": would drop rows carrying declared label(s) " + str(stray)
+        )
+
+    import dataclasses
+
+    kept = np.flatnonzero(keep)
+    log.info(
+        "%s: %d of %d rows kept -- dropped label(s) %s, which this variant does not declare",
+        experiment.run_id,
+        int(keep.sum()),
+        int(y.size),
+        ", ".join(str(label) for label in dropped_labels),
+    )
+    return dataclasses.replace(
+        data,
+        X=data.X[kept],
+        y=y[kept],
+        groups=np.asarray(data.groups)[kept],
+        record_uids=tuple(data.record_uids[i] for i in kept.tolist()),
+    )
+
+
 def run_experiment(
     exp: Experiment | str,
     *,
@@ -904,8 +995,19 @@ def run_experiment(
     assert_declared_class_weight(experiment)
 
     loaded = sm.load_task_data(experiment.task) if data is None else data
+
+    # A variant with a narrower label space evaluates fewer records than the
+    # DA-07 map names -- EXP-C1's two_class drops the 68 Unknown patients by
+    # design. `require_all` is relaxed ONLY when that restriction actually
+    # happened, so an unexpectedly missing record still raises.
+    before = len(loaded.record_uids)
+    loaded = restrict_to_label_space(loaded, experiment)
+    restricted = len(loaded.record_uids) != before
+
     resolved = cv_module.resolve_folds(
-        cv_module.load_folds(experiment.task), loaded.record_uids
+        cv_module.load_folds(experiment.task),
+        loaded.record_uids,
+        require_all=not restricted,
     )
     selected = tuple(
         fold

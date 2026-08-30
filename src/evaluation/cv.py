@@ -396,13 +396,27 @@ def resolve_folds(
                 + " record(s) named by the fold are absent from the matrix, e.g. "
                 + ", ".join(missing[:5])
             )
-        train = np.array(
-            [position[uid] for uid in fold.train_uids if uid in position], dtype=int
-        )
-        test = np.array(
-            [position[uid] for uid in fold.test_uids if uid in position], dtype=int
-        )
-        resolved.append(dataclasses.replace(fold, train_index=train, test_index=test))
+        train_keep = [i for i, uid in enumerate(fold.train_uids) if uid in position]
+        test_keep = [i for i, uid in enumerate(fold.test_uids) if uid in position]
+        train = np.array([position[fold.train_uids[i]] for i in train_keep], dtype=int)
+        test = np.array([position[fold.test_uids[i]] for i in test_keep], dtype=int)
+
+        # With `require_all=False` a fold legitimately loses records -- EXP-C1's
+        # two_class variant drops the 156 Unknown rows. The uid and group tuples
+        # must shrink WITH the indices, in lockstep: they are parallel per-record
+        # arrays, and every consumer treats them as such. `_run_unit` builds a
+        # unit's record_uids from `test_uids`, so a fold whose uids still listed
+        # the dropped records produced a predictions frame with more uids than
+        # predictions and died in `prediction_frame`. Cheaper to keep the fold
+        # internally consistent here than to special-case each consumer.
+        shrunk: dict[str, Any] = {"train_index": train, "test_index": test}
+        if len(train_keep) != len(fold.train_uids):
+            shrunk["train_uids"] = tuple(fold.train_uids[i] for i in train_keep)
+            shrunk["train_groups"] = tuple(fold.train_groups[i] for i in train_keep)
+        if len(test_keep) != len(fold.test_uids):
+            shrunk["test_uids"] = tuple(fold.test_uids[i] for i in test_keep)
+            shrunk["test_groups"] = tuple(fold.test_groups[i] for i in test_keep)
+        resolved.append(dataclasses.replace(fold, **shrunk))
     return tuple(resolved)
 
 
