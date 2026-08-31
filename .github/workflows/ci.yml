@@ -173,15 +173,22 @@ jobs:
           cache: pip
           cache-dependency-path: |
             requirements/base.txt
+            requirements/api.txt
             requirements/dev.txt
 
       - name: Install requirements
         # mypy needs the runtime packages present to resolve real signatures;
         # installing only requirements/dev.txt would type-check against stubs
         # that do not match what the project actually runs.
+        #
+        # api.txt joined this list in Phase 108: mypy checks all of src/, and
+        # src/api/ imports fastapi and pydantic. Both ship py.typed, so the
+        # alternative -- adding them to ignore_missing_imports -- would have
+        # silently discarded type checking on the one module that serves the
+        # network. Installing them keeps the check real.
         run: |
           python -m pip install --upgrade pip setuptools wheel
-          python -m pip install -r requirements/base.txt -r requirements/dev.txt
+          python -m pip install -r requirements/base.txt -r requirements/api.txt -r requirements/dev.txt
 
       - name: ruff
         run: ruff check src/ tests/ scripts/ conftest.py
