@@ -13,3 +13,9 @@ pytest-cov==7.1.0
 ruff==0.16.4
 mypy==2.3.1
 types-PyYAML==6.0.12.20260815
+
+# Phase 108's API tests drive the app through starlette's TestClient, which
+# needs an HTTP client library present. httpx2 rather than httpx: starlette
+# emits a StarletteDeprecationWarning for httpx and names httpx2 as the
+# replacement, and this project's tests run with warnings visible.
+httpx2==2.12.0
