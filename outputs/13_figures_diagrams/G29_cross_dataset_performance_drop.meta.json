@@ -1,0 +1,53 @@
+{
+  "figure_id": "G29",
+  "figure_number": 12,
+  "title": "Cross Dataset Performance Drop",
+  "caption": "Cross-dataset transfer from an adult cohort (PhysioNet 2016, median age 25, 0.27% of aged records under 18) to a predominantly paediatric cohort (CirCor 2022, 98.2% of age-banded patients paediatric). A large drop is the expected consequence of that mismatch and is NOT evidence that PV-MEPCG fails to generalize. Recording-level metrics. The in-domain bar is EXP-A2's 25-fold nested cross-validation mean for the same model; the external bar is one evaluation over all 3,163 CirCor recordings.",
+  "exp_id": "EXP-D1",
+  "objective": "O5 (external validation)",
+  "dataset": "D1 PhysioNet 2016 -> D4 CirCor 2022",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-08-31T08:07:30.689263+00:00",
+  "command": "python scripts/22_cross_dataset.py",
+  "plotted_rows": 6,
+  "plotted_csv": "G29_cross_dataset_performance_drop.csv",
+  "plotted_csv_sha256": "0e27ebbeebc059e92cbc00cb41b292d9f3da680981618a5976c86dc9f8528707",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "outputs/08_circor_external_validation/EXP-D1/metrics_by_level.csv",
+      "exists": true,
+      "bytes": 1081,
+      "sha256": "0caaf4cb0888ff8c2968836d7c13e335cd53f7bd03d4cd75432feae934e30897",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-31T08:07:28.281403+00:00"
+    },
+    {
+      "path": "outputs/06_binary_results/EXP-A2/per_fold_metrics.csv",
+      "exists": true,
+      "bytes": 106450,
+      "sha256": "c5159f5b754924fca96067ec9b81302bb5c999e50542655cb34f7ada06fb72cb",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-30T16:49:48.062970+00:00"
+    },
+    {
+      "path": "models_saved/binary/final/manifest.json",
+      "exists": true,
+      "bytes": 6428,
+      "sha256": "1f918dd801fd6dc6b6962f27b96111fb9313b229f0fee785501dbb9055b8cb64",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-29T19:00:34.608553+00:00"
+    }
+  ],
+  "written": {
+    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G29_cross_dataset_performance_drop.csv",
+    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G29_cross_dataset_performance_drop.png",
+    "svg": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G29_cross_dataset_performance_drop.svg"
+  },
+  "notes": [
+    "Patient-level aggregation is deliberately not drawn here: it moves the operating point rather than recovering performance, and putting it beside the in-domain bar would invite reading it as a fix. It is in T16."
+  ]
+}
