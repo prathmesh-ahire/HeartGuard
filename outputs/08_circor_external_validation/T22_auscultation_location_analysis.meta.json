@@ -1,0 +1,112 @@
+{
+  "table_id": "T22",
+  "title": "Auscultation Location Analysis",
+  "caption": "CirCor out-of-fold predictions stratified by the chest position the recording was taken from, for the murmur task in both label spaces and for the clinical outcome task. Nothing is retrained: this re-scores the predictions EXP-C1 and EXP-C2 already produced. Phc holds four recordings in the whole corpus and is carried with Reportable = False; its numbers are arithmetic noise and must not be quoted. Mean and SD are over the five patient-grouped folds.",
+  "exp_id": "EXP-C3",
+  "objective": "O5 (external validation)",
+  "dataset": "D4 CirCor 2022",
+  "framework": "PV-MEPCG / PulseVision",
+  "generated_utc": "2026-08-31T07:58:18.167809+00:00",
+  "git": {
+    "available": true,
+    "reason": null,
+    "commit": "17ef13fc76fd6a17ae1ce7d054edbb2d7b7c426e",
+    "commit_short": "17ef13fc",
+    "branch": "main",
+    "dirty": true,
+    "dirty_files": [
+      "outputs/00_evidence_index/evidence_index.csv",
+      "outputs/00_evidence_index/run_manifest.json",
+      "outputs/13_figures_diagrams/figure_registry.csv",
+      "src/api/main.py",
+      "frontend/out/",
+      "outputs/08_circor_external_validation/EXP-C1-three_class/per_fold_by_location.csv",
+      "outputs/08_circor_external_validation/EXP-C1-two_class/per_fold_by_location.csv",
+      "outputs/08_circor_external_validation/EXP-C2/per_fold_by_location.csv",
+      "outputs/08_circor_external_validation/T22_auscultation_location_analysis.csv",
+      "outputs/08_circor_external_validation/T22_auscultation_location_analysis.docx",
+      "outputs/08_circor_external_validation/T22_auscultation_location_analysis.md",
+      "outputs/08_circor_external_validation/T22_auscultation_location_analysis.meta.json",
+      "outputs/08_circor_external_validation/T22_auscultation_location_analysis.tex",
+      "outputs/08_circor_external_validation/circor_most_audible_location.md",
+      "outputs/08_circor_external_validation/circor_most_audible_location_check.csv",
+      "outputs/13_figures_diagrams/G32_location_performance.csv",
+      "outputs/13_figures_diagrams/G32_location_performance.meta.json",
+      "outputs/13_figures_diagrams/G32_location_performance.png",
+      "outputs/13_figures_diagrams/G32_location_performance.svg",
+      "scripts/21_location_analysis.py",
+      "src/evaluation/location.py",
+      "src/reporting/location_report.py",
+      "src/reporting/samples.py"
+    ]
+  },
+  "command": "python scripts/21_location_analysis.py",
+  "rounding_rules": {
+    "metric": 3,
+    "percent": 1,
+    "count": 0,
+    "integer": 0,
+    "seconds": 2,
+    "text": null,
+    "preformatted": null
+  },
+  "column_kinds": {
+    "run": "text",
+    "task": "text",
+    "model_id": "text",
+    "location": "text",
+    "n_records_corpus": "count",
+    "reported": "text",
+    "n_folds": "count",
+    "n_units_mean": "metric",
+    "sensitivity_mean": "metric",
+    "sensitivity_sd": "metric",
+    "specificity_mean": "metric",
+    "specificity_sd": "metric",
+    "balanced_accuracy_mean": "metric",
+    "balanced_accuracy_sd": "metric",
+    "macro_f1_mean": "metric",
+    "macro_f1_sd": "metric",
+    "accuracy_mean": "metric",
+    "accuracy_sd": "metric",
+    "exclusion_reason": "text"
+  },
+  "n_rows": 75,
+  "sources": [
+    {
+      "path": "outputs/08_circor_external_validation/EXP-C1-three_class/per_fold_by_location.csv",
+      "exists": true,
+      "bytes": 40032,
+      "sha256": "9d4a2b40cafccb4a8436bb1fbe0326c0089b296edafb01d8d2fd6cb00a6f41a9",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-31T07:58:10.837830+00:00"
+    },
+    {
+      "path": "outputs/08_circor_external_validation/EXP-C1-two_class/per_fold_by_location.csv",
+      "exists": true,
+      "bytes": 29738,
+      "sha256": "5785c7a6c44636e7df4ffab41fc0451c6b5909e5b3e99e49f29995d07c1ca807",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-31T07:58:13.978206+00:00"
+    },
+    {
+      "path": "outputs/08_circor_external_validation/EXP-C2/per_fold_by_location.csv",
+      "exists": true,
+      "bytes": 28139,
+      "sha256": "159d888f3ee929935fc29ab231597516bae775cfca3229ef57d1bc0cdbc0d786",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-31T07:58:17.007701+00:00"
+    }
+  ],
+  "written": {
+    "csv": "outputs/08_circor_external_validation/T22_auscultation_location_analysis.csv",
+    "md": "outputs/08_circor_external_validation/T22_auscultation_location_analysis.md",
+    "docx": "outputs/08_circor_external_validation/T22_auscultation_location_analysis.docx",
+    "latex": "outputs/08_circor_external_validation/T22_auscultation_location_analysis.tex"
+  },
+  "notes": [
+    "Location read from metadata_master.recording_location and cross-checked against the record_uid, which encodes it independently; 43 recordings carry a repeat suffix (_1.._3) that a naive suffix split misreads.",
+    "The patient-level label is propagated to every recording of that patient, so per-location sensitivity is measured against a label that may not be audible at that position. See circor_label_propagation.md.",
+    "PV-MEPCG / PulseVision is an academic screening prototype, not a diagnostic tool."
+  ]
+}
