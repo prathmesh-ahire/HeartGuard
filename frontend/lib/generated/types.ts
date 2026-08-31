@@ -204,6 +204,99 @@ export interface GeneratedEquations {
   equations: GeneratedEquation[];
 }
 
+export interface GeneratedRecordColumn {
+  name: string;
+  label: string;
+  kind: string;
+  /** Pre-formatted strings. This is what a page renders. */
+  display: string[];
+  /** Numbers, for sorting and filtering only. Never rendered as text. */
+  values: (number | null)[] | null;
+}
+
+export interface GeneratedRecordSummary {
+  dataset_source: string;
+  dataset_name: string;
+  n_files: number;
+  n_files_display: string;
+  n_modelled: number;
+  n_modelled_display: string;
+  n_subjects: number;
+  n_subjects_display: string;
+  hours_modelled: number;
+  hours_modelled_display: string;
+}
+
+export interface GeneratedDatasetSummary {
+  source: string;
+  n_records: number;
+  n_supervised: number;
+  summary: GeneratedRecordSummary[];
+  scope_note: string;
+}
+
+export interface GeneratedRecordIndex {
+  source: string;
+  n_records: number;
+  n_supervised: number;
+  columns: GeneratedRecordColumn[];
+  facets: { name: string; label: string; values: string[] }[];
+  summary: GeneratedRecordSummary[];
+  scope_note: string;
+}
+
+export interface GeneratedSignalExample {
+  key: string;
+  record_uid: string;
+  title: string;
+  note: string;
+  fs: number;
+  native_fs: number;
+  stride: number;
+  n_points: number;
+  time_sec: number[];
+  /** raw / filtered / normalized / filtered_normalized, all precomputed. */
+  series: Record<string, number[]>;
+  quality: { name: string; label: string; display: string; value: number | null }[];
+}
+
+export interface GeneratedSignalExamples {
+  available: boolean;
+  reason: string | null;
+  source?: string;
+  window_seconds?: number;
+  points_per_series?: number;
+  states?: { key: string; filter: boolean; normalize: boolean }[];
+  note?: string;
+  records: GeneratedSignalExample[];
+}
+
+export interface GeneratedObjective {
+  number: number;
+  label: string;
+  /** A short handle. NEVER rendered in place of `wording`. */
+  handle: string;
+  /** The blueprint's locked wording. Quoted exactly; never paraphrased. */
+  wording: string;
+  /** sha256 of `wording`, so "verbatim" is checkable rather than asserted. */
+  wording_sha256: string;
+  modules: string[];
+  evidence: { dir: string; n_files: number; status: string }[];
+  caveat: string | null;
+  pending_reason: string | null;
+  status: string;
+}
+
+export interface GeneratedObjectives {
+  n_objectives: number;
+  source: string;
+  source_page: number;
+  source_sha256: string;
+  locked_notice: string;
+  transcription_notes: string[];
+  objectives: GeneratedObjective[];
+}
+
 export interface GeneratedSegment {
   start: number;
   end: number;

@@ -317,12 +317,44 @@ def test_typescript_declares_every_payload_and_index_assigns_without_a_cast(
     ):
         assert "export interface " + name in types, name + " is not declared"
 
-    index = (exported.generated / "index.ts").read_text(encoding="utf-8")
+    # Every emitted module, not only the barrel. Phase 114 moved the four large
+    # payloads out of `index.ts` into their own modules -- `tables.json` and
+    # `figures.json` among them -- because the barrel is a single module
+    # imported by the root layout, so anything in it is bundled into all fifteen
+    # routes. The property this test protects is unchanged and is NOT weakened:
+    # every payload is assigned to its declared type WITHOUT a cast. It is now
+    # checked across the modules rather than in one file, because that is where
+    # the assignments are.
+    modules = {
+        path.name: path.read_text(encoding="utf-8")
+        for path in exported.generated.glob("*.ts")
+        if path.name != "types.ts"
+    }
+    assert "index.ts" in modules
+    joined = "\n".join(modules.values())
+
     # A cast would defeat the whole point: tsc must structurally check the JSON.
-    assert " as GeneratedTable" not in index
-    assert " as unknown" not in index
-    assert "export const manifest: GeneratedManifest = manifestJson;" in index
-    assert "export const tables: Record<string, GeneratedTable> = tablesJson;" in index
+    for forbidden in (" as GeneratedTable", " as GeneratedFigure", " as unknown", " as any"):
+        assert forbidden not in joined, "a cast in the generated TypeScript: " + forbidden
+
+    assert "export const manifest: GeneratedManifest = manifestJson;" in modules["index.ts"]
+    assert "export const tables: Record<string, GeneratedTable> = payload;" in modules["tables.ts"]
+    assert (
+        "export const figures: Record<string, GeneratedFigure> = payload;" in modules["figures.ts"]
+    )
+    assert "export const records: GeneratedRecordIndex = payload;" in modules["records.ts"]
+
+    # Every JSON the exporter wrote is imported by exactly one module, so no
+    # payload is silently duplicated into two chunks.
+    for json_file in exported.generated.glob("*.json"):
+        importers = [name for name, text in modules.items() if "'./" + json_file.name + "'" in text]
+        assert len(importers) == 1, (
+            json_file.name
+            + " is imported by "
+            + str(len(importers))
+            + " modules: "
+            + ", ".join(importers)
+        )
 
 
 def test_the_typescript_states_the_display_versus_values_rule(

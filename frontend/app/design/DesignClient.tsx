@@ -3,7 +3,9 @@
 import { useState } from 'react';
 
 import { cn } from '@/lib/cn';
-import { figure, tables, theme } from '@/lib/generated';
+import { theme } from '@/lib/generated';
+import { figure } from '@/lib/generated/figures';
+import { tables } from '@/lib/generated/tables';
 import { PALETTE_CONTRAST, SERIES_COLORS, SURFACE, TYPE_SCALE } from '@/lib/tokens';
 import { RecordingViewer } from '@/components/audio/RecordingViewer';
 import { CalibrationCurve, ConfusionMatrix, GroupedBars, PrCurve, RocCurve, ScatterPlot } from '@/components/charts/Charts';

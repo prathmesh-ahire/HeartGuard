@@ -158,6 +158,13 @@ module = [
     "tqdm.*",
     "docx.*",
     "kaleido.*",
+    # pypdf is deliberately NOT a project dependency. It is installed to extract
+    # the blueprint's equations (Phase 113) and locked objectives (Phase 114),
+    # then uninstalled -- the extracted content is committed, and re-extraction
+    # is a verification step, not a build step. `objectives.verify_against_source`
+    # imports it inside a try/except and reports "not installed" as a state
+    # rather than failing, so mypy must tolerate its absence.
+    "pypdf.*",
 ]
 ignore_missing_imports = true
 

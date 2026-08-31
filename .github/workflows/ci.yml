@@ -282,6 +282,25 @@ jobs:
           fi
           python scripts/16_check_no_hardcoded_metrics.py
 
+      - name: Displayed-value audit
+        # The other half of the guard rail, and the only place it can run.
+        #
+        # The grep check above sees a literal typed into a `.tsx` file. It
+        # cannot see what a page actually rendered -- a template expression, a
+        # value formatted in the wrong place, or a payload the site was built
+        # against before the exporter changed. These tests read the exported
+        # HTML in `frontend/out/` and check every stated number against the CSV
+        # in `outputs/` that produced it, in both directions.
+        #
+        # They run HERE rather than in the tests job because `frontend/out/` is
+        # a build artifact: it exists in this job and nowhere else. In the
+        # Python job they skip, by design, and skipping there is why they must
+        # not be left out here.
+        if: steps.detect.outputs.present == 'true'
+        run: |
+          python -m pip install -r requirements/dev.txt
+          pytest tests/test_pages_1_3.py -q
+
       - name: Report skip
         if: steps.detect.outputs.present != 'true'
         run: |

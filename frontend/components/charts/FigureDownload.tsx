@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/cn';
-import { figure as generatedFigure } from '@/lib/generated';
+import { figure as generatedFigure } from '@/lib/generated/figures';
 import { SURFACE, TYPE_SCALE } from '@/lib/tokens';
 
 /**

@@ -1,0 +1,137 @@
+{
+  "n_objectives": 6,
+  "source": "Docs/Kharat_Mam_Developer_Blueprint_PulseVision_PCG_Heart_Sound_Classification.pdf",
+  "source_page": 2,
+  "source_sha256": "18ccac2d86f3ffdc4cbb6457fdf7abe1c499b9b41675efc80d0cfe91cb10c73d",
+  "locked_notice": "These objectives are locked by the source document: they are not changed, shortened, paraphrased or reworded anywhere in this project. The wording below is quoted exactly, and each is published with the sha256 of its own text so a paraphrase is detectable rather than arguable.",
+  "transcription_notes": [
+    "Objective 2 is printed across a line break as 'state-' / 'of-the-art'; the wrap is closed to 'state-of-the-art'. Dropping the hyphen instead gives 'stateof-the-art', which is what a naive dehyphenation produces.",
+    "Objective 3 uses typographic quotation marks (U+201C, U+201D) around 'ensemble'. They are preserved rather than normalised to ASCII."
+  ],
+  "objectives": [
+    {
+      "number": 1,
+      "label": "Objective 1",
+      "handle": "Normal versus abnormal classification",
+      "wording": "To introduce a new approach for the classification of normal and abnormal heart sound recordings using a machine learning algorithm. An appropriate algorithm for auto diagnosis systems of heart diseases, capable of distinguishing most known pathological states, must be developed.",
+      "wording_sha256": "216462f641a1cae2ec90bb55810a80e49c6f10e36cbbc27ea98028bcbbafac02",
+      "modules": [
+        "src/models/pipeline.py",
+        "src/models/estimators.py",
+        "src/inference/predictor.py"
+      ],
+      "evidence": [
+        {
+          "dir": "outputs/06_binary_results",
+          "n_files": 779,
+          "status": "produced"
+        }
+      ],
+      "caveat": "This is a screening and decision-support prototype. The blueprint's phrase \u201cauto diagnosis systems\u201d is its wording, not a claim made by this implementation: nothing here diagnoses, and every result is reported as a screening signal.",
+      "pending_reason": null,
+      "status": "produced"
+    },
+    {
+      "number": 2,
+      "label": "Objective 2",
+      "handle": "State-of-the-art review",
+      "wording": "To review recently published preprocessing, feature extraction, and classification techniques, as well as the state-of-the-art in phonocardiogram (PCG) signal analysis.",
+      "wording_sha256": "b0510c744259016bc06e9b45627ce02c16550aea1508050202412fc6e080c54c",
+      "modules": [
+        "src/reporting/tables.py"
+      ],
+      "evidence": [],
+      "caveat": null,
+      "pending_reason": "The literature review is Phase 101 and has not run. No outputs directory is named here on purpose: pointing at one that does not exist, or at a neighbouring directory that holds something else, would turn this check into a formality.",
+      "status": "pending"
+    },
+    {
+      "number": 3,
+      "label": "Objective 3",
+      "handle": "Heterogeneous ensemble",
+      "wording": "To utilise ensemble machine learning algorithms that combine the predictions of several learning models into a single \u201censemble\u201d model to improve overall performance.",
+      "wording_sha256": "f05323c96b4ee232005e75aa47610576982e7dda3a18b2ddf3727bf1cc572528",
+      "modules": [
+        "src/ensemble/soft_voting.py",
+        "src/optimization/weights.py"
+      ],
+      "evidence": [
+        {
+          "dir": "outputs/05_search_optimization",
+          "n_files": 287,
+          "status": "produced"
+        }
+      ],
+      "caveat": null,
+      "pending_reason": null,
+      "status": "produced"
+    },
+    {
+      "number": 4,
+      "label": "Objective 4",
+      "handle": "Short, noisy, single recordings",
+      "wording": "To understand heart sound classification techniques that might find use in medical diagnostic systems; the objective is to accurately classify normal and abnormal heart sounds from single, short, and potentially noisy recordings.",
+      "wording_sha256": "e4ab43a994bea016d459296df02ba7ed0b4da1db89a06eac9f5e639081b3b53c",
+      "modules": [
+        "src/preprocessing/pipeline.py",
+        "src/feature_extraction/extractor.py"
+      ],
+      "evidence": [
+        {
+          "dir": "outputs/02_preprocessing",
+          "n_files": 18,
+          "status": "produced"
+        },
+        {
+          "dir": "outputs/03_features",
+          "n_files": 39,
+          "status": "produced"
+        }
+      ],
+      "caveat": null,
+      "pending_reason": null,
+      "status": "produced"
+    },
+    {
+      "number": 5,
+      "label": "Objective 5",
+      "handle": "Search-driven optimization",
+      "wording": "Apply a search algorithm to improve the performance of the diagnostic system in terms of accuracy, complexity, and the range of distinguishable heart sounds.",
+      "wording_sha256": "935653072b2f40db69dd7945412af4a113d807d660fce2f50be37805d6e835fc",
+      "modules": [
+        "src/optimization/driver.py",
+        "src/feature_selection/ranking.py"
+      ],
+      "evidence": [
+        {
+          "dir": "outputs/05_search_optimization",
+          "n_files": 287,
+          "status": "produced"
+        }
+      ],
+      "caveat": null,
+      "pending_reason": null,
+      "status": "produced"
+    },
+    {
+      "number": 6,
+      "label": "Objective 6",
+      "handle": "More classes, more samples",
+      "wording": "To introduce a greater number of classes (types of heart sounds) to test the final system further, making it capable of handling more tests on a larger number of samples.",
+      "wording_sha256": "32e8b1ebf00f9764574d442d811b5126c9d9d6fe09a6714eb728ad49087bc1e1",
+      "modules": [
+        "src/models/pipeline.py"
+      ],
+      "evidence": [
+        {
+          "dir": "outputs/07_multiclass_results",
+          "n_files": 397,
+          "status": "produced"
+        }
+      ],
+      "caveat": "PASCAL A has 124 records with 19 in one class, which is too few to carry this objective alone. The PhysioNet diagnosis track (3,240 records) is what answers it at scale. PASCAL's \u201cartifact\u201d label is a recording-quality category, not a cardiac class, so the four-class model is never described as a four-class cardiac classifier.",
+      "pending_reason": null,
+      "status": "produced"
+    }
+  ]
+}

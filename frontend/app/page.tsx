@@ -1,15 +1,28 @@
 import Link from 'next/link';
 
-import { manifest } from '@/lib/generated';
+import { Objectives } from '@/components/objectives/Objectives';
+import { Hero3D } from '@/components/three/Hero3D';
+import { PipelineWalkthrough } from '@/components/pipeline/PipelineWalkthrough';
+import { SectionHeader } from '@/components/ui/SectionHeader';
+import { StatTile } from '@/components/ui/StatTile';
+import { datasetSummary, manifest } from '@/lib/generated';
 import { GROUP_LABELS, ROUTES } from '@/lib/routes';
 
 /**
- * Home, in its Phase 110 scaffold form: the route map and the provenance of
- * this build. The hero, the 3D heart, the six locked objectives and the
- * animated pipeline arrive in Phase 114 (T114.1).
+ * Home (T114.1): the hero, the six locked objectives verbatim, the animated
+ * pipeline, and the dataset summary tiles.
  *
- * The counts below come from `manifest`, which Python wrote. Nothing on this
- * page is typed in, and nothing is a result.
+ * A server component. The interactive parts — the 3D heart and the scroll-driven
+ * pipeline — are client components imported into it, so KaTeX's mistake from
+ * Phase 112 (a server component pulled across a client boundary and into the
+ * browser bundle) cannot repeat here: nothing on this page renders a formula
+ * and nothing on it computes.
+ *
+ * Every number below comes from `generated/`, formatted in Python. The tiles
+ * read `datasetSummary.summary`, which reports **both** populations per corpus, because
+ * the corpus and the modelled subset differ for three of the four families and a
+ * tile showing one while the reader assumes the other is how a wrong count gets
+ * into a thesis.
  */
 export default function HomePage() {
   const groups = (['overview', 'method', 'results', 'predict'] as const).map((group) => ({
@@ -18,43 +31,102 @@ export default function HomePage() {
   }));
 
   return (
-    <div className="space-y-10">
-      <section className="max-w-3xl">
-        <p className="text-xs uppercase tracking-widest text-slate-500">
-          Phonocardiogram heart-sound classification
-        </p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight">
-          {manifest.framework}
-        </h1>
-        <p className="mt-4 text-slate-600 dark:text-slate-400">
-          A search-optimized heterogeneous ensemble over engineered acoustic features,
-          evaluated across four public PCG corpora under subject-grouped
-          cross-validation. This site is the reporting surface for that work: every
-          precomputed value it shows is generated from the pipeline&rsquo;s own output
-          files at build time.
-        </p>
-        <div className="mt-6 rounded border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-600 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-400">
-          <p className="font-medium text-slate-800 dark:text-slate-200">
-            Route tree scaffolded; page content is built in Phases 114&ndash;117.
+    <div className="space-y-16">
+      {/* ----------------------------------------------------------------- */}
+      <section className="grid items-center gap-8 lg:grid-cols-2">
+        <div>
+          <p className="text-xs uppercase tracking-widest text-slate-500">
+            Phonocardiogram heart-sound classification
           </p>
-          <p className="mt-1">
-            The hero, the six research objectives and the animated pipeline walkthrough
-            belong to Phase 114. Nothing on this page is a measured result.
+          <h1 className="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">
+            {manifest.framework}
+          </h1>
+          <p className="mt-5 max-w-xl text-lg text-slate-600 dark:text-slate-400">
+            A search-optimized heterogeneous ensemble over engineered acoustic
+            features, evaluated across four public PCG corpora under subject-grouped
+            cross-validation.
           </p>
+          <p className="mt-4 max-w-xl text-slate-600 dark:text-slate-400">
+            This site is the reporting surface for that work. Every precomputed value
+            it shows was generated from the pipeline&rsquo;s own output files at build
+            time and can be traced back to the CSV that produced it. The only thing
+            computed while you are here is a prediction you ask for yourself.
+          </p>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <Link
+              href="/dataset/"
+              className="rounded-md bg-sky-700 px-4 py-2 text-sm font-medium text-white hover:bg-sky-800 dark:bg-sky-600 dark:hover:bg-sky-500"
+            >
+              Explore the corpus
+            </Link>
+            <Link
+              href="/predict/binary/"
+              className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-800 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-900"
+            >
+              Screen a recording
+            </Link>
+          </div>
+        </div>
+        <Hero3D height="22rem" interactive />
+      </section>
+
+      {/* ----------------------------------------------------------------- */}
+      <section>
+        <SectionHeader
+          eyebrow="Corpus"
+          title="Four public datasets, audited against the files on disk"
+          description={datasetSummary.scope_note}
+        />
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {datasetSummary.summary.map((row) => (
+            <StatTile
+              key={row.dataset_source}
+              label={row.dataset_name}
+              display={row.n_modelled_display}
+              value={row.n_modelled}
+              unit="modelled recordings"
+              source={datasetSummary.source}
+              hint={
+                <>
+                  {row.n_files_display} files on disk · {row.n_subjects_display} subjects ·{' '}
+                  {row.hours_modelled_display} hours modelled
+                </>
+              }
+            />
+          ))}
         </div>
       </section>
 
+      {/* ----------------------------------------------------------------- */}
       <section>
-        <h2 className="text-sm font-semibold uppercase tracking-widest text-slate-500">
-          Pages
-        </h2>
-        <div className="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <SectionHeader
+          eyebrow="Scope"
+          title="The six locked objectives"
+          description="Quoted exactly as the source document fixes them."
+        />
+        <Objectives className="mt-6" />
+      </section>
+
+      {/* ----------------------------------------------------------------- */}
+      <section>
+        <SectionHeader
+          eyebrow="Method"
+          title="From a recording to a screened result"
+          description="Twelve steps, each naming the module that implements it and the outputs directory that evidences it. Both are checked when this page is built."
+        />
+        <PipelineWalkthrough className="mt-6" />
+      </section>
+
+      {/* ----------------------------------------------------------------- */}
+      <section>
+        <SectionHeader eyebrow="Contents" title="Pages" level={2} />
+        <div className="mt-6 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {groups.map(({ group, routes }) => (
             <div key={group}>
               <h3 className="text-xs uppercase tracking-widest text-slate-400 dark:text-slate-500">
                 {GROUP_LABELS[group]}
               </h3>
-              <ul className="mt-2 space-y-3">
+              <ul className="mt-3 space-y-3">
                 {routes.map((route) => (
                   <li key={route.href}>
                     <Link
@@ -72,38 +144,6 @@ export default function HomePage() {
             </div>
           ))}
         </div>
-      </section>
-
-      <section>
-        <h2 className="text-sm font-semibold uppercase tracking-widest text-slate-500">
-          This build
-        </h2>
-        <dl className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
-          <div className="rounded border border-slate-200 p-4 dark:border-slate-800">
-            <dt className="text-xs uppercase tracking-widest text-slate-500">Tables</dt>
-            <dd className="mt-1 text-2xl font-semibold tabular-nums">
-              {manifest.n_tables}
-            </dd>
-          </div>
-          <div className="rounded border border-slate-200 p-4 dark:border-slate-800">
-            <dt className="text-xs uppercase tracking-widest text-slate-500">Figures</dt>
-            <dd className="mt-1 text-2xl font-semibold tabular-nums">
-              {manifest.n_figures}
-            </dd>
-          </div>
-          <div className="rounded border border-slate-200 p-4 dark:border-slate-800">
-            <dt className="text-xs uppercase tracking-widest text-slate-500">
-              Source files
-            </dt>
-            <dd className="mt-1 text-2xl font-semibold tabular-nums">
-              {manifest.sources.length}
-            </dd>
-          </div>
-          <div className="rounded border border-slate-200 p-4 dark:border-slate-800">
-            <dt className="text-xs uppercase tracking-widest text-slate-500">Pages</dt>
-            <dd className="mt-1 text-2xl font-semibold tabular-nums">{ROUTES.length}</dd>
-          </div>
-        </dl>
       </section>
     </div>
   );

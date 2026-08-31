@@ -1,0 +1,56 @@
+{
+  "source": "outputs/01_dataset_audit/metadata_master.csv",
+  "n_records": 7536,
+  "n_supervised": 6988,
+  "summary": [
+    {
+      "dataset_source": "D1",
+      "dataset_name": "PhysioNet 2016",
+      "n_files": 3541,
+      "n_files_display": "3,541",
+      "n_modelled": 3240,
+      "n_modelled_display": "3,240",
+      "n_subjects": 857,
+      "n_subjects_display": "857",
+      "hours_modelled": 20.215577638888888,
+      "hours_modelled_display": "20.216"
+    },
+    {
+      "dataset_source": "D2",
+      "dataset_name": "PASCAL set_a",
+      "n_files": 176,
+      "n_files_display": "176",
+      "n_modelled": 124,
+      "n_modelled_display": "124",
+      "n_subjects": 175,
+      "n_subjects_display": "175",
+      "hours_modelled": 0.27604232527777783,
+      "hours_modelled_display": "0.276"
+    },
+    {
+      "dataset_source": "D3",
+      "dataset_name": "PASCAL set_b",
+      "n_files": 656,
+      "n_files_display": "656",
+      "n_modelled": 461,
+      "n_modelled_display": "461",
+      "n_subjects": 171,
+      "n_subjects_display": "171",
+      "hours_modelled": 0.8296733333333334,
+      "hours_modelled_display": "0.830"
+    },
+    {
+      "dataset_source": "D4",
+      "dataset_name": "CirCor 2022",
+      "n_files": 3163,
+      "n_files_display": "3,163",
+      "n_modelled": 3163,
+      "n_modelled_display": "3,163",
+      "n_subjects": 942,
+      "n_subjects_display": "942",
+      "hours_modelled": 20.09410076388889,
+      "hours_modelled_display": "20.094"
+    }
+  ],
+  "scope_note": "Every audited file is counted in 'files'; 'modelled' is the supervised subset the experiments actually use, which is smaller than the corpus for three of the four families. Any total taken over these rows has to say which of the two populations it counted."
+}
