@@ -271,6 +271,163 @@ export interface GeneratedSignalExamples {
   records: GeneratedSignalExample[];
 }
 
+export interface GeneratedMetricValue {
+  mean: number | null;
+  sd: number | null;
+  mean_display: string;
+  sd_display: string;
+  /** "0.848 +/- 0.040". This is what a table cell renders. */
+  display: string;
+}
+
+export interface GeneratedExperimentModel {
+  model_id: string;
+  n_folds: number | null;
+  n_folds_display: string;
+  metrics: Record<string, GeneratedMetricValue>;
+  per_class: Record<string, unknown>[];
+}
+
+export interface GeneratedExperiment {
+  exp_id: string;
+  task: string;
+  title: string;
+  available: boolean;
+  reason: string | null;
+  description?: string;
+  caveat?: string | null;
+  directory?: string;
+  /** Whether a search ran inside this experiment, from its own config snapshot. */
+  tuned?: boolean | null;
+  cv?: string | null;
+  n_models?: number;
+  run_id?: string | null;
+  git_commit?: string | null;
+  seed?: number | null;
+  metrics?: { name: string; label: string; higher_is_better: boolean }[];
+  models?: GeneratedExperimentModel[];
+  folds?: {
+    model_id: string;
+    fold_labels: string[];
+    metrics: Record<string, (number | null)[]>;
+  }[];
+  confusion?: {
+    available: boolean;
+    reason?: string | null;
+    class_names?: string[];
+    labels?: number[];
+    note?: string;
+    models?: Partial<Record<string, { total: number[][] }>>;
+  };
+  curves?: {
+    available: boolean;
+    reason?: string | null;
+    source?: string;
+    grid_points?: number;
+    calibration_bins?: number;
+    aggregation_note?: string;
+    models?: Record<string, unknown>[];
+  };
+}
+
+export interface GeneratedExperiments {
+  n_declared: number;
+  n_available: number;
+  selection_note: string;
+  label_space_note: string;
+  experiments: GeneratedExperiment[];
+}
+
+export interface GeneratedFeature {
+  index: number;
+  name: string;
+  family: string;
+  extractor: string;
+  unit: string | null;
+  description: string;
+  abs_cohens_d: number | null;
+  abs_cohens_d_display: string;
+}
+
+export interface GeneratedFeatures {
+  n_features: number;
+  registry_note: string;
+  features: GeneratedFeature[];
+  families: {
+    family: string;
+    n_features: number;
+    n_features_display: string;
+    first_index: number;
+  }[];
+  selected: {
+    available: boolean;
+    reason: string | null;
+    n_selected?: number;
+    stability_note?: string;
+    features: Record<string, unknown>[];
+  };
+  example_vector: {
+    available: boolean;
+    reason: string | null;
+    source?: string;
+    record_uid?: string;
+    n_features?: number;
+    note?: string;
+    values: {
+      index: number;
+      name: string;
+      family: string;
+      value: number | null;
+      display: string;
+    }[];
+  };
+}
+
+/** A CSV passed through as columns. The column set differs per search run, so
+ *  this is the one generated shape deliberately not enumerated field by field.
+ *  `display` still renders and `values` still only positions marks. */
+export interface GeneratedFramePayload {
+  available: boolean;
+  reason: string | null;
+  source: string;
+  n_rows: number;
+  columns: {
+    name: string;
+    kind: string;
+    display: string[];
+    values: (number | null)[] | null;
+  }[];
+}
+
+export interface GeneratedOptimization {
+  n_runs: number;
+  fold_safety_note: string;
+  n_display: string;
+  runs: {
+    run_id: string;
+    title: string;
+    description: string;
+    available: boolean;
+    reason: string | null;
+    convergence: {
+      available: boolean;
+      reason: string | null;
+      x_label?: string;
+      y_label?: string;
+      n_series?: number;
+      series: { label: string; x: (number | null)[]; y: (number | null)[] }[];
+    } | null;
+    best_parameters: unknown;
+  }[];
+  pareto: GeneratedFramePayload;
+  weight_stability: GeneratedFramePayload;
+  equal_vs_optimized: GeneratedFramePayload;
+  feature_count_curve: GeneratedFramePayload;
+  method_comparison: GeneratedFramePayload;
+  final_weights: unknown;
+  operating_point: unknown;
+}
+
 export interface GeneratedObjective {
   number: number;
   label: string;

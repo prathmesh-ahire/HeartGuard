@@ -299,7 +299,7 @@ jobs:
         if: steps.detect.outputs.present == 'true'
         run: |
           python -m pip install -r requirements/dev.txt
-          pytest tests/test_pages_1_3.py -q
+          pytest tests/test_pages_1_3.py tests/test_pages_4_6.py -q
 
       - name: Report skip
         if: steps.detect.outputs.present != 'true'

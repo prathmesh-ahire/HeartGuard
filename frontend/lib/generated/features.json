@@ -1,0 +1,2608 @@
+{
+  "n_features": 138,
+  "registry_note": "The column order of the 138-vector is a literal in src/feature_extraction/registry.py and is fingerprinted; two runs that disagree on that fingerprint are not comparable. This list is in that order and is never sorted by name.",
+  "features": [
+    {
+      "index": 0,
+      "name": "time_mean",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "nan",
+      "description": "Mean amplitude of the preprocessed signal",
+      "abs_cohens_d": 0.0296112855471697,
+      "abs_cohens_d_display": "0.030"
+    },
+    {
+      "index": 1,
+      "name": "time_std",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "nan",
+      "description": "Standard deviation of amplitude",
+      "abs_cohens_d": 0.0455916241895692,
+      "abs_cohens_d_display": "0.046"
+    },
+    {
+      "index": 2,
+      "name": "time_var",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "nan",
+      "description": "Variance of amplitude",
+      "abs_cohens_d": 0.0455917056507413,
+      "abs_cohens_d_display": "0.046"
+    },
+    {
+      "index": 3,
+      "name": "time_min",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "nan",
+      "description": "Most negative sample",
+      "abs_cohens_d": 0.2462537542545558,
+      "abs_cohens_d_display": "0.246"
+    },
+    {
+      "index": 4,
+      "name": "time_max",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "nan",
+      "description": "Most positive sample",
+      "abs_cohens_d": 0.438504426806908,
+      "abs_cohens_d_display": "0.439"
+    },
+    {
+      "index": 5,
+      "name": "time_range",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "nan",
+      "description": "Full amplitude range",
+      "abs_cohens_d": 0.3715941047432708,
+      "abs_cohens_d_display": "0.372"
+    },
+    {
+      "index": 6,
+      "name": "time_median",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "nan",
+      "description": "Median amplitude",
+      "abs_cohens_d": 0.0377735893935479,
+      "abs_cohens_d_display": "0.038"
+    },
+    {
+      "index": 7,
+      "name": "time_iqr",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "nan",
+      "description": "Interquartile range of amplitude",
+      "abs_cohens_d": 0.5699203596174145,
+      "abs_cohens_d_display": "0.570"
+    },
+    {
+      "index": 8,
+      "name": "time_skewness",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "nan",
+      "description": "Asymmetry of the amplitude distribution",
+      "abs_cohens_d": 0.3066405178234351,
+      "abs_cohens_d_display": "0.307"
+    },
+    {
+      "index": 9,
+      "name": "time_kurtosis",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "nan",
+      "description": "Tailedness of the amplitude distribution; excess kurtosis",
+      "abs_cohens_d": 0.0239950495918298,
+      "abs_cohens_d_display": "0.024"
+    },
+    {
+      "index": 10,
+      "name": "time_energy",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "nan",
+      "description": "Total signal energy",
+      "abs_cohens_d": 0.305058488566308,
+      "abs_cohens_d_display": "0.305"
+    },
+    {
+      "index": 11,
+      "name": "time_rms",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "nan",
+      "description": "Root-mean-square amplitude",
+      "abs_cohens_d": 0.0455916241535445,
+      "abs_cohens_d_display": "0.046"
+    },
+    {
+      "index": 12,
+      "name": "time_peak_to_peak",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "nan",
+      "description": "Peak-to-peak excursion; equals range, kept because the blueprint lists both",
+      "abs_cohens_d": 0.3715941047432708,
+      "abs_cohens_d_display": "0.372"
+    },
+    {
+      "index": 13,
+      "name": "time_crest_factor",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "nan",
+      "description": "Peak-to-RMS ratio; high for impulsive sounds",
+      "abs_cohens_d": 0.3409777871593639,
+      "abs_cohens_d_display": "0.341"
+    },
+    {
+      "index": 14,
+      "name": "time_zcr_mean",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "nan",
+      "description": "Mean framed zero-crossing rate",
+      "abs_cohens_d": 0.9595604612990932,
+      "abs_cohens_d_display": "0.960"
+    },
+    {
+      "index": 15,
+      "name": "time_zcr_std",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "nan",
+      "description": "Variability of the framed zero-crossing rate",
+      "abs_cohens_d": 0.476093648519278,
+      "abs_cohens_d_display": "0.476"
+    },
+    {
+      "index": 16,
+      "name": "time_shannon_entropy",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "bit",
+      "description": "Shannon entropy of the amplitude distribution",
+      "abs_cohens_d": 0.0193947415906604,
+      "abs_cohens_d_display": "0.019"
+    },
+    {
+      "index": 17,
+      "name": "time_sample_entropy",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "nan",
+      "description": "Sample entropy; regularity of the waveform",
+      "abs_cohens_d": 0.1183499910136074,
+      "abs_cohens_d_display": "0.118"
+    },
+    {
+      "index": 18,
+      "name": "time_hjorth_activity",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "nan",
+      "description": "Hjorth activity; signal power",
+      "abs_cohens_d": 0.0455917056507413,
+      "abs_cohens_d_display": "0.046"
+    },
+    {
+      "index": 19,
+      "name": "time_hjorth_mobility",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "nan",
+      "description": "Hjorth mobility; mean frequency proxy",
+      "abs_cohens_d": 0.2505273285066535,
+      "abs_cohens_d_display": "0.251"
+    },
+    {
+      "index": 20,
+      "name": "time_hjorth_complexity",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "nan",
+      "description": "Hjorth complexity; bandwidth proxy",
+      "abs_cohens_d": 0.8065006445033979,
+      "abs_cohens_d_display": "0.807"
+    },
+    {
+      "index": 21,
+      "name": "time_autocorr_peak_value",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "nan",
+      "description": "Strength of the dominant periodicity; a rhythm-regularity proxy",
+      "abs_cohens_d": 0.1291104784638416,
+      "abs_cohens_d_display": "0.129"
+    },
+    {
+      "index": 22,
+      "name": "time_autocorr_peak_lag",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "s",
+      "description": "Period of the dominant periodicity; a cardiac-cycle proxy",
+      "abs_cohens_d": 0.033801911060723,
+      "abs_cohens_d_display": "0.034"
+    },
+    {
+      "index": 23,
+      "name": "time_duration",
+      "family": "time",
+      "extractor": "time_domain",
+      "unit": "s",
+      "description": "Recording duration",
+      "abs_cohens_d": 0.3050584886704589,
+      "abs_cohens_d_display": "0.305"
+    },
+    {
+      "index": 24,
+      "name": "freq_centroid_mean",
+      "family": "frequency",
+      "extractor": "frequency",
+      "unit": "Hz",
+      "description": "Mean spectral centre of mass",
+      "abs_cohens_d": 0.4454400636709756,
+      "abs_cohens_d_display": "0.445"
+    },
+    {
+      "index": 25,
+      "name": "freq_centroid_std",
+      "family": "frequency",
+      "extractor": "frequency",
+      "unit": "Hz",
+      "description": "Variability of the spectral centroid",
+      "abs_cohens_d": 0.1370334975388042,
+      "abs_cohens_d_display": "0.137"
+    },
+    {
+      "index": 26,
+      "name": "freq_bandwidth_mean",
+      "family": "frequency",
+      "extractor": "frequency",
+      "unit": "Hz",
+      "description": "Mean spectral spread about the centroid",
+      "abs_cohens_d": 0.0009511407220102,
+      "abs_cohens_d_display": "0.001"
+    },
+    {
+      "index": 27,
+      "name": "freq_bandwidth_std",
+      "family": "frequency",
+      "extractor": "frequency",
+      "unit": "Hz",
+      "description": "Variability of the spectral bandwidth",
+      "abs_cohens_d": 0.2425333765700782,
+      "abs_cohens_d_display": "0.243"
+    },
+    {
+      "index": 28,
+      "name": "freq_rolloff85_mean",
+      "family": "frequency",
+      "extractor": "frequency",
+      "unit": "Hz",
+      "description": "Mean 85% spectral rolloff",
+      "abs_cohens_d": 0.3117322516446438,
+      "abs_cohens_d_display": "0.312"
+    },
+    {
+      "index": 29,
+      "name": "freq_rolloff85_std",
+      "family": "frequency",
+      "extractor": "frequency",
+      "unit": "Hz",
+      "description": "Variability of the 85% rolloff",
+      "abs_cohens_d": 0.3124067971549149,
+      "abs_cohens_d_display": "0.312"
+    },
+    {
+      "index": 30,
+      "name": "freq_rolloff95_mean",
+      "family": "frequency",
+      "extractor": "frequency",
+      "unit": "Hz",
+      "description": "Mean 95% spectral rolloff",
+      "abs_cohens_d": 0.1085530728386036,
+      "abs_cohens_d_display": "0.109"
+    },
+    {
+      "index": 31,
+      "name": "freq_rolloff95_std",
+      "family": "frequency",
+      "extractor": "frequency",
+      "unit": "Hz",
+      "description": "Variability of the 95% rolloff",
+      "abs_cohens_d": 0.2230210658587087,
+      "abs_cohens_d_display": "0.223"
+    },
+    {
+      "index": 32,
+      "name": "freq_flatness_mean",
+      "family": "frequency",
+      "extractor": "frequency",
+      "unit": "nan",
+      "description": "Mean Wiener entropy; 1 is noise-like, 0 is tonal",
+      "abs_cohens_d": 0.01713380808574,
+      "abs_cohens_d_display": "0.017"
+    },
+    {
+      "index": 33,
+      "name": "freq_flatness_std",
+      "family": "frequency",
+      "extractor": "frequency",
+      "unit": "nan",
+      "description": "Variability of spectral flatness",
+      "abs_cohens_d": 0.0617947816140661,
+      "abs_cohens_d_display": "0.062"
+    },
+    {
+      "index": 34,
+      "name": "freq_flux_mean",
+      "family": "frequency",
+      "extractor": "frequency",
+      "unit": "nan",
+      "description": "Mean spectral change between consecutive frames",
+      "abs_cohens_d": 0.5522168951840567,
+      "abs_cohens_d_display": "0.552"
+    },
+    {
+      "index": 35,
+      "name": "freq_flux_std",
+      "family": "frequency",
+      "extractor": "frequency",
+      "unit": "nan",
+      "description": "Variability of spectral flux",
+      "abs_cohens_d": 0.5751843215590272,
+      "abs_cohens_d_display": "0.575"
+    },
+    {
+      "index": 36,
+      "name": "freq_spectral_entropy",
+      "family": "frequency",
+      "extractor": "frequency",
+      "unit": "nan",
+      "description": "Normalized spectral entropy of the Welch PSD, in [0, 1]",
+      "abs_cohens_d": 0.2651073854117928,
+      "abs_cohens_d_display": "0.265"
+    },
+    {
+      "index": 37,
+      "name": "freq_dominant",
+      "family": "frequency",
+      "extractor": "frequency",
+      "unit": "Hz",
+      "description": "Frequency carrying the most power",
+      "abs_cohens_d": 0.4041886317749483,
+      "abs_cohens_d_display": "0.404"
+    },
+    {
+      "index": 38,
+      "name": "freq_peak_power",
+      "family": "frequency",
+      "extractor": "frequency",
+      "unit": "1/Hz",
+      "description": "Power spectral density at the dominant frequency",
+      "abs_cohens_d": 0.2380343910034258,
+      "abs_cohens_d_display": "0.238"
+    },
+    {
+      "index": 39,
+      "name": "freq_total_power",
+      "family": "frequency",
+      "extractor": "frequency",
+      "unit": "nan",
+      "description": "Total power of the Welch PSD",
+      "abs_cohens_d": 0.0702978886997052,
+      "abs_cohens_d_display": "0.070"
+    },
+    {
+      "index": 40,
+      "name": "freq_band_power_20_50",
+      "family": "frequency",
+      "extractor": "frequency",
+      "unit": "nan",
+      "description": "Relative power, 20-50 Hz",
+      "abs_cohens_d": 0.6400033070103824,
+      "abs_cohens_d_display": "0.640"
+    },
+    {
+      "index": 41,
+      "name": "freq_band_power_50_100",
+      "family": "frequency",
+      "extractor": "frequency",
+      "unit": "nan",
+      "description": "Relative power, 50-100 Hz",
+      "abs_cohens_d": 0.6841403975537933,
+      "abs_cohens_d_display": "0.684"
+    },
+    {
+      "index": 42,
+      "name": "freq_band_power_100_150",
+      "family": "frequency",
+      "extractor": "frequency",
+      "unit": "nan",
+      "description": "Relative power, 100-150 Hz",
+      "abs_cohens_d": 0.4915488949306709,
+      "abs_cohens_d_display": "0.492"
+    },
+    {
+      "index": 43,
+      "name": "freq_band_power_150_250",
+      "family": "frequency",
+      "extractor": "frequency",
+      "unit": "nan",
+      "description": "Relative power, 150-250 Hz",
+      "abs_cohens_d": 0.0053862043764463,
+      "abs_cohens_d_display": "0.005"
+    },
+    {
+      "index": 44,
+      "name": "freq_band_power_250_350",
+      "family": "frequency",
+      "extractor": "frequency",
+      "unit": "nan",
+      "description": "Relative power, 250-350 Hz",
+      "abs_cohens_d": 0.1379332630952843,
+      "abs_cohens_d_display": "0.138"
+    },
+    {
+      "index": 45,
+      "name": "freq_band_power_350_400",
+      "family": "frequency",
+      "extractor": "frequency",
+      "unit": "nan",
+      "description": "Relative power, 350-400 Hz",
+      "abs_cohens_d": 0.0874522185782625,
+      "abs_cohens_d_display": "0.087"
+    },
+    {
+      "index": 46,
+      "name": "mfcc_01_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean of MFCC coefficient 1",
+      "abs_cohens_d": 0.2718812221796353,
+      "abs_cohens_d_display": "0.272"
+    },
+    {
+      "index": 47,
+      "name": "mfcc_02_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean of MFCC coefficient 2",
+      "abs_cohens_d": 0.2898879599076454,
+      "abs_cohens_d_display": "0.290"
+    },
+    {
+      "index": 48,
+      "name": "mfcc_03_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean of MFCC coefficient 3",
+      "abs_cohens_d": 0.6063060392044642,
+      "abs_cohens_d_display": "0.606"
+    },
+    {
+      "index": 49,
+      "name": "mfcc_04_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean of MFCC coefficient 4",
+      "abs_cohens_d": 1.2433394410986405,
+      "abs_cohens_d_display": "1.243"
+    },
+    {
+      "index": 50,
+      "name": "mfcc_05_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean of MFCC coefficient 5",
+      "abs_cohens_d": 0.8158185814058686,
+      "abs_cohens_d_display": "0.816"
+    },
+    {
+      "index": 51,
+      "name": "mfcc_06_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean of MFCC coefficient 6",
+      "abs_cohens_d": 0.7453976187189075,
+      "abs_cohens_d_display": "0.745"
+    },
+    {
+      "index": 52,
+      "name": "mfcc_07_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean of MFCC coefficient 7",
+      "abs_cohens_d": 0.7605467440186362,
+      "abs_cohens_d_display": "0.761"
+    },
+    {
+      "index": 53,
+      "name": "mfcc_08_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean of MFCC coefficient 8",
+      "abs_cohens_d": 0.7431083171737036,
+      "abs_cohens_d_display": "0.743"
+    },
+    {
+      "index": 54,
+      "name": "mfcc_09_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean of MFCC coefficient 9",
+      "abs_cohens_d": 0.2264041497175068,
+      "abs_cohens_d_display": "0.226"
+    },
+    {
+      "index": 55,
+      "name": "mfcc_10_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean of MFCC coefficient 10",
+      "abs_cohens_d": 0.1209795779658892,
+      "abs_cohens_d_display": "0.121"
+    },
+    {
+      "index": 56,
+      "name": "mfcc_11_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean of MFCC coefficient 11",
+      "abs_cohens_d": 0.0682843790607766,
+      "abs_cohens_d_display": "0.068"
+    },
+    {
+      "index": 57,
+      "name": "mfcc_12_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean of MFCC coefficient 12",
+      "abs_cohens_d": 0.2556115583061993,
+      "abs_cohens_d_display": "0.256"
+    },
+    {
+      "index": 58,
+      "name": "mfcc_13_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean of MFCC coefficient 13",
+      "abs_cohens_d": 0.1178185996174911,
+      "abs_cohens_d_display": "0.118"
+    },
+    {
+      "index": 59,
+      "name": "mfcc_01_std",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Standard deviation of MFCC coefficient 1",
+      "abs_cohens_d": 0.5859266320024443,
+      "abs_cohens_d_display": "0.586"
+    },
+    {
+      "index": 60,
+      "name": "mfcc_02_std",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Standard deviation of MFCC coefficient 2",
+      "abs_cohens_d": 0.1685256231016957,
+      "abs_cohens_d_display": "0.169"
+    },
+    {
+      "index": 61,
+      "name": "mfcc_03_std",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Standard deviation of MFCC coefficient 3",
+      "abs_cohens_d": 0.0092525313723015,
+      "abs_cohens_d_display": "0.009"
+    },
+    {
+      "index": 62,
+      "name": "mfcc_04_std",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Standard deviation of MFCC coefficient 4",
+      "abs_cohens_d": 0.163001260154776,
+      "abs_cohens_d_display": "0.163"
+    },
+    {
+      "index": 63,
+      "name": "mfcc_05_std",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Standard deviation of MFCC coefficient 5",
+      "abs_cohens_d": 0.3594040736773311,
+      "abs_cohens_d_display": "0.359"
+    },
+    {
+      "index": 64,
+      "name": "mfcc_06_std",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Standard deviation of MFCC coefficient 6",
+      "abs_cohens_d": 0.1535475816077617,
+      "abs_cohens_d_display": "0.154"
+    },
+    {
+      "index": 65,
+      "name": "mfcc_07_std",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Standard deviation of MFCC coefficient 7",
+      "abs_cohens_d": 0.1140549290398992,
+      "abs_cohens_d_display": "0.114"
+    },
+    {
+      "index": 66,
+      "name": "mfcc_08_std",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Standard deviation of MFCC coefficient 8",
+      "abs_cohens_d": 0.0216768971398099,
+      "abs_cohens_d_display": "0.022"
+    },
+    {
+      "index": 67,
+      "name": "mfcc_09_std",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Standard deviation of MFCC coefficient 9",
+      "abs_cohens_d": 0.0134757289448035,
+      "abs_cohens_d_display": "0.013"
+    },
+    {
+      "index": 68,
+      "name": "mfcc_10_std",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Standard deviation of MFCC coefficient 10",
+      "abs_cohens_d": 0.1293827264757679,
+      "abs_cohens_d_display": "0.129"
+    },
+    {
+      "index": 69,
+      "name": "mfcc_11_std",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Standard deviation of MFCC coefficient 11",
+      "abs_cohens_d": 0.1491086280844792,
+      "abs_cohens_d_display": "0.149"
+    },
+    {
+      "index": 70,
+      "name": "mfcc_12_std",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Standard deviation of MFCC coefficient 12",
+      "abs_cohens_d": 0.1748810475658486,
+      "abs_cohens_d_display": "0.175"
+    },
+    {
+      "index": 71,
+      "name": "mfcc_13_std",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Standard deviation of MFCC coefficient 13",
+      "abs_cohens_d": 0.1937567112947916,
+      "abs_cohens_d_display": "0.194"
+    },
+    {
+      "index": 72,
+      "name": "mfcc_01_delta_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean first-order delta of MFCC coefficient 1",
+      "abs_cohens_d": 0.0541640853891295,
+      "abs_cohens_d_display": "0.054"
+    },
+    {
+      "index": 73,
+      "name": "mfcc_02_delta_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean first-order delta of MFCC coefficient 2",
+      "abs_cohens_d": 0.0457831608345483,
+      "abs_cohens_d_display": "0.046"
+    },
+    {
+      "index": 74,
+      "name": "mfcc_03_delta_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean first-order delta of MFCC coefficient 3",
+      "abs_cohens_d": 0.1476154929840185,
+      "abs_cohens_d_display": "0.148"
+    },
+    {
+      "index": 75,
+      "name": "mfcc_04_delta_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean first-order delta of MFCC coefficient 4",
+      "abs_cohens_d": 0.0064988730750604,
+      "abs_cohens_d_display": "0.006"
+    },
+    {
+      "index": 76,
+      "name": "mfcc_05_delta_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean first-order delta of MFCC coefficient 5",
+      "abs_cohens_d": 0.0497344919505889,
+      "abs_cohens_d_display": "0.050"
+    },
+    {
+      "index": 77,
+      "name": "mfcc_06_delta_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean first-order delta of MFCC coefficient 6",
+      "abs_cohens_d": 0.0538068731747919,
+      "abs_cohens_d_display": "0.054"
+    },
+    {
+      "index": 78,
+      "name": "mfcc_07_delta_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean first-order delta of MFCC coefficient 7",
+      "abs_cohens_d": 0.0162268351311239,
+      "abs_cohens_d_display": "0.016"
+    },
+    {
+      "index": 79,
+      "name": "mfcc_08_delta_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean first-order delta of MFCC coefficient 8",
+      "abs_cohens_d": 0.0116668499782337,
+      "abs_cohens_d_display": "0.012"
+    },
+    {
+      "index": 80,
+      "name": "mfcc_09_delta_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean first-order delta of MFCC coefficient 9",
+      "abs_cohens_d": 0.0038857119217933,
+      "abs_cohens_d_display": "0.004"
+    },
+    {
+      "index": 81,
+      "name": "mfcc_10_delta_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean first-order delta of MFCC coefficient 10",
+      "abs_cohens_d": 0.0298898556898834,
+      "abs_cohens_d_display": "0.030"
+    },
+    {
+      "index": 82,
+      "name": "mfcc_11_delta_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean first-order delta of MFCC coefficient 11",
+      "abs_cohens_d": 0.0316922042290355,
+      "abs_cohens_d_display": "0.032"
+    },
+    {
+      "index": 83,
+      "name": "mfcc_12_delta_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean first-order delta of MFCC coefficient 12",
+      "abs_cohens_d": 0.0185031639372585,
+      "abs_cohens_d_display": "0.019"
+    },
+    {
+      "index": 84,
+      "name": "mfcc_13_delta_mean",
+      "family": "mfcc",
+      "extractor": "mfcc",
+      "unit": "nan",
+      "description": "Mean first-order delta of MFCC coefficient 13",
+      "abs_cohens_d": 0.0356707951524313,
+      "abs_cohens_d_display": "0.036"
+    },
+    {
+      "index": 85,
+      "name": "chroma_01_mean",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Mean of chroma bin 1 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.6933863874060672,
+      "abs_cohens_d_display": "0.693"
+    },
+    {
+      "index": 86,
+      "name": "chroma_02_mean",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Mean of chroma bin 2 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.625527743400047,
+      "abs_cohens_d_display": "0.626"
+    },
+    {
+      "index": 87,
+      "name": "chroma_03_mean",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Mean of chroma bin 3 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.6096710867485711,
+      "abs_cohens_d_display": "0.610"
+    },
+    {
+      "index": 88,
+      "name": "chroma_04_mean",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Mean of chroma bin 4 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.5231874205325706,
+      "abs_cohens_d_display": "0.523"
+    },
+    {
+      "index": 89,
+      "name": "chroma_05_mean",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Mean of chroma bin 5 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.2873092897346967,
+      "abs_cohens_d_display": "0.287"
+    },
+    {
+      "index": 90,
+      "name": "chroma_06_mean",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Mean of chroma bin 6 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.2291650013102766,
+      "abs_cohens_d_display": "0.229"
+    },
+    {
+      "index": 91,
+      "name": "chroma_07_mean",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Mean of chroma bin 7 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.1268866906593818,
+      "abs_cohens_d_display": "0.127"
+    },
+    {
+      "index": 92,
+      "name": "chroma_08_mean",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Mean of chroma bin 8 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.1644213498324941,
+      "abs_cohens_d_display": "0.164"
+    },
+    {
+      "index": 93,
+      "name": "chroma_09_mean",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Mean of chroma bin 9 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.1400226121189876,
+      "abs_cohens_d_display": "0.140"
+    },
+    {
+      "index": 94,
+      "name": "chroma_10_mean",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Mean of chroma bin 10 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.3250858566325676,
+      "abs_cohens_d_display": "0.325"
+    },
+    {
+      "index": 95,
+      "name": "chroma_11_mean",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Mean of chroma bin 11 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.381263289728503,
+      "abs_cohens_d_display": "0.381"
+    },
+    {
+      "index": 96,
+      "name": "chroma_12_mean",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Mean of chroma bin 12 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.6150820772539212,
+      "abs_cohens_d_display": "0.615"
+    },
+    {
+      "index": 97,
+      "name": "chroma_01_std",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Standard deviation of chroma bin 1 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.1653259984498331,
+      "abs_cohens_d_display": "0.165"
+    },
+    {
+      "index": 98,
+      "name": "chroma_02_std",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Standard deviation of chroma bin 2 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.0334034211581007,
+      "abs_cohens_d_display": "0.033"
+    },
+    {
+      "index": 99,
+      "name": "chroma_03_std",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Standard deviation of chroma bin 3 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.2330337170517134,
+      "abs_cohens_d_display": "0.233"
+    },
+    {
+      "index": 100,
+      "name": "chroma_04_std",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Standard deviation of chroma bin 4 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.046363701846228,
+      "abs_cohens_d_display": "0.046"
+    },
+    {
+      "index": 101,
+      "name": "chroma_05_std",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Standard deviation of chroma bin 5 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.0550837105038597,
+      "abs_cohens_d_display": "0.055"
+    },
+    {
+      "index": 102,
+      "name": "chroma_06_std",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Standard deviation of chroma bin 6 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.1135095134479416,
+      "abs_cohens_d_display": "0.114"
+    },
+    {
+      "index": 103,
+      "name": "chroma_07_std",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Standard deviation of chroma bin 7 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.0714948616010653,
+      "abs_cohens_d_display": "0.071"
+    },
+    {
+      "index": 104,
+      "name": "chroma_08_std",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Standard deviation of chroma bin 8 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.0741257950342099,
+      "abs_cohens_d_display": "0.074"
+    },
+    {
+      "index": 105,
+      "name": "chroma_09_std",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Standard deviation of chroma bin 9 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.197729783720352,
+      "abs_cohens_d_display": "0.198"
+    },
+    {
+      "index": 106,
+      "name": "chroma_10_std",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Standard deviation of chroma bin 10 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.004860473884561,
+      "abs_cohens_d_display": "0.005"
+    },
+    {
+      "index": 107,
+      "name": "chroma_11_std",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Standard deviation of chroma bin 11 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.0283679551932225,
+      "abs_cohens_d_display": "0.028"
+    },
+    {
+      "index": 108,
+      "name": "chroma_12_std",
+      "family": "chroma",
+      "extractor": "chroma",
+      "unit": "nan",
+      "description": "Standard deviation of chroma bin 12 (harmonic-distribution descriptor; see T35.4 caveat)",
+      "abs_cohens_d": 0.1781570616864538,
+      "abs_cohens_d_display": "0.178"
+    },
+    {
+      "index": 109,
+      "name": "dwt_cA5_energy",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "nan",
+      "description": "Sub-band energy (cA5)",
+      "abs_cohens_d": 0.701288144109616,
+      "abs_cohens_d_display": "0.701"
+    },
+    {
+      "index": 110,
+      "name": "dwt_cD5_energy",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "nan",
+      "description": "Sub-band energy (cD5)",
+      "abs_cohens_d": 0.3465697541889202,
+      "abs_cohens_d_display": "0.347"
+    },
+    {
+      "index": 111,
+      "name": "dwt_cD4_energy",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "nan",
+      "description": "Sub-band energy (cD4)",
+      "abs_cohens_d": 0.3479245911205323,
+      "abs_cohens_d_display": "0.348"
+    },
+    {
+      "index": 112,
+      "name": "dwt_cD3_energy",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "nan",
+      "description": "Sub-band energy (cD3)",
+      "abs_cohens_d": 0.0791715554789729,
+      "abs_cohens_d_display": "0.079"
+    },
+    {
+      "index": 113,
+      "name": "dwt_cD2_energy",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "nan",
+      "description": "Sub-band energy (cD2)",
+      "abs_cohens_d": 0.1295491155632704,
+      "abs_cohens_d_display": "0.130"
+    },
+    {
+      "index": 114,
+      "name": "dwt_cD1_energy",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "nan",
+      "description": "Sub-band energy (cD1)",
+      "abs_cohens_d": 0.129249346775034,
+      "abs_cohens_d_display": "0.129"
+    },
+    {
+      "index": 115,
+      "name": "dwt_cA5_std",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "nan",
+      "description": "Sub-band standard deviation (cA5)",
+      "abs_cohens_d": 0.6317728010322199,
+      "abs_cohens_d_display": "0.632"
+    },
+    {
+      "index": 116,
+      "name": "dwt_cD5_std",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "nan",
+      "description": "Sub-band standard deviation (cD5)",
+      "abs_cohens_d": 0.2319783607455221,
+      "abs_cohens_d_display": "0.232"
+    },
+    {
+      "index": 117,
+      "name": "dwt_cD4_std",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "nan",
+      "description": "Sub-band standard deviation (cD4)",
+      "abs_cohens_d": 0.6970201104284254,
+      "abs_cohens_d_display": "0.697"
+    },
+    {
+      "index": 118,
+      "name": "dwt_cD3_std",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "nan",
+      "description": "Sub-band standard deviation (cD3)",
+      "abs_cohens_d": 0.3664787384663036,
+      "abs_cohens_d_display": "0.366"
+    },
+    {
+      "index": 119,
+      "name": "dwt_cD2_std",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "nan",
+      "description": "Sub-band standard deviation (cD2)",
+      "abs_cohens_d": 0.1190607783559644,
+      "abs_cohens_d_display": "0.119"
+    },
+    {
+      "index": 120,
+      "name": "dwt_cD1_std",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "nan",
+      "description": "Sub-band standard deviation (cD1)",
+      "abs_cohens_d": 0.2326139824310201,
+      "abs_cohens_d_display": "0.233"
+    },
+    {
+      "index": 121,
+      "name": "dwt_cA5_entropy",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "bit",
+      "description": "Sub-band Shannon entropy (cA5)",
+      "abs_cohens_d": 0.3367160310983648,
+      "abs_cohens_d_display": "0.337"
+    },
+    {
+      "index": 122,
+      "name": "dwt_cD5_entropy",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "bit",
+      "description": "Sub-band Shannon entropy (cD5)",
+      "abs_cohens_d": 0.3210730904564685,
+      "abs_cohens_d_display": "0.321"
+    },
+    {
+      "index": 123,
+      "name": "dwt_cD4_entropy",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "bit",
+      "description": "Sub-band Shannon entropy (cD4)",
+      "abs_cohens_d": 0.2095620079926548,
+      "abs_cohens_d_display": "0.210"
+    },
+    {
+      "index": 124,
+      "name": "dwt_cD3_entropy",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "bit",
+      "description": "Sub-band Shannon entropy (cD3)",
+      "abs_cohens_d": 0.8216364141237279,
+      "abs_cohens_d_display": "0.822"
+    },
+    {
+      "index": 125,
+      "name": "dwt_cD2_entropy",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "bit",
+      "description": "Sub-band Shannon entropy (cD2)",
+      "abs_cohens_d": 1.226244902918775,
+      "abs_cohens_d_display": "1.226"
+    },
+    {
+      "index": 126,
+      "name": "dwt_cD1_entropy",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "bit",
+      "description": "Sub-band Shannon entropy (cD1)",
+      "abs_cohens_d": 1.4458089940056145,
+      "abs_cohens_d_display": "1.446"
+    },
+    {
+      "index": 127,
+      "name": "dwt_cA5_mean_abs",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "nan",
+      "description": "Sub-band mean absolute coefficient (cA5)",
+      "abs_cohens_d": 0.7867962036431333,
+      "abs_cohens_d_display": "0.787"
+    },
+    {
+      "index": 128,
+      "name": "dwt_cD5_mean_abs",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "nan",
+      "description": "Sub-band mean absolute coefficient (cD5)",
+      "abs_cohens_d": 0.7054510507686846,
+      "abs_cohens_d_display": "0.705"
+    },
+    {
+      "index": 129,
+      "name": "dwt_cD4_mean_abs",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "nan",
+      "description": "Sub-band mean absolute coefficient (cD4)",
+      "abs_cohens_d": 0.6170298573368647,
+      "abs_cohens_d_display": "0.617"
+    },
+    {
+      "index": 130,
+      "name": "dwt_cD3_mean_abs",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "nan",
+      "description": "Sub-band mean absolute coefficient (cD3)",
+      "abs_cohens_d": 0.5319864459431708,
+      "abs_cohens_d_display": "0.532"
+    },
+    {
+      "index": 131,
+      "name": "dwt_cD2_mean_abs",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "nan",
+      "description": "Sub-band mean absolute coefficient (cD2)",
+      "abs_cohens_d": 0.157255804059588,
+      "abs_cohens_d_display": "0.157"
+    },
+    {
+      "index": 132,
+      "name": "dwt_cD1_mean_abs",
+      "family": "dwt",
+      "extractor": "wavelet",
+      "unit": "nan",
+      "description": "Sub-band mean absolute coefficient (cD1)",
+      "abs_cohens_d": 0.053776199059053,
+      "abs_cohens_d_display": "0.054"
+    },
+    {
+      "index": 133,
+      "name": "env_mean",
+      "family": "envelope",
+      "extractor": "envelope",
+      "unit": "nan",
+      "description": "Mean amplitude envelope",
+      "abs_cohens_d": 0.501914150909412,
+      "abs_cohens_d_display": "0.502"
+    },
+    {
+      "index": 134,
+      "name": "env_std",
+      "family": "envelope",
+      "extractor": "envelope",
+      "unit": "nan",
+      "description": "Envelope variability",
+      "abs_cohens_d": 0.3054856948078608,
+      "abs_cohens_d_display": "0.305"
+    },
+    {
+      "index": 135,
+      "name": "env_skew",
+      "family": "envelope",
+      "extractor": "envelope",
+      "unit": "nan",
+      "description": "Envelope asymmetry",
+      "abs_cohens_d": 0.0572016373082244,
+      "abs_cohens_d_display": "0.057"
+    },
+    {
+      "index": 136,
+      "name": "env_kurtosis",
+      "family": "envelope",
+      "extractor": "envelope",
+      "unit": "nan",
+      "description": "Envelope peakedness",
+      "abs_cohens_d": 0.0979596138665157,
+      "abs_cohens_d_display": "0.098"
+    },
+    {
+      "index": 137,
+      "name": "env_peak_rate",
+      "family": "envelope",
+      "extractor": "envelope",
+      "unit": "Hz",
+      "description": "Envelope peaks per second; a heart-rate proxy",
+      "abs_cohens_d": 0.1574404236856522,
+      "abs_cohens_d_display": "0.157"
+    }
+  ],
+  "families": [
+    {
+      "family": "time",
+      "n_features": 24,
+      "n_features_display": "24",
+      "first_index": 0
+    },
+    {
+      "family": "frequency",
+      "n_features": 22,
+      "n_features_display": "22",
+      "first_index": 24
+    },
+    {
+      "family": "mfcc",
+      "n_features": 39,
+      "n_features_display": "39",
+      "first_index": 46
+    },
+    {
+      "family": "chroma",
+      "n_features": 24,
+      "n_features_display": "24",
+      "first_index": 85
+    },
+    {
+      "family": "dwt",
+      "n_features": 24,
+      "n_features_display": "24",
+      "first_index": 109
+    },
+    {
+      "family": "envelope",
+      "n_features": 5,
+      "n_features_display": "5",
+      "first_index": 133
+    }
+  ],
+  "selected": {
+    "available": true,
+    "reason": null,
+    "n_selected": 20,
+    "stability_note": "Feature selection runs inside the training fold, so a feature is selected in some number of folds rather than globally. A feature kept in 3 of 25 folds and one kept in 25 are both listed here and are not the same claim, which is why the count is on every row.",
+    "features": [
+      {
+        "rank": 1,
+        "feature": "time_iqr",
+        "family": "time",
+        "ranker": "gb_importance",
+        "selected_in_folds": 5,
+        "n_folds": 5,
+        "share": 1.0,
+        "share_display": "1.000"
+      },
+      {
+        "rank": 2,
+        "feature": "time_energy",
+        "family": "time",
+        "ranker": "gb_importance",
+        "selected_in_folds": 3,
+        "n_folds": 5,
+        "share": 0.6,
+        "share_display": "0.600"
+      },
+      {
+        "rank": 3,
+        "feature": "time_zcr_mean",
+        "family": "time",
+        "ranker": "gb_importance",
+        "selected_in_folds": 5,
+        "n_folds": 5,
+        "share": 1.0,
+        "share_display": "1.000"
+      },
+      {
+        "rank": 4,
+        "feature": "time_hjorth_complexity",
+        "family": "time",
+        "ranker": "gb_importance",
+        "selected_in_folds": 4,
+        "n_folds": 5,
+        "share": 0.8,
+        "share_display": "0.800"
+      },
+      {
+        "rank": 5,
+        "feature": "time_duration",
+        "family": "time",
+        "ranker": "gb_importance",
+        "selected_in_folds": 5,
+        "n_folds": 5,
+        "share": 1.0,
+        "share_display": "1.000"
+      },
+      {
+        "rank": 6,
+        "feature": "freq_band_power_250_350",
+        "family": "frequency",
+        "ranker": "gb_importance",
+        "selected_in_folds": 3,
+        "n_folds": 5,
+        "share": 0.6,
+        "share_display": "0.600"
+      },
+      {
+        "rank": 7,
+        "feature": "mfcc_02_mean",
+        "family": "mfcc",
+        "ranker": "gb_importance",
+        "selected_in_folds": 4,
+        "n_folds": 5,
+        "share": 0.8,
+        "share_display": "0.800"
+      },
+      {
+        "rank": 8,
+        "feature": "mfcc_04_mean",
+        "family": "mfcc",
+        "ranker": "gb_importance",
+        "selected_in_folds": 5,
+        "n_folds": 5,
+        "share": 1.0,
+        "share_display": "1.000"
+      },
+      {
+        "rank": 9,
+        "feature": "mfcc_05_mean",
+        "family": "mfcc",
+        "ranker": "gb_importance",
+        "selected_in_folds": 4,
+        "n_folds": 5,
+        "share": 0.8,
+        "share_display": "0.800"
+      },
+      {
+        "rank": 10,
+        "feature": "mfcc_01_std",
+        "family": "mfcc",
+        "ranker": "gb_importance",
+        "selected_in_folds": 3,
+        "n_folds": 5,
+        "share": 0.6,
+        "share_display": "0.600"
+      },
+      {
+        "rank": 11,
+        "feature": "mfcc_05_std",
+        "family": "mfcc",
+        "ranker": "gb_importance",
+        "selected_in_folds": 3,
+        "n_folds": 5,
+        "share": 0.6,
+        "share_display": "0.600"
+      },
+      {
+        "rank": 12,
+        "feature": "chroma_07_std",
+        "family": "chroma",
+        "ranker": "gb_importance",
+        "selected_in_folds": 3,
+        "n_folds": 5,
+        "share": 0.6,
+        "share_display": "0.600"
+      },
+      {
+        "rank": 13,
+        "feature": "dwt_cA5_energy",
+        "family": "dwt",
+        "ranker": "gb_importance",
+        "selected_in_folds": 3,
+        "n_folds": 5,
+        "share": 0.6,
+        "share_display": "0.600"
+      },
+      {
+        "rank": 14,
+        "feature": "dwt_cD5_energy",
+        "family": "dwt",
+        "ranker": "gb_importance",
+        "selected_in_folds": 5,
+        "n_folds": 5,
+        "share": 1.0,
+        "share_display": "1.000"
+      },
+      {
+        "rank": 15,
+        "feature": "dwt_cD4_energy",
+        "family": "dwt",
+        "ranker": "gb_importance",
+        "selected_in_folds": 3,
+        "n_folds": 5,
+        "share": 0.6,
+        "share_display": "0.600"
+      },
+      {
+        "rank": 16,
+        "feature": "dwt_cD1_energy",
+        "family": "dwt",
+        "ranker": "gb_importance",
+        "selected_in_folds": 5,
+        "n_folds": 5,
+        "share": 1.0,
+        "share_display": "1.000"
+      },
+      {
+        "rank": 17,
+        "feature": "dwt_cD1_entropy",
+        "family": "dwt",
+        "ranker": "gb_importance",
+        "selected_in_folds": 5,
+        "n_folds": 5,
+        "share": 1.0,
+        "share_display": "1.000"
+      },
+      {
+        "rank": 18,
+        "feature": "dwt_cD5_mean_abs",
+        "family": "dwt",
+        "ranker": "gb_importance",
+        "selected_in_folds": 5,
+        "n_folds": 5,
+        "share": 1.0,
+        "share_display": "1.000"
+      },
+      {
+        "rank": 19,
+        "feature": "dwt_cD4_mean_abs",
+        "family": "dwt",
+        "ranker": "gb_importance",
+        "selected_in_folds": 3,
+        "n_folds": 5,
+        "share": 0.6,
+        "share_display": "0.600"
+      },
+      {
+        "rank": 20,
+        "feature": "dwt_cD3_mean_abs",
+        "family": "dwt",
+        "ranker": "gb_importance",
+        "selected_in_folds": 3,
+        "n_folds": 5,
+        "share": 0.6,
+        "share_display": "0.600"
+      }
+    ]
+  },
+  "example_vector": {
+    "available": true,
+    "reason": null,
+    "source": "all_features_matrix.parquet",
+    "record_uid": "D1_training-a_a0005",
+    "n_features": 138,
+    "note": "One recording's full 138-vector, in the locked registry order. This is the same record the inference gate scores, so its waveform, its features and its stored out-of-fold probability are all the same bytes.",
+    "values": [
+      {
+        "index": 0,
+        "name": "time_mean",
+        "family": "time",
+        "value": -1.5357227383452606e-10,
+        "display": "-0.000"
+      },
+      {
+        "index": 1,
+        "name": "time_std",
+        "family": "time",
+        "value": 0.9999999996287317,
+        "display": "1.000"
+      },
+      {
+        "index": 2,
+        "name": "time_var",
+        "family": "time",
+        "value": 0.9999999992574632,
+        "display": "1.000"
+      },
+      {
+        "index": 3,
+        "name": "time_min",
+        "family": "time",
+        "value": -9.863367080688477,
+        "display": "-9.863"
+      },
+      {
+        "index": 4,
+        "name": "time_max",
+        "family": "time",
+        "value": 6.563884735107422,
+        "display": "6.564"
+      },
+      {
+        "index": 5,
+        "name": "time_range",
+        "family": "time",
+        "value": 16.4272518157959,
+        "display": "16.427"
+      },
+      {
+        "index": 6,
+        "name": "time_median",
+        "family": "time",
+        "value": 0.0016694148653186,
+        "display": "0.002"
+      },
+      {
+        "index": 7,
+        "name": "time_iqr",
+        "family": "time",
+        "value": 0.427151158452034,
+        "display": "0.427"
+      },
+      {
+        "index": 8,
+        "name": "time_skewness",
+        "family": "time",
+        "value": -0.56897223857684,
+        "display": "-0.569"
+      },
+      {
+        "index": 9,
+        "name": "time_kurtosis",
+        "family": "time",
+        "value": 12.9261524175362,
+        "display": "12.926"
+      },
+      {
+        "index": 10,
+        "name": "time_energy",
+        "family": "time",
+        "value": 71331.99994703336,
+        "display": "71332.000"
+      },
+      {
+        "index": 11,
+        "name": "time_rms",
+        "family": "time",
+        "value": 0.9999999996287317,
+        "display": "1.000"
+      },
+      {
+        "index": 12,
+        "name": "time_peak_to_peak",
+        "family": "time",
+        "value": 16.4272518157959,
+        "display": "16.427"
+      },
+      {
+        "index": 13,
+        "name": "time_crest_factor",
+        "family": "time",
+        "value": 9.863367084350434,
+        "display": "9.863"
+      },
+      {
+        "index": 14,
+        "name": "time_zcr_mean",
+        "family": "time",
+        "value": 0.0362973230286738,
+        "display": "0.036"
+      },
+      {
+        "index": 15,
+        "name": "time_zcr_std",
+        "family": "time",
+        "value": 0.0061959620524831,
+        "display": "0.006"
+      },
+      {
+        "index": 16,
+        "name": "time_shannon_entropy",
+        "family": "time",
+        "value": 3.2101102458074515,
+        "display": "3.210"
+      },
+      {
+        "index": 17,
+        "name": "time_sample_entropy",
+        "family": "time",
+        "value": 0.1044144417623843,
+        "display": "0.104"
+      },
+      {
+        "index": 18,
+        "name": "time_hjorth_activity",
+        "family": "time",
+        "value": 0.9999999992574632,
+        "display": "1.000"
+      },
+      {
+        "index": 19,
+        "name": "time_hjorth_mobility",
+        "family": "time",
+        "value": 0.1256832322237858,
+        "display": "0.126"
+      },
+      {
+        "index": 20,
+        "name": "time_hjorth_complexity",
+        "family": "time",
+        "value": 1.5770108006250163,
+        "display": "1.577"
+      },
+      {
+        "index": 21,
+        "name": "time_autocorr_peak_value",
+        "family": "time",
+        "value": 0.4680890301126091,
+        "display": "0.468"
+      },
+      {
+        "index": 22,
+        "name": "time_autocorr_peak_lag",
+        "family": "time",
+        "value": 0.0285,
+        "display": "0.029"
+      },
+      {
+        "index": 23,
+        "name": "time_duration",
+        "family": "time",
+        "value": 35.666,
+        "display": "35.666"
+      },
+      {
+        "index": 24,
+        "name": "freq_centroid_mean",
+        "family": "frequency",
+        "value": 60.85558163412724,
+        "display": "60.856"
+      },
+      {
+        "index": 25,
+        "name": "freq_centroid_std",
+        "family": "frequency",
+        "value": 12.076264677423502,
+        "display": "12.076"
+      },
+      {
+        "index": 26,
+        "name": "freq_bandwidth_mean",
+        "family": "frequency",
+        "value": 56.11526883485181,
+        "display": "56.115"
+      },
+      {
+        "index": 27,
+        "name": "freq_bandwidth_std",
+        "family": "frequency",
+        "value": 16.106465796549585,
+        "display": "16.106"
+      },
+      {
+        "index": 28,
+        "name": "freq_rolloff85_mean",
+        "family": "frequency",
+        "value": 94.47804659498208,
+        "display": "94.478"
+      },
+      {
+        "index": 29,
+        "name": "freq_rolloff85_std",
+        "family": "frequency",
+        "value": 30.259768404735407,
+        "display": "30.260"
+      },
+      {
+        "index": 30,
+        "name": "freq_rolloff95_mean",
+        "family": "frequency",
+        "value": 178.00739247311827,
+        "display": "178.007"
+      },
+      {
+        "index": 31,
+        "name": "freq_rolloff95_std",
+        "family": "frequency",
+        "value": 59.22200294717627,
+        "display": "59.222"
+      },
+      {
+        "index": 32,
+        "name": "freq_flatness_mean",
+        "family": "frequency",
+        "value": 3.6831589901810976e-06,
+        "display": "0.000"
+      },
+      {
+        "index": 33,
+        "name": "freq_flatness_std",
+        "family": "frequency",
+        "value": 4.097691549383059e-05,
+        "display": "0.000"
+      },
+      {
+        "index": 34,
+        "name": "freq_flux_mean",
+        "family": "frequency",
+        "value": 0.148300450872699,
+        "display": "0.148"
+      },
+      {
+        "index": 35,
+        "name": "freq_flux_std",
+        "family": "frequency",
+        "value": 0.0451259520447185,
+        "display": "0.045"
+      },
+      {
+        "index": 36,
+        "name": "freq_spectral_entropy",
+        "family": "frequency",
+        "value": 0.4067997191641744,
+        "display": "0.407"
+      },
+      {
+        "index": 37,
+        "name": "freq_dominant",
+        "family": "frequency",
+        "value": 35.15625,
+        "display": "35.156"
+      },
+      {
+        "index": 38,
+        "name": "freq_peak_power",
+        "family": "frequency",
+        "value": 0.056072948965262,
+        "display": "0.056"
+      },
+      {
+        "index": 39,
+        "name": "freq_total_power",
+        "family": "frequency",
+        "value": 1.024206570055295,
+        "display": "1.024"
+      },
+      {
+        "index": 40,
+        "name": "freq_band_power_20_50",
+        "family": "frequency",
+        "value": 0.8929443391764268,
+        "display": "0.893"
+      },
+      {
+        "index": 41,
+        "name": "freq_band_power_50_100",
+        "family": "frequency",
+        "value": 0.0947332096049841,
+        "display": "0.095"
+      },
+      {
+        "index": 42,
+        "name": "freq_band_power_100_150",
+        "family": "frequency",
+        "value": 0.0052987999445468,
+        "display": "0.005"
+      },
+      {
+        "index": 43,
+        "name": "freq_band_power_150_250",
+        "family": "frequency",
+        "value": 0.0007418800436979,
+        "display": "0.001"
+      },
+      {
+        "index": 44,
+        "name": "freq_band_power_250_350",
+        "family": "frequency",
+        "value": 0.0001256852548733,
+        "display": "0.000"
+      },
+      {
+        "index": 45,
+        "name": "freq_band_power_350_400",
+        "family": "frequency",
+        "value": 1.4121937113500806e-05,
+        "display": "0.000"
+      },
+      {
+        "index": 46,
+        "name": "mfcc_01_mean",
+        "family": "mfcc",
+        "value": -49.84228616443909,
+        "display": "-49.842"
+      },
+      {
+        "index": 47,
+        "name": "mfcc_02_mean",
+        "family": "mfcc",
+        "value": 86.6328215685341,
+        "display": "86.633"
+      },
+      {
+        "index": 48,
+        "name": "mfcc_03_mean",
+        "family": "mfcc",
+        "value": 20.094462289116134,
+        "display": "20.094"
+      },
+      {
+        "index": 49,
+        "name": "mfcc_04_mean",
+        "family": "mfcc",
+        "value": 19.92724565795935,
+        "display": "19.927"
+      },
+      {
+        "index": 50,
+        "name": "mfcc_05_mean",
+        "family": "mfcc",
+        "value": 6.929401128974442,
+        "display": "6.929"
+      },
+      {
+        "index": 51,
+        "name": "mfcc_06_mean",
+        "family": "mfcc",
+        "value": 7.440744528641132,
+        "display": "7.441"
+      },
+      {
+        "index": 52,
+        "name": "mfcc_07_mean",
+        "family": "mfcc",
+        "value": 3.2167298542540266,
+        "display": "3.217"
+      },
+      {
+        "index": 53,
+        "name": "mfcc_08_mean",
+        "family": "mfcc",
+        "value": 5.219109698234431,
+        "display": "5.219"
+      },
+      {
+        "index": 54,
+        "name": "mfcc_09_mean",
+        "family": "mfcc",
+        "value": 2.5081076858369817,
+        "display": "2.508"
+      },
+      {
+        "index": 55,
+        "name": "mfcc_10_mean",
+        "family": "mfcc",
+        "value": 2.004473896967863,
+        "display": "2.004"
+      },
+      {
+        "index": 56,
+        "name": "mfcc_11_mean",
+        "family": "mfcc",
+        "value": 0.6834245277485181,
+        "display": "0.683"
+      },
+      {
+        "index": 57,
+        "name": "mfcc_12_mean",
+        "family": "mfcc",
+        "value": 0.8090373296758725,
+        "display": "0.809"
+      },
+      {
+        "index": 58,
+        "name": "mfcc_13_mean",
+        "family": "mfcc",
+        "value": 0.8853051329920943,
+        "display": "0.885"
+      },
+      {
+        "index": 59,
+        "name": "mfcc_01_std",
+        "family": "mfcc",
+        "value": 39.58551618238092,
+        "display": "39.586"
+      },
+      {
+        "index": 60,
+        "name": "mfcc_02_std",
+        "family": "mfcc",
+        "value": 18.11360694643536,
+        "display": "18.114"
+      },
+      {
+        "index": 61,
+        "name": "mfcc_03_std",
+        "family": "mfcc",
+        "value": 9.803792944459444,
+        "display": "9.804"
+      },
+      {
+        "index": 62,
+        "name": "mfcc_04_std",
+        "family": "mfcc",
+        "value": 7.334882905066042,
+        "display": "7.335"
+      },
+      {
+        "index": 63,
+        "name": "mfcc_05_std",
+        "family": "mfcc",
+        "value": 5.678296788706644,
+        "display": "5.678"
+      },
+      {
+        "index": 64,
+        "name": "mfcc_06_std",
+        "family": "mfcc",
+        "value": 5.093599797980363,
+        "display": "5.094"
+      },
+      {
+        "index": 65,
+        "name": "mfcc_07_std",
+        "family": "mfcc",
+        "value": 4.264150987311689,
+        "display": "4.264"
+      },
+      {
+        "index": 66,
+        "name": "mfcc_08_std",
+        "family": "mfcc",
+        "value": 3.511052422460861,
+        "display": "3.511"
+      },
+      {
+        "index": 67,
+        "name": "mfcc_09_std",
+        "family": "mfcc",
+        "value": 3.797351257784455,
+        "display": "3.797"
+      },
+      {
+        "index": 68,
+        "name": "mfcc_10_std",
+        "family": "mfcc",
+        "value": 4.298852471451204,
+        "display": "4.299"
+      },
+      {
+        "index": 69,
+        "name": "mfcc_11_std",
+        "family": "mfcc",
+        "value": 4.106156855011842,
+        "display": "4.106"
+      },
+      {
+        "index": 70,
+        "name": "mfcc_12_std",
+        "family": "mfcc",
+        "value": 3.7175825435318055,
+        "display": "3.718"
+      },
+      {
+        "index": 71,
+        "name": "mfcc_13_std",
+        "family": "mfcc",
+        "value": 3.592877569233114,
+        "display": "3.593"
+      },
+      {
+        "index": 72,
+        "name": "mfcc_01_delta_mean",
+        "family": "mfcc",
+        "value": 0.0297796825975883,
+        "display": "0.030"
+      },
+      {
+        "index": 73,
+        "name": "mfcc_02_delta_mean",
+        "family": "mfcc",
+        "value": -0.0165569219373038,
+        "display": "-0.017"
+      },
+      {
+        "index": 74,
+        "name": "mfcc_03_delta_mean",
+        "family": "mfcc",
+        "value": 0.0093862071467171,
+        "display": "0.009"
+      },
+      {
+        "index": 75,
+        "name": "mfcc_04_delta_mean",
+        "family": "mfcc",
+        "value": -0.0340345927765126,
+        "display": "-0.034"
+      },
+      {
+        "index": 76,
+        "name": "mfcc_05_delta_mean",
+        "family": "mfcc",
+        "value": -0.0439747050268233,
+        "display": "-0.044"
+      },
+      {
+        "index": 77,
+        "name": "mfcc_06_delta_mean",
+        "family": "mfcc",
+        "value": 0.0013994645854853,
+        "display": "0.001"
+      },
+      {
+        "index": 78,
+        "name": "mfcc_07_delta_mean",
+        "family": "mfcc",
+        "value": 0.0137818023939912,
+        "display": "0.014"
+      },
+      {
+        "index": 79,
+        "name": "mfcc_08_delta_mean",
+        "family": "mfcc",
+        "value": 0.0019028148519662,
+        "display": "0.002"
+      },
+      {
+        "index": 80,
+        "name": "mfcc_09_delta_mean",
+        "family": "mfcc",
+        "value": -0.0100972567849199,
+        "display": "-0.010"
+      },
+      {
+        "index": 81,
+        "name": "mfcc_10_delta_mean",
+        "family": "mfcc",
+        "value": -0.0019239472916741,
+        "display": "-0.002"
+      },
+      {
+        "index": 82,
+        "name": "mfcc_11_delta_mean",
+        "family": "mfcc",
+        "value": 0.0035403139418041,
+        "display": "0.004"
+      },
+      {
+        "index": 83,
+        "name": "mfcc_12_delta_mean",
+        "family": "mfcc",
+        "value": 0.0050248771232894,
+        "display": "0.005"
+      },
+      {
+        "index": 84,
+        "name": "mfcc_13_delta_mean",
+        "family": "mfcc",
+        "value": 0.0062527445858225,
+        "display": "0.006"
+      },
+      {
+        "index": 85,
+        "name": "chroma_01_mean",
+        "family": "chroma",
+        "value": 0.7945010724626309,
+        "display": "0.795"
+      },
+      {
+        "index": 86,
+        "name": "chroma_02_mean",
+        "family": "chroma",
+        "value": 0.8296546727300682,
+        "display": "0.830"
+      },
+      {
+        "index": 87,
+        "name": "chroma_03_mean",
+        "family": "chroma",
+        "value": 0.8150530041625247,
+        "display": "0.815"
+      },
+      {
+        "index": 88,
+        "name": "chroma_04_mean",
+        "family": "chroma",
+        "value": 0.8140412964710967,
+        "display": "0.814"
+      },
+      {
+        "index": 89,
+        "name": "chroma_05_mean",
+        "family": "chroma",
+        "value": 0.7863324113532842,
+        "display": "0.786"
+      },
+      {
+        "index": 90,
+        "name": "chroma_06_mean",
+        "family": "chroma",
+        "value": 0.8080728978065443,
+        "display": "0.808"
+      },
+      {
+        "index": 91,
+        "name": "chroma_07_mean",
+        "family": "chroma",
+        "value": 0.8095582842441433,
+        "display": "0.810"
+      },
+      {
+        "index": 92,
+        "name": "chroma_08_mean",
+        "family": "chroma",
+        "value": 0.7808506997444539,
+        "display": "0.781"
+      },
+      {
+        "index": 93,
+        "name": "chroma_09_mean",
+        "family": "chroma",
+        "value": 0.7790114660643364,
+        "display": "0.779"
+      },
+      {
+        "index": 94,
+        "name": "chroma_10_mean",
+        "family": "chroma",
+        "value": 0.7925920131931115,
+        "display": "0.793"
+      },
+      {
+        "index": 95,
+        "name": "chroma_11_mean",
+        "family": "chroma",
+        "value": 0.777254225555557,
+        "display": "0.777"
+      },
+      {
+        "index": 96,
+        "name": "chroma_12_mean",
+        "family": "chroma",
+        "value": 0.7974133671598459,
+        "display": "0.797"
+      },
+      {
+        "index": 97,
+        "name": "chroma_01_std",
+        "family": "chroma",
+        "value": 0.1385642248976474,
+        "display": "0.139"
+      },
+      {
+        "index": 98,
+        "name": "chroma_02_std",
+        "family": "chroma",
+        "value": 0.15100256661462,
+        "display": "0.151"
+      },
+      {
+        "index": 99,
+        "name": "chroma_03_std",
+        "family": "chroma",
+        "value": 0.1484093280788449,
+        "display": "0.148"
+      },
+      {
+        "index": 100,
+        "name": "chroma_04_std",
+        "family": "chroma",
+        "value": 0.1529986838019985,
+        "display": "0.153"
+      },
+      {
+        "index": 101,
+        "name": "chroma_05_std",
+        "family": "chroma",
+        "value": 0.1380604941238434,
+        "display": "0.138"
+      },
+      {
+        "index": 102,
+        "name": "chroma_06_std",
+        "family": "chroma",
+        "value": 0.130229109679536,
+        "display": "0.130"
+      },
+      {
+        "index": 103,
+        "name": "chroma_07_std",
+        "family": "chroma",
+        "value": 0.1267468168327561,
+        "display": "0.127"
+      },
+      {
+        "index": 104,
+        "name": "chroma_08_std",
+        "family": "chroma",
+        "value": 0.1262872447073575,
+        "display": "0.126"
+      },
+      {
+        "index": 105,
+        "name": "chroma_09_std",
+        "family": "chroma",
+        "value": 0.1332607629329781,
+        "display": "0.133"
+      },
+      {
+        "index": 106,
+        "name": "chroma_10_std",
+        "family": "chroma",
+        "value": 0.1412673927865662,
+        "display": "0.141"
+      },
+      {
+        "index": 107,
+        "name": "chroma_11_std",
+        "family": "chroma",
+        "value": 0.1449897161401602,
+        "display": "0.145"
+      },
+      {
+        "index": 108,
+        "name": "chroma_12_std",
+        "family": "chroma",
+        "value": 0.1453280210368612,
+        "display": "0.145"
+      },
+      {
+        "index": 109,
+        "name": "dwt_cA5_energy",
+        "family": "dwt",
+        "value": 24169.463004494763,
+        "display": "24169.463"
+      },
+      {
+        "index": 110,
+        "name": "dwt_cD5_energy",
+        "family": "dwt",
+        "value": 41113.36555678828,
+        "display": "41113.366"
+      },
+      {
+        "index": 111,
+        "name": "dwt_cD4_energy",
+        "family": "dwt",
+        "value": 5671.318973165326,
+        "display": "5671.319"
+      },
+      {
+        "index": 112,
+        "name": "dwt_cD3_energy",
+        "family": "dwt",
+        "value": 360.26382264044105,
+        "display": "360.264"
+      },
+      {
+        "index": 113,
+        "name": "dwt_cD2_energy",
+        "family": "dwt",
+        "value": 19.401385814438346,
+        "display": "19.401"
+      },
+      {
+        "index": 114,
+        "name": "dwt_cD1_energy",
+        "family": "dwt",
+        "value": 0.6341583029760621,
+        "display": "0.634"
+      },
+      {
+        "index": 115,
+        "name": "dwt_cA5_std",
+        "family": "dwt",
+        "value": 3.288476164947376,
+        "display": "3.288"
+      },
+      {
+        "index": 116,
+        "name": "dwt_cD5_std",
+        "family": "dwt",
+        "value": 4.288964687274465,
+        "display": "4.289"
+      },
+      {
+        "index": 117,
+        "name": "dwt_cD4_std",
+        "family": "dwt",
+        "value": 1.1271413417809146,
+        "display": "1.127"
+      },
+      {
+        "index": 118,
+        "name": "dwt_cD3_std",
+        "family": "dwt",
+        "value": 0.2009458575892201,
+        "display": "0.201"
+      },
+      {
+        "index": 119,
+        "name": "dwt_cD2_std",
+        "family": "dwt",
+        "value": 0.0329794412806905,
+        "display": "0.033"
+      },
+      {
+        "index": 120,
+        "name": "dwt_cD1_std",
+        "family": "dwt",
+        "value": 0.0042165123171527,
+        "display": "0.004"
+      },
+      {
+        "index": 121,
+        "name": "dwt_cA5_entropy",
+        "family": "dwt",
+        "value": 4.007909902184961,
+        "display": "4.008"
+      },
+      {
+        "index": 122,
+        "name": "dwt_cD5_entropy",
+        "family": "dwt",
+        "value": 3.301169557940669,
+        "display": "3.301"
+      },
+      {
+        "index": 123,
+        "name": "dwt_cD4_entropy",
+        "family": "dwt",
+        "value": 2.572782365867482,
+        "display": "2.573"
+      },
+      {
+        "index": 124,
+        "name": "dwt_cD3_entropy",
+        "family": "dwt",
+        "value": 2.3641990790809717,
+        "display": "2.364"
+      },
+      {
+        "index": 125,
+        "name": "dwt_cD2_entropy",
+        "family": "dwt",
+        "value": 2.3382443519922496,
+        "display": "2.338"
+      },
+      {
+        "index": 126,
+        "name": "dwt_cD1_entropy",
+        "family": "dwt",
+        "value": 1.569651475082769,
+        "display": "1.570"
+      },
+      {
+        "index": 127,
+        "name": "dwt_cA5_mean_abs",
+        "family": "dwt",
+        "value": 1.8542505579084383,
+        "display": "1.854"
+      },
+      {
+        "index": 128,
+        "name": "dwt_cD5_mean_abs",
+        "family": "dwt",
+        "value": 2.110100765073819,
+        "display": "2.110"
+      },
+      {
+        "index": 129,
+        "name": "dwt_cD4_mean_abs",
+        "family": "dwt",
+        "value": 0.5198390725633828,
+        "display": "0.520"
+      },
+      {
+        "index": 130,
+        "name": "dwt_cD3_mean_abs",
+        "family": "dwt",
+        "value": 0.0860711437793743,
+        "display": "0.086"
+      },
+      {
+        "index": 131,
+        "name": "dwt_cD2_mean_abs",
+        "family": "dwt",
+        "value": 0.0147744931052792,
+        "display": "0.015"
+      },
+      {
+        "index": 132,
+        "name": "dwt_cD1_mean_abs",
+        "family": "dwt",
+        "value": 0.0018567819894335,
+        "display": "0.002"
+      },
+      {
+        "index": 133,
+        "name": "env_mean",
+        "family": "envelope",
+        "value": 0.7972259219206044,
+        "display": "0.797"
+      },
+      {
+        "index": 134,
+        "name": "env_std",
+        "family": "envelope",
+        "value": 1.135841964860434,
+        "display": "1.136"
+      },
+      {
+        "index": 135,
+        "name": "env_skew",
+        "family": "envelope",
+        "value": 2.711767727124254,
+        "display": "2.712"
+      },
+      {
+        "index": 136,
+        "name": "env_kurtosis",
+        "family": "envelope",
+        "value": 7.59349759930504,
+        "display": "7.593"
+      },
+      {
+        "index": 137,
+        "name": "env_peak_rate",
+        "family": "envelope",
+        "value": 1.8785397857903887,
+        "display": "1.879"
+      }
+    ]
+  }
+}
