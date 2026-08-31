@@ -1,0 +1,99 @@
+exp_id: EXP-C2
+run_id: EXP-C2
+variant: ''
+title: CirCor clinical outcome
+phase: 69
+task: circor_outcome
+dataset: d4_circor
+models:
+- M3
+- M4
+- M5
+- M6
+- M7
+cv: patient_grouped_5fold
+cv_scheme:
+  kind: StratifiedGroupKFold
+  n_splits: 5
+  total_folds: 5
+  group_key: patient_id
+  shuffle: true
+  random_state: 42
+tuned: true
+nested: false
+emits:
+- T14
+label_space:
+  Normal: 0
+  Abnormal: 1
+scoring: balanced_accuracy
+report_metrics:
+- accuracy
+- sensitivity
+- specificity
+- precision
+- f1
+- balanced_accuracy
+- roc_auc
+- pr_auc
+- mcc
+- brier
+- ece
+selection_rule:
+- sensitivity
+- balanced_accuracy
+seed: 42
+output_section: 08_circor_external_validation
+declaration:
+  title: CirCor clinical outcome
+  phase: 69
+  dataset: d4_circor
+  task: circor_outcome
+  level: recording
+  label_space:
+    Normal: 0
+    Abnormal: 1
+  class_counts:
+    Normal: 486
+    Abnormal: 456
+  label_source: patient_txt_files
+  label_field: '#Outcome'
+  models:
+  - M3
+  - M4
+  - M5
+  - M6
+  - M7
+  tuned: true
+  cv: patient_grouped_5fold
+  aggregation_rules:
+  - max
+  - mean
+  - any_present
+  output_section: 08_circor_external_validation
+  emits:
+  - T14
+  notes: 'Near-balanced (486/456), unlike every other task here. The patient-level
+    label is propagated to that patient''s recordings; the noise this introduces is
+    documented rather than ignored.
+
+    '
+run:
+  models_run:
+  - M3
+  - M4
+  - M5
+  - M6
+  - M7
+  folds_run:
+  - r0f0
+  - r0f1
+  - r0f2
+  - r0f3
+  - r0f4
+  n_folds_run: 5
+  n_units: 25
+  n_computed: 25
+  n_resumed: 0
+  seconds: 17093.04
+  command: python scripts/11_run_experiment.py --exp EXP-C2 --planner nested

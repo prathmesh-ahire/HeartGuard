@@ -293,6 +293,7 @@ class NestedSearchPlanner(ModelPlanner):
         trials: int = DEFAULT_TRIALS,
         model_trials: dict[str, int] | None = None,
         inner_splits: int = 3,
+        max_seconds: float | None = None,
         pipeline_config: dict[str, Any] | None = None,
         search_pipeline_config: dict[str, Any] | None = None,
         cache_dir: str | Path | None = None,
@@ -302,6 +303,15 @@ class NestedSearchPlanner(ModelPlanner):
         self.trials = int(trials)
         self.model_trials = dict(DEFAULT_MODEL_TRIALS if model_trials is None else model_trials)
         self.inner_splits = int(inner_splits)
+        #: Wall-clock ceiling per search, checked BETWEEN trials. `Budget` has
+        #: carried this since Phase 54 but nothing reached it, so no nested
+        #: search had any ceiling at all: a fold whose search draws an expensive
+        #: gradient-boosting point could run for hours with no bound and no way
+        #: to tell it apart from a hang. It cannot interrupt a trial in progress
+        #: -- that is a property of the search loop, not a gap here -- so it
+        #: bounds a search to roughly one trial beyond the limit, which is the
+        #: useful guarantee. None keeps the old unbounded behaviour.
+        self.max_seconds = None if max_seconds is None else float(max_seconds)
         #: Applied to the final per-fold fit.
         self.pipeline_config = pipeline_config
         #: Applied inside the search. Left as the default 138-feature pipeline
@@ -351,6 +361,7 @@ class NestedSearchPlanner(ModelPlanner):
             "model_id": model_id,
             "trials": self.budget_for(model_id),
             "inner_splits": self.inner_splits,
+            "max_seconds": self.max_seconds,
             "fold": fold.label,
             "task": getattr(data, "task", ""),
             "n_train": int(np.asarray(fold.train_index).size),
@@ -400,7 +411,9 @@ class NestedSearchPlanner(ModelPlanner):
             self.method,
             model_id,
             objective=objective,
-            budget=ob.Budget(max_trials=self.budget_for(model_id)),
+            budget=ob.Budget(
+                max_trials=self.budget_for(model_id), max_seconds=self.max_seconds
+            ),
             pipeline_config=self.search_pipeline_config,
         )
         result = search.run(data, fold, n_inner_splits=self.inner_splits)

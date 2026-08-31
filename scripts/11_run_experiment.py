@@ -75,6 +75,14 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="nested planners only: per-model override, e.g. M5=5",
     )
     parser.add_argument("--inner-splits", type=int, default=3)
+    parser.add_argument(
+        "--max-seconds", type=float, default=None, metavar="S",
+        help=(
+            "nested planners only: wall-clock ceiling per search, checked between "
+            "trials. Unset means unbounded, which is how every run before Phase 68 "
+            "behaved"
+        ),
+    )
     parser.add_argument("--out-dir", default=None, help="override the output root")
     parser.add_argument(
         "--variant", default=None, metavar="NAME",
@@ -121,6 +129,7 @@ def build_planner(args: argparse.Namespace, exp: object) -> object:
         trials=args.trials,
         model_trials=_model_trials(args.model_trials),
         inner_splits=args.inner_splits,
+        max_seconds=args.max_seconds,
     )
 
 

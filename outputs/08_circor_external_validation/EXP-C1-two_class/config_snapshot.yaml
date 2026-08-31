@@ -1,0 +1,109 @@
+exp_id: EXP-C1
+run_id: EXP-C1-two_class
+variant: two_class
+title: CirCor murmur classification
+phase: 68
+task: circor_murmur
+dataset: d4_circor
+models:
+- M3
+- M4
+- M5
+- M6
+- M7
+cv: patient_grouped_5fold
+cv_scheme:
+  kind: StratifiedGroupKFold
+  n_splits: 5
+  total_folds: 5
+  group_key: patient_id
+  shuffle: true
+  random_state: 42
+tuned: true
+nested: false
+emits:
+- T13
+- T15
+label_space:
+  Absent: 0
+  Present: 1
+scoring: balanced_accuracy
+report_metrics:
+- accuracy
+- sensitivity
+- specificity
+- precision
+- f1
+- balanced_accuracy
+- roc_auc
+- pr_auc
+- mcc
+- brier
+- ece
+selection_rule:
+- sensitivity
+- balanced_accuracy
+seed: 42
+output_section: 08_circor_external_validation
+declaration:
+  title: CirCor murmur classification
+  phase: 68
+  dataset: d4_circor
+  task: circor_murmur
+  level: recording
+  n_patients: 942
+  n_recordings: 3163
+  variants:
+    three_class:
+      headline: true
+      label_space:
+        Absent: 0
+        Present: 1
+        Unknown: 2
+      class_counts:
+        Absent: 695
+        Present: 179
+        Unknown: 68
+      n_patients: 942
+    two_class:
+      headline: false
+      label_space:
+        Absent: 0
+        Present: 1
+      n_patients: 874
+  models:
+  - M3
+  - M4
+  - M5
+  - M6
+  - M7
+  tuned: true
+  cv: patient_grouped_5fold
+  aggregation_rules:
+  - max
+  - mean
+  - any_present
+  output_section: 08_circor_external_validation
+  emits:
+  - T13
+  - T15
+run:
+  models_run:
+  - M3
+  - M4
+  - M5
+  - M6
+  - M7
+  folds_run:
+  - r0f0
+  - r0f1
+  - r0f2
+  - r0f3
+  - r0f4
+  n_folds_run: 5
+  n_units: 25
+  n_computed: 25
+  n_resumed: 0
+  seconds: 36486.8
+  command: python scripts/11_run_experiment.py --exp EXP-C1 --planner nested --variant
+    two_class
