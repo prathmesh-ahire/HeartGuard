@@ -270,6 +270,11 @@ def curves_payload(exp_dir: str | Path) -> dict[str, Any]:
                 continue
             entry[kind] = {
                 "x": [float(v) for v in block["x"]],
+                # The axis tick labels, formatted HERE. A chart that called
+                # toFixed on the grid would be formatting a number in the
+                # browser, which is the rule the whole codegen boundary exists
+                # to hold -- and Phase 113's chart gate fails the build on it.
+                "x_display": [format(float(v), ".2f") for v in block["x"]],
                 "mean": [float(v) for v in block["mean"]],
                 "sd": [float(v) for v in block["sd"]],
                 "n_folds": int(block["n_folds"].iloc[0]),

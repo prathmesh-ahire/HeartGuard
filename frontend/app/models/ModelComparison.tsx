@@ -73,7 +73,9 @@ export function ModelComparison() {
   const curves = experiment.curves;
   const curveModel = (curves?.models ?? []).find(
     (item) => (item as { model_id?: string }).model_id === selectedModel,
-  ) as Record<string, { x: number[]; mean: number[]; sd: number[] } | undefined> | undefined;
+  ) as
+    | Record<string, { x: number[]; x_display: string[]; mean: number[]; sd: number[] } | undefined>
+    | undefined;
 
   return (
     <div>
@@ -244,6 +246,7 @@ export function ModelComparison() {
             <CurveChart
               className="mt-3"
               x={curveModel.roc.x}
+              xDisplay={curveModel.roc.x_display}
               mean={curveModel.roc.mean}
               sd={curveModel.roc.sd}
               xName="False positive rate"
@@ -267,6 +270,7 @@ export function ModelComparison() {
             <CurveChart
               className="mt-3"
               x={curveModel.pr.x}
+              xDisplay={curveModel.pr.x_display}
               mean={curveModel.pr.mean}
               sd={curveModel.pr.sd}
               xName="Recall"

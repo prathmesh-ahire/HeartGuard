@@ -33,6 +33,7 @@ function useDark(): boolean {
 
 export function CurveChart({
   x,
+  xDisplay,
   mean,
   sd,
   xName,
@@ -44,6 +45,8 @@ export function CurveChart({
   height = 300,
 }: {
   x: number[];
+  /** Axis tick labels, formatted in Python. This component never formats one. */
+  xDisplay: string[];
   mean: number[];
   sd: number[];
   xName: string;
@@ -74,7 +77,7 @@ export function CurveChart({
       xAxis: {
         ...(base.xAxis as object),
         type: 'category',
-        data: x.map((value) => value.toFixed(2)),
+        data: xDisplay,
         name: xName,
         nameLocation: 'middle',
         nameGap: 28,
@@ -129,7 +132,7 @@ export function CurveChart({
           : []),
       ],
     };
-  }, [dark, diagonal, mean, sd, x, xName, yName]);
+  }, [dark, diagonal, mean, sd, x, xDisplay, xName, yName]);
 
   if (x.length === 0 || mean.length === 0) {
     return (
