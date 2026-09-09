@@ -1,0 +1,21 @@
+{
+  "model_id": "M1",
+  "hyperparameters": {
+    "C": 0.41967346752031676,
+    "l1_ratio": 0.0,
+    "solver": "saga",
+    "max_iter": 2000
+  },
+  "n_records_fitted": 1786,
+  "n_sample_records": 251,
+  "n_sample_subjects": 197,
+  "snr_levels_db": [
+    null,
+    20.0,
+    15.0,
+    10.0,
+    5.0,
+    0.0
+  ],
+  "why_refitted": "The deployed model was fitted on all 3,240 PhysioNet records, so scoring it on any of them is in-sample. This model excludes every subject appearing in the sweep sample."
+}

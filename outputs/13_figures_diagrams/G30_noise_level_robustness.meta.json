@@ -1,0 +1,51 @@
+{
+  "figure_id": "G30",
+  "figure_number": 13,
+  "title": "Noise Level Robustness",
+  "caption": "Left: balanced accuracy by PP-08 quality group for each experiment, averaged over that experiment's models and folds -- observational, and the groups differ in more than noise. Right: the same PhysioNet recordings at 20/15/10/5/0 dB added white Gaussian noise, scored by a model refitted without their subjects; dotted lines mark the untouched control. Additive white noise is a laboratory stressor and not a model of real stethoscope contamination.",
+  "exp_id": "EXP-E1",
+  "objective": "O4 (robustness)",
+  "dataset": "D1 PhysioNet 2016, D2/D3 PASCAL, D4 CirCor 2022",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-09-09T07:15:58.207206+00:00",
+  "command": "python scripts/23_noise_robustness.py",
+  "plotted_rows": 93,
+  "plotted_csv": "G30_noise_level_robustness.csv",
+  "plotted_csv_sha256": "9d2c50a0a4a7969fd285cfcf8e06529b077bea844cff56d462d3aae2e7971cd1",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "outputs/02_preprocessing/signal_quality_flags.csv",
+      "exists": true,
+      "bytes": 1876922,
+      "sha256": "1b8f004435ef0f8787f46520ad4f0883d93113ca75e04a3f59df682e2084d1f2",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-26T11:46:51.948505+00:00"
+    },
+    {
+      "path": "outputs/09_robustness_analysis/EXP-E1/awgn_sweep_metrics.csv",
+      "exists": true,
+      "bytes": 2040,
+      "sha256": "5860c3589beedfb33c7282595b0699713dd5a5e256393f87d25f5c10b8cd9172",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-09T07:15:51.169164+00:00"
+    },
+    {
+      "path": "outputs/09_robustness_analysis/EXP-E1/sqi_crosscheck.csv",
+      "exists": true,
+      "bytes": 314,
+      "sha256": "df259f98c5dd244651b1a701c0382e49b14ee90ab4520e2693552a961d5f6cfc",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-09T07:15:46.694447+00:00"
+    }
+  ],
+  "written": {
+    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G30_noise_level_robustness.csv",
+    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G30_noise_level_robustness.png",
+    "svg": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G30_noise_level_robustness.svg"
+  },
+  "notes": []
+}

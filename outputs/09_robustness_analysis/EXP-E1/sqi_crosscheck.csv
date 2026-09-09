@@ -1,0 +1,2 @@
+n_records,n_sqi_poor,n_pp08_poor,both_poor,pp08_poor_only,sqi_poor_only,both_clean,agreement,recall_of_sqi_poor,precision_on_sqi_poor,mean_snr_proxy_db_sqi_good,mean_snr_proxy_db_sqi_poor
+3240,364,477,252,225,112,2651,0.8959876543209877,0.6923076923076923,0.5283018867924528,30.17928602364395,29.352893445054942
