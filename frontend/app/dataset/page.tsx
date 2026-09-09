@@ -7,7 +7,9 @@ import { ResultsTable } from '@/components/table/ResultsTable';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { StatTile } from '@/components/ui/StatTile';
 import { datasetSummary } from '@/lib/generated';
-import { figure } from '@/lib/generated/figures';
+import { G02 } from '@/lib/generated/figures/G02';
+import { G03 } from '@/lib/generated/figures/G03';
+import { G04 } from '@/lib/generated/figures/G04';
 import { table } from '@/lib/generated/tables';
 
 export const metadata: Metadata = {
@@ -99,7 +101,7 @@ export default function Page() {
         <div className="mt-8 grid gap-8 lg:grid-cols-2">
           <div>
             <GroupedBars
-              source={figure('G02')}
+              source={G02}
               categoryColumn="class"
               valueColumns={['n_records']}
               label="Records per class, per dataset"
@@ -110,7 +112,7 @@ export default function Page() {
           </div>
           <div>
             <GroupedBars
-              source={figure('G03')}
+              source={G03}
               categoryColumn="class"
               valueColumns={['share']}
               label="Class share within each dataset"
@@ -133,7 +135,7 @@ export default function Page() {
         <ResultsTable className="mt-5" table={table('T03')} />
         <div className="mt-8">
           <GroupedBars
-            source={figure('G04')}
+            source={G04}
             categoryColumn="bin_low_sec"
             valueColumns={['n_records']}
             label="Recording duration histogram"

@@ -4,7 +4,8 @@ import { useState } from 'react';
 
 import { cn } from '@/lib/cn';
 import { theme } from '@/lib/generated';
-import { figure } from '@/lib/generated/figures';
+import { G01 } from '@/lib/generated/figures/G01';
+import { G04 } from '@/lib/generated/figures/G04';
 import { tables } from '@/lib/generated/tables';
 import { PALETTE_CONTRAST, SERIES_COLORS, SURFACE, TYPE_SCALE } from '@/lib/tokens';
 import { RecordingViewer } from '@/components/audio/RecordingViewer';
@@ -461,7 +462,7 @@ export function DesignClient() {
 
           <GlassCard className="p-5">
             <GroupedBars
-              source={figure('G01')}
+              source={G01}
               categoryColumn="dataset"
               valueColumns={['n_records']}
               label="Recording counts per dataset family"
@@ -472,7 +473,7 @@ export function DesignClient() {
 
           <GlassCard className="p-5">
             <ScatterPlot
-              source={figure('G04')}
+              source={G04}
               xColumn="bin_start_sec"
               yColumn="n_records"
               xName="Duration (s)"

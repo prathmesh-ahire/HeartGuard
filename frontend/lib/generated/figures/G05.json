@@ -1,0 +1,24 @@
+{
+  "id": "G05",
+  "number": 5,
+  "title": "Before And After Filtering",
+  "caption": "The first 6 seconds of D1_training-b_b0406 (PhysioNet 2016, 8.0 s), raw against bandpass-filtered. The y-axes are shared, so the amplitude reduction is the filter removing baseline wander rather than a change of scale. The record is the D1 recording with the largest sub-20 Hz power relative to the passband, selected by the deterministic Phase 28 rule.",
+  "exp_id": "n/a (not experiment-bound)",
+  "objective": "O3 (preprocessing pipeline)",
+  "dataset": "D1",
+  "notes": [
+    "Raw here is resampled to the 2 kHz working rate but otherwise untouched: no filter, no normalization."
+  ],
+  "sources": [
+    "dataset/ (read-only) via src/preprocessing/pipeline.py",
+    "outputs/01_dataset_audit/metadata_master.csv",
+    "outputs/02_preprocessing/signal_quality_flags.csv"
+  ],
+  "source_csv": "outputs/13_figures_diagrams/G05_before_and_after_filtering.csv",
+  "png": "/figures/G05_before_and_after_filtering.png",
+  "dpi": 300,
+  "n_rows": 12000,
+  "columns": [],
+  "data_omitted": true,
+  "data_omitted_reason": "12000 rows x 3 columns exceeds the 2000-row inline budget; this figure is served as its canonical 300 dpi PNG and its full data is at outputs/13_figures_diagrams/G05_before_and_after_filtering.csv"
+}

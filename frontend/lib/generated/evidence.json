@@ -818,6 +818,30 @@
     ]
   },
   {
+    "key": "figures.G30",
+    "kind": "figure",
+    "artifact": "G30",
+    "generated_from": "outputs/13_figures_diagrams/G30_noise_level_robustness.csv",
+    "generated_from_sha256": "9d2c50a0a4a7969fd285cfcf8e06529b077bea844cff56d462d3aae2e7971cd1",
+    "upstream_sources": [
+      "outputs/02_preprocessing/signal_quality_flags.csv",
+      "outputs/09_robustness_analysis/EXP-E1/awgn_sweep_metrics.csv",
+      "outputs/09_robustness_analysis/EXP-E1/sqi_crosscheck.csv"
+    ]
+  },
+  {
+    "key": "figures.G31",
+    "kind": "figure",
+    "artifact": "G31",
+    "generated_from": "outputs/13_figures_diagrams/G31_duration_wise_performance.csv",
+    "generated_from_sha256": "28757e1243df1ef984046bd3be9a50ca6f1d82548f59a796182c9e6492f8e803",
+    "upstream_sources": [
+      "outputs/09_robustness_analysis/EXP-E2/per_band_summary.csv",
+      "outputs/09_robustness_analysis/EXP-E2/truncation_metrics.csv",
+      "outputs/09_robustness_analysis/EXP-E2/short_record_diagnostics.csv"
+    ]
+  },
+  {
     "key": "figures.G32",
     "kind": "figure",
     "artifact": "G32",

@@ -7,7 +7,7 @@ import { EquationList } from '@/components/equations/Equations';
 import { ResultsTable } from '@/components/table/ResultsTable';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { StatTile } from '@/components/ui/StatTile';
-import { figure } from '@/lib/generated/figures';
+import { G10 } from '@/lib/generated/figures/G10';
 import { features } from '@/lib/generated/features';
 import { table } from '@/lib/generated/tables';
 
@@ -60,7 +60,7 @@ export default function Page() {
         </div>
         <div className="mt-8">
           <GroupedBars
-            source={figure('G10')}
+            source={G10}
             categoryColumn="family"
             valueColumns={['n_features']}
             label="Features per family"

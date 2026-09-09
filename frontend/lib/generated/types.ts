@@ -65,6 +65,15 @@ export interface GeneratedFigure {
   data_omitted_reason: string | null;
 }
 
+/**
+ * A figure without its plotted frame: enough to caption it, cite it, and link
+ * its 300 dpi PNG. This is what `generated/figures` holds, because that module
+ * is imported by every page that captions or downloads a figure and a page that
+ * captions G01 must not also bundle the frame behind G31. Import the frame from
+ * `generated/figures/G01` where you actually plot it.
+ */
+export type GeneratedFigureMeta = Omit<GeneratedFigure, 'columns'>;
+
 export interface GeneratedTheme {
   palette: {
     name: string;

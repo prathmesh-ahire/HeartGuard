@@ -1,0 +1,21 @@
+{
+  "id": "G09",
+  "number": 9,
+  "title": "Wavelet Decomposition",
+  "caption": "The 5-level db4 sub-bands of the first 6 seconds of D1_training-e_e02008 (PhysioNet 2016, 17.6 s). The y-axes are independent: sub-band amplitudes span three orders of magnitude and a shared scale would draw most of them as flat lines. Only cD1 lies wholly outside the 20-400 Hz passband, and it carries a median 0.2% of the decomposition energy across the corpus.",
+  "exp_id": "n/a (not experiment-bound)",
+  "objective": "O4 (feature engineering)",
+  "dataset": "D1",
+  "notes": [],
+  "sources": [
+    "dataset/ (read-only) via src/preprocessing/pipeline.py",
+    "outputs/03_features/feature_inventory.csv"
+  ],
+  "source_csv": "outputs/13_figures_diagrams/G09_wavelet_decomposition.csv",
+  "png": "/figures/G09_wavelet_decomposition.png",
+  "dpi": 300,
+  "n_rows": 12032,
+  "columns": [],
+  "data_omitted": true,
+  "data_omitted_reason": "12032 rows x 4 columns exceeds the 2000-row inline budget; this figure is served as its canonical 300 dpi PNG and its full data is at outputs/13_figures_diagrams/G09_wavelet_decomposition.csv"
+}

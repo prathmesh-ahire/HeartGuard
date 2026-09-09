@@ -8,12 +8,12 @@
 
 import payload from './figures.json';
 
-import type { GeneratedFigure } from './types';
+import type { GeneratedFigureMeta } from './types';
 
-/** Every exported figure by id, with the frame it was plotted from where that frame is small enough to inline. */
-export const figures: Record<string, GeneratedFigure> = payload;
+/** Every exported figure by id, without its plotted frame: title, caption, source CSV and PNG. The frame is in generated/figures/<ID>. */
+export const figures: Record<string, GeneratedFigureMeta> = payload;
 
 /** One figure by id, or undefined. Pages handle undefined explicitly. */
-export function figure(id: string): GeneratedFigure | undefined {
+export function figure(id: string): GeneratedFigureMeta | undefined {
   return figures[id];
 }

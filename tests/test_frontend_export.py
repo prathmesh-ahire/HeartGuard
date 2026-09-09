@@ -276,9 +276,36 @@ def test_each_figure_serves_its_canonical_png_from_public(
         assert figure["dpi"] == 300
 
 
+def _figure_frames(exported: fe.ExportResult) -> dict[str, dict]:
+    """The full per-figure payloads, frames included.
+
+    `figures.json` is metadata only since the frames moved to one module per
+    figure -- a page that captions G01 must not bundle the frame behind G31.
+    These tests read the frames where they now live rather than where they used
+    to be; the properties asserted are unchanged.
+    """
+    directory = exported.generated / fe.FIGURE_MODULE_DIR
+    index = json.loads((exported.generated / "figures.json").read_text(encoding="utf-8"))
+    frames = {}
+    for figure_id in index:
+        path = directory / (figure_id + ".json")
+        assert path.is_file(), figure_id + " has no module of its own"
+        frames[figure_id] = json.loads(path.read_text(encoding="utf-8"))
+    return frames
+
+
+def test_the_figure_index_carries_no_frame(exported: fe.ExportResult) -> None:
+    """Metadata only, or the split it exists for does not hold."""
+    index = json.loads((exported.generated / "figures.json").read_text(encoding="utf-8"))
+    assert index
+    for figure_id, meta in index.items():
+        assert "columns" not in meta, figure_id + " still carries its frame in the index"
+        assert meta["title"] and meta["source_csv"], figure_id
+
+
 def test_an_omitted_frame_says_so_and_says_why(exported: fe.ExportResult) -> None:
     """A silent omission is indistinguishable from data that never existed."""
-    figures = json.loads((exported.generated / "figures.json").read_text(encoding="utf-8"))
+    figures = _figure_frames(exported)
     for figure_id, figure in figures.items():
         if figure["data_omitted"]:
             assert figure["columns"] == []
@@ -291,7 +318,7 @@ def test_an_omitted_frame_says_so_and_says_why(exported: fe.ExportResult) -> Non
 
 
 def test_the_inline_budgets_are_actually_applied(exported: fe.ExportResult) -> None:
-    figures = json.loads((exported.generated / "figures.json").read_text(encoding="utf-8"))
+    figures = _figure_frames(exported)
     for figure_id, figure in figures.items():
         cells = figure["n_rows"] * max(len(figure["columns"]), 1)
         too_big = figure["n_rows"] > fe.MAX_INLINE_ROWS or cells > fe.MAX_INLINE_CELLS
@@ -326,8 +353,10 @@ def test_typescript_declares_every_payload_and_index_assigns_without_a_cast(
     # checked across the modules rather than in one file, because that is where
     # the assignments are.
     modules = {
-        path.name: path.read_text(encoding="utf-8")
-        for path in exported.generated.glob("*.ts")
+        str(path.relative_to(exported.generated)).replace("\\", "/"): path.read_text(
+            encoding="utf-8"
+        )
+        for path in exported.generated.rglob("*.ts")
         if path.name != "types.ts"
     }
     assert "index.ts" in modules
@@ -340,13 +369,23 @@ def test_typescript_declares_every_payload_and_index_assigns_without_a_cast(
     assert "export const manifest: GeneratedManifest = manifestJson;" in modules["index.ts"]
     assert "export const tables: Record<string, GeneratedTable> = payload;" in modules["tables.ts"]
     assert (
-        "export const figures: Record<string, GeneratedFigure> = payload;" in modules["figures.ts"]
+        "export const figures: Record<string, GeneratedFigureMeta> = payload;"
+        in modules["figures.ts"]
     )
     assert "export const records: GeneratedRecordIndex = payload;" in modules["records.ts"]
 
+    # Each figure's frame is assigned to GeneratedFigure in its own module, and
+    # the index module carries no frame at all.
+    figure_modules = [name for name in modules if name.startswith(fe.FIGURE_MODULE_DIR + "/")]
+    assert figure_modules, "no per-figure modules were written"
+    for name in figure_modules:
+        stem = name.rsplit("/", 1)[-1].removesuffix(".ts")
+        assert "export const " + stem + ": GeneratedFigure = payload;" in modules[name]
+
     # Every JSON the exporter wrote is imported by exactly one module, so no
-    # payload is silently duplicated into two chunks.
-    for json_file in exported.generated.glob("*.json"):
+    # payload is silently duplicated into two chunks. Recursive since the
+    # per-figure payloads live one directory down.
+    for json_file in exported.generated.rglob("*.json"):
         importers = [name for name, text in modules.items() if "'./" + json_file.name + "'" in text]
         assert len(importers) == 1, (
             json_file.name

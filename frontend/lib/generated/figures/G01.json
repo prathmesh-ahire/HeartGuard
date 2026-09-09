@@ -1,0 +1,96 @@
+{
+  "id": "G01",
+  "number": 1,
+  "title": "Dataset Recording Counts",
+  "caption": "Recordings in each corpus. 'All files' is everything in the folder; 'labeled' is the subset with a usable label, which is what enters modelling. The gap is unlabelled material: 301 PhysioNet validation twins, 52 PASCAL A and 195 PASCAL B unlabelled records.",
+  "exp_id": "n/a (not experiment-bound)",
+  "objective": "O1 (corpus definition)",
+  "dataset": null,
+  "notes": [],
+  "sources": [
+    "outputs/01_dataset_audit/dataset_inventory.csv"
+  ],
+  "source_csv": "outputs/13_figures_diagrams/G01_dataset_recording_counts.csv",
+  "png": "/figures/G01_dataset_recording_counts.png",
+  "dpi": 300,
+  "n_rows": 4,
+  "columns": [
+    {
+      "name": "dataset_source",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "values": null
+    },
+    {
+      "name": "dataset_name",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "PhysioNet 2016",
+        "PASCAL set_a",
+        "PASCAL set_b",
+        "CirCor 2022"
+      ],
+      "values": null
+    },
+    {
+      "name": "total_files",
+      "kind": "count",
+      "places": 0,
+      "display": [
+        "3,541",
+        "176",
+        "656",
+        "3,163"
+      ],
+      "values": [
+        3541.0,
+        176.0,
+        656.0,
+        3163.0
+      ]
+    },
+    {
+      "name": "usable_files",
+      "kind": "count",
+      "places": 0,
+      "display": [
+        "3,240",
+        "124",
+        "461",
+        "3,163"
+      ],
+      "values": [
+        3240.0,
+        124.0,
+        461.0,
+        3163.0
+      ]
+    },
+    {
+      "name": "unlabelled_files",
+      "kind": "count",
+      "places": 0,
+      "display": [
+        "301",
+        "52",
+        "195",
+        "0"
+      ],
+      "values": [
+        301.0,
+        52.0,
+        195.0,
+        0.0
+      ]
+    }
+  ],
+  "data_omitted": false,
+  "data_omitted_reason": null
+}

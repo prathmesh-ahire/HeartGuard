@@ -1,10 +1,10 @@
 {
   "framework": "PV-MEPCG / PulseVision",
-  "run_id": "20260909T065702Z-176e3436",
-  "git_commit": "46b81c250f2a740cdfdd31e12a34d22e204876b1",
+  "run_id": "20260909T080941Z-88d8c83d",
+  "git_commit": "ced7e33ab8f5d32dfe2ab2fbfbb237c2d653c41c",
   "git_branch": "main",
   "git_dirty": true,
-  "exported_utc": "2026-09-09T06:57:04.596985+00:00",
+  "exported_utc": "2026-09-09T08:09:43.262238+00:00",
   "exporter": "python scripts/17_export_frontend_data.py",
   "source_dirs": [
     "dataset_audit",
@@ -25,7 +25,7 @@
     }
   ],
   "n_tables": 7,
-  "n_figures": 12,
+  "n_figures": 14,
   "sources": [
     {
       "path": "models_saved/binary/final/manifest.json",
@@ -178,6 +178,36 @@
       "bytes": 1081
     },
     {
+      "path": "outputs/09_robustness_analysis/EXP-E1/awgn_sweep_metrics.csv",
+      "sha256": "5860c3589beedfb33c7282595b0699713dd5a5e256393f87d25f5c10b8cd9172",
+      "digest_method": "sha256/lf",
+      "bytes": 2040
+    },
+    {
+      "path": "outputs/09_robustness_analysis/EXP-E1/sqi_crosscheck.csv",
+      "sha256": "df259f98c5dd244651b1a701c0382e49b14ee90ab4520e2693552a961d5f6cfc",
+      "digest_method": "sha256/lf",
+      "bytes": 314
+    },
+    {
+      "path": "outputs/09_robustness_analysis/EXP-E2/per_band_summary.csv",
+      "sha256": "629bd066f2ec2a9c25846ef605159bded2cab95bd32b7e3035b88426d3899470",
+      "digest_method": "sha256/lf",
+      "bytes": 14800
+    },
+    {
+      "path": "outputs/09_robustness_analysis/EXP-E2/short_record_diagnostics.csv",
+      "sha256": "833103868519becac1cd8ea2aee3c322f8f6c36c4b4646b8c29996f04c8f4ff1",
+      "digest_method": "sha256/lf",
+      "bytes": 2379
+    },
+    {
+      "path": "outputs/09_robustness_analysis/EXP-E2/truncation_metrics.csv",
+      "sha256": "e592a42c361e2a90d60e8e430b56a32fb6665d3c7a0a0cb7de0918642ac89a53",
+      "digest_method": "sha256/lf",
+      "bytes": 1529
+    },
+    {
       "path": "outputs/13_figures_diagrams/G01_dataset_recording_counts.csv",
       "sha256": "6347d1a23740322372f036b0fd08ad14bd0015809510804628e3c91c0731fb23",
       "digest_method": "sha256/lf",
@@ -242,6 +272,18 @@
       "sha256": "0e27ebbeebc059e92cbc00cb41b292d9f3da680981618a5976c86dc9f8528707",
       "digest_method": "sha256/lf",
       "bytes": 852
+    },
+    {
+      "path": "outputs/13_figures_diagrams/G30_noise_level_robustness.csv",
+      "sha256": "9d2c50a0a4a7969fd285cfcf8e06529b077bea844cff56d462d3aae2e7971cd1",
+      "digest_method": "sha256/lf",
+      "bytes": 22092
+    },
+    {
+      "path": "outputs/13_figures_diagrams/G31_duration_wise_performance.csv",
+      "sha256": "28757e1243df1ef984046bd3be9a50ca6f1d82548f59a796182c9e6492f8e803",
+      "digest_method": "sha256/lf",
+      "bytes": 16869
     },
     {
       "path": "outputs/13_figures_diagrams/G32_location_performance.csv",

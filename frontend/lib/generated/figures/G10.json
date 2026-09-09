@@ -1,0 +1,91 @@
+{
+  "id": "G10",
+  "number": 10,
+  "title": "Feature Family Counts",
+  "caption": "The 138 engineered features by family, in registry order rather than alphabetically: the order is the fixed column order of the feature vector, declared as a literal in src/feature_extraction/registry.py and fingerprinted, and two runs that disagree on it are not comparable. 138 = time 24 + frequency 22 + MFCC 39 + chroma 24 + DWT 24 + envelope 5.",
+  "exp_id": "n/a (not experiment-bound)",
+  "objective": "O4 (feature engineering)",
+  "dataset": null,
+  "notes": [],
+  "sources": [
+    "outputs/03_features/feature_family_summary.csv"
+  ],
+  "source_csv": "outputs/13_figures_diagrams/G10_feature_family_counts.csv",
+  "png": "/figures/G10_feature_family_counts.png",
+  "dpi": 300,
+  "n_rows": 6,
+  "columns": [
+    {
+      "name": "family",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "time",
+        "frequency",
+        "mfcc",
+        "chroma",
+        "dwt",
+        "envelope"
+      ],
+      "values": null
+    },
+    {
+      "name": "extractor",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "time_domain",
+        "frequency",
+        "mfcc",
+        "chroma",
+        "wavelet",
+        "envelope"
+      ],
+      "values": null
+    },
+    {
+      "name": "n_features",
+      "kind": "count",
+      "places": 0,
+      "display": [
+        "24",
+        "22",
+        "39",
+        "24",
+        "24",
+        "5"
+      ],
+      "values": [
+        24.0,
+        22.0,
+        39.0,
+        24.0,
+        24.0,
+        5.0
+      ]
+    },
+    {
+      "name": "first_index",
+      "kind": "count",
+      "places": 0,
+      "display": [
+        "0",
+        "24",
+        "46",
+        "85",
+        "109",
+        "133"
+      ],
+      "values": [
+        0.0,
+        24.0,
+        46.0,
+        85.0,
+        109.0,
+        133.0
+      ]
+    }
+  ],
+  "data_omitted": false,
+  "data_omitted_reason": null
+}

@@ -1,0 +1,21 @@
+{
+  "id": "G06",
+  "number": 6,
+  "title": "Normal Versus Abnormal Spectrogram",
+  "caption": "Spectrograms of one normal and one abnormal PhysioNet recording over the same 6-second window, on a shared colour scale so the two panels are comparable. Both records are the ones nearest their class median duration under the Phase 28 selection rule. The y-axis is limited to the 20-400 Hz passband the preprocessing keeps.",
+  "exp_id": "n/a (not experiment-bound)",
+  "objective": "O3 (preprocessing pipeline)",
+  "dataset": "D1",
+  "notes": [],
+  "sources": [
+    "dataset/ (read-only) via src/preprocessing/pipeline.py",
+    "outputs/01_dataset_audit/metadata_master.csv"
+  ],
+  "source_csv": "outputs/13_figures_diagrams/G06_normal_versus_abnormal_spectrogram.csv",
+  "png": "/figures/G06_normal_versus_abnormal_spectrogram.png",
+  "dpi": 300,
+  "n_rows": 514,
+  "columns": [],
+  "data_omitted": true,
+  "data_omitted_reason": "514 rows x 47 columns exceeds the 20000-cell inline budget; this figure is served as its canonical 300 dpi PNG and its full data is at outputs/13_figures_diagrams/G06_normal_versus_abnormal_spectrogram.csv"
+}
