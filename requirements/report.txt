@@ -12,3 +12,11 @@ openpyxl==3.1.5      # .xlsx table workbooks
 # pipeline currently renders Plotly from Python (all figures are matplotlib /
 # seaborn; Plotly is a frontend-JS concern). See Docs/note.md.
 kaleido==1.3.0
+
+# Diagram toolchain (T97.1): matplotlib, already pinned in base.txt.
+# NOT Graphviz -- needs a `dot` system binary that is not on PATH here and will
+# not be on a grader's either. NOT the Mermaid CLI -- it pulls a headless
+# Chromium, the same dependency that already leaves kaleido above unusable on
+# this machine. matplotlib renders SVG and 300 dpi PNG natively, runs offline,
+# and keeps every diagram a version-controlled Python function under
+# src/reporting/diagrams/. Nothing further to install.
