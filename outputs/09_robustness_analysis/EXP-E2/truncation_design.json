@@ -1,0 +1,13 @@
+{
+  "sample_source": "outputs/09_robustness_analysis/EXP-E1/awgn_sample.csv",
+  "n_sample_records": 251,
+  "n_sample_subjects": 197,
+  "clip_seconds": [
+    null,
+    10.0,
+    5.0,
+    3.0
+  ],
+  "why_shared_sample": "The same recordings carry both stressors, so the noise curve and the truncation curve can be read against each other.",
+  "window_placement": "Randomly placed, seeded per (record, length). Always clipping the opening seconds would confound length with position -- the head of a recording carries the transducer being settled."
+}
