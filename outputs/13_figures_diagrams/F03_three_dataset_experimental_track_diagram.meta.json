@@ -1,0 +1,48 @@
+{
+  "diagram_id": "F03",
+  "diagram_number": 3,
+  "title": "Three-dataset experimental track diagram",
+  "caption": "PhysioNet 2016, PASCAL A and B, and CirCor 2022 as separate tracks with five label spaces that are never merged.",
+  "task": "T95.3",
+  "objective": "O2",
+  "framework": "PV-MEPCG / PulseVision",
+  "toolchain": "matplotlib (src/reporting/diagrams)",
+  "dpi": 300,
+  "formats": [
+    "png",
+    "svg"
+  ],
+  "palette": "Okabe-Ito (colourblind-safe); shape carries meaning, colour repeats it",
+  "source_module": "src/reporting/diagrams/architecture_figures.py",
+  "source_function": "build_f03",
+  "source_sha256": "936a3e70a4fb9b928405ed5d7403eb99d00a3eec01d1fe372771d3c639782454",
+  "legibility": {
+    "clipped": [],
+    "figure_inches": [
+      9.0,
+      5.2
+    ],
+    "print_scale": 0.6667,
+    "min_effective_pt": 7.48,
+    "threshold_pt": 7.0,
+    "roles": {
+      "annotation": 7.48,
+      "legend": 7.48,
+      "node_label": 8.5,
+      "node_sublabel": 7.48,
+      "subtitle": 7.48,
+      "title": 11.05
+    },
+    "strings": 26,
+    "overflowing_nodes": [],
+    "violations": []
+  },
+  "generated_utc": "2026-09-09T12:16:18.678252+00:00",
+  "command": "python scripts/05_render_diagrams.py --only F03",
+  "sources": [],
+  "written": {
+    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/F03_three_dataset_experimental_track_diagram.png",
+    "svg": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/F03_three_dataset_experimental_track_diagram.svg"
+  },
+  "notes": []
+}

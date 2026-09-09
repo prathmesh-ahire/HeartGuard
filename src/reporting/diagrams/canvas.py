@@ -139,8 +139,19 @@ class DiagramCanvas:
         self.figure = plt.figure(figsize=(self.width_inches, self.height_inches))
         self.figure.patch.set_facecolor("white")
 
-        top = _TITLE_STRIP if title else _MARGIN
-        top += _SUBTITLE_STRIP if subtitle else 0.0
+        # A subtitle is a sentence, and a sentence does not fit one line at every
+        # figure width. Wrapping it here rather than at draw time is what lets the
+        # strip above the axes be reserved for the number of lines it will
+        # actually take: reserving one line and drawing two lands the second on
+        # top of the first row of boxes, and no clipping check catches that,
+        # because it is inside the figure.
+        self.title = self._wrap_to_width(title, self.title_pt)
+        self.subtitle = self._wrap_to_width(subtitle, self.sub_pt)
+        self._title_lines = len(self.title.splitlines()) if title else 0
+        self._subtitle_lines = len(self.subtitle.splitlines()) if subtitle else 0
+
+        top = _TITLE_STRIP * self._title_lines if title else _MARGIN
+        top += _SUBTITLE_STRIP * self._subtitle_lines
         bottom = _STAMP_STRIP + (_LEGEND_ROW * legend_rows if legend_rows else 0.0)
         axes_height = self.height_inches - top - bottom
         if axes_height <= 0.5:
@@ -178,6 +189,21 @@ class DiagramCanvas:
         self._measured: list[tuple[str, Any]] = []
 
     # -- unit helpers ----------------------------------------------------
+
+    def _wrap_to_width(self, text: str, points: float) -> str:
+        """Wrap a heading to the drawable width at its own point size.
+
+        0.58 em per character, not the 0.52 the node labels use: a heading is a
+        prose sentence in mixed case, where DejaVu Serif runs wider than the
+        short mostly-lowercase phrases inside a box. Measured, after 0.50 let an
+        F02 subtitle run off a 9-inch figure. The real check is still the
+        clipping test in :meth:`legibility_report`, which fails the render.
+        """
+        if not text:
+            return text
+        usable = self.width_inches - 2.0 * _MARGIN
+        chars = max(20, int(usable * 72.0 / (points * 0.58)))
+        return "\n".join(textwrap.wrap(text, width=chars)) or text
 
     def x_units(self, inches: float) -> float:
         """Convert a physical length to grid units along x."""
@@ -223,7 +249,7 @@ class DiagramCanvas:
         if label:
             self.axes.text(
                 col + self.x_units(0.07),
-                row + self.y_units(0.13),
+                row + self.y_units(0.17),
                 label,
                 fontsize=self.sub_pt,
                 color=color,
@@ -243,10 +269,15 @@ class DiagramCanvas:
         col: float,
         row: float,
         width: float = 2.0,
-        height: float = 1.0,
+        height: float | None = None,
         sublabel: str = "",
     ) -> Node:
-        """Place one box and return it. ``key`` is what :meth:`edge` refers to."""
+        """Place one box and return it. ``key`` is what :meth:`edge` refers to.
+
+        Leave ``height`` out and the box takes the height its own text needs
+        (:meth:`fit_height`). Pass one only where a row of boxes has to share a
+        height, or where the box is deliberately larger than its label.
+        """
         if kind not in NODE_STYLES:
             raise ValueError(
                 "unknown node kind "
@@ -258,6 +289,8 @@ class DiagramCanvas:
             raise ValueError("duplicate node key: " + key)
 
         style = NODE_STYLES[kind]
+        if height is None:
+            height = self.fit_height(label, width=width, sublabel=sublabel, kind=kind)
         placed = Node(key, label, kind, col, row, width, height, sublabel, style)
         self.nodes[key] = placed
         if kind not in self._used_node_kinds:
@@ -277,19 +310,40 @@ class DiagramCanvas:
         va: str = "center",
         color: str = MUTED,
         italic: bool = True,
+        width: float | None = None,
     ) -> None:
-        """A free annotation on the drawing. Not a step, so it gets no box."""
-        self.axes.text(
+        """A free annotation on the drawing. Not a step, so it gets no box.
+
+        Wrapped to the room actually available from where it is anchored --
+        ``width`` in grid columns, or the distance to the edge it runs toward.
+        An unwrapped annotation is the easiest thing on a canvas to run off the
+        page, because unlike a box it has no border to make the overflow
+        obvious in the source.
+        """
+        if width is None:
+            width = {
+                "left": self.columns - col,
+                "right": col,
+                "center": 2.0 * min(col, self.columns - col),
+            }.get(ha, self.columns - col)
+        inches = max(0.5, width) / self._x_per_inch
+        chars = max(20, int(inches * 72.0 / (self.sub_pt * 0.58)))
+        wrapped = "\n".join(
+            line for block in content.split("\n") for line in (textwrap.wrap(block, chars) or [""])
+        )
+        annotation = self.axes.text(
             col,
             row,
-            content,
+            wrapped,
             fontsize=self.sub_pt,
             color=color,
             ha=ha,
             va=va,
             style="italic" if italic else "normal",
             zorder=4,
+            linespacing=1.3,
         )
+        self._measured.append(("annotation", annotation))
         self._texts.append(("annotation", self.sub_pt))
 
     def edge(
@@ -467,6 +521,64 @@ class DiagramCanvas:
                 )
             )
 
+    def _label_metrics(
+        self, label: str, sublabel: str, width: float, shape: str = "round"
+    ) -> tuple[str, str, float]:
+        """Wrap a box's text to its width and say how tall it needs to be.
+
+        One function, used by both the drawing and the fit check, so a box can
+        never be measured against a different wrap from the one it is drawn
+        with. The line heights are the ``linespacing`` values used below, and
+        the 0.07 inch allowance keeps a descender off the border.
+        """
+        inches = width / self._x_per_inch
+        # A shape that is not a rectangle holds less text than its bounding box:
+        # a diamond is half its width at the vertical midline, and a
+        # parallelogram loses a skew's worth at the top and bottom. Wrapping to
+        # the full width hangs the label out over the slanted edges.
+        inches *= {"diamond": 0.62, "parallelogram": 0.84, "folded": 0.92}.get(shape, 1.0)
+        # 0.56 em per character for DejaVu Serif at these sizes; 72 pt per inch.
+        # Measured up from 0.52 after an F02 label ran to both borders of its
+        # box: the estimate has to be pessimistic, because being wrong the other
+        # way is invisible until someone looks at the render.
+        chars = max(8, int(inches * 72.0 / (self.label_pt * 0.56)))
+        wrapped = "\n".join(textwrap.wrap(label, width=chars)) or label
+
+        wrapped_sub = ""
+        sub_lines = 0
+        if sublabel:
+            sub_chars = max(10, int(inches * 72.0 / (self.sub_pt * 0.56)))
+            lines = textwrap.wrap(sublabel, width=sub_chars) or [sublabel]
+            wrapped_sub = "\n".join(lines)
+            sub_lines = len(lines)
+
+        needed = (
+            len(wrapped.splitlines()) * self.label_pt * 1.25 / 72.0
+            + sub_lines * self.sub_pt * 1.20 / 72.0
+            + 0.07
+        )
+        return wrapped, wrapped_sub, needed
+
+    def fit_height(
+        self,
+        label: str,
+        *,
+        width: float,
+        sublabel: str = "",
+        kind: str = "process",
+        minimum_inches: float = 0.5,
+        pad_inches: float = 0.12,
+    ) -> float:
+        """The height, in grid rows, this box needs for its own text.
+
+        Sizing boxes by hand is how a diagram ends up with its caption sitting
+        across its own border: the wrap depends on the box width, the figure
+        width and the point size, and guessing that right twenty times is not
+        realistic. Ask instead, and the overflow check never has to fire.
+        """
+        _, _, needed = self._label_metrics(label, sublabel, width, NODE_STYLES[kind].shape)
+        return self.y_units(max(minimum_inches, needed + pad_inches))
+
     def _draw_label(self, node: Node) -> None:
         """Wrap the label to the box, then write it centred.
 
@@ -476,20 +588,20 @@ class DiagramCanvas:
         9-inch landscape one.
         """
         cx, cy = node.center
-        inches = node.width / self._x_per_inch
-        # A diamond is half its bounding box at the vertical midline, so a label
-        # wrapped to the full width hangs out over the points of it.
-        if node.style.shape == "diamond":
-            inches *= 0.62
-        # ~0.52 em per character for DejaVu Serif at small sizes; 72 pt to the inch.
-        chars = max(8, int(inches * 72.0 / (self.label_pt * 0.52)))
-        wrapped = "\n".join(textwrap.wrap(node.label, width=chars)) or node.label
+        wrapped, wrapped_sub, needed = self._label_metrics(
+            node.label, node.sublabel, node.width, node.style.shape
+        )
 
         # A sublabel is anchored to the bottom of the box and the main label is
         # centred in what is left, rather than both being offset from the middle:
         # a two- or three-line label offset upward from centre climbs out of the
         # box while the sublabel stays put, and the two overlap.
-        sub_band = self.y_units(0.22) if node.sublabel else 0.0
+        #
+        # "What is left" is measured from the sublabel's own wrapped height. A
+        # fixed band was right for a one-line caption and put a three-line one
+        # straight through the label above it.
+        sub_lines = len(wrapped_sub.splitlines()) if node.sublabel else 0
+        sub_band = self.y_units(sub_lines * self.sub_pt * 1.20 / 72.0 + 0.06) if sub_lines else 0.0
         self.axes.text(
             cx,
             cy - sub_band / 2.0,
@@ -503,14 +615,11 @@ class DiagramCanvas:
         )
         self._texts.append(("node_label", self.label_pt))
 
-        sub_lines = 0
         if node.sublabel:
-            sub_chars = max(10, int(inches * 72.0 / (self.sub_pt * 0.52)))
-            sub_lines = len(textwrap.wrap(node.sublabel, width=sub_chars)) or 1
             self.axes.text(
                 cx,
                 node.row + node.height - self.y_units(0.06),
-                "\n".join(textwrap.wrap(node.sublabel, width=sub_chars)),
+                wrapped_sub,
                 fontsize=self.sub_pt,
                 color=MUTED,
                 ha="center",
@@ -520,14 +629,6 @@ class DiagramCanvas:
             )
             self._texts.append(("node_sublabel", self.sub_pt))
 
-        # Does it fit? Line height is 1.25 em for the label and 1.2 for the
-        # sublabel, matching the linespacing above; the 0.07 inch allowance is
-        # the padding that keeps a descender off the border.
-        needed = (
-            len(wrapped.splitlines()) * self.label_pt * 1.25 / 72.0
-            + sub_lines * self.sub_pt * 1.20 / 72.0
-            + 0.07
-        )
         if needed > node.height / self._y_per_inch:
             self._overflowing.append(node.key)
 
@@ -541,7 +642,7 @@ class DiagramCanvas:
                     "title",
                     self.figure.text(
                         _MARGIN / self.width_inches,
-                        1.0 - (_TITLE_STRIP * 0.62) / self.height_inches,
+                        1.0 - (_TITLE_STRIP * self._title_lines * 0.62) / self.height_inches,
                         self.title,
                         fontsize=self.title_pt,
                         fontweight="bold",
@@ -558,7 +659,12 @@ class DiagramCanvas:
                     "subtitle",
                     self.figure.text(
                         _MARGIN / self.width_inches,
-                        1.0 - (_TITLE_STRIP + _SUBTITLE_STRIP * 0.45) / self.height_inches,
+                        1.0
+                        - (
+                            _TITLE_STRIP * self._title_lines
+                            + _SUBTITLE_STRIP * self._subtitle_lines * 0.55
+                        )
+                        / self.height_inches,
                         self.subtitle,
                         fontsize=self.sub_pt,
                         color=MUTED,
@@ -687,9 +793,13 @@ class DiagramCanvas:
         if get_renderer is None:  # pragma: no cover - not reachable on Agg
             return []
         renderer = get_renderer()
-        page = self.figure.bbox
         outside: list[str] = []
         for name, artist in self._measured:
+            # An annotation is checked against the drawing area, not the page:
+            # text that leaves the axes is still inside the figure, so a
+            # figure-level check would pass it -- and it lands on the legend or
+            # the stamp, which is exactly how it goes wrong.
+            page = self.axes.bbox if name == "annotation" else self.figure.bbox
             try:
                 box = artist.get_window_extent(renderer)
             except (AttributeError, RuntimeError):  # pragma: no cover - defensive
