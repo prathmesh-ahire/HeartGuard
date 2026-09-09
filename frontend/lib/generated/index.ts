@@ -61,6 +61,7 @@ export const datasetSummary: GeneratedDatasetSummary = datasetSummaryJson;
 /** One real CirCor recording and its expert cardiac-cycle segmentation. */
 export const segmentation: GeneratedSegmentation = segmentationJson;
 
+
 export type {
   ColumnKind,
   GeneratedColumn,
@@ -84,7 +85,11 @@ export type {
   GeneratedObjectives,
   GeneratedPipeline,
   GeneratedPipelineStep,
+  GeneratedPrediction,
   GeneratedRecordSummary,
+  GeneratedSample,
+  GeneratedStoredReference,
+  GeneratedTaskSpec,
   GeneratedSegment,
   GeneratedSegmentation,
   GeneratedSource,
@@ -94,3 +99,6 @@ export type {
 
 // `tables`, `table()`, `figures` and `figure()` are NOT here; they moved to
 // `generated/tables` and `generated/figures` for the reason in the header note.
+// `prediction` moved to `generated/prediction` for the same reason: three of the
+// fifteen routes use it, and in the barrel it cost the other twelve 2.9 kB each
+// and left the shared chunk 1.8 kB under budget.

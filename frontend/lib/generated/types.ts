@@ -510,3 +510,70 @@ export interface GeneratedEvidenceEntry {
   generated_from_sha256: string;
   upstream_sources: string[];
 }
+
+export interface GeneratedTaskSpec {
+  task: string;
+  title: string;
+  classes: string[];
+  description: string;
+  page: string;
+  model_available_at_export: boolean;
+  reason_at_export: string | null;
+  model_dir: string;
+}
+
+export interface GeneratedStoredReference {
+  experiment: string;
+  model_id: string;
+  source: string;
+  positive_class: string;
+  n_repeats: number;
+  fold_labels: string[];
+  probabilities: number[];
+  probabilities_display: string[];
+  mean_probability: number;
+  mean_probability_display: string;
+  predicted_classes: string[];
+  folds_agree: boolean;
+  true_class: string;
+}
+
+export interface GeneratedSample {
+  sample_id: string;
+  record_uid: string;
+  tasks: string[];
+  selection: string;
+  dataset_source: string;
+  dataset_name: string;
+  subset: string;
+  subject_id: string | null;
+  recording_location: string | null;
+  duration_seconds: number | null;
+  duration_display: string;
+  original_sample_rate_hz: number | null;
+  labels: Record<string, string | null>;
+  reference: GeneratedStoredReference | null;
+  audio_path: string;
+  predict_path: string;
+}
+
+export interface GeneratedPrediction {
+  framework: string;
+  disclaimer: string;
+  tasks: GeneratedTaskSpec[];
+  samples: GeneratedSample[];
+  n_samples_with_reference: number;
+  patient_group: { subject_id: string; sample_ids: string[]; note: string };
+  aggregation_rules: string[];
+  reference: { experiment: string; model_id: string; source: string; note: string };
+  upload: {
+    accepted_suffixes: string[];
+    min_duration_seconds: number;
+    max_duration_seconds: number;
+    min_duration_display: string;
+    max_duration_display: string;
+    duration_note: string;
+  };
+  low_confidence: { margin: number; margin_display: string; note: string };
+  operating_point: { threshold: number; threshold_display: string; note: string };
+}
