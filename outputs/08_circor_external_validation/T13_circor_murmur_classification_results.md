@@ -1,0 +1,68 @@
+### T13 - CirCor Murmur Classification Results
+
+CirCor DigiScope 2022 murmur classification, patient-grouped 5-fold cross-validation with a nested per-fold search, scored at recording level and at patient level under each aggregation rule. Mean over the 5 folds with the SD of balanced accuracy.
+
+| Variant | Model | Level | Rule | Folds | Units / fold | Balanced accuracy | SD | Macro-F1 | Absent recall | Present recall | Unknown recall | Sensitivity | Specificity | ROC-AUC | Accuracy |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| EXP-C1-three_class | M3 | recording | none | 5 | 632.6 | 0.417 | 0.024 | 0.425 | 0.982 | 0.268 | 0.000 | n/a | n/a | n/a | 0.794 |
+| EXP-C1-three_class | M4 | recording | none | 5 | 632.6 | 0.547 | 0.020 | 0.534 | 0.842 | 0.466 | 0.333 | n/a | n/a | n/a | 0.744 |
+| EXP-C1-three_class | M5 | recording | none | 5 | 632.6 | 0.545 | 0.026 | 0.522 | 0.823 | 0.461 | 0.352 | n/a | n/a | n/a | 0.729 |
+| EXP-C1-three_class | M6 | recording | none | 5 | 632.6 | 0.418 | 0.028 | 0.427 | 0.987 | 0.268 | 0.000 | n/a | n/a | n/a | 0.798 |
+| EXP-C1-three_class | M7 | recording | none | 5 | 632.6 | 0.462 | 0.061 | 0.471 | 0.928 | 0.341 | 0.116 | n/a | n/a | n/a | 0.774 |
+| EXP-C1-three_class | M3 | patient | max | 5 | 188.4 | 0.465 | 0.034 | 0.472 | 0.963 | 0.431 | 0.000 | n/a | n/a | n/a | 0.792 |
+| EXP-C1-three_class | M4 | patient | max | 5 | 188.4 | 0.474 | 0.041 | 0.442 | 0.816 | 0.605 | 0.000 | n/a | n/a | n/a | 0.717 |
+| EXP-C1-three_class | M5 | patient | max | 5 | 188.4 | 0.468 | 0.044 | 0.435 | 0.810 | 0.594 | 0.000 | n/a | n/a | n/a | 0.710 |
+| EXP-C1-three_class | M6 | patient | max | 5 | 188.4 | 0.456 | 0.033 | 0.463 | 0.968 | 0.398 | 0.000 | n/a | n/a | n/a | 0.790 |
+| EXP-C1-three_class | M7 | patient | max | 5 | 188.4 | 0.467 | 0.039 | 0.460 | 0.918 | 0.483 | 0.000 | n/a | n/a | n/a | 0.769 |
+| EXP-C1-three_class | M3 | patient | mean | 5 | 188.4 | 0.385 | 0.011 | 0.377 | 0.993 | 0.162 | 0.000 | n/a | n/a | n/a | 0.763 |
+| EXP-C1-three_class | M4 | patient | mean | 5 | 188.4 | 0.446 | 0.032 | 0.452 | 0.963 | 0.375 | 0.000 | n/a | n/a | n/a | 0.781 |
+| EXP-C1-three_class | M5 | patient | mean | 5 | 188.4 | 0.461 | 0.026 | 0.468 | 0.973 | 0.409 | 0.000 | n/a | n/a | n/a | 0.795 |
+| EXP-C1-three_class | M6 | patient | mean | 5 | 188.4 | 0.405 | 0.028 | 0.404 | 0.996 | 0.219 | 0.000 | n/a | n/a | n/a | 0.776 |
+| EXP-C1-three_class | M7 | patient | mean | 5 | 188.4 | 0.420 | 0.038 | 0.420 | 0.984 | 0.275 | 0.000 | n/a | n/a | n/a | 0.778 |
+| EXP-C1-three_class | M3 | patient | any_present | 5 | 188.4 | 0.470 | 0.039 | 0.471 | 0.941 | 0.470 | 0.000 | n/a | n/a | n/a | 0.783 |
+| EXP-C1-three_class | M4 | patient | any_present | 5 | 188.4 | 0.480 | 0.044 | 0.433 | 0.767 | 0.672 | 0.000 | n/a | n/a | n/a | 0.693 |
+| EXP-C1-three_class | M5 | patient | any_present | 5 | 188.4 | 0.472 | 0.034 | 0.423 | 0.744 | 0.671 | 0.000 | n/a | n/a | n/a | 0.676 |
+| EXP-C1-three_class | M6 | patient | any_present | 5 | 188.4 | 0.459 | 0.038 | 0.462 | 0.955 | 0.421 | 0.000 | n/a | n/a | n/a | 0.785 |
+| EXP-C1-three_class | M7 | patient | any_present | 5 | 188.4 | 0.476 | 0.044 | 0.461 | 0.888 | 0.539 | 0.000 | n/a | n/a | n/a | 0.757 |
+| EXP-C1-two_class | M3 | recording | none | 5 | 601.4 | 0.619 | 0.028 | n/a | n/a | n/a | n/a | 0.249 | 0.990 | 0.745 | 0.838 |
+| EXP-C1-two_class | M4 | recording | none | 5 | 601.4 | 0.675 | 0.052 | n/a | n/a | n/a | n/a | 0.430 | 0.919 | 0.736 | 0.819 |
+| EXP-C1-two_class | M5 | recording | none | 5 | 601.4 | 0.671 | 0.040 | n/a | n/a | n/a | n/a | 0.422 | 0.919 | 0.743 | 0.817 |
+| EXP-C1-two_class | M6 | recording | none | 5 | 601.4 | 0.696 | 0.032 | n/a | n/a | n/a | n/a | 0.547 | 0.845 | 0.753 | 0.784 |
+| EXP-C1-two_class | M7 | recording | none | 5 | 601.4 | 0.696 | 0.032 | n/a | n/a | n/a | n/a | 0.547 | 0.845 | 0.753 | 0.784 |
+| EXP-C1-two_class | M3 | patient | max | 5 | 174.8 | 0.702 | 0.053 | n/a | n/a | n/a | n/a | 0.437 | 0.967 | n/a | 0.858 |
+| EXP-C1-two_class | M4 | patient | max | 5 | 174.8 | 0.714 | 0.056 | n/a | n/a | n/a | n/a | 0.638 | 0.790 | n/a | 0.759 |
+| EXP-C1-two_class | M5 | patient | max | 5 | 174.8 | 0.696 | 0.041 | n/a | n/a | n/a | n/a | 0.604 | 0.787 | n/a | 0.749 |
+| EXP-C1-two_class | M6 | patient | max | 5 | 174.8 | 0.721 | 0.068 | n/a | n/a | n/a | n/a | 0.493 | 0.948 | n/a | 0.855 |
+| EXP-C1-two_class | M7 | patient | max | 5 | 174.8 | 0.721 | 0.068 | n/a | n/a | n/a | n/a | 0.493 | 0.948 | n/a | 0.855 |
+| EXP-C1-two_class | M3 | patient | mean | 5 | 174.8 | 0.589 | 0.015 | n/a | n/a | n/a | n/a | 0.185 | 0.994 | n/a | 0.828 |
+| EXP-C1-two_class | M4 | patient | mean | 5 | 174.8 | 0.691 | 0.060 | n/a | n/a | n/a | n/a | 0.425 | 0.957 | n/a | 0.848 |
+| EXP-C1-two_class | M5 | patient | mean | 5 | 174.8 | 0.699 | 0.077 | n/a | n/a | n/a | n/a | 0.437 | 0.961 | n/a | 0.854 |
+| EXP-C1-two_class | M6 | patient | mean | 5 | 174.8 | 0.634 | 0.026 | n/a | n/a | n/a | n/a | 0.274 | 0.994 | n/a | 0.847 |
+| EXP-C1-two_class | M7 | patient | mean | 5 | 174.8 | 0.634 | 0.026 | n/a | n/a | n/a | n/a | 0.274 | 0.994 | n/a | 0.847 |
+| EXP-C1-two_class | M3 | patient | any_present | 5 | 174.8 | 0.702 | 0.053 | n/a | n/a | n/a | n/a | 0.437 | 0.967 | n/a | 0.858 |
+| EXP-C1-two_class | M4 | patient | any_present | 5 | 174.8 | 0.714 | 0.056 | n/a | n/a | n/a | n/a | 0.638 | 0.790 | n/a | 0.759 |
+| EXP-C1-two_class | M5 | patient | any_present | 5 | 174.8 | 0.696 | 0.041 | n/a | n/a | n/a | n/a | 0.604 | 0.787 | n/a | 0.749 |
+| EXP-C1-two_class | M6 | patient | any_present | 5 | 174.8 | 0.697 | 0.066 | n/a | n/a | n/a | n/a | 0.744 | 0.650 | n/a | 0.669 |
+| EXP-C1-two_class | M7 | patient | any_present | 5 | 174.8 | 0.697 | 0.066 | n/a | n/a | n/a | n/a | 0.744 | 0.650 | n/a | 0.669 |
+
+> The three-class variant (Absent / Present / Unknown) is the headline, matching the 2022 Challenge. The two-class variant excludes the patients whose murmur is Unknown and is reported alongside, never instead.
+
+> Models: M3, M4, M5, M6, M7. The shipped binary model M1 is not among them: the CirCor tracks carry their own model set.
+
+> Per-class recall columns apply to the three-class variant; sensitivity and specificity (murmur Present as positive) apply to the two-class variant. 'n/a' marks a metric the variant does not define.
+
+> ROC-AUC was computed at recording level only; the patient-level rows carry none, and 'n/a' there is an absent measurement, not a zero.
+
+> CirCor labels a PATIENT and the model scores a RECORDING, so every recording inherits its patient's label, including recordings from locations where the finding is not audible. Recording-level figures are pessimistic by an unmeasured amount; see circor_label_propagation.md.
+
+> Patient-level rows aggregate a patient's recordings under three rules (max, mean, any_present). Aggregation moves the operating point; no rule is declared the winner, because that is a clinical judgement.
+
+> CirCor is a predominantly paediatric cohort; nothing here transfers a PhysioNet result to it (that is EXP-D1, T16).
+
+> PV-MEPCG / PulseVision is an academic screening and decision-support prototype, not a diagnostic tool.
+
+_Table T13 -- CirCor Murmur Classification Results_
+_Experiment: EXP-C1_
+_Objective: O6 (large-sample validation), O1 (external corpus)_
+_Source: outputs/08_circor_external_validation/T13_circor_murmur_results.csv; outputs/08_circor_external_validation/EXP-C1-three_class/per_fold_by_level.csv; outputs/08_circor_external_validation/EXP-C1-two_class/per_fold_by_level.csv_
+_Generated by PV-MEPCG / PulseVision at 2026-09-10T16:53:56.706696+00:00_

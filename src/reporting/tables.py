@@ -86,7 +86,9 @@ __all__ = [
     "read_docx_table",
     "read_latex_table",
     "read_markdown_table",
+    "expected_body",
     "source_fingerprint",
+    "portable_path",
     "content_digest",
     "TEXT_SUFFIXES",
 ]
@@ -96,11 +98,22 @@ log = get_logger("reporting.tables")
 ColumnKind = str
 
 #: Decimal places per column kind (T85.6). ``None`` means "render as text".
+#:
+#: ``mean_count`` is a count averaged over folds (188.4 patients per test fold):
+#: rounding it to an integer hides that it is a mean, and three metric places
+#: (188.400) claim a precision a head-count does not have.
+#:
+#: ``p_value`` renders like a metric, except that a value too small to show at
+#: the column's precision renders as ``<0.001`` (or ``<0.0001`` at four places).
+#: Under the plain metric rule a p of 2.7e-14 printed as ``0.0000``, which reads
+#: as "exactly zero" and is not a value a significance table may show.
 PLACES: dict[str, int | None] = {
     "metric": 3,
+    "p_value": 3,
     "percent": 1,
     "count": 0,
     "integer": 0,
+    "mean_count": 1,
     "seconds": 2,
     "text": None,
     "preformatted": None,
@@ -247,6 +260,12 @@ def format_value(value: Any, kind: str, places: int | None = None) -> str:
 
     if value is None:
         return NA_TEXT
+    # An empty string is a missing value that has not been read back yet: the
+    # CSV writes it as an empty field, pandas reads that field as NaN, and the
+    # CSV then says "n/a" where the DOCX showed a blank. T22's exclusion_reason
+    # and SEG-01's recording_location rendered blank for exactly this reason.
+    if isinstance(value, str) and not value.strip():
+        return NA_TEXT
     try:
         if bool(pd.isna(value)):
             return NA_TEXT
@@ -266,6 +285,10 @@ def format_value(value: Any, kind: str, places: int | None = None) -> str:
 
     if kind in ("count", "integer"):
         return format(round(number), ",d")
+    if kind == "p_value":
+        floor = 10.0 ** (-resolved)
+        if 0.0 <= number < floor:
+            return "<" + format(floor, "." + str(resolved) + "f")
     return format(number, "." + str(resolved) + "f")
 
 
@@ -323,6 +346,32 @@ def content_digest(path: str | Path) -> tuple[str, str]:
     return hashlib.sha256(raw).hexdigest(), "sha256/raw"
 
 
+def portable_path(path: str | Path) -> str:
+    """A source path as provenance must record it: repo-relative and posix.
+
+    **Why this exists.** Phases 78-83 passed ``str(absolute_path)`` into their
+    specs, so T23-T28 recorded ``D:/Projects/HeartGuard/outputs/...`` in their
+    ``.meta.json``, their rendered provenance lines and the evidence index. That
+    path resolves on exactly one machine. On CI, ``PROJECT_ROOT / "D:/..."`` is
+    a nonexistent relative path, so any gate that re-checks a table's source
+    fails there while passing here -- the ``configs/paths.yaml`` trap from
+    Phase 30 again, arriving through provenance instead of config. Normalizing
+    here, once, means no caller can reintroduce it.
+
+    A path outside the project (a pytest ``tmp_path``, a scratch ``--out-dir``)
+    stays absolute: making it relative would point it at something else.
+    """
+    from src.utils.evidence import PROJECT_ROOT
+
+    candidate = Path(path)
+    if not candidate.is_absolute():
+        return candidate.as_posix()
+    try:
+        return candidate.resolve().relative_to(PROJECT_ROOT).as_posix()
+    except (ValueError, OSError):
+        return candidate.as_posix()
+
+
 def source_fingerprint(path: str | Path) -> dict[str, Any]:
     """Path, size, mtime and content digest of one source file.
 
@@ -333,11 +382,12 @@ def source_fingerprint(path: str | Path) -> dict[str, Any]:
 
     ``bytes`` is the raw on-disk size and is informational only -- it differs
     between a CRLF and an LF checkout of the same file, so nothing compares it.
+    The recorded ``path`` goes through :func:`portable_path`.
     """
     candidate = Path(path)
     if not candidate.is_file():
         return {
-            "path": str(candidate).replace("\\", "/"),
+            "path": portable_path(candidate),
             "exists": False,
             "bytes": None,
             "sha256": None,
@@ -375,6 +425,22 @@ def build_table(spec: TableSpec, frame: Any) -> Table:
     if data.empty:
         raise ValueError(spec.table_id + ": refusing to write an empty table")
 
+    # formatted_frame() keys the rendered columns by header. Two columns both
+    # headed "SD" collapse into one: the first keeps its position and silently
+    # takes the LAST one's values, so T08's first draft printed ROC-AUC's SD
+    # under sensitivity. Refused here rather than renamed, because only the
+    # table's author knows what the two columns should be called.
+    declared_headers = {c.name: c.label() for c in spec.columns}
+    headers = [declared_headers.get(str(c), str(c)) for c in data.columns]
+    duplicated = sorted({h for h in headers if headers.count(h) > 1})
+    if duplicated:
+        raise ValueError(
+            spec.table_id
+            + ": duplicate column header(s) "
+            + ", ".join(repr(h) for h in duplicated)
+            + " -- the rendered table would show one column's values under another's name"
+        )
+
     kinds: dict[str, str] = {}
     for column in data.columns:
         name = str(column)
@@ -398,7 +464,10 @@ def _provenance_lines(table: Table) -> list[str]:
     ]
     if spec.objective:
         lines.append("Objective: " + spec.objective)
-    lines.append("Source: " + ("; ".join(spec.sources) if spec.sources else "(none recorded)"))
+    lines.append(
+        "Source: "
+        + ("; ".join(portable_path(s) for s in spec.sources) if spec.sources else "(none recorded)")
+    )
     lines.append("Generated by PV-MEPCG / PulseVision at " + datetime.now(UTC).isoformat())
     return lines
 
@@ -558,6 +627,11 @@ def _write_meta(table: Table, out_dir: str | Path, written: dict[str, Path]) -> 
         "command": spec.command or None,
         "rounding_rules": dict(PLACES),
         "column_kinds": dict(table.kinds),
+        # A per-column override of the kind's default places. Recorded because
+        # a reader (or a gate) re-rendering the CSV from the kinds alone would
+        # otherwise disagree with the DOCX on every overridden column -- T28's
+        # four-place p-values were exactly that case before this was written.
+        "column_places": {c.name: c.places for c in spec.columns if c.places is not None},
         "n_rows": len(table.frame),
         "sources": [source_fingerprint(s) for s in spec.sources],
         "written": {fmt: str(path).replace("\\", "/") for fmt, path in written.items()},
@@ -597,7 +671,7 @@ def write_table(
         objective=table.spec.objective,
         experiment_id=table.spec.exp_id,
         dataset=table.spec.dataset,
-        source_data="; ".join(table.spec.sources),
+        source_data="; ".join(portable_path(s) for s in table.spec.sources),
         command=table.spec.command,
         index_path=evidence_index,
     )
@@ -612,6 +686,25 @@ def write_table(
 # ---------------------------------------------------------------------------
 # readers -- the T85.7 gate has to read the rendered forms BACK
 # ---------------------------------------------------------------------------
+
+
+def expected_body(frame: Any, meta: dict[str, Any]) -> list[list[str]]:
+    """The body rows every rendering of a table must show, from its CSV and meta.
+
+    What a gate compares a DOCX, LaTeX or Markdown table against: each CSV cell
+    put through :func:`format_value` under the kind and places the meta
+    recorded. Metas written before ``column_places`` existed have none, which is
+    correct for them -- they declared no overrides the reader could not see.
+    """
+    kinds = meta.get("column_kinds", {})
+    places = meta.get("column_places", {})
+    return [
+        [
+            format_value(frame[column].iloc[row], kinds[column], places.get(column))
+            for column in frame.columns
+        ]
+        for row in range(len(frame))
+    ]
 
 
 def read_markdown_table(path: str | Path) -> list[list[str]]:

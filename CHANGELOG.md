@@ -20,6 +20,14 @@ gate has actually passed.
 
 ---
 
+## Phase 87 — Tables T08-T15 (Core Results)
+**Gate:** T87.7 — T08-T15 exist in CSV/Markdown/DOCX/LaTeX with provenance, every rendering shows exactly its CSV, and every metric re-derives at 1e-9 from the run it came from (per-fold files, EXP-A1/A2 aggregates, the A10 ablation and the Phase 82 tests) — PASS (`tests/test_result_tables.py`)
+**Added:** `src/reporting/result_tables.py` (builders, `LOCATIONS` for T08-T30, `audit_table`), `scripts/37_result_tables.py`, `tests/test_result_tables.py`, the T08-T15 deliverables beside the working CSVs in `outputs/06_binary_results/`, `07_multiclass_results/`, `08_circor_external_validation/`
+**Changed:** `src/reporting/tables.py` (duplicate headers refused, `column_places` recorded, `portable_path`, `p_value` and `mean_count` kinds, blank text renders `n/a`, `expected_body`), `outputs/00_evidence_index/evidence_index.csv`
+**Notes:** The engine let two columns under one header collapse, printing ROC-AUC's SD beside sensitivity in T08's first draft; T16-T28 had never been render-checked and seven do not render their own CSV under their recorded rules. Full reasoning in `Docs/note.md`.
+
+---
+
 ## Phase 29 — Preprocessing Tables & Ablation (deferral closed)
 **Gate:** T29.7 — PP-07 through PP-09 all present, the ablation ran all four filter x normalization configurations over the full 3,240-record D1 corpus on the DA-07 25-fold map, and all 12 PP artifacts registered in the evidence index with zero missing — PASS (18 tests, none skipped)
 **Added:** `src/preprocessing/ablation_run.py`, `scripts/25_preprocessing_ablation.py`, **PP-09** `outputs/02_preprocessing/preprocessing_ablation.csv`, `preprocessing_ablation_per_fold.csv`, `preprocessing_ablation_run.json`
