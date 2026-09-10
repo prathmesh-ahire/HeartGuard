@@ -1,0 +1,9 @@
+diagnosis_class,n_records,n_subjects,threshold,retained,merged_into,reason
+CAD,287,204,50,True,CAD,at or above the 50-record threshold
+MVP,134,30,50,True,MVP,at or above the 50-record threshold
+Benign,118,27,50,True,Benign,at or above the 50-record threshold
+Pathologic,62,62,50,True,Pathologic,at or above the 50-record threshold
+MPC,23,7,50,False,Other pathologic,below the 50-record threshold (5 folds x 10 test records); pooled because it is not individually estimable at this sample size
+AD,17,5,50,False,Other pathologic,below the 50-record threshold (5 folds x 10 test records); pooled because it is not individually estimable at this sample size
+MR,12,12,50,False,Other pathologic,below the 50-record threshold (5 folds x 10 test records); pooled because it is not individually estimable at this sample size
+AS,12,12,50,False,Other pathologic,below the 50-record threshold (5 folds x 10 test records); pooled because it is not individually estimable at this sample size

@@ -1,0 +1,30 @@
+### T-S1 - PhysioNet Diagnosis Multiclass
+
+Supplementary multiclass evidence for Objective 6 on 665 abnormal PhysioNet recordings over 348 subjects, subject-grouped 5-fold, balanced class weighting. Eight diagnosis classes were merged to 5 by the policy in diagnosis_class_merge_policy.csv. Two intervals are reported on every metric because they answer different questions: the fold interval is a Student-t interval over 5 folds, the record interval a percentile bootstrap over recordings. Ranked by macro-F1.
+
+| Model | Name | Folds | macro f1 | macro f1 SD | macro f1 95% CI (folds) | macro f1 95% CI (records) | balanced accuracy | balanced accuracy SD | balanced accuracy 95% CI (folds) | balanced accuracy 95% CI (records) | macro recall | macro recall SD | macro recall 95% CI (folds) | macro recall 95% CI (records) | macro precision | macro precision SD | macro precision 95% CI (folds) | macro precision 95% CI (records) | weighted f1 | weighted f1 SD | weighted f1 95% CI (folds) | weighted f1 95% CI (records) | accuracy | accuracy SD | accuracy 95% CI (folds) | accuracy 95% CI (records) | Classes predicted | Degenerate |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| M5 | Gradient Boosting | 5 | 0.620 | 0.039 | [0.5724, 0.6682] | [0.5844, 0.6619] | 0.616 | 0.040 | [0.5670, 0.6655] | [0.5779, 0.6546] | 0.616 | 0.040 | [0.5670, 0.6655] | [0.5779, 0.6546] | 0.640 | 0.035 | [0.5971, 0.6835] | [0.5948, 0.6775] | 0.708 | 0.020 | [0.6829, 0.7327] | [0.6738, 0.7434] | 0.713 | 0.017 | [0.6916, 0.7339] | [0.6767, 0.7459] | 5 | False |
+| M4 | Random Forest | 5 | 0.607 | 0.036 | [0.5620, 0.6518] | [0.5692, 0.6479] | 0.611 | 0.037 | [0.5643, 0.6569] | [0.5736, 0.6441] | 0.611 | 0.037 | [0.5643, 0.6569] | [0.5736, 0.6441] | 0.643 | 0.063 | [0.5655, 0.7211] | [0.5842, 0.6788] | 0.689 | 0.020 | [0.6641, 0.7144] | [0.6568, 0.7275] | 0.705 | 0.024 | [0.6749, 0.7355] | [0.6707, 0.7383] | 5 | False |
+| M7 | Soft Voting (optimized weights) | 5 | 0.606 | 0.037 | [0.5606, 0.6515] | [0.5679, 0.6475] | 0.606 | 0.040 | [0.5564, 0.6565] | [0.5697, 0.6408] | 0.606 | 0.040 | [0.5564, 0.6565] | [0.5697, 0.6408] | 0.655 | 0.055 | [0.5867, 0.7229] | [0.5959, 0.6975] | 0.686 | 0.021 | [0.6595, 0.7128] | [0.6534, 0.7262] | 0.704 | 0.023 | [0.6747, 0.7327] | [0.6706, 0.7383] | 5 | False |
+| M6 | Soft Voting (equal weights) | 5 | 0.592 | 0.046 | [0.5347, 0.6500] | [0.5601, 0.6374] | 0.598 | 0.041 | [0.5473, 0.6496] | [0.5646, 0.6322] | 0.598 | 0.041 | [0.5473, 0.6496] | [0.5646, 0.6322] | 0.695 | 0.101 | [0.5688, 0.8205] | [0.6326, 0.7587] | 0.687 | 0.031 | [0.6491, 0.7258] | [0.6531, 0.7308] | 0.716 | 0.028 | [0.6815, 0.7501] | [0.6812, 0.7504] | 5 | False |
+| M1 | Logistic Regression | 5 | 0.566 | 0.039 | [0.5174, 0.6151] | [0.5302, 0.6018] | 0.571 | 0.029 | [0.5346, 0.6067] | [0.5316, 0.6095] | 0.571 | 0.029 | [0.5346, 0.6067] | [0.5316, 0.6095] | 0.573 | 0.041 | [0.5214, 0.6240] | [0.5322, 0.6039] | 0.652 | 0.037 | [0.6056, 0.6981] | [0.6185, 0.6885] | 0.650 | 0.040 | [0.6004, 0.6989] | [0.6150, 0.6842] | 5 | False |
+| M3 | SVM (RBF kernel) | 5 | 0.563 | 0.050 | [0.5002, 0.6253] | [0.5325, 0.6037] | 0.572 | 0.042 | [0.5196, 0.6235] | [0.5371, 0.6056] | 0.572 | 0.042 | [0.5196, 0.6235] | [0.5371, 0.6056] | 0.602 | 0.116 | [0.4578, 0.7456] | [0.5685, 0.7507] | 0.667 | 0.036 | [0.6231, 0.7114] | [0.6327, 0.7105] | 0.698 | 0.031 | [0.6599, 0.7357] | [0.6632, 0.7323] | 5 | False |
+
+> **A SOURCE-ONLY BASELINE SCORES MACRO-F1 0.6345 AND BALANCED ACCURACY 0.6751 USING NO AUDIO AT ALL** -- it predicts each recording's class from which PhysioNet sub-collection it came from, fitted inside each training fold. NO MODEL IN THIS TABLE BEATS IT. The diagnosis labels are nearly nested inside the sub-collections (see class_by_sub_collection.csv), so this track does NOT establish audio-based diagnosis classification and no number in it may be reported as if it did.
+
+> This track covers the ABNORMAL recordings only. The 2,575 normal recordings are not a class here: including them would make the largest class 39 times the smallest and would restate the binary task, which EXP-A1 answers on all 3,240 records.
+
+> 'Benign, CAD, MVP, Other pathologic, Pathologic' are the classes. 'Other pathologic' pools four conditions that are individually too small to estimate (MPC, AD, MR, AS). It is a statistical convenience and NOT a diagnosis -- no number for it may be read as a claim about any one of the four.
+
+> n = 5 folds. Every interval here is wide and most of them overlap between models; this is supplementary evidence on a small sample, not a model ranking that separates its models.
+
+> Nine subjects carry recordings under more than one diagnosis class. Grouping is by subject, so those subjects contribute to two classes within the same fold; no subject crosses a fold boundary.
+
+> PV-MEPCG / PulseVision is an academic screening prototype, not a diagnostic tool.
+
+_Table T-S1 -- PhysioNet Diagnosis Multiclass_
+_Experiment: EXP-G1_
+_Objective: O6 (multiclass classification)_
+_Source: outputs/01_dataset_audit/metadata_master.csv; outputs/01_dataset_audit/diagnosis_split_map.csv; outputs/03_features/all_features_matrix.parquet_
+_Generated by PV-MEPCG / PulseVision at 2026-09-10T06:23:29.094084+00:00_

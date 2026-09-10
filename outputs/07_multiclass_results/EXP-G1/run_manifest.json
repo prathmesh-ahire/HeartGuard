@@ -1,0 +1,18 @@
+{
+  "exp_id": "EXP-G1",
+  "task": "diagnosis_multiclass",
+  "scheme": "grouped_5fold",
+  "classes": [
+    "Benign",
+    "CAD",
+    "MVP",
+    "Other pathologic",
+    "Pathologic"
+  ],
+  "merge_threshold_records": 50,
+  "other_class": "Other pathologic",
+  "n_records": 665,
+  "n_subjects": 348,
+  "supplementary": true,
+  "command": "python scripts/28_diagnosis_track.py"
+}

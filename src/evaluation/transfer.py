@@ -196,6 +196,17 @@ def write_population_metadata(
             "the drop has at least two causes and must not be attributed wholly "
             "to age."
         ),
+        "third_known_cause": (
+            "ACQUISITION SHORTCUT. PhysioNet's sub-collections were recorded "
+            "with different equipment in different settings, so part of what "
+            "any model fitted on the pooled corpus learns is the acquisition "
+            "signature rather than cardiac content. CirCor was recorded "
+            "elsewhere with different equipment, so none of that signature "
+            "transfers. This is a THIRD cause of the drop, independent of age "
+            "and of class-balance heterogeneity. Quantified in "
+            "acquisition_shortcut_addendum.md, which is dated and written "
+            "separately BECAUSE this file must contain no measured result."
+        ),
         "retuning_allowed": False,
         "retuning_performed": False,
         "train": physionet_population(),

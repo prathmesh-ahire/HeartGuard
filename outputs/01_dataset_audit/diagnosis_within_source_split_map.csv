@@ -1,0 +1,293 @@
+task,scheme,dataset_source,record_uid,subject_id,split_group,subset,diagnosis_class,diagnosis_merged,y,repeat,fold
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0001,a_C45,a_C45,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0002,a_C19,a_C19,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0003,a_C23,a_C23,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0004,a_C35,a_C35,training-a,Benign,Benign,0,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0005,a_C63,a_C63,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0006,a_C12,a_C12,training-a,AD,Other pathologic,2,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0008,a_C73,a_C73,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0010,a_C31,a_C31,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0013,a_C49,a_C49,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0014,a_C30,a_C30,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0015,a_C63,a_C63,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0017,a_C63,a_C63,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0018,a_C15,a_C15,training-a,Benign,Benign,0,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0020,a_C73,a_C73,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0021,a_C89,a_C89,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0022,a_C68,a_C68,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0023,a_C23,a_C23,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0024,a_C19,a_C19,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0026,a_C71,a_C71,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0030,a_C36,a_C36,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0031,a_C67,a_C67,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0033,a_C32,a_C32,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0034,a_C115,a_C115,training-a,Benign,Benign,0,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0036,a_C67,a_C67,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0037,a_C35,a_C35,training-a,MPC,Other pathologic,2,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0039,a_C37,a_C37,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0040,a_C73,a_C73,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0041,a_C51,a_C51,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0042,a_C82,a_C82,training-a,MPC,Other pathologic,2,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0043,a_C31,a_C31,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0044,a_C16,a_C16,training-a,AD,Other pathologic,2,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0045,a_C30,a_C30,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0046,a_C35,a_C35,training-a,Benign,Benign,0,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0047,a_C89,a_C89,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0048,a_C79,a_C79,training-a,MPC,Other pathologic,2,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0051,a_C47,a_C47,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0052,a_C33,a_C33,training-a,Benign,Benign,0,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0054,a_C63,a_C63,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0056,a_C37,a_C37,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0057,a_C79,a_C79,training-a,MPC,Other pathologic,2,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0058,a_C16,a_C16,training-a,Benign,Benign,0,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0059,a_C68,a_C68,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0060,a_C35,a_C35,training-a,Benign,Benign,0,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0061,a_C115,a_C115,training-a,Benign,Benign,0,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0062,a_C89,a_C89,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0063,a_C86,a_C86,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0064,a_C73,a_C73,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0065,a_C82,a_C82,training-a,MPC,Other pathologic,2,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0066,a_C67,a_C67,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0067,a_C16,a_C16,training-a,AD,Other pathologic,2,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0072,a_C79,a_C79,training-a,MPC,Other pathologic,2,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0073,a_C63,a_C63,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0074,a_C47,a_C47,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0075,a_C36,a_C36,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0076,a_C69,a_C69,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0077,a_C63,a_C63,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0078,a_C32,a_C32,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0079,a_C37,a_C37,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0082,a_C16,a_C16,training-a,AD,Other pathologic,2,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0083,a_C36,a_C36,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0084,a_C16,a_C16,training-a,Benign,Benign,0,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0087,a_C15,a_C15,training-a,Benign,Benign,0,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0089,a_C12,a_C12,training-a,AD,Other pathologic,2,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0090,a_C84,a_C84,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0092,a_C36,a_C36,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0095,a_C65,a_C65,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0096,a_C29,a_C29,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0097,a_C35,a_C35,training-a,Benign,Benign,0,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0098,a_C35,a_C35,training-a,Benign,Benign,0,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0099,a_C78,a_C78,training-a,AD,Other pathologic,2,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0100,a_C17,a_C17,training-a,Benign,Benign,0,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0101,a_C63,a_C63,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0103,a_C23,a_C23,training-a,MPC,Other pathologic,2,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0104,a_C22,a_C22,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0107,a_C81,a_C81,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0110,a_C73,a_C73,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0111,a_C73,a_C73,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0112,a_C63,a_C63,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0113,a_C70,a_C70,training-a,Benign,Benign,0,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0114,a_C81,a_C81,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0115,a_C36,a_C36,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0116,a_C22,a_C22,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0117,a_C51,a_C51,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0119,a_C49,a_C49,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0120,a_C45,a_C45,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0121,a_C49,a_C49,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0122,a_C36,a_C36,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0123,a_C15,a_C15,training-a,Benign,Benign,0,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0124,a_C89,a_C89,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0126,a_C35,a_C35,training-a,MPC,Other pathologic,2,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0128,a_C86,a_C86,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0130,a_C35,a_C35,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0131,a_C22,a_C22,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0132,a_C35,a_C35,training-a,Benign,Benign,0,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0133,a_C25,a_C25,training-a,Benign,Benign,0,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0134,a_C71,a_C71,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0135,a_C90,a_C90,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0137,a_C84,a_C84,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0138,a_C12,a_C12,training-a,AD,Other pathologic,2,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0142,a_C78,a_C78,training-a,AD,Other pathologic,2,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0143,a_C79,a_C79,training-a,MPC,Other pathologic,2,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0144,a_C84,a_C84,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0145,a_C90,a_C90,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0146,a_C37,a_C37,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0147,a_C69,a_C69,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0148,a_C81,a_C81,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0149,a_C35,a_C35,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0150,a_C65,a_C65,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0151,a_C63,a_C63,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0152,a_C33,a_C33,training-a,Benign,Benign,0,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0156,a_C17,a_C17,training-a,Benign,Benign,0,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0157,a_C35,a_C35,training-a,Benign,Benign,0,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0158,a_C17,a_C17,training-a,Benign,Benign,0,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0159,a_C35,a_C35,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0160,a_C35,a_C35,training-a,Benign,Benign,0,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0162,a_C16,a_C16,training-a,Benign,Benign,0,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0163,a_C115,a_C115,training-a,Benign,Benign,0,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0164,a_C47,a_C47,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0166,a_C71,a_C71,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0167,a_C33,a_C33,training-a,Benign,Benign,0,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0168,a_C80,a_C80,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0169,a_C35,a_C35,training-a,Benign,Benign,0,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0170,a_C36,a_C36,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0172,a_C67,a_C67,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0173,a_C17,a_C17,training-a,Benign,Benign,0,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0174,a_C19,a_C19,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0175,a_C115,a_C115,training-a,Benign,Benign,0,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0176,a_C35,a_C35,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0177,a_C30,a_C30,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0180,a_C35,a_C35,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0182,a_C29,a_C29,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0183,a_C82,a_C82,training-a,MPC,Other pathologic,2,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0186,a_C89,a_C89,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0187,a_C63,a_C63,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0188,a_C80,a_C80,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0190,a_C25,a_C25,training-a,Benign,Benign,0,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0191,a_C90,a_C90,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0192,a_C68,a_C68,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0194,a_C19,a_C19,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0197,a_C71,a_C71,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0198,a_C45,a_C45,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0200,a_C45,a_C45,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0201,a_C73,a_C73,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0202,a_C63,a_C63,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0203,a_C35,a_C35,training-a,MPC,Other pathologic,2,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0205,a_C22,a_C22,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0206,a_C35,a_C35,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0207,a_C84,a_C84,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0209,a_C73,a_C73,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0213,a_C78,a_C78,training-a,AD,Other pathologic,2,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0214,a_C35,a_C35,training-a,MPC,Other pathologic,2,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0215,a_C73,a_C73,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0216,a_C70,a_C70,training-a,Benign,Benign,0,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0217,a_C63,a_C63,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0218,a_C84,a_C84,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0219,a_C65,a_C65,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0220,a_C51,a_C51,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0221,a_C73,a_C73,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0222,a_C115,a_C115,training-a,Benign,Benign,0,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0223,a_C23,a_C23,training-a,MPC,Other pathologic,2,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0224,a_C32,a_C32,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0225,a_C63,a_C63,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0226,a_C89,a_C89,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0228,a_C70,a_C70,training-a,Benign,Benign,0,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0230,a_C29,a_C29,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0232,a_C31,a_C31,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0233,a_C51,a_C51,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0234,a_C73,a_C73,training-a,MPC,Other pathologic,2,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0236,a_C35,a_C35,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0237,a_C35,a_C35,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0239,a_C23,a_C23,training-a,MPC,Other pathologic,2,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0240,a_C32,a_C32,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0242,a_C78,a_C78,training-a,AD,Other pathologic,2,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0244,a_C35,a_C35,training-a,Benign,Benign,0,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0245,a_C73,a_C73,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0246,a_C49,a_C49,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0247,a_C81,a_C81,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0248,a_C73,a_C73,training-a,MPC,Other pathologic,2,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0249,a_C65,a_C65,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0251,a_C12,a_C12,training-a,AD,Other pathologic,2,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0252,a_C15,a_C15,training-a,Benign,Benign,0,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0254,a_C68,a_C68,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0255,a_C63,a_C63,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0256,a_C21,a_C21,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0257,a_C25,a_C25,training-a,Benign,Benign,0,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0258,a_C63,a_C63,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0259,a_C63,a_C63,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0260,a_C73,a_C73,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0261,a_C31,a_C31,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0262,a_C86,a_C86,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0263,a_C22,a_C22,training-a,Benign,Benign,0,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0265,a_C16,a_C16,training-a,Benign,Benign,0,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0267,a_C21,a_C21,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0268,a_C115,a_C115,training-a,Benign,Benign,0,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0269,a_C80,a_C80,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0272,a_C36,a_C36,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0273,a_C84,a_C84,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0275,a_C115,a_C115,training-a,Benign,Benign,0,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0276,a_C70,a_C70,training-a,Benign,Benign,0,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0277,a_C115,a_C115,training-a,Benign,Benign,0,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0278,a_C35,a_C35,training-a,Benign,Benign,0,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0279,a_C74,a_C74,training-a,Benign,Benign,0,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0280,a_C75,a_C75,training-a,MPC,Other pathologic,2,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0281,a_C66,a_C66,training-a,Benign,Benign,0,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0282,a_C34,a_C34,training-a,Benign,Benign,0,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0284,a_C75,a_C75,training-a,MPC,Other pathologic,2,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0286,a_C39,a_C39,training-a,MPC,Other pathologic,2,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0288,a_C39,a_C39,training-a,MPC,Other pathologic,2,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0291,a_C74,a_C74,training-a,Benign,Benign,0,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0292,a_C48,a_C48,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0295,a_C74,a_C74,training-a,Benign,Benign,0,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0296,a_C72,a_C72,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0297,a_C75,a_C75,training-a,MPC,Other pathologic,2,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0300,a_C27,a_C27,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0303,a_C28,a_C28,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0305,a_C50,a_C50,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0306,a_C27,a_C27,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0307,a_C46,a_C46,training-a,Benign,Benign,0,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0308,a_C39,a_C39,training-a,MPC,Other pathologic,2,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0312,a_C66,a_C66,training-a,Benign,Benign,0,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0313,a_C35,a_C35,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0314,a_C14,a_C14,training-a,Benign,Benign,0,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0315,a_C14,a_C14,training-a,Benign,Benign,0,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0316,a_C20,a_C20,training-a,Benign,Benign,0,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0317,a_C72,a_C72,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0318,a_C28,a_C28,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0319,a_C34,a_C34,training-a,Benign,Benign,0,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0320,a_C28,a_C28,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0321,a_C27,a_C27,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0322,a_C115,a_C115,training-a,Benign,Benign,0,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0324,a_C42,a_C42,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0326,a_C77,a_C77,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0327,a_C46,a_C46,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0331,a_C11,a_C11,training-a,AD,Other pathologic,2,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0333,a_C50,a_C50,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0335,a_C35,a_C35,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0336,a_C18,a_C18,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0338,a_C48,a_C48,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0339,a_C28,a_C28,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0341,a_C46,a_C46,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0343,a_C85,a_C85,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0344,a_C50,a_C50,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0345,a_C48,a_C48,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0346,a_C72,a_C72,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0347,a_C14,a_C14,training-a,Benign,Benign,0,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0348,a_C66,a_C66,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0349,a_C72,a_C72,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0350,a_C85,a_C85,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0354,a_C46,a_C46,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0356,a_C46,a_C46,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0357,a_C11,a_C11,training-a,AD,Other pathologic,2,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0358,a_C20,a_C20,training-a,Benign,Benign,0,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0360,a_C18,a_C18,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0362,a_C48,a_C48,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0363,a_C42,a_C42,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0364,a_C66,a_C66,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0365,a_C11,a_C11,training-a,AD,Other pathologic,2,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0366,a_C50,a_C50,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0367,a_C74,a_C74,training-a,Benign,Benign,0,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0368,a_C50,a_C50,training-a,AD,Other pathologic,2,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0369,a_C18,a_C18,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0370,a_C34,a_C34,training-a,Benign,Benign,0,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0371,a_C20,a_C20,training-a,Benign,Benign,0,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0372,a_C46,a_C46,training-a,Benign,Benign,0,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0373,a_C24,a_C24,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0374,a_C34,a_C34,training-a,Benign,Benign,0,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0375,a_C11,a_C11,training-a,AD,Other pathologic,2,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0376,a_C66,a_C66,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0377,a_C66,a_C66,training-a,Benign,Benign,0,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0378,a_C35,a_C35,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0379,a_C77,a_C77,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0380,a_C28,a_C28,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0381,a_C35,a_C35,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0382,a_C18,a_C18,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0383,a_C20,a_C20,training-a,Benign,Benign,0,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0384,a_C28,a_C28,training-a,MVP,MVP,1,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0387,a_C66,a_C66,training-a,Benign,Benign,0,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0388,a_C46,a_C46,training-a,Benign,Benign,0,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0389,a_C42,a_C42,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0390,a_C72,a_C72,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0391,a_C75,a_C75,training-a,MPC,Other pathologic,2,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0392,a_C46,a_C46,training-a,Benign,Benign,0,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0394,a_C115,a_C115,training-a,Benign,Benign,0,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0395,a_C14,a_C14,training-a,Benign,Benign,0,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0396,a_C24,a_C24,training-a,Benign,Benign,0,0,4
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0397,a_C27,a_C27,training-a,Benign,Benign,0,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0398,a_C66,a_C66,training-a,MVP,MVP,1,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0399,a_C42,a_C42,training-a,MVP,MVP,1,0,3
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0400,a_C50,a_C50,training-a,AD,Other pathologic,2,0,2
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0402,a_C77,a_C77,training-a,MVP,MVP,1,0,0
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0403,a_C85,a_C85,training-a,MVP,MVP,1,0,1
+diagnosis_multiclass_within_source,grouped_5fold,D1,D1_training-a_a0404,a_C115,a_C115,training-a,Benign,Benign,0,0,0

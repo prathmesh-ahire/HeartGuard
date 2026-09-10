@@ -1,0 +1,10 @@
+{
+  "model_id": "M1",
+  "task": "binary",
+  "reference_arm": "PP-A",
+  "n_records": 3240,
+  "n_subjects": 857,
+  "smoke": false,
+  "wall_seconds": 7608.777,
+  "command": "python scripts/25_preprocessing_ablation.py"
+}

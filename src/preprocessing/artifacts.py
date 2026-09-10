@@ -5,18 +5,20 @@ naming every artifact Part III is supposed to produce, what it is, and what it
 was generated from. Phase 102 assembles the evidence index from these rows and
 asserts each one resolves to a real file.
 
-**A missing artifact is registered as ``missing``, never skipped.** PP-09 does
-not exist yet -- it needs features and a trained model, which are Parts IV and V
--- so it registers with ``status=missing`` and appears in the index as a known,
-dated gap with its reason in ``outputs/missing_outputs_report.txt``. An artifact
-quietly absent from the index is indistinguishable from one nobody ever planned
-to produce, and by submission nobody would remember which it was.
+**A missing artifact is registered as ``missing``, never skipped.** PP-09 spent
+Parts IV-IX registered that way: it needs features and a trained model, which
+Parts IV and V build, so it appeared in the index as a known, dated gap with its
+reason in ``outputs/missing_outputs_report.txt`` rather than not appearing at
+all. An artifact quietly absent from the index is indistinguishable from one
+nobody ever planned to produce, and by submission nobody would remember which it
+was. The status comes from the filesystem on every registration, so PP-09 turned
+``ok`` the moment the run produced it -- nothing here had to be edited to say so.
 
 The three supporting files are registered under ``PP-S*`` ids. They are not in
 the source document's PP list, and they are not padding: the transfer function
 is the evidence behind the filter's stated -6 dB cutoffs, the SQI calibration is
 the evidence behind PP-08's noise flag, and the grid defines the four arms PP-09
-will compare. Each would otherwise be an unexplained file in an output folder.
+compares. Each would otherwise be an unexplained file in an output folder.
 """
 
 from __future__ import annotations
@@ -92,7 +94,7 @@ _COMMANDS: dict[str, str] = {
     "PP-01": FIGURE_COMMAND,
     "PP-07": _cmd("ablation", "write_settings"),
     "PP-08": _cmd("quality", "run_quality_scan"),
-    "PP-09": "not yet generated -- see outputs/missing_outputs_report.txt",
+    "PP-09": "python scripts/25_preprocessing_ablation.py",
     "PP-S1": _cmd("filters", "plot_transfer_function"),
     "PP-S3": _cmd("ablation", "write_grid"),
 }

@@ -41,6 +41,19 @@ ENTRIES (newest last)
 
 
 [2026-08-26] T29.3 / T29.4 / T29.7 — PP-09 `preprocessing_ablation.csv` (deferred, not skipped)
+  *** RESOLVED 2026-09-10. PP-09 exists. The entry below is kept for the record;
+      the gap it describes is closed. The run took 2 h 06 m over the full 3,240
+      supervised D1 records under all four filter x normalization arms, using the
+      locked 138 features, the DA-07 25-fold map and an untuned M1 baseline.
+      Two controls passed: the re-extracted shipped arm PP-A matches the
+      committed FE-03 matrix to a maximum relative difference of exactly 0, and
+      PP-A's cross-validated score reproduces EXP-A1's M1 row to six decimals.
+      Finding: all four arms are indistinguishable (every delta an order of
+      magnitude below the fold SD), and the shipped arm is NOT the best on
+      balanced accuracy or AUC. The standing rule that no preprocessing claim
+      may cite a measured metric delta therefore REMAINS in force, for the
+      opposite reason to the original one — the deltas exist now, and they do
+      not support such a claim. See Docs/note.md, 2026-09-10. ***
   Reason: The task asks for features to be extracted and a baseline model trained
     under each of the four filter x normalization configurations. Neither input
     exists at Phase 29: the locked 138-feature extractor is built in Phases 31-42

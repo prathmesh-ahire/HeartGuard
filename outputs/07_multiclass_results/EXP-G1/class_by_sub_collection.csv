@@ -1,0 +1,6 @@
+diagnosis_merged,training-a,training-b,training-c,training-d,training-e,training-f,n_records,n_subsets_present,largest_subset_share
+Benign,118,0,0,0,0,0,118,1,1.0
+CAD,0,104,0,0,183,0,287,2,0.6376306620209059
+MVP,134,0,0,0,0,0,134,1,1.0
+Other pathologic,40,0,24,0,0,0,64,2,0.625
+Pathologic,0,0,0,28,0,34,62,2,0.5483870967741935

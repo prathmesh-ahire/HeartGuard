@@ -1,0 +1,62 @@
+{
+  "figure_id": "G24",
+  "figure_number": 2,
+  "title": "Baseline versus Optimized",
+  "caption": "The five optimization stages over the identical DA-07 repeated 5x5 subject-grouped fold map, with the fold SD as the error bar. The dashed line is the untuned single-model baseline. Read the two panels together: the stage that maximises sensitivity is not the stage that maximises balanced accuracy, and neither is the last one.",
+  "exp_id": "EXP-F2",
+  "objective": "O3 (optimization), O5 (ablation evidence)",
+  "dataset": "D1 PhysioNet 2016 (3,240 records, 857 subjects)",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-09-10T04:36:31.348515+00:00",
+  "command": "python scripts/27_optimization_ablation.py",
+  "plotted_rows": 5,
+  "plotted_csv": "G24_baseline_versus_optimized.csv",
+  "plotted_csv_sha256": "f3d5ae21b1ded919fba836b14bdce28fbdc31c46686a38dc777614f5d25ea267",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "outputs/06_binary_results/EXP-A1/per_fold_metrics.csv",
+      "exists": true,
+      "bytes": 48738,
+      "sha256": "8e3801ea7d96f5bfb17c0dd29e12dc9e4a9148ed1792d1fdce7ab082dc9a9737",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-30T07:09:39.903734+00:00"
+    },
+    {
+      "path": "outputs/06_binary_results/EXP-A2/per_fold_metrics.csv",
+      "exists": true,
+      "bytes": 106450,
+      "sha256": "c5159f5b754924fca96067ec9b81302bb5c999e50542655cb34f7ada06fb72cb",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-30T16:49:48.062970+00:00"
+    },
+    {
+      "path": "outputs/05_search_optimization/SO-05/weight_stability.csv",
+      "exists": true,
+      "bytes": 1471,
+      "sha256": "a1c2d7e07e99b70d3f737c6d37f2f53798d36ad444a24eb69809a4173805cc23",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-28T11:32:17.153915+00:00"
+    },
+    {
+      "path": "outputs/01_dataset_audit/subject_split_map.csv",
+      "exists": true,
+      "bytes": 2248147,
+      "sha256": "3350cb8483ddfafb64ddfbece014a65e3c36a314dafe2cfa123e9582c1d9caa4",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-25T19:31:08.752733+00:00"
+    }
+  ],
+  "written": {
+    "csv": "outputs/09_ablation/G24_baseline_versus_optimized.csv",
+    "png": "outputs/09_ablation/G24_baseline_versus_optimized.png"
+  },
+  "notes": [
+    "Error bars are the SD across 25 folds, not a confidence interval on the mean, and they overlap between every pair of stages. No stage in this figure is distinguishable from its neighbour on this evidence; Phase 81's paired tests are where that question is settled.",
+    "The stages are the optimization pipeline's order, not a ranking.",
+    "PV-MEPCG / PulseVision is an academic screening prototype, not a diagnostic tool."
+  ]
+}

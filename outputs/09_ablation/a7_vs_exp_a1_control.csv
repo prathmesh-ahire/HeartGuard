@@ -1,0 +1,7 @@
+metric,n_units,max_abs_difference,matches
+sensitivity,125,0.0,True
+specificity,125,0.0,True
+f1,125,0.0,True
+balanced_accuracy,125,0.0,True
+roc_auc,125,0.0,True
+accuracy,125,0.0,True

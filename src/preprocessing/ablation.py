@@ -1,6 +1,6 @@
 """Preprocessing settings table and ablation grid (Phase 29, T29.1-T29.2).
 
-Two deliverables live here, and one deliberate gap.
+Two deliverables live here, and a pointer to the third.
 
 **PP-07** (:func:`write_settings`) is the preprocessing configuration as a table:
 every setting that shapes a signal, its value, its unit and the config key it
@@ -14,13 +14,14 @@ bandpass on or off, crossed with normalization on or off. Each arm materializes
 a real ``Config`` and therefore a real cache directory, so the four arms coexist
 on disk instead of overwriting one another (see ``pipeline.config_hash``).
 
-**The gap: PP-09 is not produced here.** T29.3 asks for features and a trained
-model under each arm, and neither exists yet -- feature extraction is Phases
-31-42 and the fold-safe pipeline and baseline models are Phases 43-46. What this
-module does now is define the four arms, prove they actually differ (a 2x2 whose
-cells produce identical signals would be four copies of one result), and leave
-the metric column to be filled in once there is a model to measure it with. The
-gap is recorded in ``outputs/missing_outputs_report.txt``.
+**PP-09 itself is produced by :mod:`src.preprocessing.ablation_run`.** T29.3 asks
+for features and a trained model under each arm, and at Phase 29 neither existed
+-- feature extraction is Phases 31-42 and the fold-safe pipeline and baseline
+models are Phases 43-46 -- so this module was written to define the four arms and
+prove they actually differ (a 2x2 whose cells produce identical signals would be
+four copies of one result), leaving the metric column to be filled in once there
+was a model to measure it with. That deferral closed after Phase 46; the run
+lives next door so the definitions here stay free of feature and model imports.
 """
 
 from __future__ import annotations

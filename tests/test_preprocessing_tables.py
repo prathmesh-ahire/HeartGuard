@@ -1,17 +1,19 @@
 """Preprocessing tables, ablation grid and evidence registration (T29.7).
 
-The T29.7 gate has three clauses. Two can pass today: PP-07 exists and is
-generated from the live config, and every PP artifact is registered in the
-evidence index. The third -- "the ablation ran all four filter/normalization
-configurations" -- cannot, because PP-09 needs features and a model that Parts
-IV and V build. That is recorded as a deferral in
-``outputs/missing_outputs_report.txt`` and asserted here: the four arms must be
-defined, distinct, and ready to run, and PP-09 must be registered as *missing*
-rather than quietly absent.
+The T29.7 gate has three clauses: PP-07 is generated from the live config, PP-09
+ran all four filter/normalization configurations, and every PP artifact is
+registered in the evidence index.
 
-``test_pp09_is_a_declared_gap_not_a_silent_one`` is the test that will start
-failing once PP-09 is produced. That is intentional -- it is the reminder to
-close the deferral rather than leave it open forever.
+The middle clause was unrunnable at Phase 29 -- PP-09 needs the locked 138
+features and a trained model, which Parts IV and V build -- and until Phase 46
+existed this module instead asserted that the gap was *declared*: four arms
+defined and distinct, PP-09 registered as ``missing`` rather than quietly
+absent, and the deferral written into ``missing_outputs_report.txt``. That
+placeholder test (``test_pp09_is_a_declared_gap_not_a_silent_one``) was written
+to fail the moment PP-09 appeared, as the prompt to close the deferral. It has
+been replaced by the assertions below, which check the table itself: four arms,
+one varying factor pair, deltas against the shipped configuration, and means
+that reconcile with the per-fold values behind them.
 """
 
 from __future__ import annotations
@@ -196,30 +198,95 @@ def test_real_index_has_every_pp_artifact_registered() -> None:
         assert registered[evidence_id]["source_data"], evidence_id + " has no source_data"
 
 
-def test_pp01_through_pp08_exist_on_disk() -> None:
-    """T29.7 -- PP-07 and PP-08 exist, and so do the six figures."""
+def test_pp01_through_pp09_exist_on_disk() -> None:
+    """T29.7 -- PP-07, PP-08 and PP-09 exist, and so do the six figures."""
     state = artifacts.verify_preprocessing_artifacts()
-    for expected in ("PP-0" + str(n) for n in range(1, 9)):
+    for expected in ("PP-0" + str(n) for n in range(1, 10)):
         assert expected in state["present"], expected + " is missing from " + state["directory"]
 
 
-def test_pp09_is_a_declared_gap_not_a_silent_one() -> None:
-    """T29.3/T29.4 are deferred, and the deferral is written down.
+# ===========================================================================
+# T29.3 / T29.4 -- PP-09, the ablation that was deferred at Phase 29
+# ===========================================================================
 
-    When PP-09 is finally produced (after Phase 46), this test fails -- on
-    purpose. That failure is the prompt to close the deferral: flip T29.3/T29.4
-    in todo.md, resolve the missing_outputs_report entry, and delete this test.
-    """
-    from src.utils.config import load_config
 
-    state = artifacts.verify_preprocessing_artifacts()
-    if "PP-09" in state["present"]:
-        pytest.fail(
-            "PP-09 now exists -- close the T29.3/T29.4 deferral in Docs/todo.md and "
-            "outputs/missing_outputs_report.txt, then delete this test"
-        )
+def _pp09() -> Any:
+    import pandas as pd
 
-    report = Path(load_config("paths").require("outputs.missing_outputs_report"))
-    text = report.read_text(encoding="utf-8")
-    assert "T29.3" in text and "PP-09" in text, "the PP-09 gap is not recorded"
-    assert "after Phase 46" in text, "the deferral records no re-entry point"
+    from src.preprocessing import ablation_run
+
+    path = ablation_run.ablation_path()
+    if not path.is_file():
+        pytest.skip("PP-09 has not been generated: " + str(path))
+    return pd.read_csv(path)
+
+
+def test_pp09_ran_all_four_filter_normalization_configurations() -> None:
+    """The T29.7 clause that could not pass until Phase 46 existed."""
+    table = _pp09()
+    assert len(table) == 4, table["arm_id"].tolist()
+    combinations = {
+        (bool(row["filter_enabled"]), bool(row["normalization_enabled"]))
+        for row in table.to_dict("records")
+    }
+    assert combinations == {(True, True), (True, False), (False, True), (False, False)}
+    assert set(table["arm_id"]) == {arm.arm_id for arm in ablation.ABLATION_GRID}
+
+
+def test_pp09_arms_differ_only_in_preprocessing() -> None:
+    """One model, one task, one fold map. Otherwise it is four unrelated runs."""
+    table = _pp09()
+    for column in ("model_id", "task", "scheme", "n_folds", "n_records", "n_subjects"):
+        assert table[column].nunique() == 1, column + " varies across the arms"
+    assert table["config_hash"].nunique() == 4, "two arms shared a preprocessing config"
+
+
+def test_pp09_deltas_are_taken_against_the_shipped_configuration() -> None:
+    from src.preprocessing import ablation_run
+
+    table = _pp09()
+    shipped = table[table["is_shipped_configuration"]]
+    assert len(shipped) == 1
+    assert str(shipped.iloc[0]["arm_id"]) == ablation_run.REFERENCE_ARM
+
+    for metric in ablation_run.METRICS:
+        assert metric + "_delta" in table.columns, metric
+        # The reference arm's delta against itself is exactly zero, not nearly.
+        assert float(shipped.iloc[0][metric + "_delta"]) == 0.0, metric
+        others = table[~table["is_shipped_configuration"]]
+        recomputed = others[metric] - float(shipped.iloc[0][metric])
+        assert others[metric + "_delta"].to_numpy() == pytest.approx(
+            recomputed.to_numpy(), abs=1e-12
+        ), metric
+
+
+def test_pp09_reports_more_than_accuracy() -> None:
+    """Rule 6, in the one table whose whole point is a single delta."""
+    table = _pp09()
+    for metric in ("sensitivity", "specificity", "f1", "balanced_accuracy", "roc_auc"):
+        assert metric in table.columns
+        assert table[metric].notna().all(), metric
+
+
+def test_pp09_means_match_the_per_fold_values_behind_them() -> None:
+    """A mean nobody can check is a hand-typed number with extra steps."""
+    import pandas as pd
+
+    from src.preprocessing import ablation_run
+
+    table = _pp09()
+    path = ablation_run.per_fold_path()
+    if not path.is_file():
+        pytest.skip("per-fold values not written: " + str(path))
+    per_fold = pd.read_csv(path)
+
+    for row in table.to_dict("records"):
+        block = per_fold[per_fold["arm_id"] == row["arm_id"]]
+        assert len(block) == int(row["n_folds"]), row["arm_id"]
+        for metric in ablation_run.METRICS:
+            values = block[metric].to_numpy(dtype=float)
+            finite = values[~pd.isna(values)]
+            assert float(row[metric]) == pytest.approx(float(finite.mean()), abs=1e-9), (
+                row["arm_id"],
+                metric,
+            )
