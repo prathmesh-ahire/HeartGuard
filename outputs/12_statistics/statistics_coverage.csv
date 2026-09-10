@@ -1,0 +1,8 @@
+run,task,n_folds,n_models,n_partition_records,minimum_achievable_p_wilcoxon,note
+EXP-A1,binary,25,6,3240,5.960464477539063e-08,config defaults over the repeated 5x5 map
+EXP-A2,binary,25,7,3240,5.960464477539063e-08,nested search over the repeated 5x5 map -- the headline binary run
+EXP-B1,pascal_a,10,6,124,0.001953125,"PASCAL A, 10 folds (5x2). n=124 records; every test here is underpowered"
+EXP-B2,pascal_b,5,6,461,0.0625,"PASCAL B, 5 folds and NOT repeated -- n=5, the underpowered case"
+EXP-C1-three_class,circor_murmur,5,5,3163,0.0625,"CirCor murmur, 5 patient-grouped folds"
+EXP-C1-two_class,circor_murmur,5,5,3007,0.0625,"CirCor murmur over the 874 known-murmur patients, 5 folds"
+EXP-C2,circor_outcome,5,5,3163,0.0625,"CirCor clinical outcome, 5 patient-grouped folds"

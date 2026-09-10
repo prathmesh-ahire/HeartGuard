@@ -1,0 +1,13 @@
+{
+  "alpha": 0.05,
+  "partition_repeat": 0,
+  "bootstrap_resamples": 2000,
+  "bootstrap_seed": 42,
+  "normality_check": "Shapiro-Wilk on the paired differences at alpha 0.05; the paired t-test where they are normal, Wilcoxon signed-rank otherwise. Both tests are computed and stored for every pair, so the choice is auditable.",
+  "n_description": {
+    "fold": "n is the number of cross-validation folds, one paired observation each",
+    "record": "n is the number of records, each appearing exactly once"
+  },
+  "why_one_repeat_for_record_level_tests": "The repeated 5x5 map holds every record out once per repeat, so pooling all 25 folds would put each record in the sample five times. McNemar and the bootstrap therefore run on repeat 0 alone, which is a complete partition of the corpus.",
+  "why_all_folds_for_fold_level_tests": "There the unit of observation is the fold, not the record, and 25 paired folds is what makes the primary track powered at all."
+}
