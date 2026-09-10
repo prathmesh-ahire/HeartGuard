@@ -20,6 +20,14 @@ gate has actually passed.
 
 ---
 
+## Phase 88 — Tables T16-T23 (Ablation, Robustness, Calibration)
+**Gate:** T88.7 — T16-T23 pass the table audit (all formats, renderings equal the CSV, sources portable and current), and every T17/T18/T19 row re-derives at 1e-9 from the EXP-F1 arm runs, the EXP-A1/A2 runs and the EXP-F2 A9/A10 comparison files — PASS (`tests/test_analysis_tables.py`, 21 tests)
+**Added:** `tests/test_analysis_tables.py`
+**Changed:** `src/reporting/tables.py` (`source_fingerprint` records an existing source repo-relative), `tests/test_table_engine.py`, T20/T21/T22/T23 renderings and metas regenerated through their scripts' table stages, `outputs/13_figures_diagrams/` G30-G34 metas, `outputs/00_evidence_index/`
+**Notes:** Regeneration changed no data file (content-digest snapshot of all 696 output files before and after). Phase 87's path fix had missed the existing-file branch; the gate caught it. Full reasoning in `Docs/note.md`.
+
+---
+
 ## Phase 87 — Tables T08-T15 (Core Results)
 **Gate:** T87.7 — T08-T15 exist in CSV/Markdown/DOCX/LaTeX with provenance, every rendering shows exactly its CSV, and every metric re-derives at 1e-9 from the run it came from (per-fold files, EXP-A1/A2 aggregates, the A10 ablation and the Phase 82 tests) — PASS (`tests/test_result_tables.py`)
 **Added:** `src/reporting/result_tables.py` (builders, `LOCATIONS` for T08-T30, `audit_table`), `scripts/37_result_tables.py`, `tests/test_result_tables.py`, the T08-T15 deliverables beside the working CSVs in `outputs/06_binary_results/`, `07_multiclass_results/`, `08_circor_external_validation/`

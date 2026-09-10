@@ -369,3 +369,28 @@ def test_source_fingerprint_records_which_digest_method_it_used(
     assert missing["exists"] is False
     assert missing["sha256"] is None
     assert missing["digest_method"] is None
+
+
+def test_an_absolute_source_inside_the_project_is_recorded_repo_relative() -> None:
+    """The regression test for T23-T28's ``D:/Projects/HeartGuard/...`` sources.
+
+    Phases 78-83 passed absolute paths into their specs, which resolve on one
+    machine and fail every provenance check on CI. The first fix normalized only
+    the missing-file branch of ``source_fingerprint``, so an EXISTING source --
+    the only kind a real table has -- still went out absolute. Both branches are
+    pinned here, with a real committed file.
+    """
+    source = PROJECT_ROOT / "pyproject.toml"
+    assert source.is_file(), "pyproject.toml is committed; this test must never skip"
+    assert tb.source_fingerprint(source)["path"] == "pyproject.toml"
+    assert tb.source_fingerprint(PROJECT_ROOT / "no_such_file.csv")["path"] == ("no_such_file.csv")
+    assert tb.portable_path(source) == "pyproject.toml"
+
+
+def test_a_source_outside_the_project_stays_absolute(tmp_path: Path) -> None:
+    """Making it relative would point it at a different file."""
+    source = tmp_path / "outside.csv"
+    source.write_text("a\n1\n", encoding="utf-8")
+    recorded = tb.source_fingerprint(source)["path"]
+    assert recorded == source.as_posix()
+    assert Path(recorded).is_absolute()

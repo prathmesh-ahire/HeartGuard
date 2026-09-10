@@ -397,7 +397,7 @@ def source_fingerprint(path: str | Path) -> dict[str, Any]:
     digest, method = content_digest(candidate)
     stat = candidate.stat()
     return {
-        "path": str(candidate).replace("\\", "/"),
+        "path": portable_path(candidate),
         "exists": True,
         "bytes": stat.st_size,
         "sha256": digest,

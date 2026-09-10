@@ -10,7 +10,7 @@
   "profile": "screen",
   "dpi": 300,
   "palette": "Okabe-Ito (colourblind-safe), fixed order",
-  "generated_utc": "2026-09-09T07:15:58.207206+00:00",
+  "generated_utc": "2026-09-10T17:03:05.765209+00:00",
   "command": "python scripts/23_noise_robustness.py",
   "plotted_rows": 93,
   "plotted_csv": "G30_noise_level_robustness.csv",
@@ -31,7 +31,7 @@
       "bytes": 2040,
       "sha256": "5860c3589beedfb33c7282595b0699713dd5a5e256393f87d25f5c10b8cd9172",
       "digest_method": "sha256/lf",
-      "modified_utc": "2026-09-09T07:15:51.169164+00:00"
+      "modified_utc": "2026-09-10T17:03:01.039704+00:00"
     },
     {
       "path": "outputs/09_robustness_analysis/EXP-E1/sqi_crosscheck.csv",
@@ -39,7 +39,7 @@
       "bytes": 314,
       "sha256": "df259f98c5dd244651b1a701c0382e49b14ee90ab4520e2693552a961d5f6cfc",
       "digest_method": "sha256/lf",
-      "modified_utc": "2026-09-09T07:15:46.694447+00:00"
+      "modified_utc": "2026-09-10T17:02:56.842088+00:00"
     }
   ],
   "written": {

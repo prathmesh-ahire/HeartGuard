@@ -6,46 +6,47 @@
   "objective": "O5 (external validation)",
   "dataset": "D4 CirCor 2022",
   "framework": "PV-MEPCG / PulseVision",
-  "generated_utc": "2026-08-31T07:58:18.167809+00:00",
+  "generated_utc": "2026-09-10T17:03:49.543278+00:00",
   "git": {
     "available": true,
     "reason": null,
-    "commit": "17ef13fc76fd6a17ae1ce7d054edbb2d7b7c426e",
-    "commit_short": "17ef13fc",
+    "commit": "a1795907d97284f998e2656f863c9911f1953293",
+    "commit_short": "a1795907",
     "branch": "main",
     "dirty": true,
     "dirty_files": [
       "outputs/00_evidence_index/evidence_index.csv",
       "outputs/00_evidence_index/run_manifest.json",
-      "outputs/13_figures_diagrams/figure_registry.csv",
-      "src/api/main.py",
-      "frontend/out/",
-      "outputs/08_circor_external_validation/EXP-C1-three_class/per_fold_by_location.csv",
-      "outputs/08_circor_external_validation/EXP-C1-two_class/per_fold_by_location.csv",
-      "outputs/08_circor_external_validation/EXP-C2/per_fold_by_location.csv",
-      "outputs/08_circor_external_validation/T22_auscultation_location_analysis.csv",
       "outputs/08_circor_external_validation/T22_auscultation_location_analysis.docx",
       "outputs/08_circor_external_validation/T22_auscultation_location_analysis.md",
-      "outputs/08_circor_external_validation/T22_auscultation_location_analysis.meta.json",
       "outputs/08_circor_external_validation/T22_auscultation_location_analysis.tex",
-      "outputs/08_circor_external_validation/circor_most_audible_location.md",
-      "outputs/08_circor_external_validation/circor_most_audible_location_check.csv",
-      "outputs/13_figures_diagrams/G32_location_performance.csv",
-      "outputs/13_figures_diagrams/G32_location_performance.meta.json",
-      "outputs/13_figures_diagrams/G32_location_performance.png",
-      "outputs/13_figures_diagrams/G32_location_performance.svg",
-      "scripts/21_location_analysis.py",
-      "src/evaluation/location.py",
-      "src/reporting/location_report.py",
-      "src/reporting/samples.py"
+      "outputs/09_robustness_analysis/T20_noise_robustness.docx",
+      "outputs/09_robustness_analysis/T20_noise_robustness.md",
+      "outputs/09_robustness_analysis/T20_noise_robustness.meta.json",
+      "outputs/09_robustness_analysis/T20_noise_robustness.tex",
+      "outputs/09_robustness_analysis/T21_duration_robustness.docx",
+      "outputs/09_robustness_analysis/T21_duration_robustness.md",
+      "outputs/09_robustness_analysis/T21_duration_robustness.meta.json",
+      "outputs/09_robustness_analysis/T21_duration_robustness.tex",
+      "outputs/13_figures_diagrams/G30_noise_level_robustness.meta.json",
+      "outputs/13_figures_diagrams/G30_noise_level_robustness.svg",
+      "outputs/13_figures_diagrams/G31_duration_wise_performance.meta.json",
+      "outputs/13_figures_diagrams/G31_duration_wise_performance.svg",
+      "outputs/13_figures_diagrams/figure_registry.csv",
+      "src/reporting/statistics_report.py",
+      "frontend/out/",
+      "outputs/09_robustness_analysis/EXP-E1/sweep.log",
+      "outputs/09_robustness_analysis/EXP-E2_trunc.log"
     ]
   },
   "command": "python scripts/21_location_analysis.py",
   "rounding_rules": {
     "metric": 3,
+    "p_value": 3,
     "percent": 1,
     "count": 0,
     "integer": 0,
+    "mean_count": 1,
     "seconds": 2,
     "text": null,
     "preformatted": null
@@ -71,6 +72,9 @@
     "accuracy_sd": "metric",
     "exclusion_reason": "text"
   },
+  "column_places": {
+    "n_units_mean": 1
+  },
   "n_rows": 75,
   "sources": [
     {
@@ -79,7 +83,7 @@
       "bytes": 40032,
       "sha256": "9d4a2b40cafccb4a8436bb1fbe0326c0089b296edafb01d8d2fd6cb00a6f41a9",
       "digest_method": "sha256/lf",
-      "modified_utc": "2026-08-31T07:58:10.837830+00:00"
+      "modified_utc": "2026-09-10T17:03:42.808535+00:00"
     },
     {
       "path": "outputs/08_circor_external_validation/EXP-C1-two_class/per_fold_by_location.csv",
@@ -87,7 +91,7 @@
       "bytes": 29738,
       "sha256": "5785c7a6c44636e7df4ffab41fc0451c6b5909e5b3e99e49f29995d07c1ca807",
       "digest_method": "sha256/lf",
-      "modified_utc": "2026-08-31T07:58:13.978206+00:00"
+      "modified_utc": "2026-09-10T17:03:45.559008+00:00"
     },
     {
       "path": "outputs/08_circor_external_validation/EXP-C2/per_fold_by_location.csv",
@@ -95,7 +99,7 @@
       "bytes": 28139,
       "sha256": "159d888f3ee929935fc29ab231597516bae775cfca3229ef57d1bc0cdbc0d786",
       "digest_method": "sha256/lf",
-      "modified_utc": "2026-08-31T07:58:17.007701+00:00"
+      "modified_utc": "2026-09-10T17:03:48.562660+00:00"
     }
   ],
   "written": {
