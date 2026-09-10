@@ -1,0 +1,13 @@
+{
+  "record_id": "85197_TV",
+  "source_origin": "corpus",
+  "wav_path": "D:/Projects/HeartGuard/dataset/archive/training_data/training_data/85197_TV.wav",
+  "tsv_path": "D:/Projects/HeartGuard/dataset/archive/training_data/training_data/85197_TV.tsv",
+  "sample_rate_hz": 4000,
+  "duration_sec": 11.648,
+  "window_start_sec": 0.0,
+  "window_end_sec": 4.0,
+  "n_segments_total": 81,
+  "n_segments_in_window": 29,
+  "window_rule": "starts at the first annotated segment and runs 4.0 s; the head of a recording is often unannotated"
+}

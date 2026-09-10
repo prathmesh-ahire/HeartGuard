@@ -1,0 +1,120 @@
+{
+  "table_id": "T27",
+  "title": "False Positive and False Negative Analysis",
+  "caption": "Every error of the final binary model, grouped four ways plus by PhysioNet diagnosis. Two error sets, never pooled: the in-domain set is EXP-A2's out-of-fold predictions over 25 repeated grouped folds, and the external set is the deployed model scoring CirCor once. Rates carry their denominators because they use different ones -- error rate is over all predictions in the group, FN rate over that group's abnormal records only, FP rate over its normal ones.",
+  "exp_id": "EXP-A2, EXP-D1",
+  "objective": "O4 (robustness), O5 (error characterisation)",
+  "dataset": "D1 PhysioNet 2016, D4 CirCor 2022",
+  "framework": "PV-MEPCG / PulseVision",
+  "generated_utc": "2026-09-10T11:47:17.502835+00:00",
+  "git": {
+    "available": true,
+    "reason": null,
+    "commit": "bfd5b6f0c8750e7d07ac014a5bab44ebc1fa77c7",
+    "commit_short": "bfd5b6f0",
+    "branch": "main",
+    "dirty": true,
+    "dirty_files": [
+      "outputs/00_evidence_index/evidence_index.csv",
+      "outputs/00_evidence_index/run_manifest.json",
+      "outputs/13_figures_diagrams/figure_registry.csv",
+      "src/evaluation/failure_analysis.py",
+      "frontend/out/",
+      "outputs/09_robustness_analysis/EXP-E1/sweep.log",
+      "outputs/09_robustness_analysis/EXP-E2_trunc.log",
+      "outputs/10_robustness/T27_false_positive_and_false_negative_analysis.csv",
+      "outputs/10_robustness/T27_false_positive_and_false_negative_analysis.docx",
+      "outputs/10_robustness/T27_false_positive_and_false_negative_analysis.md",
+      "outputs/10_robustness/T27_false_positive_and_false_negative_analysis.meta.json",
+      "outputs/10_robustness/T27_false_positive_and_false_negative_analysis.tex",
+      "outputs/10_robustness/failure_analysis/",
+      "outputs/13_figures_diagrams/G35_false_positive_and_false_negative_distribution.csv",
+      "outputs/13_figures_diagrams/G35_false_positive_and_false_negative_distribution.meta.json",
+      "outputs/13_figures_diagrams/G35_false_positive_and_false_negative_distribution.png",
+      "outputs/13_figures_diagrams/G35_false_positive_and_false_negative_distribution.svg",
+      "scripts/32_failure_analysis.py",
+      "src/reporting/failure_report.py"
+    ]
+  },
+  "command": "python scripts/32_failure_analysis.py",
+  "rounding_rules": {
+    "metric": 3,
+    "percent": 1,
+    "count": 0,
+    "integer": 0,
+    "seconds": 2,
+    "text": null,
+    "preformatted": null
+  },
+  "column_kinds": {
+    "source": "text",
+    "category": "text",
+    "level": "text",
+    "n_predictions": "count",
+    "n_records": "count",
+    "n_positive": "count",
+    "n_negative": "count",
+    "n_positive_records": "count",
+    "n_negative_records": "count",
+    "n_fp": "count",
+    "n_fn": "count",
+    "n_errors": "count",
+    "error_rate": "metric",
+    "false_negative_rate": "metric",
+    "false_positive_rate": "metric",
+    "mean_confidence_when_wrong": "metric",
+    "below_reporting_floor": "text",
+    "fn_below_reporting_floor": "text",
+    "fp_below_reporting_floor": "text"
+  },
+  "n_rows": 39,
+  "sources": [
+    {
+      "path": "D:/Projects/HeartGuard/outputs/10_robustness/failure_analysis/failures_by_category.csv",
+      "exists": true,
+      "bytes": 7066,
+      "sha256": "d35b074bf6761fa1e1edca04efb7636cb10ffa56ee8e23b3e7d5eea0f2c756bd",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T11:47:16.812054+00:00"
+    },
+    {
+      "path": "D:/Projects/HeartGuard/outputs/10_robustness/failure_analysis/false_positives_and_negatives.csv",
+      "exists": true,
+      "bytes": 1014885,
+      "sha256": "c20ac288f7cbf972687c72aa31b446a4fc211c7b73153510754e2d47a979a231",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T11:47:16.675210+00:00"
+    },
+    {
+      "path": "D:/Projects/HeartGuard/outputs/10_robustness/failure_analysis/record_failures.csv",
+      "exists": true,
+      "bytes": 1084641,
+      "sha256": "964fa0b0e33f6f3fe990a23fb8ee1e88f9aeab81f652cede428a05c88d8909b5",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T11:47:16.807126+00:00"
+    },
+    {
+      "path": "D:/Projects/HeartGuard/outputs/10_robustness/failure_analysis/confused_class_pairs.csv",
+      "exists": true,
+      "bytes": 21127,
+      "sha256": "64e259ee390e4a45fe859414e5b0b129b2a6004b9e4920d2ff7acb2c46308b5d",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T11:47:16.825140+00:00"
+    }
+  ],
+  "written": {
+    "csv": "D:/Projects/HeartGuard/outputs/10_robustness/T27_false_positive_and_false_negative_analysis.csv",
+    "md": "D:/Projects/HeartGuard/outputs/10_robustness/T27_false_positive_and_false_negative_analysis.md",
+    "docx": "D:/Projects/HeartGuard/outputs/10_robustness/T27_false_positive_and_false_negative_analysis.docx",
+    "latex": "D:/Projects/HeartGuard/outputs/10_robustness/T27_false_positive_and_false_negative_analysis.tex"
+  },
+  "notes": [
+    "THE FALSE-NEGATIVE RATE IS THE ONE THAT MATTERS HERE. A missed abnormal recording is the failure a screening tool is judged on, and a group that is mostly normal can post a low error rate while missing most of its abnormals.",
+    "THE FLOOR IS APPLIED PER RATE, NOT PER GROUP, AND IT HAS TO BE. Each rate has its own denominator: the FN rate's is the group's abnormal records and the FP rate's is its normal ones, so a group can clear the 30-record floor overall while one of its rates rests on a handful. PhysioNet training-c is the case that forced this: 31 records, above the floor, of which SEVEN are normal -- and its false-positive rate of 1.000 is a statement about those seven. Read 'FN rate below floor' and 'FP rate below floor' per rate; 'Group below floor' covers the error rate. Flagged rows are reported rather than dropped, because a suppressed group reads as an absence of failures.",
+    "IN-DOMAIN COUNTS ARE OVER PREDICTIONS, NOT RECORDS. The repeated 5x5 map holds every record out once per repeat, so each is scored five times and the prediction counts are five times the corpus. record_failures.csv carries the per-record view, where a record wrong in 5 of 5 (five independently fitted models agreeing) is distinguished from one wrong in 1 of 5.",
+    "THE TWO ERROR SETS ARE NOT COMPARABLE. EXP-D1 is adult-to-paediatric transfer whose population mismatch is documented and expected; its error rate is not evidence about the method.",
+    "The diagnosis grouping is a DESCRIPTION, not a subgroup result. PhysioNet's diagnosis field is very unevenly filled and most of its categories fall below the reporting floor.",
+    "T80.4 -- the most-confused pair across every stored multiclass confusion matrix is Abnormal -> Normal on EXP-C2 M3 (849 summed over folds, 55.5% of that class). Every pair is in confused_class_pairs.csv. Read share_of_true_class, not the count: 40 confusions out of 320 records and 40 out of 46 are different findings.",
+    "PV-MEPCG / PulseVision is an academic screening and decision-support prototype, not a diagnostic tool. A named record here is a recording the model classified incorrectly, not a clinical finding about a person."
+  ]
+}

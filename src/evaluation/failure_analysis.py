@@ -339,6 +339,8 @@ def categorise(failures: Any, by: str) -> Any:
         counts = block["error_type"].value_counts()
         n = len(block)
         n_wrong = int(block["is_error"].sum())
+        n_positive_records = int(block.loc[block["y_true"] == 1, "record_uid"].nunique())
+        n_negative_records = int(block.loc[block["y_true"] == 0, "record_uid"].nunique())
         rows.append(
             {
                 "source": str(source),
@@ -348,6 +350,13 @@ def categorise(failures: Any, by: str) -> Any:
                 "n_records": int(block["record_uid"].nunique()),
                 "n_positive": int((block["y_true"] == 1).sum()),
                 "n_negative": int((block["y_true"] == 0).sum()),
+                # Record-level class denominators, which are what the floor has
+                # to be applied to. training-c holds 31 records -- above the
+                # floor -- but only SEVEN of them are normal, and its
+                # false-positive rate of 1.000 is a statement about those seven.
+                # Flooring on the group total alone published that unmarked.
+                "n_positive_records": n_positive_records,
+                "n_negative_records": n_negative_records,
                 **{"n_" + kind.lower(): int(counts.get(kind, 0)) for kind in ERROR_TYPES},
                 "n_errors": n_wrong,
                 "error_rate": float(n_wrong) / n if n else float("nan"),
@@ -367,6 +376,8 @@ def categorise(failures: Any, by: str) -> Any:
                     else float("nan")
                 ),
                 "below_reporting_floor": bool(block["record_uid"].nunique() < MIN_GROUP),
+                "fn_below_reporting_floor": bool(n_positive_records < MIN_GROUP),
+                "fp_below_reporting_floor": bool(n_negative_records < MIN_GROUP),
             }
         )
     return pd.DataFrame(rows)

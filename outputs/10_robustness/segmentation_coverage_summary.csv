@@ -1,0 +1,5 @@
+dataset,timing_kind,n_recordings,n_with_annotation,share_annotated,n_cycles_total,has_phase_durations,note
+D4 CirCor 2022,interval segmentation (CirCor .tsv),3163,3162,0.9996838444514701,64350,True,"start/end/state triples per recording; S1, systole, S2 and diastole all have real durations."
+D2 PASCAL set_a,S1/S2 instants (set_a_timing.csv),176,21,0.11931818181818182,195,False,"Hand-marked S1 and S2 INSTANTS, not intervals. Systole and diastole are derivable as the gaps between them; S1 and S2 durations do not exist and are left NaN. All annotated recordings are class 'normal'."
+D3 PASCAL set_b,none,656,0,0.0,0,False,No timing annotation ships with set_b. T84.2 records this.
+D1 PhysioNet 2016,none,3240,0,0.0,0,False,No segmentation ships with the 2016 Challenge training set. T84.2 records this.
