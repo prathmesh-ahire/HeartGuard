@@ -173,3 +173,22 @@ ENTRIES (newest last)
     100's equations reference, which should read those declarations rather than
     restate them; and Phase 84 may later define a canonical cardiac-cycle form,
     which the T113.6 overlay would then follow.
+
+[2026-09-09] T97.7 -- "confirm all 20 diagrams regenerate" (deferred, not skipped)
+  Reason: The work order puts Phase 97 (the diagram production pipeline) before
+    Phases 95/96 (the diagram builders) deliberately -- the pipeline has to exist
+    before the diagrams it renders do. So the clause "confirm all 20 regenerate"
+    has nothing to run over at Phase 97: only F01-F10 exist. What DID run is the
+    whole mechanism end to end on the specimen sheet (every node kind, every
+    arrow kind, both output formats, the registry, the meta sidecar, the source
+    digest, and a byte-identical PNG across two runs), plus a test pinning that
+    `--expect 20` FAILS rather than reporting success on a short run.
+  Impact: T97.7 is marked `[!]` in Docs/todo.md rather than `[x]`. The count
+    assertion is not weakened -- it lives in the command and is simply
+    unsatisfiable until the remaining builders exist. Re-entry point: the end of
+    Phase 96, where `python scripts/05_render_diagrams.py --expect 20` must exit
+    zero. Full reasoning in the 2026-09-09 Phase 97 entry in Docs/note.md.
+  NOTE: this entry was added 2026-09-10. It was missing when Phase 97 shipped --
+    the project's own rule requires every blocked task to have a matching entry
+    here, and `test_extra_declared_gaps_match_the_blocked_tasks` enforces it, but
+    that test is `needs_data` and had not been run since T97.7 was marked `[!]`.

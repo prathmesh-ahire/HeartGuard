@@ -1,0 +1,103 @@
+{
+  "table_id": "T-S5",
+  "title": "Leave-One-Source-Out Generalization",
+  "caption": "The same models, features and seed evaluated two ways. 'Pooled 25-fold' is the DA-07 protocol, where every training fold contains records from all six PhysioNet sub-collections. 'Leave-one-source-out' holds out an entire sub-collection and trains on the other five, six times, so the model is tested on a recording setup it has never seen. The drop is the cost of that. Subjects never span sub-collections, so both protocols are subject-disjoint.",
+  "exp_id": "EXP-F3",
+  "objective": "O4 (robustness), deployment realism",
+  "dataset": "D1 PhysioNet 2016 (3,240 records, 857 subjects, 6 sub-collections)",
+  "framework": "PV-MEPCG / PulseVision",
+  "generated_utc": "2026-09-10T08:00:14.179629+00:00",
+  "git": {
+    "available": true,
+    "reason": null,
+    "commit": "18ea523bf691c767df6a2ec5eaf35bf2226552c7",
+    "commit_short": "18ea523b",
+    "branch": "main",
+    "dirty": true,
+    "dirty_files": [
+      "outputs/00_evidence_index/run_manifest.json",
+      "frontend/out/",
+      "outputs/09_ablation/EXP-F3/",
+      "outputs/09_ablation/T-S5_leave_one_source_out_generalization.csv",
+      "outputs/09_ablation/T-S5_leave_one_source_out_generalization.docx",
+      "outputs/09_ablation/T-S5_leave_one_source_out_generalization.md",
+      "outputs/09_ablation/T-S5_leave_one_source_out_generalization.tex",
+      "outputs/09_robustness_analysis/EXP-E1/sweep.log",
+      "outputs/09_robustness_analysis/EXP-E2_trunc.log"
+    ]
+  },
+  "command": "python scripts/29_source_holdout.py",
+  "rounding_rules": {
+    "metric": 3,
+    "percent": 1,
+    "count": 0,
+    "integer": 0,
+    "seconds": 2,
+    "text": null,
+    "preformatted": null
+  },
+  "column_kinds": {
+    "model_id": "text",
+    "n_folds_holdout": "count",
+    "sensitivity_pooled": "metric",
+    "sensitivity_holdout": "metric",
+    "sensitivity_holdout_sd": "metric",
+    "sensitivity_drop": "metric",
+    "balanced_accuracy_pooled": "metric",
+    "balanced_accuracy_holdout": "metric",
+    "balanced_accuracy_holdout_sd": "metric",
+    "balanced_accuracy_drop": "metric",
+    "specificity_pooled": "metric",
+    "specificity_holdout": "metric",
+    "specificity_holdout_sd": "metric",
+    "specificity_drop": "metric",
+    "roc_auc_pooled": "metric",
+    "roc_auc_holdout": "metric",
+    "roc_auc_holdout_sd": "metric",
+    "roc_auc_drop": "metric",
+    "f1_pooled": "metric",
+    "f1_holdout": "metric",
+    "f1_holdout_sd": "metric",
+    "f1_drop": "metric"
+  },
+  "n_rows": 6,
+  "sources": [
+    {
+      "path": "outputs/03_features/all_features_matrix.parquet",
+      "exists": true,
+      "bytes": 10624664,
+      "sha256": "e006a4707fc8ec03941d49e0ff64cb18fb65cc28d6832ca0fa3b71d463c4521c",
+      "digest_method": "sha256/raw",
+      "modified_utc": "2026-08-27T11:33:36.882753+00:00"
+    },
+    {
+      "path": "outputs/01_dataset_audit/metadata_master.csv",
+      "exists": true,
+      "bytes": 1995833,
+      "sha256": "1ef1284faeba8b6428691fea92077e203e549b9895e85f821d562da5c6cd1371",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-25T19:31:02.054015+00:00"
+    },
+    {
+      "path": "outputs/06_binary_results/EXP-A1/aggregate_metrics.csv",
+      "exists": true,
+      "bytes": 5921,
+      "sha256": "9deb64ef289f4456e7079a37867e309257b92a489373bb2df20299c6f444d255",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-30T07:09:39.972457+00:00"
+    }
+  ],
+  "written": {
+    "csv": "outputs/09_ablation/T-S5_leave_one_source_out_generalization.csv",
+    "md": "outputs/09_ablation/T-S5_leave_one_source_out_generalization.md",
+    "docx": "outputs/09_ablation/T-S5_leave_one_source_out_generalization.docx",
+    "latex": "outputs/09_ablation/T-S5_leave_one_source_out_generalization.tex"
+  },
+  "notes": [
+    "A source-only predictor scored on these same six folds reaches sensitivity 0.0000 and balanced accuracy 0.5000. Read every model number against that, not against 0.5.",
+    "**The mean over six folds hides a great deal.** training-e alone is 2,141 of the 3,240 records and is 8.5% abnormal; training-c is 31 records and 77.4% abnormal. Holding out training-e leaves a training set with a completely different class balance, and holding out training-c gives a 31-record test fold. The per-fold table is the deliverable.",
+    "A drop here is evidence that the model depends on the acquisition signature. It is NOT proof: holding out a collection also changes the class balance and the patient population, the same confounds EXP-D1 documents. The gap between a model and the source-only baseline on the same fold is the part neither explains.",
+    "This experiment exists because Phase 76 found that a no-audio source-only predictor reaches balanced accuracy 0.719 on the pooled binary task. See Docs/note.md, 2026-09-10.",
+    "PV-MEPCG / PulseVision is an academic screening prototype, not a diagnostic tool."
+  ]
+}

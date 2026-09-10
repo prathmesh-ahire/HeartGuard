@@ -1,0 +1,8 @@
+{
+  "exp_id": "EXP-F3",
+  "task": "binary",
+  "scheme": "leave_one_source_out",
+  "n_folds": 6,
+  "question": "Does the binary model still work on audio from a recording setup it has never seen?",
+  "command": "python scripts/29_source_holdout.py"
+}

@@ -588,6 +588,53 @@ def test_extra_diagnosis_track_is_subject_disjoint_and_covers_every_class() -> N
 
 
 @pytest.mark.needs_data
+def test_extra_leave_one_source_out_is_reported_and_its_verdict_is_pinned() -> None:
+    """EXP-F3 exists, and the finding that no model transfers is asserted.
+
+    Pinned deliberately. EXP-F3 is the only measurement in the project that
+    bounds what the pooled figures may be claimed to mean: leave-one-
+    sub-collection-out takes AUC from 0.92-0.94 to 0.43-0.53, and **AUC is
+    rank-based so class-prior shift cannot explain it**. If a later change makes
+    a model transfer, this test fails and the standing rule in Docs/note.md
+    ("the binary model does not transfer to an unseen recording collection")
+    must be revisited rather than silently outlived.
+    """
+    import pandas as pd
+
+    directory = _root() / "09_ablation" / "EXP-F3"
+    if not (directory / "per_fold_metrics.csv").is_file():
+        pytest.skip("EXP-F3 has not been run")
+
+    per_fold = pd.read_csv(directory / "per_fold_metrics.csv")
+    assert per_fold["held_out_source"].nunique() == 6, (
+        "EXP-F3 must hold out all six PhysioNet sub-collections"
+    )
+    # Subject-disjointness is structural here (no subject spans a collection),
+    # and that structure is what makes the experiment valid at all.
+    from src.evaluation import source_holdout as sh
+
+    records = sh.holdout_records()
+    spanning = records.groupby("split_group")[sh.SOURCE_COLUMN].nunique()
+    assert not int((spanning > 1).sum())
+
+    comparison = directory / "pooled_vs_holdout.csv"
+    assert comparison.is_file(), "EXP-F3 ran but its pooled comparison is missing"
+    table = pd.read_csv(comparison)
+    assert "roc_auc_pooled" in table.columns and "roc_auc_holdout" in table.columns
+
+    best = float(table["roc_auc_holdout"].max())
+    assert best < 0.75, (
+        "a model now reaches held-out AUC " + format(best, ".4f")
+        + " on an unseen sub-collection. That contradicts the standing rule in "
+        "Docs/note.md; re-read the 2026-09-10 EXP-F3 entry before changing it"
+    )
+    assert float(table["roc_auc_pooled"].min()) > 0.85, (
+        "the pooled AUCs no longer look like EXP-A1's; the comparison is not "
+        "against the run it claims to be"
+    )
+
+
+@pytest.mark.needs_data
 def test_extra_diagnosis_track_never_touches_a_normal_record() -> None:
     """EXP-G1 is the abnormal subtypes. A normal record here is a merged space."""
     import pandas as pd
