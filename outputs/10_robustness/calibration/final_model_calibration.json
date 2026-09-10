@@ -1,0 +1,40 @@
+{
+  "final_model_id": "M1",
+  "final_model_estimator": "Pipeline",
+  "final_model_has_post_hoc_calibrator": false,
+  "final_model_calibration": "none -- M1 is a logistic regression, fitted by maximising a proper scoring rule, so it emits probabilities without a second stage",
+  "svm_member_model_id": "M3",
+  "svm_calibration_method": "sigmoid",
+  "svm_calibration_cv": 3,
+  "svm_calibration_ensemble": true,
+  "svm_calibration_source": "configs/models.yaml calibration block",
+  "isotonic_min_samples": 1000,
+  "ensembles_carrying_the_svm": [
+    "M6",
+    "M7"
+  ],
+  "why": "The selected final model carries no SVM, so the sigmoid-versus-isotonic comparison is evidence about the ensemble members (M6/M7), not about the deployed estimator.",
+  "comparison_n_folds": 25,
+  "comparison_mean": {
+    "isotonic": {
+      "brier": 0.187659,
+      "ece": 0.0566,
+      "sensitivity": 0.667538,
+      "balanced_accuracy": 0.79994
+    },
+    "sigmoid": {
+      "brier": 0.183051,
+      "ece": 0.057307,
+      "sensitivity": 0.669845,
+      "balanced_accuracy": 0.800084
+    }
+  },
+  "better_brier": "sigmoid",
+  "better_ece": "isotonic",
+  "brier_fold_wins": {
+    "isotonic": 6,
+    "sigmoid": 19,
+    "tied": 0
+  },
+  "configured_method_matches_better_brier": true
+}

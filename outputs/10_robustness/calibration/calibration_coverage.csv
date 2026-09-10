@@ -1,0 +1,9 @@
+run,task,exp_id,variant,n_classes,class_names,n_models,n_folds,n_rows,status,note
+EXP-A1,binary,EXP-A1,,2,normal; abnormal,6,25,97200,ok,"config defaults, 25 folds"
+EXP-A2,binary,EXP-A2,,2,normal; abnormal,7,25,113400,ok,"nested Bayesian search, 25 folds -- the headline binary run"
+EXP-B1,pascal_a,EXP-B1,,4,normal; murmur; extrahls; artifact,6,10,3720,ok,"PASCAL A, n=124 records; 'artifact' is a recording-quality class"
+EXP-B2,pascal_b,EXP-B2,,3,normal; murmur; extrastole,6,5,2766,ok,"PASCAL B, n=461 records, 5 folds"
+EXP-C1-three_class,circor_murmur,EXP-C1,three_class,3,Absent; Present; Unknown,5,5,15815,ok,"CirCor murmur, 3-class (matches the 2022 Challenge)"
+EXP-C1-two_class,circor_murmur,EXP-C1,two_class,2,Absent; Present,5,5,15035,ok,"CirCor murmur, 2-class over the 874 known-murmur patients"
+EXP-C2,circor_outcome,EXP-C2,,2,Normal; Abnormal,5,5,15815,ok,"CirCor clinical outcome, 5 patient-grouped folds"
+EXP-D1,circor_outcome,EXP-D1,,2,Normal; Abnormal,1,1,3163,ok,"ONE external evaluation, not cross-validation: n_folds=1, so every SD is undefined. Adult-to-paediatric transfer -- the population mismatch, not the method, dominates this row."
