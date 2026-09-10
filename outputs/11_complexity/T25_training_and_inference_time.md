@@ -1,0 +1,85 @@
+### T25 - Training and Inference Time
+
+Training time per fold, from every stored run's own instrumentation, and end-to-end inference time per recording decomposed by pipeline stage. Training rows are distributions, not points: min, max and the max/min ratio travel with the mean. Inference rows are the warm repeats of a controlled bench over a duration-stratified sample of real PhysioNet recordings.
+
+| Measurement | Run | Task | Arm | Model / stage | Unit | Observations | Mean (s) | SD (s) | Median (s) | Min (s) | Max (s) | Max / min |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| training (stored run instrumentation) | EXP-A1 | binary | config defaults | M1 | one fold fit | 25 | 0.21 | 0.07 | 0.19 | 0.18 | 0.53 | 3.0 |
+| training (stored run instrumentation) | EXP-A1 | binary | config defaults | M3 | one fold fit | 25 | 0.99 | 0.10 | 0.94 | 0.87 | 1.23 | 1.4 |
+| training (stored run instrumentation) | EXP-A1 | binary | config defaults | M4 | one fold fit | 25 | 4.82 | 0.19 | 4.79 | 4.50 | 5.30 | 1.2 |
+| training (stored run instrumentation) | EXP-A1 | binary | config defaults | M5 | one fold fit | 25 | 32.34 | 3.50 | 33.15 | 25.76 | 37.89 | 1.5 |
+| training (stored run instrumentation) | EXP-A1 | binary | config defaults | M6 | one fold fit | 25 | 214.04 | 20.22 | 204.34 | 192.51 | 268.68 | 1.4 |
+| training (stored run instrumentation) | EXP-A1 | binary | config defaults | M8 | one fold fit | 25 | 8.07 | 1.61 | 7.56 | 6.97 | 13.86 | 2.0 |
+| training (stored run instrumentation) | EXP-A2 | binary | nested search | M1 | one fold fit | 25 | 2.97 | 6.39 | 0.24 | 0.09 | 28.49 | 320.0 |
+| training (stored run instrumentation) | EXP-A2 | binary | nested search | M3 | one fold fit | 25 | 1.40 | 0.32 | 1.49 | 0.82 | 1.88 | 2.3 |
+| training (stored run instrumentation) | EXP-A2 | binary | nested search | M4 | one fold fit | 25 | 13.00 | 8.51 | 15.36 | 1.09 | 25.34 | 23.2 |
+| training (stored run instrumentation) | EXP-A2 | binary | nested search | M5 | one fold fit | 25 | 99.18 | 89.82 | 59.16 | 17.41 | 276.52 | 15.9 |
+| training (stored run instrumentation) | EXP-A2 | binary | nested search | M6 | one fold fit | 25 | 545.14 | 380.12 | 360.20 | 164.22 | 1545.16 | 9.4 |
+| training (stored run instrumentation) | EXP-A2 | binary | nested search | M7 | one fold fit | 25 | 534.58 | 401.52 | 341.06 | 145.16 | 1517.77 | 10.5 |
+| training (stored run instrumentation) | EXP-A2 | binary | nested search | M8 | one fold fit | 25 | 12.94 | 13.00 | 6.75 | 1.11 | 46.89 | 42.3 |
+| training (stored run instrumentation) | EXP-A2-so04_subset | binary | nested search (on the SO-04 20-feature subset rather than all 138) | M6 | one fold fit | 25 | 85.99 | 59.78 | 59.82 | 23.28 | 251.68 | 10.8 |
+| training (stored run instrumentation) | EXP-A2-so04_subset | binary | nested search (on the SO-04 20-feature subset rather than all 138) | M7 | one fold fit | 25 | 88.61 | 50.35 | 69.00 | 33.14 | 180.65 | 5.5 |
+| training (stored run instrumentation) | EXP-B1 | pascal_a | nested search | M1 | one fold fit | 10 | 0.67 | 0.67 | 0.56 | 0.02 | 1.46 | 76.3 |
+| training (stored run instrumentation) | EXP-B1 | pascal_a | nested search | M3 | one fold fit | 10 | 0.08 | 0.01 | 0.08 | 0.07 | 0.11 | 1.6 |
+| training (stored run instrumentation) | EXP-B1 | pascal_a | nested search | M4 | one fold fit | 10 | 1.16 | 1.10 | 0.68 | 0.33 | 3.15 | 9.6 |
+| training (stored run instrumentation) | EXP-B1 | pascal_a | nested search | M5 | one fold fit | 10 | 3.59 | 3.30 | 1.63 | 1.24 | 8.57 | 6.9 |
+| training (stored run instrumentation) | EXP-B1 | pascal_a | nested search | M6 | one fold fit | 10 | 8.82 | 5.70 | 6.76 | 3.79 | 18.02 | 4.8 |
+| training (stored run instrumentation) | EXP-B1 | pascal_a | nested search | M7 | one fold fit | 10 | 31.93 | 18.66 | 24.18 | 12.73 | 60.68 | 4.8 |
+| training (stored run instrumentation) | EXP-B1-defaults | pascal_a | config defaults (the defaults arm shipped beside EXP-B1) | M1 | one fold fit | 10 | 0.04 | 0.01 | 0.04 | 0.03 | 0.05 | 1.6 |
+| training (stored run instrumentation) | EXP-B1-defaults | pascal_a | config defaults (the defaults arm shipped beside EXP-B1) | M3 | one fold fit | 10 | 0.08 | 0.02 | 0.08 | 0.06 | 0.14 | 2.3 |
+| training (stored run instrumentation) | EXP-B1-defaults | pascal_a | config defaults (the defaults arm shipped beside EXP-B1) | M4 | one fold fit | 10 | 1.59 | 0.13 | 1.53 | 1.47 | 1.89 | 1.3 |
+| training (stored run instrumentation) | EXP-B1-defaults | pascal_a | config defaults (the defaults arm shipped beside EXP-B1) | M5 | one fold fit | 10 | 2.07 | 0.13 | 2.09 | 1.89 | 2.26 | 1.2 |
+| training (stored run instrumentation) | EXP-B1-defaults | pascal_a | config defaults (the defaults arm shipped beside EXP-B1) | M6 | one fold fit | 10 | 6.33 | 0.79 | 6.16 | 5.51 | 8.36 | 1.5 |
+| training (stored run instrumentation) | EXP-B1-defaults | pascal_a | config defaults (the defaults arm shipped beside EXP-B1) | M7 | one fold fit | 10 | 23.39 | 2.09 | 22.71 | 21.90 | 28.82 | 1.3 |
+| training (stored run instrumentation) | EXP-B2 | pascal_b | nested search | M1 | one fold fit | 5 | 2.92 | 1.69 | 3.14 | 0.12 | 4.62 | 37.4 |
+| training (stored run instrumentation) | EXP-B2 | pascal_b | nested search | M3 | one fold fit | 5 | 0.13 | 0.01 | 0.13 | 0.12 | 0.14 | 1.2 |
+| training (stored run instrumentation) | EXP-B2 | pascal_b | nested search | M4 | one fold fit | 5 | 2.39 | 2.31 | 0.80 | 0.74 | 5.68 | 7.7 |
+| training (stored run instrumentation) | EXP-B2 | pascal_b | nested search | M5 | one fold fit | 5 | 24.69 | 26.69 | 10.51 | 4.55 | 67.12 | 14.7 |
+| training (stored run instrumentation) | EXP-B2 | pascal_b | nested search | M6 | one fold fit | 5 | 43.88 | 43.36 | 20.49 | 9.61 | 104.83 | 10.9 |
+| training (stored run instrumentation) | EXP-B2 | pascal_b | nested search | M7 | one fold fit | 5 | 129.30 | 119.18 | 66.54 | 33.13 | 292.91 | 8.8 |
+| training (stored run instrumentation) | EXP-B2-defaults | pascal_b | config defaults (the defaults arm shipped beside EXP-B2) | M1 | one fold fit | 5 | 0.08 | 0.01 | 0.08 | 0.07 | 0.10 | 1.4 |
+| training (stored run instrumentation) | EXP-B2-defaults | pascal_b | config defaults (the defaults arm shipped beside EXP-B2) | M3 | one fold fit | 5 | 0.17 | 0.08 | 0.14 | 0.12 | 0.31 | 2.6 |
+| training (stored run instrumentation) | EXP-B2-defaults | pascal_b | config defaults (the defaults arm shipped beside EXP-B2) | M4 | one fold fit | 5 | 1.94 | 0.10 | 1.92 | 1.81 | 2.05 | 1.1 |
+| training (stored run instrumentation) | EXP-B2-defaults | pascal_b | config defaults (the defaults arm shipped beside EXP-B2) | M5 | one fold fit | 5 | 11.71 | 0.53 | 11.45 | 11.31 | 12.61 | 1.1 |
+| training (stored run instrumentation) | EXP-B2-defaults | pascal_b | config defaults (the defaults arm shipped beside EXP-B2) | M6 | one fold fit | 5 | 27.14 | 2.10 | 26.70 | 24.85 | 29.59 | 1.2 |
+| training (stored run instrumentation) | EXP-B2-defaults | pascal_b | config defaults (the defaults arm shipped beside EXP-B2) | M7 | one fold fit | 5 | 83.11 | 2.49 | 82.82 | 79.35 | 85.77 | 1.1 |
+| training (stored run instrumentation) | EXP-C1-three_class | circor_murmur | nested search | M3 | one fold fit | 5 | 3.39 | 0.56 | 3.17 | 2.87 | 4.04 | 1.4 |
+| training (stored run instrumentation) | EXP-C1-three_class | circor_murmur | nested search | M4 | one fold fit | 5 | 15.37 | 17.50 | 8.90 | 2.88 | 46.18 | 16.1 |
+| training (stored run instrumentation) | EXP-C1-three_class | circor_murmur | nested search | M5 | one fold fit | 5 | 232.84 | 240.90 | 57.39 | 56.64 | 505.38 | 8.9 |
+| training (stored run instrumentation) | EXP-C1-three_class | circor_murmur | nested search | M6 | one fold fit | 5 | 502.17 | 486.32 | 179.81 | 127.60 | 1111.58 | 8.7 |
+| training (stored run instrumentation) | EXP-C1-three_class | circor_murmur | nested search | M7 | one fold fit | 5 | 1658.17 | 1666.43 | 575.19 | 351.77 | 3772.19 | 10.7 |
+| training (stored run instrumentation) | EXP-C1-two_class | circor_murmur | nested search | M3 | one fold fit | 5 | 2.21 | 0.48 | 1.95 | 1.83 | 2.91 | 1.6 |
+| training (stored run instrumentation) | EXP-C1-two_class | circor_murmur | nested search | M4 | one fold fit | 5 | 10.34 | 8.93 | 7.82 | 2.04 | 25.09 | 12.3 |
+| training (stored run instrumentation) | EXP-C1-two_class | circor_murmur | nested search | M5 | one fold fit | 5 | 68.93 | 64.74 | 28.70 | 17.20 | 142.39 | 8.3 |
+| training (stored run instrumentation) | EXP-C1-two_class | circor_murmur | nested search | M6 | one fold fit | 5 | 404.35 | 340.36 | 189.44 | 108.75 | 777.26 | 7.1 |
+| training (stored run instrumentation) | EXP-C1-two_class | circor_murmur | nested search | M7 | one fold fit | 5 | 4030.89 | 8303.52 | 174.17 | 129.34 | 18876.09 | 145.9 |
+| training (stored run instrumentation) | EXP-C2 | circor_outcome | nested search | M3 | one fold fit | 5 | 2.71 | 0.23 | 2.70 | 2.45 | 3.08 | 1.3 |
+| training (stored run instrumentation) | EXP-C2 | circor_outcome | nested search | M4 | one fold fit | 5 | 12.46 | 18.03 | 6.02 | 0.74 | 44.22 | 59.7 |
+| training (stored run instrumentation) | EXP-C2 | circor_outcome | nested search | M5 | one fold fit | 5 | 77.66 | 78.33 | 22.04 | 20.48 | 179.10 | 8.7 |
+| training (stored run instrumentation) | EXP-C2 | circor_outcome | nested search | M6 | one fold fit | 5 | 440.62 | 378.00 | 209.00 | 121.84 | 917.48 | 7.5 |
+| training (stored run instrumentation) | EXP-C2 | circor_outcome | nested search | M7 | one fold fit | 5 | 1007.95 | 1295.61 | 209.76 | 112.78 | 3064.80 | 27.2 |
+| inference (controlled bench, per recording) | inference bench | binary | deployed bundle, warm | validate | one recording, one stage | 80 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 2.0 |
+| inference (controlled bench, per recording) | inference bench | binary | deployed bundle, warm | load_model | one recording, one stage | 80 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | n/a |
+| inference (controlled bench, per recording) | inference bench | binary | deployed bundle, warm | preprocess | one recording, one stage | 80 | 0.02 | 0.01 | 0.02 | 0.01 | 0.06 | 6.5 |
+| inference (controlled bench, per recording) | inference bench | binary | deployed bundle, warm | extract | one recording, one stage | 80 | 2.26 | 0.57 | 2.20 | 1.40 | 3.64 | 2.6 |
+| inference (controlled bench, per recording) | inference bench | binary | deployed bundle, warm | predict | one recording, one stage | 80 | 0.06 | 0.00 | 0.06 | 0.05 | 0.06 | 1.2 |
+| inference (controlled bench, per recording) | inference bench | binary | deployed bundle, warm | unattributed | one recording, one stage | 80 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 2.7 |
+| inference (controlled bench, per recording) | inference bench | binary | deployed bundle, warm | total | one recording, one stage | 80 | 2.34 | 0.57 | 2.30 | 1.47 | 3.72 | 2.5 |
+
+> A SINGLE ENSEMBLE FIT TIME IS MEANINGLESS. M6 and M7 fit each member four times, and a nested fold whose member search picked a large gradient-boosting configuration costs an order of magnitude more than one that picked a small one. Read the min/max, and never quote an ensemble's mean fit time without the spread beside it.
+
+> TRAINING TIMES WERE NOT MEASURED ON AN IDLE MACHINE. They are what the project's own runs recorded, over months, sometimes with other jobs running -- one measured episode of three concurrent jobs cost M8 a factor of 14. They are honest records of what the runs cost and they are NOT a like-for-like model comparison; T26's controlled bench is. A large max/min on a 'config defaults' arm is more likely contention than a model property.
+
+> The instrumented inference stages sum to slightly less than 'total': assembling the feature vector between extraction and prediction is not separately timed, and the remainder is reported as the 'unattributed' stage rather than absorbed into a neighbour.
+
+> The first scoring of a process pays for librosa's numba JIT and the bundle's first load. That cost is real exactly once per process, so the reported rows are the warm repeats; the cold first repeat is kept in inference_timing.csv.
+
+> Measured on CPU only -- this machine has no CUDA GPU, and no number here may be compared against a GPU-trained model. M9 (1D-CNN) is out of scope for that reason and is not fitted anywhere in this project.
+
+> PV-MEPCG / PulseVision is an academic screening and decision-support prototype, not a diagnostic tool.
+
+_Table T25 -- Training and Inference Time_
+_Experiment: EXP-A1, EXP-A2, EXP-B1, EXP-B2, EXP-C1, EXP-C2_
+_Objective: O5 (complexity and deployability)_
+_Source: D:/Projects/HeartGuard/outputs/11_complexity/training_time_summary.csv; D:/Projects/HeartGuard/outputs/11_complexity/inference_stage_summary.csv; D:/Projects/HeartGuard/outputs/11_complexity/model_footprint.csv; D:/Projects/HeartGuard/outputs/11_complexity/complexity_overview.csv_
+_Generated by PV-MEPCG / PulseVision at 2026-09-10T11:37:48.211328+00:00_

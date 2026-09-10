@@ -424,7 +424,9 @@ def class_by_source_table() -> Any:
         PROJECT_ROOT / "outputs" / "01_dataset_audit" / "metadata_master.csv",
         low_memory=False,
     )
-    subset_of = dict(zip(master["record_uid"].astype(str), master["subset"].astype(str)))
+    subset_of = dict(
+        zip(master["record_uid"].astype(str), master["subset"].astype(str), strict=True)
+    )
     records = records.copy()
     records["subset"] = [subset_of[u] for u in records["record_uid"].astype(str)]
 

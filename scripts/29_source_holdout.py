@@ -168,7 +168,7 @@ def main(argv: list[str] | None = None) -> int:
             float(baseline["sensitivity"].mean()),
             float(baseline["balanced_accuracy"].mean()),
         )
-        run.set("holdout_models", int(len(comparison)))
+        run.set("holdout_models", len(comparison))
     except BaseException:
         run.finish("failed")
         raise

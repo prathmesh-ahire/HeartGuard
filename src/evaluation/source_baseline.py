@@ -165,7 +165,7 @@ def baseline_table() -> Any:
     rows.append(
         {
             "track": "binary (EXP-A1)",
-            "n_folds": int(len(binary)),
+            "n_folds": len(binary),
             "primary_metric": "sensitivity",
             "source_only": float(binary["sensitivity"].mean()),
             "best_model": str(top["model_id"]),
@@ -184,7 +184,7 @@ def baseline_table() -> Any:
         records = dt.diagnosis_records()
         master = _master()
         source_of = dict(
-            zip(master["record_uid"].astype(str), master[SOURCE_COLUMN].astype(str))
+            zip(master["record_uid"].astype(str), master[SOURCE_COLUMN].astype(str), strict=True)
         )
         records = records.copy()
         records[SOURCE_COLUMN] = [source_of[u] for u in records["record_uid"].astype(str)]
@@ -200,7 +200,7 @@ def baseline_table() -> Any:
         rows.append(
             {
                 "track": "diagnosis (EXP-G1)",
-                "n_folds": int(len(diagnosis)),
+                "n_folds": len(diagnosis),
                 "primary_metric": "macro_f1",
                 "source_only": float(diagnosis["macro_f1"].mean()),
                 "best_model": str(best_dx["model_id"]),

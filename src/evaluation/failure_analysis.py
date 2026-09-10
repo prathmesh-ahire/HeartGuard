@@ -302,8 +302,8 @@ def record_failures(failures: Any) -> Any:
                 row[column] = first[column]
         wrong = block[block["is_error"]]
         row["y_true"] = int(first["y_true"])
-        row["n_evaluations"] = int(len(block))
-        row["n_wrong"] = int(len(wrong))
+        row["n_evaluations"] = len(block)
+        row["n_wrong"] = len(wrong)
         row["error_rate"] = float(len(wrong)) / float(len(block))
         row["consistently_wrong"] = bool(len(wrong) == len(block))
         row["error_type"] = (
@@ -337,7 +337,7 @@ def categorise(failures: Any, by: str) -> Any:
     for values, block in failures.groupby(["source", by], sort=True):
         source, level = values
         counts = block["error_type"].value_counts()
-        n = int(len(block))
+        n = len(block)
         n_wrong = int(block["is_error"].sum())
         rows.append(
             {

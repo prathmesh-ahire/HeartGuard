@@ -31,14 +31,20 @@ because it is O(N^2). A latency budget is therefore a statement about one featur
 
 ## Peak memory needs a sampler, and the sampler's limits are reported
 
-`tracemalloc` sees Python allocations; numpy's buffers are allocated by numpy's
-own allocator and are invisible to it, which on a feature matrix is most of the
-memory. So :func:`peak_memory_during` samples the process resident set from the
-OS on a background thread and reports the peak above the pre-fit baseline -- and
-reports the sample count with it, because a fit shorter than a few sample
-intervals has not been measured, it has been glanced at. `tracemalloc`'s peak is
-recorded alongside rather than instead: where the two disagree the gap is the
-numpy share, which is itself informative.
+`tracemalloc` sees allocations made through CPython's allocator. That includes
+numpy's array buffers on this stack -- measured, not assumed: a 128 MB array
+shows up as a 128.03 MB tracemalloc peak. What it does **not** see is memory
+taken inside third-party native code that calls `malloc` directly, which is
+where a BLAS workspace or XGBoost's own allocator lives, and those are exactly
+the models whose fits are expensive.
+
+So :func:`peak_memory_during` also samples the process resident set from the OS
+on a background thread and reports the peak above the pre-fit baseline -- with
+the sample count beside it, because a fit shorter than a few sample intervals
+has not been measured, it has been glanced at. Both numbers are recorded: RSS
+sees everything and is process-wide, tracemalloc sees only Python's allocator
+and is exact for what it sees. Where they disagree, the gap is native
+allocation and page-touching behaviour.
 
 Resident set is process-wide, so this is a peak **during** the fit, not a peak
 **caused by** it. Nothing else runs in the measured window, and the baseline is
@@ -330,8 +336,22 @@ def process_rss_bytes() -> int:
         # an *unused* ignore on the other OS, so a checked-both-ways build can
         # never be clean with a direct attribute access here.
         windll = getattr(ctypes, "windll")  # noqa: B009 -- see above
-        handle = windll.kernel32.GetCurrentProcess()
-        ok = windll.psapi.GetProcessMemoryInfo(handle, ctypes.byref(counters), counters.cb)
+
+        # `restype` is not optional here and getting it wrong fails silently.
+        # GetCurrentProcess returns the pseudo-handle (HANDLE)-1; ctypes defaults
+        # an unannotated return to a 32-bit int, so on 64-bit Windows the value
+        # is truncated and GetProcessMemoryInfo rejects it with
+        # ERROR_INVALID_HANDLE (6) -- returning 0 rather than raising. The first
+        # version of this function did exactly that and produced a whole column
+        # of NaN peak memory that looked like "the fits were too fast to sample".
+        current = windll.kernel32.GetCurrentProcess
+        current.restype = wintypes.HANDLE
+        current.argtypes = []
+        info = windll.psapi.GetProcessMemoryInfo
+        info.restype = wintypes.BOOL
+        info.argtypes = [wintypes.HANDLE, ctypes.POINTER(_Counters), wintypes.DWORD]
+
+        ok = info(current(), ctypes.byref(counters), counters.cb)
         return int(counters.WorkingSetSize) if ok else 0
 
     try:

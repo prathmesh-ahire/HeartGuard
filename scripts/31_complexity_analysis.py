@@ -19,9 +19,9 @@ project job is running.
     T79.1 plus the assembly: aggregates every stored run's per-fold fit and
     predict times and writes T24, T25, T26, G25, G26 and G27.
 
-    python scripts/30_complexity_analysis.py --stage bench
-    python scripts/30_complexity_analysis.py --stage inference
-    python scripts/30_complexity_analysis.py --stage tables
+    python scripts/31_complexity_analysis.py --stage bench
+    python scripts/31_complexity_analysis.py --stage inference
+    python scripts/31_complexity_analysis.py --stage tables
 """
 
 from __future__ import annotations
@@ -30,7 +30,7 @@ import argparse
 import sys
 from pathlib import Path
 
-if __package__ in (None, ""):  # allow `python scripts/30_complexity_analysis.py`
+if __package__ in (None, ""):  # allow `python scripts/31_complexity_analysis.py`
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.utils.logging_setup import get_logger
@@ -38,7 +38,7 @@ from src.utils.logging_setup import get_logger
 log = get_logger("complexity_analysis")
 
 SECTION = "outputs/11_complexity"
-COMMAND = "python scripts/30_complexity_analysis.py"
+COMMAND = "python scripts/31_complexity_analysis.py"
 
 FOOTPRINT_CSV = "model_footprint.csv"
 INFERENCE_CSV = "inference_timing.csv"
@@ -58,12 +58,13 @@ BUSY_MARKERS = (
     "scripts/27_",
     "scripts/28_",
     "scripts/29_",
+    "scripts/30_",
     "joblib.externals.loky",
 )
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(prog="30_complexity_analysis")
+    parser = argparse.ArgumentParser(prog="31_complexity_analysis")
     parser.add_argument("--stage", default="all", choices=("bench", "inference", "tables", "all"))
     parser.add_argument("--force", action="store_true", help="overwrite an existing bench CSV")
     parser.add_argument(

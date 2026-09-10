@@ -156,7 +156,7 @@ def run_holdout(
     ).reset_index(drop=True)
 
     folds = cv_module.resolve_folds(build_folds(records), data.record_uids)
-    source_of = dict(zip(records["record_uid"].astype(str), records[SOURCE_COLUMN]))
+    source_of = dict(zip(records["record_uid"].astype(str), records[SOURCE_COLUMN], strict=True))
 
     rows: list[dict[str, Any]] = []
     for model_id in chosen:
@@ -225,7 +225,7 @@ def compare_with_pooled(per_fold: Any) -> Any:
     for model_id, block in per_fold.groupby("model_id", sort=False):
         row: dict[str, Any] = {
             "model_id": model_id,
-            "n_folds_holdout": int(len(block)),
+            "n_folds_holdout": len(block),
         }
         for metric in METRICS:
             values = block[metric].to_numpy(dtype=float)

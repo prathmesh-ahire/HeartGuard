@@ -348,12 +348,13 @@ def build_t26(footprint: Any, sources: tuple[str, ...], command: str = "") -> Ta
         dataset="D1 PhysioNet 2016, fold r0f0 training rows",
         notes=(
             "TWO MEMORY NUMBERS, AND THEY MEASURE DIFFERENT THINGS. tracemalloc "
-            "sees Python allocations only; numpy's buffers go through numpy's own "
-            "allocator and are invisible to it, which on a feature matrix is most "
-            "of the memory. The resident-set peak sees everything but is "
-            "process-wide, so it is a peak DURING the fit rather than a peak "
-            "CAUSED by it. Where the two disagree, the gap is roughly the numpy "
-            "share.",
+            "counts allocations made through CPython's allocator, which on this "
+            "stack includes numpy's array buffers but NOT memory taken inside "
+            "native library code that calls malloc directly -- a BLAS workspace "
+            "or XGBoost's own allocator. The resident-set peak sees all of it but "
+            "is process-wide, so it is a peak DURING the fit rather than a peak "
+            "CAUSED by it. Where the two disagree, the gap is native allocation "
+            "and page-touching behaviour.",
             "'Reliable' is false where the resident-set sampler collected fewer "
             "than five samples -- a fit shorter than about 100 ms has been "
             "glanced at, not measured, and its memory column must not be quoted.",
@@ -383,34 +384,56 @@ def build_g25(
         fig, axes = subplots("double", ncols=2, nrows=1)
         left, right = np.atleast_1d(axes)[0], np.atleast_1d(axes)[1]
 
-        for index, (_, row) in enumerate(frame.iterrows()):
+        # Labels are staggered above and below alternately. Several models sit
+        # within a few percent of each other on both axes -- M6 and M7 are the
+        # same ensemble with different weights -- so a fixed offset overplots
+        # them into an unreadable blob.
+        ordered = frame.sort_values("single_predict_seconds").reset_index(drop=True)
+        for index, row in ordered.iterrows():
             x = float(row["single_predict_seconds"])
             y = float(row[metric])
-            left.scatter(x, y, s=42, color=class_color(index), zorder=3, edgecolor="black",
-                         linewidth=0.4)
+            left.scatter(
+                x, y, s=42, color=class_color(index), zorder=3, edgecolor="black", linewidth=0.4
+            )
+            offsets = ((7, 5), (7, -11), (-19, 5), (-19, -11))
             left.annotate(
                 str(row["model_id"]),
                 (x, y),
                 textcoords="offset points",
-                xytext=(5, 3),
+                xytext=offsets[index % len(offsets)],
                 fontsize=6,
             )
         left.set_xscale("log")
+        left.set_xmargin(0.25)
+        left.set_ymargin(0.18)
         left.set_xlabel("predict time for one record (s, log scale)")
         left.set_ylabel(metric.replace("_", " ") + " (" + HEADLINE_RUN + " fold mean)")
         left.set_title("What a model choice controls", fontsize=8)
 
         pipeline = float(frame["pipeline_seconds_per_recording"].iloc[0])
         share = float(frame["extraction_share_of_pipeline"].iloc[0])
+        slowest = float(frame["single_predict_seconds"].max())
+        labels = ["whole pipeline", "of which extraction", "slowest model's predict"]
+        values = [pipeline, pipeline * share, slowest]
+        # Linear, not log. The point of this panel is that one bar is a sliver
+        # of another, and a log axis is precisely the transform that hides that.
         right.barh(
-            ["whole pipeline", "of which extraction", "slowest model's predict"],
-            [pipeline, pipeline * share, float(frame["single_predict_seconds"].max())],
+            labels,
+            values,
             color=[class_color(0), class_color(1), class_color(2)],
             edgecolor="black",
             linewidth=0.4,
         )
-        right.set_xscale("log")
-        right.set_xlabel("seconds per recording (log scale)")
+        for position, value in enumerate(values):
+            right.text(
+                value + pipeline * 0.02,
+                position,
+                format(value, ".3f") + " s",
+                va="center",
+                fontsize=6,
+            )
+        right.set_xlim(0, pipeline * 1.25)
+        right.set_xlabel("seconds per recording")
         right.set_title("What the user actually waits for", fontsize=8)
         right.tick_params(labelsize=6)
 
@@ -429,9 +452,11 @@ def build_g25(
             + ", both from the controlled bench and the stored run. Right: the "
             "same numbers against what an end-to-end inference on a real "
             "recording costs. Feature extraction is the same work for every "
-            "model, so the ~190x spread on the left is invisible to anyone "
-            "waiting for a result -- a model choice buys accuracy here, not "
-            "latency. Log scales on both."
+            "model, so the spread on the left is invisible to anyone waiting for "
+            "a result -- a model choice buys accuracy here, not latency. The left "
+            "axis is logarithmic because the models span two orders of magnitude; "
+            "the right one is deliberately linear, because a log axis is exactly "
+            "the transform that would hide how small the model's share is."
         ),
         sources=sources,
         exp_id=HEADLINE_RUN,
@@ -472,6 +497,10 @@ def build_g26(summary: Any, sources: tuple[str, ...], command: str = "") -> Grap
                     np.clip(np.asarray(highs, dtype=float) - mean_array, 0, None),
                 ]
             )
+            # The Okabe-Ito palette has eight colours and there are ten runs, so
+            # the ninth and tenth would silently reuse the first two. Hatching
+            # the wrapped ones keeps every run distinguishable without inventing
+            # a colour outside the project's declared palette.
             axis.bar(
                 positions,
                 mean_array,
@@ -481,6 +510,7 @@ def build_g26(summary: Any, sources: tuple[str, ...], command: str = "") -> Grap
                 color=class_color(index),
                 edgecolor="black",
                 linewidth=0.3,
+                hatch="///" if index >= 8 else "",
                 label=run,
                 error_kw={"elinewidth": 0.6},
             )
@@ -488,6 +518,7 @@ def build_g26(summary: Any, sources: tuple[str, ...], command: str = "") -> Grap
         axis.set_yscale("log")
         axis.set_xticks(np.arange(len(models)))
         axis.set_xticklabels(models)
+        axis.set_xlim(-0.6, len(models) - 0.4)
         axis.set_ylabel("seconds to fit one fold (log scale)")
         axis.legend(fontsize=5, ncol=3)
         axis.set_title(
@@ -509,7 +540,9 @@ def build_g26(summary: Any, sources: tuple[str, ...], command: str = "") -> Grap
             "gradient-boosting configuration costs an order of magnitude more "
             "than one that picked a small one. These are the times the project's "
             "own runs recorded on a machine that was sometimes running other "
-            "jobs; T26's controlled bench is the like-for-like comparison."
+            "jobs; T26's controlled bench is the like-for-like comparison. The "
+            "colourblind-safe palette holds eight colours and there are ten runs, "
+            "so the last two are hatched rather than given a ninth colour."
         ),
         sources=sources,
         exp_id="EXP-A1, EXP-A2, EXP-B1, EXP-B2, EXP-C1, EXP-C2",
@@ -540,7 +573,6 @@ def build_g27(footprint: Any, sources: tuple[str, ...], command: str = "") -> Gr
         left.set_yscale("log")
         left.set_xticks(positions)
         left.set_xticklabels(frame["model_id"], fontsize=6)
-        left.set_ylabel("serialized pipeline (MB, log scale)")
         left.set_title("On disk", fontsize=8)
 
         reliable = frame["memory_measurement_reliable"].astype(bool).to_numpy()
@@ -554,10 +586,15 @@ def build_g27(footprint: Any, sources: tuple[str, ...], command: str = "") -> Gr
         )
         right.set_xticks(positions)
         right.set_xticklabels(frame["model_id"], fontsize=6)
-        right.set_ylabel("peak resident set above baseline (MB)")
+        right.set_ylabel("peak resident set above baseline (MB)", fontsize=7)
         right.set_title("Peak memory during the fit", fontsize=8)
+        left.set_ylabel("serialized pipeline (MB, log scale)", fontsize=7)
 
-        fig.suptitle("Model size and fit memory, one declared configuration")
+        # The right panel's axis label is long enough to reach the suptitle at
+        # this figure size; widen the gutter and lower the panels rather than
+        # abbreviating a label that has to say which memory this is.
+        fig.subplots_adjust(wspace=0.32, top=0.78)
+        fig.suptitle("Model size and fit memory, one declared configuration", y=0.97)
         fig.text(
             0.5,
             0.90,

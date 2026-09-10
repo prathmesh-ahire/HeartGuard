@@ -1,0 +1,21 @@
+record_uid,file_path,duration_sec,duration_band,binary_label
+D1_training-b_b0122,dataset/archive (3)/training-b/b0122.wav,7.8495,medium,0.0
+D1_training-e_e01393,dataset/archive (3)/training-e/e01393.wav,17.648,medium,0.0
+D1_training-b_b0126,dataset/archive (3)/training-b/b0126.wav,8.0,medium,0.0
+D1_training-e_e00991,dataset/archive (3)/training-e/e00991.wav,13.41,medium,0.0
+D1_training-e_e00264,dataset/archive (3)/training-e/e00264.wav,17.322,medium,0.0
+D1_training-e_e00240,dataset/archive (3)/training-e/e00240.wav,16.913,medium,0.0
+D1_training-e_e01142,dataset/archive (3)/training-e/e01142.wav,10.376,medium,0.0
+D1_training-b_b0134,dataset/archive (3)/training-b/b0134.wav,8.0,medium,0.0
+D1_training-b_b0295,dataset/archive (3)/training-b/b0295.wav,8.0,medium,1.0
+D1_training-e_e01691,dataset/archive (3)/training-e/e01691.wav,14.33,medium,0.0
+D1_training-e_e01619,dataset/archive (3)/training-e/e01619.wav,23.843,long,0.0
+D1_training-e_e00438,dataset/archive (3)/training-e/e00438.wav,23.575,long,0.0
+D1_training-e_e00338,dataset/archive (3)/training-e/e00338.wav,57.733,long,0.0
+D1_training-e_e01202,dataset/archive (3)/training-e/e01202.wav,47.008,long,0.0
+D1_training-e_e01770,dataset/archive (3)/training-e/e01770.wav,42.239,long,0.0
+D1_training-a_a0321,dataset/archive (3)/training-a/a0321.wav,30.6505,long,1.0
+D1_training-e_e00589,dataset/archive (3)/training-e/e00589.wav,25.807,long,0.0
+D1_training-e_e00754,dataset/archive (3)/training-e/e00754.wav,39.047,long,0.0
+D1_training-e_e00890,dataset/archive (3)/training-e/e00890.wav,29.832,long,0.0
+D1_training-e_e02107,dataset/archive (3)/training-e/e02107.wav,22.875,long,0.0

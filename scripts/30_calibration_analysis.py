@@ -14,8 +14,8 @@ Two stages, because one of them fits models and the other does not.
     fold at four bin counts, builds the reliability and confidence frames, and
     writes T23, G33 and G34.
 
-    python scripts/29_calibration_analysis.py --stage svm
-    python scripts/29_calibration_analysis.py --stage tables
+    python scripts/30_calibration_analysis.py --stage svm
+    python scripts/30_calibration_analysis.py --stage tables
 """
 
 from __future__ import annotations
@@ -24,7 +24,7 @@ import argparse
 import sys
 from pathlib import Path
 
-if __package__ in (None, ""):  # allow `python scripts/29_calibration_analysis.py`
+if __package__ in (None, ""):  # allow `python scripts/30_calibration_analysis.py`
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.utils.logging_setup import get_logger
@@ -33,13 +33,13 @@ log = get_logger("calibration_analysis")
 
 SECTION = "outputs/10_robustness"
 RUN_DIR = "calibration"
-COMMAND = "python scripts/29_calibration_analysis.py"
+COMMAND = "python scripts/30_calibration_analysis.py"
 
 SVM_COMPARISON_CSV = "svm_calibration_method_comparison.csv"
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(prog="29_calibration_analysis")
+    parser = argparse.ArgumentParser(prog="30_calibration_analysis")
     parser.add_argument("--stage", default="both", choices=("svm", "tables", "both"))
     parser.add_argument(
         "--force-svm",

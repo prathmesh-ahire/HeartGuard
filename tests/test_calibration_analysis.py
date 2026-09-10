@@ -8,7 +8,7 @@ than against a hard-coded list, so a model added to an experiment later cannot
 quietly go unmeasured while the gate still passes.
 
 Every artifact test skips rather than fails when its input is absent: the
-outputs of `scripts/29_calibration_analysis.py` are not committed in full and a
+outputs of `scripts/30_calibration_analysis.py` are not committed in full and a
 fresh clone must report "skipped", never a false pass. See the standing rule in
 Docs/note.md.
 """
@@ -35,7 +35,7 @@ def _csv(name: str) -> Any:
 
     path = _root() / name
     if not path.is_file():
-        pytest.skip(str(path) + " does not exist; run scripts/29_calibration_analysis.py")
+        pytest.skip(str(path) + " does not exist; run scripts/30_calibration_analysis.py")
     return pd.read_csv(path)
 
 
@@ -46,7 +46,7 @@ def _section_csv(name: str) -> Any:
 
     path = PROJECT_ROOT / SECTION / name
     if not path.is_file():
-        pytest.skip(str(path) + " does not exist; run scripts/29_calibration_analysis.py")
+        pytest.skip(str(path) + " does not exist; run scripts/30_calibration_analysis.py")
     return pd.read_csv(path)
 
 
@@ -231,7 +231,7 @@ def test_the_chosen_calibration_is_recorded_and_names_the_final_model() -> None:
 
     path = _root() / "final_model_calibration.json"
     if not path.is_file():
-        pytest.skip(str(path) + " does not exist; run scripts/29_calibration_analysis.py")
+        pytest.skip(str(path) + " does not exist; run scripts/30_calibration_analysis.py")
     record = json.loads(path.read_text(encoding="utf-8"))
 
     assert record["svm_calibration_method"] in CALIBRATION_METHODS
@@ -263,7 +263,7 @@ def test_t23_states_which_calibration_the_final_model_uses() -> None:
         PROJECT_ROOT / SECTION / "T23_calibration_and_confidence_summary.meta.json"
     )
     if not meta_path.is_file():
-        pytest.skip(str(meta_path) + " does not exist; run scripts/29_calibration_analysis.py")
+        pytest.skip(str(meta_path) + " does not exist; run scripts/30_calibration_analysis.py")
     meta = json.loads(meta_path.read_text(encoding="utf-8"))
     notes = " ".join(meta.get("notes", []))
     assert "T78.4" in notes
@@ -302,7 +302,7 @@ def test_the_figures_exist_with_the_csv_they_were_drawn_from(figure_id: str, slu
     png = directory / (slug + ".png")
     csv = directory / (slug + ".csv")
     if not png.is_file():
-        pytest.skip(str(png) + " does not exist; run scripts/29_calibration_analysis.py")
+        pytest.skip(str(png) + " does not exist; run scripts/30_calibration_analysis.py")
     assert csv.is_file(), figure_id + " has a PNG with no source CSV"
     frame = pd.read_csv(csv)
     assert len(frame)
@@ -325,7 +325,7 @@ def test_g34_is_the_confidence_curve_not_the_positive_class_curve() -> None:
 
     path = figures_dir() / "G34_calibration_curve.csv"
     if not path.is_file():
-        pytest.skip(str(path) + " does not exist; run scripts/29_calibration_analysis.py")
+        pytest.skip(str(path) + " does not exist; run scripts/30_calibration_analysis.py")
     frame = pd.read_csv(path)
     assert set(frame["kind"]) == {"confidence_vs_accuracy"}
     floors = 1.0 / frame["n_classes"].astype(float)
