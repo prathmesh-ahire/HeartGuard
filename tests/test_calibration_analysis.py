@@ -148,14 +148,25 @@ def test_ece_grows_with_the_bin_count_on_real_predictions() -> None:
 
 
 def test_every_model_of_every_run_has_a_brier_and_an_ece() -> None:
+    """Checked against each run's own predictions.parquet, not a hard-coded list.
+
+    The parquets are gitignored, so on CI and on a fresh clone there is nothing
+    to check the summary against and this SKIPS. It must not pass vacuously
+    either: `available` counts the runs whose predictions were actually read,
+    and a zero there is a skip rather than a silently-satisfied loop. That is
+    the standing rule in Docs/note.md, and the first version of this test broke
+    CI by asserting on a counter no run had incremented.
+    """
     from src.evaluation.calibration_analysis import load_predictions, run_specs
 
     summary = _csv("calibration_summary.csv")
     measured = 0
+    available = 0
     for spec in run_specs():
         frame = load_predictions(spec)
         if frame is None:
             continue
+        available += 1
         expected = set(frame["model_id"].astype(str))
         block = summary[summary["run"] == spec.run]
         assert set(block["model_id"].astype(str)) == expected, spec.run
@@ -163,6 +174,9 @@ def test_every_model_of_every_run_has_a_brier_and_an_ece() -> None:
         assert block["ece_mean"].notna().all(), spec.run
         assert (block["n_folds"] == frame["fold_label"].nunique()).all(), spec.run
         measured += len(block)
+
+    if not available:
+        pytest.skip("no run has a predictions.parquet here (they are gitignored)")
     assert measured >= 40
 
 
