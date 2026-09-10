@@ -1,0 +1,18 @@
+{
+  "requested_models": [
+    "M4",
+    "M5",
+    "M8"
+  ],
+  "shap_version": "0.51.0",
+  "fold_label": "r0f0",
+  "status": "computed",
+  "models_computed": [
+    "M4",
+    "M5",
+    "M8"
+  ],
+  "models_failed": {},
+  "n_rows_per_model": 400,
+  "note": "TreeExplainer on the transformed matrix (imputer -> scaler), on the held-out rows of one fold. Signed values are for the positive class, so a positive mean pushes toward 'abnormal'. Unlike permutation importance, SHAP is computed on the model's own structure rather than by re-scoring, so it measures attribution rather than reliance."
+}

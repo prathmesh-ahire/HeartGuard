@@ -1,0 +1,106 @@
+{
+  "table_id": "FE-11",
+  "title": "Top Feature Importance",
+  "caption": "The highest-ranked features per model under permutation importance, computed on held-out rows across the five folds of one repeat -- a complete partition of the corpus, so every record is scored exactly once. The rank is taken on the mean; 'Rank SD' says how much the per-fold ranks themselves moved, which is the number that separates a genuinely top feature from an unstable one.",
+  "exp_id": "n/a (fitted for this analysis, config defaults)",
+  "objective": "O2 (feature contribution), O3 (model behaviour)",
+  "dataset": "D1 PhysioNet 2016",
+  "framework": "PV-MEPCG / PulseVision",
+  "generated_utc": "2026-09-10T14:51:22.349094+00:00",
+  "git": {
+    "available": true,
+    "reason": null,
+    "commit": "32e1e9832198c743a4f6ae219197c3a67aae6c46",
+    "commit_short": "32e1e983",
+    "branch": "main",
+    "dirty": true,
+    "dirty_files": [
+      "frontend/out/",
+      "outputs/03_features/FE-11_top_feature_importance.csv",
+      "outputs/03_features/FE-11_top_feature_importance.docx",
+      "outputs/03_features/FE-11_top_feature_importance.md",
+      "outputs/03_features/FE-11_top_feature_importance.tex",
+      "outputs/04_models/explainability/",
+      "outputs/09_robustness_analysis/EXP-E1/sweep.log",
+      "outputs/09_robustness_analysis/EXP-E2_trunc.log",
+      "scripts/33_explainability.py",
+      "src/explainability/global_importance.py",
+      "src/explainability/per_sample.py",
+      "src/reporting/importance_report.py",
+      "tests/test_explainability.py"
+    ]
+  },
+  "command": "python scripts/33_explainability.py",
+  "rounding_rules": {
+    "metric": 3,
+    "percent": 1,
+    "count": 0,
+    "integer": 0,
+    "seconds": 2,
+    "text": null,
+    "preformatted": null
+  },
+  "column_kinds": {
+    "model_id": "text",
+    "kind": "text",
+    "rank": "integer",
+    "feature": "text",
+    "importance_mean": "metric",
+    "importance_sd": "metric",
+    "importance_min": "metric",
+    "importance_max": "metric",
+    "rank_mean": "metric",
+    "rank_sd": "metric",
+    "n_folds": "count",
+    "n_folds_positive": "count"
+  },
+  "n_rows": 100,
+  "sources": [
+    {
+      "path": "D:/Projects/HeartGuard/outputs/04_models/explainability/importance_per_fold.csv",
+      "exists": true,
+      "bytes": 648266,
+      "sha256": "fa7ed6939cb01848a8548d4ea8ebbee23203a74bd04a147988c525cd1a7bd91d",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T14:49:02.675530+00:00"
+    },
+    {
+      "path": "D:/Projects/HeartGuard/outputs/04_models/explainability/importance_summary.csv",
+      "exists": true,
+      "bytes": 176808,
+      "sha256": "347faa100df1a55b58c32c82aa73451594d70f5535cfa7467f5f2fd17b279d3b",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T14:49:03.315406+00:00"
+    },
+    {
+      "path": "D:/Projects/HeartGuard/outputs/04_models/explainability/feature_family_importance.csv",
+      "exists": true,
+      "bytes": 5841,
+      "sha256": "da95e026aeeba4a674b481b45d02d7ec6ebb921c9c5e003773d89807810c0834",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T14:49:03.327501+00:00"
+    },
+    {
+      "path": "D:/Projects/HeartGuard/outputs/04_models/explainability/shap_importance.csv",
+      "exists": true,
+      "bytes": 35773,
+      "sha256": "ea323755bbef114e186b6c38a312c97c9e86a458376ddb11a2c6c6ed12924446",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T14:51:09.812647+00:00"
+    }
+  ],
+  "written": {
+    "csv": "D:/Projects/HeartGuard/outputs/03_features/FE-11_top_feature_importance.csv",
+    "md": "D:/Projects/HeartGuard/outputs/03_features/FE-11_top_feature_importance.md",
+    "docx": "D:/Projects/HeartGuard/outputs/03_features/FE-11_top_feature_importance.docx",
+    "latex": "D:/Projects/HeartGuard/outputs/03_features/FE-11_top_feature_importance.tex"
+  },
+  "notes": [
+    "PERMUTATION IS THE REPORTED MEASURE AND IMPURITY IS THE FOIL. Impurity importance is measured on the TRAINING rows and is biased toward features with many split points, which on this matrix means the 39 MFCC and 24 wavelet columns. Permutation importance is measured on rows the model never saw and asks what the fitted model actually uses. Where they disagree, prefer permutation; nothing here averages the two.",
+    "PERMUTATION IMPORTANCE CAN BE NEGATIVE and a negative value is not a small positive one: it means shuffling the feature IMPROVED the held-out score, so the model was being misled by it on those folds. Family shares are therefore taken over the positive part only -- a signed grand total can sit near zero and turn every share into nonsense.",
+    "'Folds positive' counts how many of the folds gave the feature a positive importance. A feature ranked highly on the mean but positive in only three of five folds is carried by one fold.",
+    "Models are fitted under configs/models.yaml defaults, not a searched configuration: the ranking is meant to be a property of the feature set and the model family, and a per-fold search would make each fold's ranking a statement about a different model.",
+    "T81.4 -- family-level rollup, which is the stable quantity. Leading family per model under permutation: M1 -> time (35.1% of positive importance); M8 -> mfcc (33.3% of positive importance); M3 -> dwt (23.3% of positive importance); M5 -> dwt (27.7% of positive importance); M4 -> dwt (27.4% of positive importance). Full rollup in feature_family_importance.csv.",
+    "PV-MEPCG / PulseVision is an academic screening and decision-support prototype. A feature the model relies on is not a clinical marker."
+  ]
+}
