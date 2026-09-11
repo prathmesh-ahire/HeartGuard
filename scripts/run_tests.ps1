@@ -22,10 +22,21 @@
 .PARAMETER Coverage
     Produce a coverage report over src/.
 
+.PARAMETER Frontend
+    After pytest, run the frontend suite (T118.6): a fresh `npm run build` (the
+    metric guard, the exporter, Next, the bundle budget), the Python
+    displayed-value audits over the new build, Vitest, and Playwright. The build
+    is never skipped, so the browser tests cannot run against a stale site.
+
+.PARAMETER FrontendOnly
+    The frontend suite without the full pytest run.
+
 .EXAMPLE
     .\scripts\run_tests.ps1
     .\scripts\run_tests.ps1 -Slow -Coverage
     .\scripts\run_tests.ps1 -Ci
+    .\scripts\run_tests.ps1 -Frontend
+    .\scripts\run_tests.ps1 -FrontendOnly
     .\scripts\run_tests.ps1 tests/test_constants.py -- -k bijective
 #>
 [CmdletBinding()]
@@ -34,6 +45,8 @@ param(
     [switch]$NoData,
     [switch]$Ci,
     [switch]$Coverage,
+    [switch]$Frontend,
+    [switch]$FrontendOnly,
     [Parameter(ValueFromRemainingArguments = $true)]
     [string[]]$Rest
 )
@@ -62,11 +75,52 @@ if ($Coverage) {
 if ($Rest) { $pytestArgs += $Rest }
 
 Write-Host "PV-MEPCG test suite" -ForegroundColor Cyan
-Write-Host ("  " + $python + " " + ($pytestArgs -join ' ')) -ForegroundColor DarkGray
-Write-Host ""
 
-& $python $pytestArgs
-$code = $LASTEXITCODE
+$code = 0
+if (-not $FrontendOnly) {
+    Write-Host ("  " + $python + " " + ($pytestArgs -join ' ')) -ForegroundColor DarkGray
+    Write-Host ""
+    & $python $pytestArgs
+    $code = $LASTEXITCODE
+}
+
+if ($Frontend -or $FrontendOnly) {
+    # The exporter and both Playwright servers are Python; they must use this
+    # interpreter, not whatever `python` resolves to on PATH.
+    $env:PATH = (Join-Path $root '.venv\Scripts') + [IO.Path]::PathSeparator + $env:PATH
+    $env:PV_PYTHON = $python
+    $steps = @(
+        @{ Name = 'build (guard, exporter, next, budget)'; Run = { npm run build } },
+        @{ Name = 'displayed-value audits'; Run = {
+            & $python -m pytest (Join-Path $root 'tests\test_pages_1_3.py') `
+                (Join-Path $root 'tests\test_pages_4_6.py') `
+                (Join-Path $root 'tests\test_pages_10_12.py') -q -p no:cacheprovider } },
+        @{ Name = 'vitest'; Run = { npm run test } },
+        @{ Name = 'playwright'; Run = { npm run test:e2e } }
+    )
+    Push-Location (Join-Path $root 'frontend')
+    # npm, Next and Playwright's servers write progress to stderr. Under 'Stop',
+    # Windows PowerShell 5.1 turns the first such line into a terminating error
+    # whenever output is redirected -- it aborted this block on uvicorn's
+    # "Started server process" log line. The exit code is the only authority.
+    $previousPreference = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        foreach ($step in $steps) {
+            Write-Host ""
+            Write-Host ("frontend: " + $step.Name) -ForegroundColor Cyan
+            & $step.Run
+            if ($LASTEXITCODE -ne 0) {
+                Write-Host ("frontend step failed: " + $step.Name) -ForegroundColor Red
+                if ($code -eq 0) { $code = $LASTEXITCODE }
+                break
+            }
+        }
+    } finally {
+        $ErrorActionPreference = $previousPreference
+        Pop-Location
+    }
+}
 
 Write-Host ""
 if ($code -eq 0) {

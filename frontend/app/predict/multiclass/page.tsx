@@ -28,6 +28,7 @@ export default function Page() {
   return (
     <div className="space-y-12">
       <SectionHeader
+        level={1}
         eyebrow="Prediction"
         title="Multiclass acoustic events"
         description={route?.summary ?? ''}

@@ -1,0 +1,536 @@
+{
+  "id": "G27",
+  "number": 27,
+  "title": "Model Size Comparison",
+  "caption": "Left: the joblib size of the whole fitted pipeline -- imputer, scaler and estimator, which is what a deployment loads -- on a log scale, spanning three orders of magnitude. Right: peak process resident set above the pre-fit baseline, sampled every 20 ms. Every model was fitted once on the training rows of binary fold r0f0 under configs/models.yaml defaults, on an otherwise idle machine, so the bars are comparable with each other. Hatched bars collected fewer than five samples: the fit finished too quickly to measure.",
+  "exp_id": "n/a (controlled bench, not an experiment)",
+  "objective": "O5 (complexity and deployability)",
+  "dataset": "D1 PhysioNet 2016, fold r0f0 training rows",
+  "notes": [],
+  "sources": [
+    "outputs/11_complexity/training_time_summary.csv",
+    "outputs/11_complexity/inference_stage_summary.csv",
+    "outputs/11_complexity/model_footprint.csv",
+    "outputs/11_complexity/complexity_overview.csv"
+  ],
+  "source_csv": "outputs/13_figures_diagrams/G27_model_size_comparison.csv",
+  "png": "/figures/G27_model_size_comparison.png",
+  "dpi": 300,
+  "n_rows": 8,
+  "columns": [
+    {
+      "name": "model_id",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "M1",
+        "M2",
+        "M3",
+        "M4",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
+      "values": null
+    },
+    {
+      "name": "task",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "binary",
+        "binary",
+        "binary",
+        "binary",
+        "binary",
+        "binary",
+        "binary",
+        "binary"
+      ],
+      "values": null
+    },
+    {
+      "name": "fold_label",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "r0f0",
+        "r0f0",
+        "r0f0",
+        "r0f0",
+        "r0f0",
+        "r0f0",
+        "r0f0",
+        "r0f0"
+      ],
+      "values": null
+    },
+    {
+      "name": "configuration",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "configs/models.yaml defaults",
+        "configs/models.yaml defaults",
+        "configs/models.yaml defaults",
+        "configs/models.yaml defaults",
+        "configs/models.yaml defaults",
+        "configs/models.yaml defaults",
+        "configs/models.yaml defaults",
+        "configs/models.yaml defaults"
+      ],
+      "values": null
+    },
+    {
+      "name": "n_train",
+      "kind": "count",
+      "places": 0,
+      "display": [
+        "2,593",
+        "2,593",
+        "2,593",
+        "2,593",
+        "2,593",
+        "2,593",
+        "2,593",
+        "2,593"
+      ],
+      "values": [
+        2593.0,
+        2593.0,
+        2593.0,
+        2593.0,
+        2593.0,
+        2593.0,
+        2593.0,
+        2593.0
+      ]
+    },
+    {
+      "name": "n_test",
+      "kind": "count",
+      "places": 0,
+      "display": [
+        "647",
+        "647",
+        "647",
+        "647",
+        "647",
+        "647",
+        "647",
+        "647"
+      ],
+      "values": [
+        647.0,
+        647.0,
+        647.0,
+        647.0,
+        647.0,
+        647.0,
+        647.0,
+        647.0
+      ]
+    },
+    {
+      "name": "n_features",
+      "kind": "count",
+      "places": 0,
+      "display": [
+        "138",
+        "138",
+        "138",
+        "138",
+        "138",
+        "138",
+        "138",
+        "138"
+      ],
+      "values": [
+        138.0,
+        138.0,
+        138.0,
+        138.0,
+        138.0,
+        138.0,
+        138.0,
+        138.0
+      ]
+    },
+    {
+      "name": "estimator_class",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "Pipeline",
+        "Pipeline",
+        "Pipeline",
+        "Pipeline",
+        "Pipeline",
+        "Pipeline",
+        "Pipeline",
+        "Pipeline"
+      ],
+      "values": null
+    },
+    {
+      "name": "model_bytes",
+      "kind": "count",
+      "places": 0,
+      "display": [
+        "7,153",
+        "2,889,406",
+        "2,214,025",
+        "12,471,058",
+        "273,177",
+        "15,561,636",
+        "15,561,896",
+        "672,657"
+      ],
+      "values": [
+        7153.0,
+        2889406.0,
+        2214025.0,
+        12471058.0,
+        273177.0,
+        15561636.0,
+        15561896.0,
+        672657.0
+      ]
+    },
+    {
+      "name": "model_mb",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "0.007153",
+        "2.889406",
+        "2.214025",
+        "12.471058",
+        "0.273177",
+        "15.561636",
+        "15.561896",
+        "0.672657"
+      ],
+      "values": [
+        0.007153,
+        2.889406,
+        2.214025,
+        12.471058,
+        0.273177,
+        15.561636,
+        15.561896,
+        0.672657
+      ]
+    },
+    {
+      "name": "fit_seconds",
+      "kind": "seconds",
+      "places": 2,
+      "display": [
+        "0.49",
+        "0.09",
+        "1.11",
+        "14.50",
+        "28.77",
+        "228.46",
+        "257.23",
+        "6.63"
+      ],
+      "values": [
+        0.4877674000017578,
+        0.0927884999982779,
+        1.1148688000030234,
+        14.503228699999454,
+        28.772615900001256,
+        228.4642775000029,
+        257.22887510000146,
+        6.626751000003424
+      ]
+    },
+    {
+      "name": "batch_predict_seconds",
+      "kind": "seconds",
+      "places": 2,
+      "display": [
+        "0.00",
+        "2.06",
+        "0.32",
+        "0.23",
+        "0.01",
+        "0.58",
+        "0.56",
+        "0.01"
+      ],
+      "values": [
+        0.0044210999985807,
+        2.0575521999999182,
+        0.3150001000030897,
+        0.2257820000013453,
+        0.0085345999978017,
+        0.579816599994956,
+        0.5560133999970276,
+        0.0124388999975053
+      ]
+    },
+    {
+      "name": "batch_predict_seconds_per_record",
+      "kind": "seconds",
+      "places": 2,
+      "display": [
+        "0.00",
+        "0.00",
+        "0.00",
+        "0.00",
+        "0.00",
+        "0.00",
+        "0.00",
+        "0.00"
+      ],
+      "values": [
+        6.833230291469486e-06,
+        0.0031801425038638,
+        0.0004868625966044,
+        0.0003489675425059,
+        1.3191035545288572e-05,
+        0.0008961616692348,
+        0.0008593715610464,
+        1.9225502314536875e-05
+      ]
+    },
+    {
+      "name": "single_predict_seconds",
+      "kind": "seconds",
+      "places": 2,
+      "display": [
+        "0.00",
+        "0.01",
+        "0.01",
+        "0.18",
+        "0.00",
+        "0.18",
+        "0.17",
+        "0.00"
+      ],
+      "values": [
+        0.0014054666656496,
+        0.0062446666658312,
+        0.0076712999992499,
+        0.1771607333333425,
+        0.001407533333501,
+        0.1829141000004407,
+        0.1692589666684701,
+        0.0038353666653468
+      ]
+    },
+    {
+      "name": "rss_sampler_available",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "True",
+        "True",
+        "True",
+        "True",
+        "True",
+        "True",
+        "True",
+        "True"
+      ],
+      "values": null
+    },
+    {
+      "name": "n_samples",
+      "kind": "count",
+      "places": 0,
+      "display": [
+        "18",
+        "4",
+        "34",
+        "377",
+        "922",
+        "6,941",
+        "7,888",
+        "213"
+      ],
+      "values": [
+        18.0,
+        4.0,
+        34.0,
+        377.0,
+        922.0,
+        6941.0,
+        7888.0,
+        213.0
+      ]
+    },
+    {
+      "name": "sample_interval_seconds",
+      "kind": "seconds",
+      "places": 2,
+      "display": [
+        "0.02",
+        "0.02",
+        "0.02",
+        "0.02",
+        "0.02",
+        "0.02",
+        "0.02",
+        "0.02"
+      ],
+      "values": [
+        0.02,
+        0.02,
+        0.02,
+        0.02,
+        0.02,
+        0.02,
+        0.02,
+        0.02
+      ]
+    },
+    {
+      "name": "baseline_rss_mb",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "219.009",
+        "223.576",
+        "224.072",
+        "229.401",
+        "235.655",
+        "245.559",
+        "303.636",
+        "372.572"
+      ],
+      "values": [
+        219.009,
+        223.576,
+        224.072,
+        229.401,
+        235.655,
+        245.559,
+        303.636,
+        372.572
+      ]
+    },
+    {
+      "name": "peak_rss_mb",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "231.887",
+        "237.916",
+        "239.677",
+        "254.001",
+        "250.765",
+        "357.048",
+        "423.916",
+        "423.748"
+      ],
+      "values": [
+        231.887,
+        237.916,
+        239.677,
+        254.001,
+        250.765,
+        357.048,
+        423.916,
+        423.748
+      ]
+    },
+    {
+      "name": "peak_rss_delta_mb",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "12.878",
+        "14.34",
+        "15.606",
+        "24.601",
+        "15.11",
+        "111.489",
+        "120.279",
+        "51.175"
+      ],
+      "values": [
+        12.878,
+        14.34,
+        15.606,
+        24.601,
+        15.11,
+        111.489,
+        120.279,
+        51.175
+      ]
+    },
+    {
+      "name": "tracemalloc_peak_mb",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "15.586",
+        "15.524",
+        "15.506",
+        "15.514",
+        "15.513",
+        "65.168",
+        "73.017",
+        "15.514"
+      ],
+      "values": [
+        15.586,
+        15.524,
+        15.506,
+        15.514,
+        15.513,
+        65.168,
+        73.017,
+        15.514
+      ]
+    },
+    {
+      "name": "tracemalloc_retained_mb",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "0.227",
+        "2.948",
+        "2.748",
+        "3.577",
+        "7.13",
+        "55.163",
+        "63.005",
+        "1.605"
+      ],
+      "values": [
+        0.227,
+        2.948,
+        2.748,
+        3.577,
+        7.13,
+        55.163,
+        63.005,
+        1.605
+      ]
+    },
+    {
+      "name": "memory_measurement_reliable",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "True",
+        "False",
+        "True",
+        "True",
+        "True",
+        "True",
+        "True",
+        "True"
+      ],
+      "values": null
+    }
+  ],
+  "data_omitted": false,
+  "data_omitted_reason": null
+}

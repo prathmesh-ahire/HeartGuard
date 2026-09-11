@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { DesignClient } from '@/app/design/DesignClient';
 import { EquationList } from '@/components/equations/Equations';
 import { SectionHeader } from '@/components/ui/SectionHeader';
+import { table } from '@/lib/generated/tables';
 
 /**
  * The design reference (T111.6, extended by Phases 112 and 113).
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
 export default function DesignPage() {
   return (
     <>
-      <DesignClient />
+      <DesignClient tables={{ T01: table('T01'), T02: table('T02') }} />
       <section className="mt-10 space-y-4">
         <SectionHeader
           level={2}

@@ -1,0 +1,2373 @@
+{
+  "available": true,
+  "reason": null,
+  "sources": [
+    {
+      "path": "outputs/04_models/explainability/importance_summary.csv",
+      "sha256": "347faa100df1a55b58c32c82aa73451594d70f5535cfa7467f5f2fd17b279d3b",
+      "available": true
+    },
+    {
+      "path": "outputs/04_models/explainability/feature_family_importance.csv",
+      "sha256": "da95e026aeeba4a674b481b45d02d7ec6ebb921c9c5e003773d89807810c0834",
+      "available": true
+    },
+    {
+      "path": "outputs/04_models/explainability/explainability_coverage.csv",
+      "sha256": "0a3046066235deda098de9f28a6d79ddb96cdd65d6ffd1b30bdf1d0cfd3ae82a",
+      "available": true
+    },
+    {
+      "path": "outputs/04_models/explainability/per_sample_explanation.json",
+      "sha256": "156013cf0f4f6eedba4378a8f8783c964a152ff0e167efed15e65a82af2dbe53",
+      "available": true
+    }
+  ],
+  "top_n": 20,
+  "importance": [
+    {
+      "task": "binary",
+      "model_id": "M1",
+      "kind": "permutation",
+      "n_features_ranked": 138,
+      "n_features_ranked_display": "138",
+      "n_folds": 5,
+      "rows": [
+        {
+          "rank": 1,
+          "feature": "time_zcr_mean",
+          "family": "time",
+          "importance": 0.1882210369630404,
+          "importance_display": "0.188",
+          "importance_sd_display": "0.033",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 2,
+          "feature": "dwt_cD1_entropy",
+          "family": "dwt",
+          "importance": 0.1228008580096794,
+          "importance_display": "0.123",
+          "importance_sd_display": "0.016",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 3,
+          "feature": "time_iqr",
+          "family": "time",
+          "importance": 0.0942050394652152,
+          "importance_display": "0.094",
+          "importance_sd_display": "0.016",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 4,
+          "feature": "mfcc_04_mean",
+          "family": "mfcc",
+          "importance": 0.0603536749976651,
+          "importance_display": "0.060",
+          "importance_sd_display": "0.013",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 5,
+          "feature": "time_sample_entropy",
+          "family": "time",
+          "importance": 0.0394490323955766,
+          "importance_display": "0.039",
+          "importance_sd_display": "0.014",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 6,
+          "feature": "freq_rolloff95_mean",
+          "family": "frequency",
+          "importance": 0.0321905182255527,
+          "importance_display": "0.032",
+          "importance_sd_display": "0.021",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 7,
+          "feature": "time_hjorth_mobility",
+          "family": "time",
+          "importance": 0.0320378812297572,
+          "importance_display": "0.032",
+          "importance_sd_display": "0.037",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 8,
+          "feature": "chroma_01_mean",
+          "family": "chroma",
+          "importance": 0.0276341489228935,
+          "importance_display": "0.028",
+          "importance_sd_display": "0.017",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 9,
+          "feature": "freq_centroid_mean",
+          "family": "frequency",
+          "importance": 0.0268404279262718,
+          "importance_display": "0.027",
+          "importance_sd_display": "0.006",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 10,
+          "feature": "dwt_cD2_mean_abs",
+          "family": "dwt",
+          "importance": 0.0241115537949529,
+          "importance_display": "0.024",
+          "importance_sd_display": "0.010",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 11,
+          "feature": "freq_band_power_20_50",
+          "family": "frequency",
+          "importance": 0.0224965147034851,
+          "importance_display": "0.022",
+          "importance_sd_display": "0.024",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 12,
+          "feature": "dwt_cA5_energy",
+          "family": "dwt",
+          "importance": 0.019600787577063,
+          "importance_display": "0.020",
+          "importance_sd_display": "0.019",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 13,
+          "feature": "mfcc_01_std",
+          "family": "mfcc",
+          "importance": 0.0191534895034624,
+          "importance_display": "0.019",
+          "importance_sd_display": "0.014",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 14,
+          "feature": "env_skew",
+          "family": "envelope",
+          "importance": 0.0170138772718041,
+          "importance_display": "0.017",
+          "importance_sd_display": "0.018",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 15,
+          "feature": "dwt_cD5_std",
+          "family": "dwt",
+          "importance": 0.0155836123946389,
+          "importance_display": "0.016",
+          "importance_sd_display": "0.019",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 16,
+          "feature": "dwt_cD2_energy",
+          "family": "dwt",
+          "importance": 0.0131823987531442,
+          "importance_display": "0.013",
+          "importance_sd_display": "0.011",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 17,
+          "feature": "mfcc_03_mean",
+          "family": "mfcc",
+          "importance": 0.0122489753321613,
+          "importance_display": "0.012",
+          "importance_sd_display": "0.014",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 18,
+          "feature": "freq_band_power_150_250",
+          "family": "frequency",
+          "importance": 0.0117815082696971,
+          "importance_display": "0.012",
+          "importance_sd_display": "0.009",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 19,
+          "feature": "freq_bandwidth_mean",
+          "family": "frequency",
+          "importance": 0.0114660522797852,
+          "importance_display": "0.011",
+          "importance_sd_display": "0.011",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 20,
+          "feature": "freq_rolloff85_mean",
+          "family": "frequency",
+          "importance": 0.0113678848020152,
+          "importance_display": "0.011",
+          "importance_sd_display": "0.011",
+          "folds_positive_display": "4 of 5"
+        }
+      ]
+    },
+    {
+      "task": "binary",
+      "model_id": "M3",
+      "kind": "permutation",
+      "n_features_ranked": 138,
+      "n_features_ranked_display": "138",
+      "n_folds": 5,
+      "rows": [
+        {
+          "rank": 1,
+          "feature": "dwt_cD1_entropy",
+          "family": "dwt",
+          "importance": 0.0197123068160801,
+          "importance_display": "0.020",
+          "importance_sd_display": "0.010",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 2,
+          "feature": "mfcc_04_mean",
+          "family": "mfcc",
+          "importance": 0.0183982370084512,
+          "importance_display": "0.018",
+          "importance_sd_display": "0.007",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 3,
+          "feature": "mfcc_01_std",
+          "family": "mfcc",
+          "importance": 0.0130583548108314,
+          "importance_display": "0.013",
+          "importance_sd_display": "0.006",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 4,
+          "feature": "time_zcr_mean",
+          "family": "time",
+          "importance": 0.0113877016284646,
+          "importance_display": "0.011",
+          "importance_sd_display": "0.007",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 5,
+          "feature": "dwt_cA5_energy",
+          "family": "dwt",
+          "importance": 0.0065533362407415,
+          "importance_display": "0.007",
+          "importance_sd_display": "0.008",
+          "folds_positive_display": "3 of 5"
+        },
+        {
+          "rank": 6,
+          "feature": "dwt_cD2_entropy",
+          "family": "dwt",
+          "importance": 0.0060552700005347,
+          "importance_display": "0.006",
+          "importance_sd_display": "0.005",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 7,
+          "feature": "chroma_03_std",
+          "family": "chroma",
+          "importance": 0.0053636388250856,
+          "importance_display": "0.005",
+          "importance_sd_display": "0.007",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 8,
+          "feature": "freq_rolloff85_std",
+          "family": "frequency",
+          "importance": 0.0051454338905203,
+          "importance_display": "0.005",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 9,
+          "feature": "mfcc_06_mean",
+          "family": "mfcc",
+          "importance": 0.0050545027819641,
+          "importance_display": "0.005",
+          "importance_sd_display": "0.001",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 10,
+          "feature": "dwt_cD3_std",
+          "family": "dwt",
+          "importance": 0.0050200187314431,
+          "importance_display": "0.005",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 11,
+          "feature": "chroma_01_mean",
+          "family": "chroma",
+          "importance": 0.0048711667848879,
+          "importance_display": "0.005",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 12,
+          "feature": "chroma_02_mean",
+          "family": "chroma",
+          "importance": 0.0045689888358834,
+          "importance_display": "0.005",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 13,
+          "feature": "dwt_cD5_mean_abs",
+          "family": "dwt",
+          "importance": 0.004247456184164,
+          "importance_display": "0.004",
+          "importance_sd_display": "0.005",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 14,
+          "feature": "mfcc_12_std",
+          "family": "mfcc",
+          "importance": 0.0042001768373219,
+          "importance_display": "0.004",
+          "importance_sd_display": "0.005",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 15,
+          "feature": "time_iqr",
+          "family": "time",
+          "importance": 0.0040926046937599,
+          "importance_display": "0.004",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 16,
+          "feature": "dwt_cD1_std",
+          "family": "dwt",
+          "importance": 0.0040552646251737,
+          "importance_display": "0.004",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 17,
+          "feature": "dwt_cD5_std",
+          "family": "dwt",
+          "importance": 0.0040011718883398,
+          "importance_display": "0.004",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 18,
+          "feature": "mfcc_05_mean",
+          "family": "mfcc",
+          "importance": 0.0039617514026262,
+          "importance_display": "0.004",
+          "importance_sd_display": "0.005",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 19,
+          "feature": "mfcc_02_mean",
+          "family": "mfcc",
+          "importance": 0.0038733149322736,
+          "importance_display": "0.004",
+          "importance_sd_display": "0.005",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 20,
+          "feature": "time_hjorth_mobility",
+          "family": "time",
+          "importance": 0.0036874072124877,
+          "importance_display": "0.004",
+          "importance_sd_display": "0.003",
+          "folds_positive_display": "4 of 5"
+        }
+      ]
+    },
+    {
+      "task": "binary",
+      "model_id": "M4",
+      "kind": "impurity",
+      "n_features_ranked": 138,
+      "n_features_ranked_display": "138",
+      "n_folds": 5,
+      "rows": [
+        {
+          "rank": 1,
+          "feature": "time_zcr_mean",
+          "family": "time",
+          "importance": 0.0613500767949585,
+          "importance_display": "0.061",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 2,
+          "feature": "mfcc_04_mean",
+          "family": "mfcc",
+          "importance": 0.0605135501931194,
+          "importance_display": "0.061",
+          "importance_sd_display": "0.001",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 3,
+          "feature": "dwt_cD1_entropy",
+          "family": "dwt",
+          "importance": 0.058709793716375,
+          "importance_display": "0.059",
+          "importance_sd_display": "0.002",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 4,
+          "feature": "dwt_cD2_entropy",
+          "family": "dwt",
+          "importance": 0.038419891220412,
+          "importance_display": "0.038",
+          "importance_sd_display": "0.002",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 5,
+          "feature": "dwt_cA5_mean_abs",
+          "family": "dwt",
+          "importance": 0.0226214241347966,
+          "importance_display": "0.023",
+          "importance_sd_display": "0.003",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 6,
+          "feature": "mfcc_05_mean",
+          "family": "mfcc",
+          "importance": 0.0198118913262818,
+          "importance_display": "0.020",
+          "importance_sd_display": "0.001",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 7,
+          "feature": "time_hjorth_complexity",
+          "family": "time",
+          "importance": 0.0183797189739527,
+          "importance_display": "0.018",
+          "importance_sd_display": "0.002",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 8,
+          "feature": "dwt_cA5_energy",
+          "family": "dwt",
+          "importance": 0.0174140219428868,
+          "importance_display": "0.017",
+          "importance_sd_display": "0.005",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 9,
+          "feature": "mfcc_01_std",
+          "family": "mfcc",
+          "importance": 0.0170478721941802,
+          "importance_display": "0.017",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 10,
+          "feature": "mfcc_06_mean",
+          "family": "mfcc",
+          "importance": 0.0163695932649319,
+          "importance_display": "0.016",
+          "importance_sd_display": "0.002",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 11,
+          "feature": "time_duration",
+          "family": "time",
+          "importance": 0.0136907037220596,
+          "importance_display": "0.014",
+          "importance_sd_display": "0.002",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 12,
+          "feature": "time_iqr",
+          "family": "time",
+          "importance": 0.0132769057566662,
+          "importance_display": "0.013",
+          "importance_sd_display": "0.001",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 13,
+          "feature": "time_energy",
+          "family": "time",
+          "importance": 0.0130754815334478,
+          "importance_display": "0.013",
+          "importance_sd_display": "0.002",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 14,
+          "feature": "mfcc_08_mean",
+          "family": "mfcc",
+          "importance": 0.0130638172490279,
+          "importance_display": "0.013",
+          "importance_sd_display": "0.002",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 15,
+          "feature": "dwt_cA5_std",
+          "family": "dwt",
+          "importance": 0.0127530265219732,
+          "importance_display": "0.013",
+          "importance_sd_display": "0.003",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 16,
+          "feature": "dwt_cD5_mean_abs",
+          "family": "dwt",
+          "importance": 0.0127411053322632,
+          "importance_display": "0.013",
+          "importance_sd_display": "0.002",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 17,
+          "feature": "dwt_cD1_energy",
+          "family": "dwt",
+          "importance": 0.0123991203121956,
+          "importance_display": "0.012",
+          "importance_sd_display": "0.001",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 18,
+          "feature": "mfcc_07_mean",
+          "family": "mfcc",
+          "importance": 0.0123965284903375,
+          "importance_display": "0.012",
+          "importance_sd_display": "0.001",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 19,
+          "feature": "freq_centroid_mean",
+          "family": "frequency",
+          "importance": 0.0122211172485833,
+          "importance_display": "0.012",
+          "importance_sd_display": "0.001",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 20,
+          "feature": "time_zcr_std",
+          "family": "time",
+          "importance": 0.0115507143751994,
+          "importance_display": "0.012",
+          "importance_sd_display": "0.001",
+          "folds_positive_display": "5 of 5"
+        }
+      ]
+    },
+    {
+      "task": "binary",
+      "model_id": "M4",
+      "kind": "permutation",
+      "n_features_ranked": 138,
+      "n_features_ranked_display": "138",
+      "n_folds": 5,
+      "rows": [
+        {
+          "rank": 1,
+          "feature": "time_zcr_mean",
+          "family": "time",
+          "importance": 0.0301455121144788,
+          "importance_display": "0.030",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 2,
+          "feature": "mfcc_04_mean",
+          "family": "mfcc",
+          "importance": 0.0245642103127221,
+          "importance_display": "0.025",
+          "importance_sd_display": "0.005",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 3,
+          "feature": "dwt_cD1_entropy",
+          "family": "dwt",
+          "importance": 0.0200058215315529,
+          "importance_display": "0.020",
+          "importance_sd_display": "0.007",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 4,
+          "feature": "dwt_cD2_entropy",
+          "family": "dwt",
+          "importance": 0.0061015846279928,
+          "importance_display": "0.006",
+          "importance_sd_display": "0.005",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 5,
+          "feature": "dwt_cD1_energy",
+          "family": "dwt",
+          "importance": 0.0040763618745356,
+          "importance_display": "0.004",
+          "importance_sd_display": "0.003",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 6,
+          "feature": "freq_flux_mean",
+          "family": "frequency",
+          "importance": 0.002958745431329,
+          "importance_display": "0.003",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 7,
+          "feature": "dwt_cD2_energy",
+          "family": "dwt",
+          "importance": 0.0025059050286713,
+          "importance_display": "0.003",
+          "importance_sd_display": "0.003",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 8,
+          "feature": "dwt_cD1_std",
+          "family": "dwt",
+          "importance": 0.0024986238333014,
+          "importance_display": "0.002",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 9,
+          "feature": "mfcc_05_std",
+          "family": "mfcc",
+          "importance": 0.0024821550136262,
+          "importance_display": "0.002",
+          "importance_sd_display": "0.007",
+          "folds_positive_display": "3 of 5"
+        },
+        {
+          "rank": 10,
+          "feature": "freq_band_power_350_400",
+          "family": "frequency",
+          "importance": 0.0022431905897635,
+          "importance_display": "0.002",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 11,
+          "feature": "time_duration",
+          "family": "time",
+          "importance": 0.0021828952954252,
+          "importance_display": "0.002",
+          "importance_sd_display": "0.007",
+          "folds_positive_display": "2 of 5"
+        },
+        {
+          "rank": 12,
+          "feature": "chroma_02_mean",
+          "family": "chroma",
+          "importance": 0.0021794758931212,
+          "importance_display": "0.002",
+          "importance_sd_display": "0.002",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 13,
+          "feature": "mfcc_01_std",
+          "family": "mfcc",
+          "importance": 0.0019366167801716,
+          "importance_display": "0.002",
+          "importance_sd_display": "0.002",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 14,
+          "feature": "mfcc_13_mean",
+          "family": "mfcc",
+          "importance": 0.0019076271953966,
+          "importance_display": "0.002",
+          "importance_sd_display": "0.002",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 15,
+          "feature": "time_energy",
+          "family": "time",
+          "importance": 0.0018856444737887,
+          "importance_display": "0.002",
+          "importance_sd_display": "0.008",
+          "folds_positive_display": "2 of 5"
+        },
+        {
+          "rank": 16,
+          "feature": "mfcc_02_mean",
+          "family": "mfcc",
+          "importance": 0.0017835396793729,
+          "importance_display": "0.002",
+          "importance_sd_display": "0.003",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 17,
+          "feature": "freq_band_power_250_350",
+          "family": "frequency",
+          "importance": 0.0016802833209237,
+          "importance_display": "0.002",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 18,
+          "feature": "dwt_cD5_mean_abs",
+          "family": "dwt",
+          "importance": 0.0014647536126788,
+          "importance_display": "0.001",
+          "importance_sd_display": "0.003",
+          "folds_positive_display": "3 of 5"
+        },
+        {
+          "rank": 19,
+          "feature": "chroma_09_mean",
+          "family": "chroma",
+          "importance": 0.001452160021285,
+          "importance_display": "0.001",
+          "importance_sd_display": "0.003",
+          "folds_positive_display": "3 of 5"
+        },
+        {
+          "rank": 20,
+          "feature": "freq_rolloff95_mean",
+          "family": "frequency",
+          "importance": 0.0014330535349456,
+          "importance_display": "0.001",
+          "importance_sd_display": "0.002",
+          "folds_positive_display": "4 of 5"
+        }
+      ]
+    },
+    {
+      "task": "binary",
+      "model_id": "M5",
+      "kind": "impurity",
+      "n_features_ranked": 138,
+      "n_features_ranked_display": "138",
+      "n_folds": 5,
+      "rows": [
+        {
+          "rank": 1,
+          "feature": "mfcc_04_mean",
+          "family": "mfcc",
+          "importance": 0.2623979121088013,
+          "importance_display": "0.262",
+          "importance_sd_display": "0.043",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 2,
+          "feature": "dwt_cD1_entropy",
+          "family": "dwt",
+          "importance": 0.1531362868485228,
+          "importance_display": "0.153",
+          "importance_sd_display": "0.036",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 3,
+          "feature": "time_zcr_mean",
+          "family": "time",
+          "importance": 0.0931691397660225,
+          "importance_display": "0.093",
+          "importance_sd_display": "0.048",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 4,
+          "feature": "dwt_cD5_energy",
+          "family": "dwt",
+          "importance": 0.0410950961445409,
+          "importance_display": "0.041",
+          "importance_sd_display": "0.009",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 5,
+          "feature": "dwt_cD1_energy",
+          "family": "dwt",
+          "importance": 0.0357627929083809,
+          "importance_display": "0.036",
+          "importance_sd_display": "0.014",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 6,
+          "feature": "time_iqr",
+          "family": "time",
+          "importance": 0.0300684993044583,
+          "importance_display": "0.030",
+          "importance_sd_display": "0.006",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 7,
+          "feature": "dwt_cD4_energy",
+          "family": "dwt",
+          "importance": 0.0150333236047649,
+          "importance_display": "0.015",
+          "importance_sd_display": "0.011",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 8,
+          "feature": "dwt_cD5_mean_abs",
+          "family": "dwt",
+          "importance": 0.0144389749669299,
+          "importance_display": "0.014",
+          "importance_sd_display": "0.011",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 9,
+          "feature": "freq_band_power_350_400",
+          "family": "frequency",
+          "importance": 0.0133424625958493,
+          "importance_display": "0.013",
+          "importance_sd_display": "0.016",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 10,
+          "feature": "freq_band_power_250_350",
+          "family": "frequency",
+          "importance": 0.0118709897355285,
+          "importance_display": "0.012",
+          "importance_sd_display": "0.012",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 11,
+          "feature": "dwt_cA5_energy",
+          "family": "dwt",
+          "importance": 0.0104977911460276,
+          "importance_display": "0.010",
+          "importance_sd_display": "0.006",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 12,
+          "feature": "time_duration",
+          "family": "time",
+          "importance": 0.0104736501133911,
+          "importance_display": "0.010",
+          "importance_sd_display": "0.003",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 13,
+          "feature": "time_energy",
+          "family": "time",
+          "importance": 0.0104584268962482,
+          "importance_display": "0.010",
+          "importance_sd_display": "0.006",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 14,
+          "feature": "mfcc_05_mean",
+          "family": "mfcc",
+          "importance": 0.0091626079933601,
+          "importance_display": "0.009",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 15,
+          "feature": "mfcc_05_std",
+          "family": "mfcc",
+          "importance": 0.0091060542779942,
+          "importance_display": "0.009",
+          "importance_sd_display": "0.005",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 16,
+          "feature": "mfcc_02_mean",
+          "family": "mfcc",
+          "importance": 0.0087239481774986,
+          "importance_display": "0.009",
+          "importance_sd_display": "0.003",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 17,
+          "feature": "chroma_05_std",
+          "family": "chroma",
+          "importance": 0.0082756039771108,
+          "importance_display": "0.008",
+          "importance_sd_display": "0.007",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 18,
+          "feature": "dwt_cA5_std",
+          "family": "dwt",
+          "importance": 0.0078646262414633,
+          "importance_display": "0.008",
+          "importance_sd_display": "0.009",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 19,
+          "feature": "chroma_07_std",
+          "family": "chroma",
+          "importance": 0.0078456754961765,
+          "importance_display": "0.008",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 20,
+          "feature": "dwt_cD3_mean_abs",
+          "family": "dwt",
+          "importance": 0.0076415355531132,
+          "importance_display": "0.008",
+          "importance_sd_display": "0.006",
+          "folds_positive_display": "5 of 5"
+        }
+      ]
+    },
+    {
+      "task": "binary",
+      "model_id": "M5",
+      "kind": "permutation",
+      "n_features_ranked": 138,
+      "n_features_ranked_display": "138",
+      "n_folds": 5,
+      "rows": [
+        {
+          "rank": 1,
+          "feature": "mfcc_04_mean",
+          "family": "mfcc",
+          "importance": 0.0379718588601555,
+          "importance_display": "0.038",
+          "importance_sd_display": "0.025",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 2,
+          "feature": "dwt_cD1_entropy",
+          "family": "dwt",
+          "importance": 0.0271584006867576,
+          "importance_display": "0.027",
+          "importance_sd_display": "0.012",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 3,
+          "feature": "time_zcr_mean",
+          "family": "time",
+          "importance": 0.0191690071123489,
+          "importance_display": "0.019",
+          "importance_sd_display": "0.009",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 4,
+          "feature": "dwt_cD5_energy",
+          "family": "dwt",
+          "importance": 0.0092557916598226,
+          "importance_display": "0.009",
+          "importance_sd_display": "0.008",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 5,
+          "feature": "dwt_cD1_energy",
+          "family": "dwt",
+          "importance": 0.0053993886369474,
+          "importance_display": "0.005",
+          "importance_sd_display": "0.011",
+          "folds_positive_display": "3 of 5"
+        },
+        {
+          "rank": 6,
+          "feature": "mfcc_02_mean",
+          "family": "mfcc",
+          "importance": 0.0046967394141431,
+          "importance_display": "0.005",
+          "importance_sd_display": "0.006",
+          "folds_positive_display": "3 of 5"
+        },
+        {
+          "rank": 7,
+          "feature": "mfcc_05_std",
+          "family": "mfcc",
+          "importance": 0.0036402172232216,
+          "importance_display": "0.004",
+          "importance_sd_display": "0.012",
+          "folds_positive_display": "3 of 5"
+        },
+        {
+          "rank": 8,
+          "feature": "time_iqr",
+          "family": "time",
+          "importance": 0.0029434196703661,
+          "importance_display": "0.003",
+          "importance_sd_display": "0.008",
+          "folds_positive_display": "3 of 5"
+        },
+        {
+          "rank": 9,
+          "feature": "chroma_07_std",
+          "family": "chroma",
+          "importance": 0.0027069456290447,
+          "importance_display": "0.003",
+          "importance_sd_display": "0.003",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 10,
+          "feature": "mfcc_01_mean",
+          "family": "mfcc",
+          "importance": 0.002567279249309,
+          "importance_display": "0.003",
+          "importance_sd_display": "0.005",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 11,
+          "feature": "freq_centroid_std",
+          "family": "frequency",
+          "importance": 0.0023794517160754,
+          "importance_display": "0.002",
+          "importance_sd_display": "0.003",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 12,
+          "feature": "dwt_cD1_std",
+          "family": "dwt",
+          "importance": 0.002287134689964,
+          "importance_display": "0.002",
+          "importance_sd_display": "0.005",
+          "folds_positive_display": "2 of 5"
+        },
+        {
+          "rank": 13,
+          "feature": "freq_rolloff85_mean",
+          "family": "frequency",
+          "importance": 0.0020376254953314,
+          "importance_display": "0.002",
+          "importance_sd_display": "0.005",
+          "folds_positive_display": "3 of 5"
+        },
+        {
+          "rank": 14,
+          "feature": "time_duration",
+          "family": "time",
+          "importance": 0.0019407757697254,
+          "importance_display": "0.002",
+          "importance_sd_display": "0.007",
+          "folds_positive_display": "3 of 5"
+        },
+        {
+          "rank": 15,
+          "feature": "freq_band_power_350_400",
+          "family": "frequency",
+          "importance": 0.0017917705775862,
+          "importance_display": "0.002",
+          "importance_sd_display": "0.009",
+          "folds_positive_display": "1 of 5"
+        },
+        {
+          "rank": 16,
+          "feature": "chroma_11_std",
+          "family": "chroma",
+          "importance": 0.0017760947746275,
+          "importance_display": "0.002",
+          "importance_sd_display": "0.002",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 17,
+          "feature": "freq_band_power_250_350",
+          "family": "frequency",
+          "importance": 0.0016536770295261,
+          "importance_display": "0.002",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "3 of 5"
+        },
+        {
+          "rank": 18,
+          "feature": "chroma_05_std",
+          "family": "chroma",
+          "importance": 0.0016475283637562,
+          "importance_display": "0.002",
+          "importance_sd_display": "0.002",
+          "folds_positive_display": "3 of 5"
+        },
+        {
+          "rank": 19,
+          "feature": "time_kurtosis",
+          "family": "time",
+          "importance": 0.0016312131406826,
+          "importance_display": "0.002",
+          "importance_sd_display": "0.003",
+          "folds_positive_display": "3 of 5"
+        },
+        {
+          "rank": 20,
+          "feature": "freq_flatness_mean",
+          "family": "frequency",
+          "importance": 0.0014205204298348,
+          "importance_display": "0.001",
+          "importance_sd_display": "0.001",
+          "folds_positive_display": "5 of 5"
+        }
+      ]
+    },
+    {
+      "task": "binary",
+      "model_id": "M8",
+      "kind": "impurity",
+      "n_features_ranked": 138,
+      "n_features_ranked_display": "138",
+      "n_folds": 5,
+      "rows": [
+        {
+          "rank": 1,
+          "feature": "dwt_cD1_entropy",
+          "family": "dwt",
+          "importance": 0.083892498165369,
+          "importance_display": "0.084",
+          "importance_sd_display": "0.022",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 2,
+          "feature": "mfcc_04_mean",
+          "family": "mfcc",
+          "importance": 0.0731470741331577,
+          "importance_display": "0.073",
+          "importance_sd_display": "0.018",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 3,
+          "feature": "dwt_cD1_energy",
+          "family": "dwt",
+          "importance": 0.0433645166456699,
+          "importance_display": "0.043",
+          "importance_sd_display": "0.008",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 4,
+          "feature": "time_zcr_mean",
+          "family": "time",
+          "importance": 0.0356184681877493,
+          "importance_display": "0.036",
+          "importance_sd_display": "0.026",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 5,
+          "feature": "dwt_cD1_std",
+          "family": "dwt",
+          "importance": 0.0321885406970977,
+          "importance_display": "0.032",
+          "importance_sd_display": "0.021",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 6,
+          "feature": "time_iqr",
+          "family": "time",
+          "importance": 0.0192105699330568,
+          "importance_display": "0.019",
+          "importance_sd_display": "0.006",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 7,
+          "feature": "dwt_cD3_mean_abs",
+          "family": "dwt",
+          "importance": 0.0189791318029165,
+          "importance_display": "0.019",
+          "importance_sd_display": "0.007",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 8,
+          "feature": "dwt_cD4_energy",
+          "family": "dwt",
+          "importance": 0.0187236713245511,
+          "importance_display": "0.019",
+          "importance_sd_display": "0.012",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 9,
+          "feature": "dwt_cD5_energy",
+          "family": "dwt",
+          "importance": 0.0157724803313612,
+          "importance_display": "0.016",
+          "importance_sd_display": "0.006",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 10,
+          "feature": "freq_band_power_350_400",
+          "family": "frequency",
+          "importance": 0.0155260073952376,
+          "importance_display": "0.016",
+          "importance_sd_display": "0.008",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 11,
+          "feature": "time_duration",
+          "family": "time",
+          "importance": 0.0137540414929389,
+          "importance_display": "0.014",
+          "importance_sd_display": "0.005",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 12,
+          "feature": "time_hjorth_mobility",
+          "family": "time",
+          "importance": 0.0121641867794096,
+          "importance_display": "0.012",
+          "importance_sd_display": "0.006",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 13,
+          "feature": "dwt_cD5_mean_abs",
+          "family": "dwt",
+          "importance": 0.0107135717757046,
+          "importance_display": "0.011",
+          "importance_sd_display": "0.005",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 14,
+          "feature": "freq_band_power_250_350",
+          "family": "frequency",
+          "importance": 0.0102284555323421,
+          "importance_display": "0.010",
+          "importance_sd_display": "0.012",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 15,
+          "feature": "dwt_cD4_std",
+          "family": "dwt",
+          "importance": 0.0101664560381323,
+          "importance_display": "0.010",
+          "importance_sd_display": "0.006",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 16,
+          "feature": "dwt_cD4_mean_abs",
+          "family": "dwt",
+          "importance": 0.0100446237251162,
+          "importance_display": "0.010",
+          "importance_sd_display": "0.002",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 17,
+          "feature": "dwt_cD2_mean_abs",
+          "family": "dwt",
+          "importance": 0.0100404876284301,
+          "importance_display": "0.010",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 18,
+          "feature": "mfcc_05_mean",
+          "family": "mfcc",
+          "importance": 0.0096483888104557,
+          "importance_display": "0.010",
+          "importance_sd_display": "0.003",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 19,
+          "feature": "dwt_cA5_mean_abs",
+          "family": "dwt",
+          "importance": 0.0096409584395587,
+          "importance_display": "0.010",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 20,
+          "feature": "time_energy",
+          "family": "time",
+          "importance": 0.0096402099356055,
+          "importance_display": "0.010",
+          "importance_sd_display": "0.002",
+          "folds_positive_display": "5 of 5"
+        }
+      ]
+    },
+    {
+      "task": "binary",
+      "model_id": "M8",
+      "kind": "permutation",
+      "n_features_ranked": 138,
+      "n_features_ranked_display": "138",
+      "n_folds": 5,
+      "rows": [
+        {
+          "rank": 1,
+          "feature": "dwt_cD1_entropy",
+          "family": "dwt",
+          "importance": 0.0535580383473056,
+          "importance_display": "0.054",
+          "importance_sd_display": "0.013",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 2,
+          "feature": "mfcc_04_mean",
+          "family": "mfcc",
+          "importance": 0.0522287449226961,
+          "importance_display": "0.052",
+          "importance_sd_display": "0.010",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 3,
+          "feature": "time_energy",
+          "family": "time",
+          "importance": 0.0147581667927345,
+          "importance_display": "0.015",
+          "importance_sd_display": "0.012",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 4,
+          "feature": "time_iqr",
+          "family": "time",
+          "importance": 0.012811108746748,
+          "importance_display": "0.013",
+          "importance_sd_display": "0.008",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 5,
+          "feature": "time_zcr_mean",
+          "family": "time",
+          "importance": 0.012807214436361,
+          "importance_display": "0.013",
+          "importance_sd_display": "0.007",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 6,
+          "feature": "dwt_cD5_energy",
+          "family": "dwt",
+          "importance": 0.0123448923823975,
+          "importance_display": "0.012",
+          "importance_sd_display": "0.016",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 7,
+          "feature": "mfcc_05_std",
+          "family": "mfcc",
+          "importance": 0.0115609603953599,
+          "importance_display": "0.012",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 8,
+          "feature": "dwt_cD1_energy",
+          "family": "dwt",
+          "importance": 0.0096526790349951,
+          "importance_display": "0.010",
+          "importance_sd_display": "0.006",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 9,
+          "feature": "dwt_cD5_mean_abs",
+          "family": "dwt",
+          "importance": 0.0085745174914473,
+          "importance_display": "0.009",
+          "importance_sd_display": "0.005",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 10,
+          "feature": "mfcc_01_std",
+          "family": "mfcc",
+          "importance": 0.0074153604044692,
+          "importance_display": "0.007",
+          "importance_sd_display": "0.003",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 11,
+          "feature": "freq_bandwidth_mean",
+          "family": "frequency",
+          "importance": 0.0066941962280674,
+          "importance_display": "0.007",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 12,
+          "feature": "mfcc_02_mean",
+          "family": "mfcc",
+          "importance": 0.0065590084447954,
+          "importance_display": "0.007",
+          "importance_sd_display": "0.005",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 13,
+          "feature": "env_std",
+          "family": "envelope",
+          "importance": 0.0054959979992938,
+          "importance_display": "0.005",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 14,
+          "feature": "mfcc_03_std",
+          "family": "mfcc",
+          "importance": 0.0054911882823631,
+          "importance_display": "0.005",
+          "importance_sd_display": "0.005",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 15,
+          "feature": "dwt_cA5_energy",
+          "family": "dwt",
+          "importance": 0.0050700221069739,
+          "importance_display": "0.005",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 16,
+          "feature": "mfcc_01_mean",
+          "family": "mfcc",
+          "importance": 0.0044877724538341,
+          "importance_display": "0.004",
+          "importance_sd_display": "0.003",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 17,
+          "feature": "chroma_11_std",
+          "family": "chroma",
+          "importance": 0.0043036803225939,
+          "importance_display": "0.004",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "5 of 5"
+        },
+        {
+          "rank": 18,
+          "feature": "freq_band_power_350_400",
+          "family": "frequency",
+          "importance": 0.0041831036099892,
+          "importance_display": "0.004",
+          "importance_sd_display": "0.005",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 19,
+          "feature": "time_autocorr_peak_value",
+          "family": "time",
+          "importance": 0.0040779805651176,
+          "importance_display": "0.004",
+          "importance_sd_display": "0.003",
+          "folds_positive_display": "4 of 5"
+        },
+        {
+          "rank": 20,
+          "feature": "time_autocorr_peak_lag",
+          "family": "time",
+          "importance": 0.0038865791709108,
+          "importance_display": "0.004",
+          "importance_sd_display": "0.004",
+          "folds_positive_display": "4 of 5"
+        }
+      ]
+    }
+  ],
+  "families": [
+    {
+      "task": "binary",
+      "model_id": "M1",
+      "kind": "permutation",
+      "rows": [
+        {
+          "rank": 1,
+          "family": "time",
+          "n_features_display": "24",
+          "share": 0.3509194731789032,
+          "share_display": "0.351",
+          "share_sd_display": "0.043",
+          "total_display": "0.352",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 2,
+          "family": "dwt",
+          "n_features_display": "24",
+          "share": 0.252162277892017,
+          "share_display": "0.252",
+          "share_sd_display": "0.046",
+          "total_display": "0.228",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 3,
+          "family": "frequency",
+          "n_features_display": "22",
+          "share": 0.1609122610118283,
+          "share_display": "0.161",
+          "share_sd_display": "0.035",
+          "total_display": "0.141",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 4,
+          "family": "mfcc",
+          "n_features_display": "39",
+          "share": 0.1371154526463343,
+          "share_display": "0.137",
+          "share_sd_display": "0.039",
+          "total_display": "0.084",
+          "net_negative_display": "2 of 5"
+        },
+        {
+          "rank": 5,
+          "family": "envelope",
+          "n_features_display": "5",
+          "share": 0.0309028675311038,
+          "share_display": "0.031",
+          "share_sd_display": "0.011",
+          "total_display": "0.025",
+          "net_negative_display": "1 of 5"
+        },
+        {
+          "rank": 6,
+          "family": "chroma",
+          "n_features_display": "24",
+          "share": 0.0679876677398133,
+          "share_display": "0.068",
+          "share_sd_display": "0.039",
+          "total_display": "0.023",
+          "net_negative_display": "2 of 5"
+        }
+      ]
+    },
+    {
+      "task": "binary",
+      "model_id": "M3",
+      "kind": "permutation",
+      "rows": [
+        {
+          "rank": 1,
+          "family": "dwt",
+          "n_features_display": "24",
+          "share": 0.232719497535801,
+          "share_display": "0.233",
+          "share_sd_display": "0.046",
+          "total_display": "0.077",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 2,
+          "family": "mfcc",
+          "n_features_display": "39",
+          "share": 0.2966423528668714,
+          "share_display": "0.297",
+          "share_sd_display": "0.026",
+          "total_display": "0.076",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 3,
+          "family": "chroma",
+          "n_features_display": "24",
+          "share": 0.162525253340695,
+          "share_display": "0.163",
+          "share_sd_display": "0.042",
+          "total_display": "0.054",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 4,
+          "family": "time",
+          "n_features_display": "24",
+          "share": 0.1623665715660636,
+          "share_display": "0.162",
+          "share_sd_display": "0.057",
+          "total_display": "0.046",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 5,
+          "family": "frequency",
+          "n_features_display": "22",
+          "share": 0.1227103359592192,
+          "share_display": "0.123",
+          "share_sd_display": "0.040",
+          "total_display": "0.034",
+          "net_negative_display": "1 of 5"
+        },
+        {
+          "rank": 6,
+          "family": "envelope",
+          "n_features_display": "5",
+          "share": 0.0230359887313498,
+          "share_display": "0.023",
+          "share_sd_display": "0.006",
+          "total_display": "0.006",
+          "net_negative_display": "1 of 5"
+        }
+      ]
+    },
+    {
+      "task": "binary",
+      "model_id": "M4",
+      "kind": "impurity",
+      "rows": [
+        {
+          "rank": 1,
+          "family": "dwt",
+          "n_features_display": "24",
+          "share": 0.2918690703037859,
+          "share_display": "0.292",
+          "share_sd_display": "0.008",
+          "total_display": "0.292",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 2,
+          "family": "mfcc",
+          "n_features_display": "39",
+          "share": 0.2722482410016765,
+          "share_display": "0.272",
+          "share_sd_display": "0.008",
+          "total_display": "0.272",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 3,
+          "family": "time",
+          "n_features_display": "24",
+          "share": 0.203267949336527,
+          "share_display": "0.203",
+          "share_sd_display": "0.006",
+          "total_display": "0.203",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 4,
+          "family": "frequency",
+          "n_features_display": "22",
+          "share": 0.1182817854373216,
+          "share_display": "0.118",
+          "share_sd_display": "0.006",
+          "total_display": "0.118",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 5,
+          "family": "chroma",
+          "n_features_display": "24",
+          "share": 0.0899387921379729,
+          "share_display": "0.090",
+          "share_sd_display": "0.002",
+          "total_display": "0.090",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 6,
+          "family": "envelope",
+          "n_features_display": "5",
+          "share": 0.0243941617827158,
+          "share_display": "0.024",
+          "share_sd_display": "0.001",
+          "total_display": "0.024",
+          "net_negative_display": "0 of 5"
+        }
+      ]
+    },
+    {
+      "task": "binary",
+      "model_id": "M4",
+      "kind": "permutation",
+      "rows": [
+        {
+          "rank": 1,
+          "family": "dwt",
+          "n_features_display": "24",
+          "share": 0.2739708346063235,
+          "share_display": "0.274",
+          "share_sd_display": "0.051",
+          "total_display": "0.035",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 2,
+          "family": "mfcc",
+          "n_features_display": "39",
+          "share": 0.2705515917899608,
+          "share_display": "0.271",
+          "share_sd_display": "0.015",
+          "total_display": "0.030",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 3,
+          "family": "time",
+          "n_features_display": "24",
+          "share": 0.2574236700887148,
+          "share_display": "0.257",
+          "share_sd_display": "0.081",
+          "total_display": "0.027",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 4,
+          "family": "frequency",
+          "n_features_display": "22",
+          "share": 0.1086375538950613,
+          "share_display": "0.109",
+          "share_sd_display": "0.062",
+          "total_display": "0.008",
+          "net_negative_display": "2 of 5"
+        },
+        {
+          "rank": 5,
+          "family": "chroma",
+          "n_features_display": "24",
+          "share": 0.0781176965131747,
+          "share_display": "0.078",
+          "share_sd_display": "0.037",
+          "total_display": "0.001",
+          "net_negative_display": "3 of 5"
+        },
+        {
+          "rank": 6,
+          "family": "envelope",
+          "n_features_display": "5",
+          "share": 0.0112986531067647,
+          "share_display": "0.011",
+          "share_sd_display": "0.013",
+          "total_display": "-0.003",
+          "net_negative_display": "4 of 5"
+        }
+      ]
+    },
+    {
+      "task": "binary",
+      "model_id": "M5",
+      "kind": "impurity",
+      "rows": [
+        {
+          "rank": 1,
+          "family": "mfcc",
+          "n_features_display": "39",
+          "share": 0.3748843523673571,
+          "share_display": "0.375",
+          "share_sd_display": "0.033",
+          "total_display": "0.375",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 2,
+          "family": "dwt",
+          "n_features_display": "24",
+          "share": 0.3272032246050586,
+          "share_display": "0.327",
+          "share_sd_display": "0.041",
+          "total_display": "0.327",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 3,
+          "family": "time",
+          "n_features_display": "24",
+          "share": 0.1817286892609327,
+          "share_display": "0.182",
+          "share_sd_display": "0.051",
+          "total_display": "0.182",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 4,
+          "family": "frequency",
+          "n_features_display": "22",
+          "share": 0.0585847481984056,
+          "share_display": "0.059",
+          "share_sd_display": "0.025",
+          "total_display": "0.059",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 5,
+          "family": "chroma",
+          "n_features_display": "24",
+          "share": 0.047572777543857,
+          "share_display": "0.048",
+          "share_sd_display": "0.007",
+          "total_display": "0.048",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 6,
+          "family": "envelope",
+          "n_features_display": "5",
+          "share": 0.0100262080243888,
+          "share_display": "0.010",
+          "share_sd_display": "0.002",
+          "total_display": "0.010",
+          "net_negative_display": "0 of 5"
+        }
+      ]
+    },
+    {
+      "task": "binary",
+      "model_id": "M5",
+      "kind": "permutation",
+      "rows": [
+        {
+          "rank": 1,
+          "family": "dwt",
+          "n_features_display": "24",
+          "share": 0.2765319519940506,
+          "share_display": "0.277",
+          "share_sd_display": "0.042",
+          "total_display": "0.043",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 2,
+          "family": "mfcc",
+          "n_features_display": "39",
+          "share": 0.3384196182074646,
+          "share_display": "0.338",
+          "share_sd_display": "0.071",
+          "total_display": "0.042",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 3,
+          "family": "time",
+          "n_features_display": "24",
+          "share": 0.2049695971321083,
+          "share_display": "0.205",
+          "share_sd_display": "0.040",
+          "total_display": "0.022",
+          "net_negative_display": "1 of 5"
+        },
+        {
+          "rank": 4,
+          "family": "frequency",
+          "n_features_display": "22",
+          "share": 0.0815484662884428,
+          "share_display": "0.082",
+          "share_sd_display": "0.047",
+          "total_display": "0.005",
+          "net_negative_display": "2 of 5"
+        },
+        {
+          "rank": 5,
+          "family": "chroma",
+          "n_features_display": "24",
+          "share": 0.0836283541433133,
+          "share_display": "0.084",
+          "share_sd_display": "0.062",
+          "total_display": "0.002",
+          "net_negative_display": "3 of 5"
+        },
+        {
+          "rank": 6,
+          "family": "envelope",
+          "n_features_display": "5",
+          "share": 0.0149020122346204,
+          "share_display": "0.015",
+          "share_sd_display": "0.017",
+          "total_display": "-0.001",
+          "net_negative_display": "4 of 5"
+        }
+      ]
+    },
+    {
+      "task": "binary",
+      "model_id": "M8",
+      "kind": "impurity",
+      "rows": [
+        {
+          "rank": 1,
+          "family": "dwt",
+          "n_features_display": "24",
+          "share": 0.3269951107875746,
+          "share_display": "0.327",
+          "share_sd_display": "0.016",
+          "total_display": "0.327",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 2,
+          "family": "mfcc",
+          "n_features_display": "39",
+          "share": 0.2414522211588498,
+          "share_display": "0.241",
+          "share_sd_display": "0.013",
+          "total_display": "0.241",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 3,
+          "family": "time",
+          "n_features_display": "24",
+          "share": 0.1646415768620555,
+          "share_display": "0.165",
+          "share_sd_display": "0.028",
+          "total_display": "0.165",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 4,
+          "family": "frequency",
+          "n_features_display": "22",
+          "share": 0.1329349311004092,
+          "share_display": "0.133",
+          "share_sd_display": "0.010",
+          "total_display": "0.133",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 5,
+          "family": "chroma",
+          "n_features_display": "24",
+          "share": 0.1105402813158656,
+          "share_display": "0.111",
+          "share_sd_display": "0.009",
+          "total_display": "0.111",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 6,
+          "family": "envelope",
+          "n_features_display": "5",
+          "share": 0.0234358787752452,
+          "share_display": "0.023",
+          "share_sd_display": "0.004",
+          "total_display": "0.023",
+          "net_negative_display": "0 of 5"
+        }
+      ]
+    },
+    {
+      "task": "binary",
+      "model_id": "M8",
+      "kind": "permutation",
+      "rows": [
+        {
+          "rank": 1,
+          "family": "mfcc",
+          "n_features_display": "39",
+          "share": 0.3330890694713422,
+          "share_display": "0.333",
+          "share_sd_display": "0.033",
+          "total_display": "0.113",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 2,
+          "family": "dwt",
+          "n_features_display": "24",
+          "share": 0.2986379252856223,
+          "share_display": "0.299",
+          "share_sd_display": "0.068",
+          "total_display": "0.107",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 3,
+          "family": "time",
+          "n_features_display": "24",
+          "share": 0.1610364943651825,
+          "share_display": "0.161",
+          "share_sd_display": "0.042",
+          "total_display": "0.050",
+          "net_negative_display": "0 of 5"
+        },
+        {
+          "rank": 4,
+          "family": "frequency",
+          "n_features_display": "22",
+          "share": 0.1034123584456079,
+          "share_display": "0.103",
+          "share_sd_display": "0.037",
+          "total_display": "0.034",
+          "net_negative_display": "1 of 5"
+        },
+        {
+          "rank": 5,
+          "family": "envelope",
+          "n_features_display": "5",
+          "share": 0.0360534893195498,
+          "share_display": "0.036",
+          "share_sd_display": "0.020",
+          "total_display": "0.012",
+          "net_negative_display": "1 of 5"
+        },
+        {
+          "rank": 6,
+          "family": "chroma",
+          "n_features_display": "24",
+          "share": 0.0677706631126951,
+          "share_display": "0.068",
+          "share_sd_display": "0.041",
+          "total_display": "0.008",
+          "net_negative_display": "2 of 5"
+        }
+      ]
+    }
+  ],
+  "coverage": [
+    {
+      "model_id": "M1",
+      "methods": [
+        "permutation"
+      ],
+      "excluded_reason": null
+    },
+    {
+      "model_id": "M2",
+      "methods": [],
+      "excluded_reason": "KNN has no feature_importances_ and is not in the reported model set; permutation importance would be measurable but the model is not one any table reports."
+    },
+    {
+      "model_id": "M3",
+      "methods": [
+        "permutation"
+      ],
+      "excluded_reason": null
+    },
+    {
+      "model_id": "M4",
+      "methods": [
+        "permutation",
+        "impurity",
+        "shap"
+      ],
+      "excluded_reason": null
+    },
+    {
+      "model_id": "M5",
+      "methods": [
+        "permutation",
+        "impurity",
+        "shap"
+      ],
+      "excluded_reason": null
+    },
+    {
+      "model_id": "M6",
+      "methods": [],
+      "excluded_reason": "soft-voting ensemble: ~228 s to fit and ~0.58 s per batch prediction, so 138 features x 10 repeats is ~17 minutes per fold and ~85 minutes over the five. Its importance is a weighted blend of M3, M4 and M5, each reported individually here. Run with --models M6 to include it."
+    },
+    {
+      "model_id": "M7",
+      "methods": [],
+      "excluded_reason": "same cost as M6, and M7 differs from it only in its weights. See M6."
+    },
+    {
+      "model_id": "M8",
+      "methods": [
+        "permutation",
+        "impurity",
+        "shap"
+      ],
+      "excluded_reason": null
+    }
+  ],
+  "example": {
+    "available": true,
+    "record_uid": "D1_training-a_a0001",
+    "selection_rule": "first abnormal D1 record in record_uid order",
+    "task": "binary",
+    "model_id": "M1",
+    "method": "exact linear decomposition (coefficient x scaled value)",
+    "units": "log-odds (natural log of the odds of the positive class)",
+    "true_class": "abnormal",
+    "predicted_class": "abnormal",
+    "probability_display": "0.915",
+    "base_value_display": "-2.178",
+    "decision_value_display": "2.372",
+    "n_shown_display": "20",
+    "n_features_display": "138",
+    "caveats": [
+      "Contributions are in log-odds, not in probability and not in risk. A contribution of +0.8 did not add 80% of anything.",
+      "A contribution is the model's weight multiplied by how unusual this recording is on that feature, in standard deviations from the corpus mean. A large value is as much a statement about the recording being atypical as about the model's view of the feature.",
+      "PV-MEPCG / PulseVision is an academic screening and decision-support prototype. An explanation of a prediction is not a clinical explanation."
+    ],
+    "rows": [
+      {
+        "feature": "time_zcr_mean",
+        "family": "time",
+        "contribution": 2.689809179517172,
+        "contribution_display": "2.690",
+        "raw_value_display": "0.040",
+        "scaled_value_display": "-1.027",
+        "weight_display": "-2.619",
+        "direction": "toward abnormal"
+      },
+      {
+        "feature": "dwt_cD1_entropy",
+        "family": "dwt",
+        "contribution": 1.3839733722908545,
+        "contribution_display": "1.384",
+        "raw_value_display": "1.630",
+        "scaled_value_display": "-0.876",
+        "weight_display": "-1.581",
+        "direction": "toward abnormal"
+      },
+      {
+        "feature": "dwt_cA5_energy",
+        "family": "dwt",
+        "contribution": 1.0872546091111588,
+        "contribution_display": "1.087",
+        "raw_value_display": "25523.994",
+        "scaled_value_display": "1.701",
+        "weight_display": "0.639",
+        "direction": "toward abnormal"
+      },
+      {
+        "feature": "mfcc_04_mean",
+        "family": "mfcc",
+        "contribution": 0.9157095876650733,
+        "contribution_display": "0.916",
+        "raw_value_display": "14.908",
+        "scaled_value_display": "0.780",
+        "weight_display": "1.173",
+        "direction": "toward abnormal"
+      },
+      {
+        "feature": "freq_centroid_mean",
+        "family": "frequency",
+        "contribution": -0.7657284910314145,
+        "contribution_display": "-0.766",
+        "raw_value_display": "72.031",
+        "scaled_value_display": "-0.761",
+        "weight_display": "1.006",
+        "direction": "toward normal"
+      },
+      {
+        "feature": "dwt_cD2_entropy",
+        "family": "dwt",
+        "contribution": -0.700791189088079,
+        "contribution_display": "-0.701",
+        "raw_value_display": "1.569",
+        "scaled_value_display": "-1.066",
+        "weight_display": "0.657",
+        "direction": "toward normal"
+      },
+      {
+        "feature": "mfcc_03_mean",
+        "family": "mfcc",
+        "contribution": 0.6983101560694125,
+        "contribution_display": "0.698",
+        "raw_value_display": "21.131",
+        "scaled_value_display": "1.232",
+        "weight_display": "0.567",
+        "direction": "toward abnormal"
+      },
+      {
+        "feature": "dwt_cD2_mean_abs",
+        "family": "dwt",
+        "contribution": -0.6134391358472585,
+        "contribution_display": "-0.613",
+        "raw_value_display": "0.033",
+        "scaled_value_display": "-0.502",
+        "weight_display": "1.222",
+        "direction": "toward normal"
+      },
+      {
+        "feature": "time_sample_entropy",
+        "family": "time",
+        "contribution": 0.5857551488153439,
+        "contribution_display": "0.586",
+        "raw_value_display": "0.180",
+        "scaled_value_display": "-0.432",
+        "weight_display": "-1.357",
+        "direction": "toward abnormal"
+      },
+      {
+        "feature": "time_hjorth_mobility",
+        "family": "time",
+        "contribution": 0.5817362203736213,
+        "contribution_display": "0.582",
+        "raw_value_display": "0.150",
+        "scaled_value_display": "-0.648",
+        "weight_display": "-0.898",
+        "direction": "toward abnormal"
+      },
+      {
+        "feature": "freq_centroid_std",
+        "family": "frequency",
+        "contribution": -0.4901309704320719,
+        "contribution_display": "-0.490",
+        "raw_value_display": "13.299",
+        "scaled_value_display": "-0.821",
+        "weight_display": "0.597",
+        "direction": "toward normal"
+      },
+      {
+        "feature": "dwt_cD5_energy",
+        "family": "dwt",
+        "contribution": -0.4814504802646243,
+        "contribution_display": "-0.481",
+        "raw_value_display": "33177.414",
+        "scaled_value_display": "1.056",
+        "weight_display": "-0.456",
+        "direction": "toward normal"
+      },
+      {
+        "feature": "freq_band_power_20_50",
+        "family": "frequency",
+        "contribution": 0.4776833897371081,
+        "contribution_display": "0.478",
+        "raw_value_display": "0.730",
+        "scaled_value_display": "0.711",
+        "weight_display": "0.672",
+        "direction": "toward abnormal"
+      },
+      {
+        "feature": "freq_rolloff85_mean",
+        "family": "frequency",
+        "contribution": -0.45459474503657615,
+        "contribution_display": "-0.455",
+        "raw_value_display": "120.800",
+        "scaled_value_display": "-0.675",
+        "weight_display": "0.673",
+        "direction": "toward normal"
+      },
+      {
+        "feature": "chroma_10_mean",
+        "family": "chroma",
+        "contribution": 0.44907142084817225,
+        "contribution_display": "0.449",
+        "raw_value_display": "0.807",
+        "scaled_value_display": "1.244",
+        "weight_display": "0.361",
+        "direction": "toward abnormal"
+      },
+      {
+        "feature": "chroma_07_std",
+        "family": "chroma",
+        "contribution": -0.4265013850841614,
+        "contribution_display": "-0.427",
+        "raw_value_display": "0.120",
+        "scaled_value_display": "-0.860",
+        "weight_display": "0.496",
+        "direction": "toward normal"
+      },
+      {
+        "feature": "freq_flux_mean",
+        "family": "frequency",
+        "contribution": -0.36105487320754365,
+        "contribution_display": "-0.361",
+        "raw_value_display": "0.137",
+        "scaled_value_display": "0.662",
+        "weight_display": "-0.545",
+        "direction": "toward normal"
+      },
+      {
+        "feature": "chroma_09_mean",
+        "family": "chroma",
+        "contribution": -0.3434951953323293,
+        "contribution_display": "-0.343",
+        "raw_value_display": "0.769",
+        "scaled_value_display": "0.659",
+        "weight_display": "-0.521",
+        "direction": "toward normal"
+      },
+      {
+        "feature": "dwt_cD3_entropy",
+        "family": "dwt",
+        "contribution": -0.3183407682521953,
+        "contribution_display": "-0.318",
+        "raw_value_display": "1.727",
+        "scaled_value_display": "-1.321",
+        "weight_display": "0.241",
+        "direction": "toward normal"
+      },
+      {
+        "feature": "dwt_cD1_mean_abs",
+        "family": "dwt",
+        "contribution": -0.30721998034992665,
+        "contribution_display": "-0.307",
+        "raw_value_display": "0.005",
+        "scaled_value_display": "-0.341",
+        "weight_display": "0.900",
+        "direction": "toward normal"
+      }
+    ]
+  },
+  "notes": [
+    "Permutation importance is the drop in the fold's held-out score when one feature's column is shuffled, measured on the outer test rows of each fold. It says what the fitted model uses, not what is true about the heart.",
+    "PhysioNet 2016's six sub-collections behave like six datasets and the top features reverse sign between them. A pooled ranking is a statement about this corpus, never a cardiac finding.",
+    "The family share is each family's portion of the positive importance mass, averaged over folds. Families are different sizes (MFCC has 39 features, envelope 5), so a share is not a per-feature rate."
+  ]
+}

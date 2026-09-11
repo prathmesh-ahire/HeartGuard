@@ -39,6 +39,15 @@ flagging them would make the guard something people route around. The gap is
 covered from the other side by T119.3's displayed-value audit, which compares
 what a page *renders* against the source CSV.
 
+T119.2 -- only one data source
+------------------------------
+A fourth family of rules flags any other way data can reach a page: a runtime
+``fetch``/``axios``/``XMLHttpRequest``/``EventSource``/``WebSocket`` in `app/`
+or `components/`, a ``.json``/``.csv``/``.yaml`` file imported directly, or a
+module named ``generated`` or ``outputs`` imported from anywhere but
+``@/lib/generated``. Live inference is the one runtime call and it lives in
+``lib/api.ts``, outside the scanned directories.
+
 An escape hatch exists -- a ``metric-guard: allow`` comment on the line or the
 one above -- and every use is REPORTED even when the run passes, so a
 suppression cannot be quiet. There should be zero.
@@ -95,6 +104,21 @@ PRECISE_LITERAL = re.compile(r"(?<![\w.])-?\d*\.\d{3,}(?![\w.])")
 
 #: 3 -- a percentage written out in text.
 PERCENT_LITERAL = re.compile(r"(?<![\w.])\d+(?:\.\d+)?\s*%")
+
+#: 4 -- T119.2: a data source other than `lib/generated/`. Pages and components
+#: import precomputed data from `@/lib/generated` and nothing else; the only
+#: runtime network call in the dashboard is live inference, and it lives in
+#: `lib/api.ts`, which is outside the scanned directories on purpose.
+_RUNTIME_FETCH = re.compile(
+    r"\bfetch\s*\(|\baxios\b|\bnew\s+XMLHttpRequest\b|\bnew\s+EventSource\b|\bnew\s+WebSocket\b"
+)
+_DATA_FILE_IMPORT = re.compile(
+    r"""(?:\bfrom\s+|\bimport\s*\(?\s*|\brequire\s*\(\s*)['"][^'"]+\.(?:json|csv|tsv|ya?ml|parquet)['"]"""
+)
+_FOREIGN_DATA_MODULE = re.compile(
+    r"""\bfrom\s+['"](?!@/lib/generated(?:/|['"]))[^'"]*(?:generated|outputs)[^'"]*['"]"""
+)
+_COMMENT_LINE = re.compile(r"^\s*(?://|/\*|\*)")
 
 #: Lines that legitimately carry numbers which look like the above.
 _EXEMPT_LINE = re.compile(
@@ -171,15 +195,23 @@ def scan_file(path: Path) -> tuple[list[Finding], list[Finding]]:
     lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
 
     for index, line in enumerate(lines):
-        if _EXEMPT_LINE.search(line):
-            continue
         hits: list[str] = []
-        if METRIC_ASSIGNMENT.search(line):
-            hits.append("metric-named key assigned a literal")
-        if PRECISE_LITERAL.search(line):
-            hits.append("literal at metric precision (>=3 decimals)")
-        if PERCENT_LITERAL.search(line) and not _CSS_PERCENT.search(line):
-            hits.append("percentage literal in text")
+        # T119.2 runs on import lines too -- an import is exactly where a
+        # foreign data source enters -- but never on comments.
+        if not _COMMENT_LINE.search(line):
+            if _RUNTIME_FETCH.search(line):
+                hits.append("runtime fetch outside lib/api.ts (T119.2)")
+            if _DATA_FILE_IMPORT.search(line):
+                hits.append("data file imported directly, not via lib/generated (T119.2)")
+            if _FOREIGN_DATA_MODULE.search(line):
+                hits.append("data module imported from outside lib/generated (T119.2)")
+        if not _EXEMPT_LINE.search(line):
+            if METRIC_ASSIGNMENT.search(line):
+                hits.append("metric-named key assigned a literal")
+            if PRECISE_LITERAL.search(line):
+                hits.append("literal at metric precision (>=3 decimals)")
+            if PERCENT_LITERAL.search(line) and not _CSS_PERCENT.search(line):
+                hits.append("percentage literal in text")
         for rule in hits:
             finding = Finding(path, index + 1, rule, line)
             (suppressed if _allowed(lines, index) else findings).append(finding)
@@ -242,7 +274,8 @@ def main(argv: list[str] | None = None) -> int:
         print(
             "The client never computes and never declares a metric. Move the value "
             "into scripts/17_export_frontend_data.py so it is formatted in Python, "
-            "and import it from frontend/lib/generated/."
+            "and import it from frontend/lib/generated/. Pages read precomputed "
+            "data from lib/generated/ only; live inference goes through lib/api.ts."
         )
         return 1
 

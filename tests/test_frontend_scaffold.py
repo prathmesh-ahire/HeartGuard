@@ -56,10 +56,16 @@ def scaffolded() -> None:
 def test_build_runs_the_exporter_before_next_build(package_json: dict) -> None:
     """The site must never build against a `generated/` nobody refreshed."""
     scripts = package_json["scripts"]
-    assert scripts["prebuild"] == "npm run export-data", (
+    # Phase 119 (T119.1) put the metric guard in front of the exporter, so a
+    # hand-typed metric fails `npm run build` itself and not only CI. The
+    # property this test protects is unchanged -- the exporter is the LAST step
+    # before `next build` -- and is now asserted on the chain, not a literal.
+    steps = [step.strip() for step in scripts["prebuild"].split("&&")]
+    assert steps[-1] == "npm run export-data", (
         "npm runs `prebuild` automatically before `build`; that hook is what makes "
         "the ordering structural rather than a habit"
     )
+    assert steps[0] == "npm run check-metrics", "the metric guard must run before anything else"
     assert EXPORTER in scripts["export-data"]
     assert scripts["build"] == "next build"
 

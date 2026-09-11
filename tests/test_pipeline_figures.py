@@ -323,7 +323,11 @@ def test_f16_routes_are_the_applications_and_only_predict_computes(
     routes = api_routes()
     text, canvas = _drawn(builders["F16"])
     posts = [path for method, path in routes if method == "POST"]
-    assert posts and all(path.startswith("/predict") for path in posts)
+    # Phase 117 added POST /report/sample, which scores the recording through
+    # the same `predict_recording` pass before rendering its DOCX. The invariant
+    # is "every POST route runs the predictor and nothing else computes", so it
+    # is named explicitly rather than widened to any path.
+    assert posts and all(path.startswith("/predict") or path == "/report/sample" for path in posts)
     for _, path in routes:
         assert path in text
     assert str(len(GENERATED_FILES)) + " generated files" in text

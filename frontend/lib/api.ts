@@ -87,6 +87,33 @@ export interface PredictResult {
   disclaimer: string;
   warnings: string[];
   display: PredictDisplay;
+  /**
+   * What drove THIS recording's decision (T117.2), formatted by the API. Absent
+   * from a response made before Phase 117, and `available: false` with a reason
+   * for any estimator the decomposition is not exact for.
+   */
+  explanation?: PredictExplanation | null;
+}
+
+export interface PredictExplanationRow {
+  feature: string;
+  family: string;
+  /** Bar geometry only. Render `contribution_display`. */
+  contribution: number | null;
+  contribution_display: string;
+  value_display: string;
+  scaled_display: string;
+  coefficient_display: string;
+  direction: string;
+}
+
+export interface PredictExplanation {
+  available: boolean;
+  reason: string | null;
+  method?: string;
+  units?: string;
+  n_shown?: number;
+  rows: PredictExplanationRow[];
 }
 
 export interface TaskStatus {
@@ -136,7 +163,7 @@ const OFFLINE_HINT =
   '`python -m src.api.main` and try again — the rest of this dashboard is ' +
   'precomputed and needs no server, but scoring a recording does.';
 
-async function call<T>(path: string, init?: RequestInit): Promise<T> {
+async function send(path: string, init?: RequestInit): Promise<Response> {
   let response: Response;
   try {
     response = await fetch(API_BASE + path, init);
@@ -153,7 +180,58 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
     }
     throw new ApiError(detail, response.status);
   }
+  return response;
+}
+
+async function call<T>(path: string, init?: RequestInit): Promise<T> {
+  const response = await send(path, init);
   return (await response.json()) as T;
+}
+
+/** A document the API generated, with the filename it chose for it. */
+export interface GeneratedDocument {
+  blob: Blob;
+  filename: string;
+}
+
+async function document(path: string, init?: RequestInit): Promise<GeneratedDocument> {
+  const response = await send(path, init);
+  const disposition = response.headers.get('content-disposition') ?? '';
+  const match = /filename\*?=(?:UTF-8'')?"?([^";]+)"?/i.exec(disposition);
+  const filename = match?.[1] ? decodeURIComponent(match[1]) : 'report.docx';
+  return { blob: await response.blob(), filename };
+}
+
+/**
+ * T117.3: one recording's DOCX report, rendered by the API from the single
+ * predict pass. Either a built-in sample id or an uploaded file.
+ */
+export function sampleReport(task: string, source: { sampleId: string } | { file: File }): Promise<GeneratedDocument> {
+  const body = new FormData();
+  body.append('task', task);
+  if ('sampleId' in source) body.append('sample_id', source.sampleId);
+  else body.append('file', source.file);
+  return document('/report/sample', { method: 'POST', body });
+}
+
+/** T117.3: one experiment run, summarised from the files it wrote. */
+export function experimentReport(expId: string): Promise<GeneratedDocument> {
+  return document('/report/experiment/' + encodeURIComponent(expId));
+}
+
+/** T117.3: the objective-coverage report (T29's DOCX). */
+export function objectivesReport(): Promise<GeneratedDocument> {
+  return document('/report/objectives');
+}
+
+/** Hand a generated document to the browser's own download. */
+export function saveDocument({ blob, filename }: GeneratedDocument): void {
+  const url = URL.createObjectURL(blob);
+  const anchor = window.document.createElement('a');
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
+  URL.revokeObjectURL(url);
 }
 
 export function health(): Promise<{ status: string; tasks: TaskStatus[]; n_available: number }> {
@@ -170,6 +248,25 @@ export function samples(): Promise<SampleStatus[]> {
 
 export function sampleAudioUrl(sampleId: string): string {
   return API_BASE + '/samples/' + encodeURIComponent(sampleId) + '/audio';
+}
+
+/**
+ * The bytes of a recording to preview: a built-in sample's URL or a local
+ * `blob:` URL of an upload. Audio, never a metric -- it lives here because this
+ * module is the dashboard's only network boundary, and T119.2's guard forbids a
+ * `fetch` anywhere in `app/` or `components/`.
+ */
+export async function audioBytes(source: string): Promise<ArrayBuffer> {
+  // Fetched as given: a sample URL already carries API_BASE, and a `blob:` URL
+  // must not be prefixed with anything.
+  let response: Response;
+  try {
+    response = await fetch(source);
+  } catch {
+    throw new ApiError(OFFLINE_HINT, 0, true);
+  }
+  if (!response.ok) throw new ApiError(response.status + ' ' + response.statusText, response.status);
+  return response.arrayBuffer();
 }
 
 export function predictFile(file: File, task: string): Promise<PredictResult> {

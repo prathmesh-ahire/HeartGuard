@@ -1,6 +1,6 @@
 {
   "id": "G31",
-  "number": 14,
+  "number": 31,
   "title": "Duration Wise Performance",
   "caption": "Left: balanced accuracy by T18.3 duration band for each experiment, averaged over that experiment's models and folds. Duration is confounded with corpus here -- every recording under 5 s is PASCAL -- and hatched bars fall below the 30-record reporting floor. Right: the same PhysioNet recordings clipped to 10, 5 and 3 seconds and re-extracted, scored by a model refitted without their subjects; dotted lines mark the untruncated control.",
   "exp_id": "EXP-E2",

@@ -1,0 +1,852 @@
+{
+  "id": "G25",
+  "number": 25,
+  "title": "Inference Time Versus Performance",
+  "caption": "Left: each model's predict time for a single prepared feature vector against its balanced accuracy on EXP-A2, both from the controlled bench and the stored run. Right: the same numbers against what an end-to-end inference on a real recording costs. Feature extraction is the same work for every model, so the spread on the left is invisible to anyone waiting for a result -- a model choice buys accuracy here, not latency. The left axis is logarithmic because the models span two orders of magnitude; the right one is deliberately linear, because a log axis is exactly the transform that would hide how small the model's share is.",
+  "exp_id": "EXP-A2",
+  "objective": "O5 (complexity and deployability)",
+  "dataset": "D1 PhysioNet 2016",
+  "notes": [],
+  "sources": [
+    "outputs/11_complexity/training_time_summary.csv",
+    "outputs/11_complexity/inference_stage_summary.csv",
+    "outputs/11_complexity/model_footprint.csv",
+    "outputs/11_complexity/complexity_overview.csv"
+  ],
+  "source_csv": "outputs/13_figures_diagrams/G25_inference_time_versus_performance.csv",
+  "png": "/figures/G25_inference_time_versus_performance.png",
+  "dpi": 300,
+  "n_rows": 8,
+  "columns": [
+    {
+      "name": "model_id",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "M1",
+        "M2",
+        "M3",
+        "M4",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
+      "values": null
+    },
+    {
+      "name": "task",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "binary",
+        "binary",
+        "binary",
+        "binary",
+        "binary",
+        "binary",
+        "binary",
+        "binary"
+      ],
+      "values": null
+    },
+    {
+      "name": "fold_label",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "r0f0",
+        "r0f0",
+        "r0f0",
+        "r0f0",
+        "r0f0",
+        "r0f0",
+        "r0f0",
+        "r0f0"
+      ],
+      "values": null
+    },
+    {
+      "name": "configuration",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "configs/models.yaml defaults",
+        "configs/models.yaml defaults",
+        "configs/models.yaml defaults",
+        "configs/models.yaml defaults",
+        "configs/models.yaml defaults",
+        "configs/models.yaml defaults",
+        "configs/models.yaml defaults",
+        "configs/models.yaml defaults"
+      ],
+      "values": null
+    },
+    {
+      "name": "n_train",
+      "kind": "count",
+      "places": 0,
+      "display": [
+        "2,593",
+        "2,593",
+        "2,593",
+        "2,593",
+        "2,593",
+        "2,593",
+        "2,593",
+        "2,593"
+      ],
+      "values": [
+        2593.0,
+        2593.0,
+        2593.0,
+        2593.0,
+        2593.0,
+        2593.0,
+        2593.0,
+        2593.0
+      ]
+    },
+    {
+      "name": "n_test",
+      "kind": "count",
+      "places": 0,
+      "display": [
+        "647",
+        "647",
+        "647",
+        "647",
+        "647",
+        "647",
+        "647",
+        "647"
+      ],
+      "values": [
+        647.0,
+        647.0,
+        647.0,
+        647.0,
+        647.0,
+        647.0,
+        647.0,
+        647.0
+      ]
+    },
+    {
+      "name": "n_features",
+      "kind": "count",
+      "places": 0,
+      "display": [
+        "138",
+        "138",
+        "138",
+        "138",
+        "138",
+        "138",
+        "138",
+        "138"
+      ],
+      "values": [
+        138.0,
+        138.0,
+        138.0,
+        138.0,
+        138.0,
+        138.0,
+        138.0,
+        138.0
+      ]
+    },
+    {
+      "name": "estimator_class",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "Pipeline",
+        "Pipeline",
+        "Pipeline",
+        "Pipeline",
+        "Pipeline",
+        "Pipeline",
+        "Pipeline",
+        "Pipeline"
+      ],
+      "values": null
+    },
+    {
+      "name": "model_bytes",
+      "kind": "count",
+      "places": 0,
+      "display": [
+        "7,153",
+        "2,889,406",
+        "2,214,025",
+        "12,471,058",
+        "273,177",
+        "15,561,636",
+        "15,561,896",
+        "672,657"
+      ],
+      "values": [
+        7153.0,
+        2889406.0,
+        2214025.0,
+        12471058.0,
+        273177.0,
+        15561636.0,
+        15561896.0,
+        672657.0
+      ]
+    },
+    {
+      "name": "model_mb",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "0.007153",
+        "2.889406",
+        "2.214025",
+        "12.471058",
+        "0.273177",
+        "15.561636",
+        "15.561896",
+        "0.672657"
+      ],
+      "values": [
+        0.007153,
+        2.889406,
+        2.214025,
+        12.471058,
+        0.273177,
+        15.561636,
+        15.561896,
+        0.672657
+      ]
+    },
+    {
+      "name": "fit_seconds",
+      "kind": "seconds",
+      "places": 2,
+      "display": [
+        "0.49",
+        "0.09",
+        "1.11",
+        "14.50",
+        "28.77",
+        "228.46",
+        "257.23",
+        "6.63"
+      ],
+      "values": [
+        0.4877674000017578,
+        0.0927884999982779,
+        1.1148688000030234,
+        14.503228699999454,
+        28.772615900001256,
+        228.4642775000029,
+        257.22887510000146,
+        6.626751000003424
+      ]
+    },
+    {
+      "name": "batch_predict_seconds",
+      "kind": "seconds",
+      "places": 2,
+      "display": [
+        "0.00",
+        "2.06",
+        "0.32",
+        "0.23",
+        "0.01",
+        "0.58",
+        "0.56",
+        "0.01"
+      ],
+      "values": [
+        0.0044210999985807,
+        2.0575521999999182,
+        0.3150001000030897,
+        0.2257820000013453,
+        0.0085345999978017,
+        0.579816599994956,
+        0.5560133999970276,
+        0.0124388999975053
+      ]
+    },
+    {
+      "name": "batch_predict_seconds_per_record",
+      "kind": "seconds",
+      "places": 2,
+      "display": [
+        "0.00",
+        "0.00",
+        "0.00",
+        "0.00",
+        "0.00",
+        "0.00",
+        "0.00",
+        "0.00"
+      ],
+      "values": [
+        6.833230291469486e-06,
+        0.0031801425038638,
+        0.0004868625966044,
+        0.0003489675425059,
+        1.3191035545288572e-05,
+        0.0008961616692348,
+        0.0008593715610464,
+        1.9225502314536875e-05
+      ]
+    },
+    {
+      "name": "single_predict_seconds",
+      "kind": "seconds",
+      "places": 2,
+      "display": [
+        "0.00",
+        "0.01",
+        "0.01",
+        "0.18",
+        "0.00",
+        "0.18",
+        "0.17",
+        "0.00"
+      ],
+      "values": [
+        0.0014054666656496,
+        0.0062446666658312,
+        0.0076712999992499,
+        0.1771607333333425,
+        0.001407533333501,
+        0.1829141000004407,
+        0.1692589666684701,
+        0.0038353666653468
+      ]
+    },
+    {
+      "name": "rss_sampler_available",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "True",
+        "True",
+        "True",
+        "True",
+        "True",
+        "True",
+        "True",
+        "True"
+      ],
+      "values": null
+    },
+    {
+      "name": "n_samples",
+      "kind": "count",
+      "places": 0,
+      "display": [
+        "18",
+        "4",
+        "34",
+        "377",
+        "922",
+        "6,941",
+        "7,888",
+        "213"
+      ],
+      "values": [
+        18.0,
+        4.0,
+        34.0,
+        377.0,
+        922.0,
+        6941.0,
+        7888.0,
+        213.0
+      ]
+    },
+    {
+      "name": "sample_interval_seconds",
+      "kind": "seconds",
+      "places": 2,
+      "display": [
+        "0.02",
+        "0.02",
+        "0.02",
+        "0.02",
+        "0.02",
+        "0.02",
+        "0.02",
+        "0.02"
+      ],
+      "values": [
+        0.02,
+        0.02,
+        0.02,
+        0.02,
+        0.02,
+        0.02,
+        0.02,
+        0.02
+      ]
+    },
+    {
+      "name": "baseline_rss_mb",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "219.009",
+        "223.576",
+        "224.072",
+        "229.401",
+        "235.655",
+        "245.559",
+        "303.636",
+        "372.572"
+      ],
+      "values": [
+        219.009,
+        223.576,
+        224.072,
+        229.401,
+        235.655,
+        245.559,
+        303.636,
+        372.572
+      ]
+    },
+    {
+      "name": "peak_rss_mb",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "231.887",
+        "237.916",
+        "239.677",
+        "254.001",
+        "250.765",
+        "357.048",
+        "423.916",
+        "423.748"
+      ],
+      "values": [
+        231.887,
+        237.916,
+        239.677,
+        254.001,
+        250.765,
+        357.048,
+        423.916,
+        423.748
+      ]
+    },
+    {
+      "name": "peak_rss_delta_mb",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "12.878",
+        "14.34",
+        "15.606",
+        "24.601",
+        "15.11",
+        "111.489",
+        "120.279",
+        "51.175"
+      ],
+      "values": [
+        12.878,
+        14.34,
+        15.606,
+        24.601,
+        15.11,
+        111.489,
+        120.279,
+        51.175
+      ]
+    },
+    {
+      "name": "tracemalloc_peak_mb",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "15.586",
+        "15.524",
+        "15.506",
+        "15.514",
+        "15.513",
+        "65.168",
+        "73.017",
+        "15.514"
+      ],
+      "values": [
+        15.586,
+        15.524,
+        15.506,
+        15.514,
+        15.513,
+        65.168,
+        73.017,
+        15.514
+      ]
+    },
+    {
+      "name": "tracemalloc_retained_mb",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "0.227",
+        "2.948",
+        "2.748",
+        "3.577",
+        "7.13",
+        "55.163",
+        "63.005",
+        "1.605"
+      ],
+      "values": [
+        0.227,
+        2.948,
+        2.748,
+        3.577,
+        7.13,
+        55.163,
+        63.005,
+        1.605
+      ]
+    },
+    {
+      "name": "memory_measurement_reliable",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "True",
+        "False",
+        "True",
+        "True",
+        "True",
+        "True",
+        "True",
+        "True"
+      ],
+      "values": null
+    },
+    {
+      "name": "run_fit_seconds_mean",
+      "kind": "seconds",
+      "places": 2,
+      "display": [
+        "2.97",
+        "n/a",
+        "1.40",
+        "13.00",
+        "99.18",
+        "545.14",
+        "534.58",
+        "12.94"
+      ],
+      "values": [
+        2.96848376,
+        null,
+        1.39509164,
+        12.99612192,
+        99.18041424,
+        545.13670376,
+        534.5805253999999,
+        12.936738200000002
+      ]
+    },
+    {
+      "name": "run_fit_seconds_min",
+      "kind": "seconds",
+      "places": 2,
+      "display": [
+        "0.09",
+        "n/a",
+        "0.82",
+        "1.09",
+        "17.41",
+        "164.22",
+        "145.16",
+        "1.11"
+      ],
+      "values": [
+        0.089022,
+        null,
+        0.822121,
+        1.092234,
+        17.413512,
+        164.215498,
+        145.155364,
+        1.109604
+      ]
+    },
+    {
+      "name": "run_fit_seconds_max",
+      "kind": "seconds",
+      "places": 2,
+      "display": [
+        "28.49",
+        "n/a",
+        "1.88",
+        "25.34",
+        "276.52",
+        "1545.16",
+        "1517.77",
+        "46.89"
+      ],
+      "values": [
+        28.490326,
+        null,
+        1.876774,
+        25.3375,
+        276.517428,
+        1545.163012,
+        1517.773905,
+        46.892374
+      ]
+    },
+    {
+      "name": "run_fit_seconds_spread",
+      "kind": "seconds",
+      "places": 2,
+      "display": [
+        "320.04",
+        "n/a",
+        "2.28",
+        "23.20",
+        "15.88",
+        "9.41",
+        "10.46",
+        "42.26"
+      ],
+      "values": [
+        320.0369122239446,
+        null,
+        2.2828440095800984,
+        23.19786785615537,
+        15.879474973227683,
+        9.409361666948149,
+        10.456202672606713,
+        42.260458686161904
+      ]
+    },
+    {
+      "name": "run_n_folds",
+      "kind": "count",
+      "places": 0,
+      "display": [
+        "25",
+        "n/a",
+        "25",
+        "25",
+        "25",
+        "25",
+        "25",
+        "25"
+      ],
+      "values": [
+        25.0,
+        null,
+        25.0,
+        25.0,
+        25.0,
+        25.0,
+        25.0,
+        25.0
+      ]
+    },
+    {
+      "name": "balanced_accuracy",
+      "kind": "metric",
+      "places": 3,
+      "display": [
+        "0.847",
+        "n/a",
+        "0.800",
+        "0.852",
+        "0.847",
+        "0.856",
+        "0.856",
+        "0.848"
+      ],
+      "values": [
+        0.8468043977525703,
+        null,
+        0.7997979696844384,
+        0.8523598911722675,
+        0.8471607213499192,
+        0.8558631699470313,
+        0.8555880661827884,
+        0.8482519737790062
+      ]
+    },
+    {
+      "name": "sensitivity",
+      "kind": "metric",
+      "places": 3,
+      "display": [
+        "0.865",
+        "n/a",
+        "0.667",
+        "0.819",
+        "0.813",
+        "0.862",
+        "0.862",
+        "0.822"
+      ],
+      "values": [
+        0.864823389162735,
+        null,
+        0.6671634033396946,
+        0.8193179675801402,
+        0.8130747740507671,
+        0.8615469513693752,
+        0.8615380387134037,
+        0.8218651609921876
+      ]
+    },
+    {
+      "name": "specificity",
+      "kind": "metric",
+      "places": 3,
+      "display": [
+        "0.829",
+        "n/a",
+        "0.932",
+        "0.885",
+        "0.881",
+        "0.850",
+        "0.850",
+        "0.875"
+      ],
+      "values": [
+        0.8287854063424054,
+        null,
+        0.9324325360291824,
+        0.885401814764395,
+        0.8812466686490713,
+        0.8501793885246873,
+        0.849638093652173,
+        0.8746387865658248
+      ]
+    },
+    {
+      "name": "roc_auc",
+      "kind": "metric",
+      "places": 3,
+      "display": [
+        "0.921",
+        "n/a",
+        "0.922",
+        "0.938",
+        "0.936",
+        "0.938",
+        "0.938",
+        "0.937"
+      ],
+      "values": [
+        0.9212095305753732,
+        null,
+        0.9220133878251724,
+        0.9383918924875704,
+        0.9363207791154012,
+        0.938400689122729,
+        0.9383495147018666,
+        0.9374168268419864
+      ]
+    },
+    {
+      "name": "f1",
+      "kind": "metric",
+      "places": 3,
+      "display": [
+        "0.687",
+        "n/a",
+        "0.692",
+        "0.726",
+        "0.719",
+        "0.709",
+        "0.708",
+        "0.715"
+      ],
+      "values": [
+        0.6867062637528286,
+        null,
+        0.691640138116163,
+        0.7262687566360944,
+        0.7194132578085204,
+        0.7087492616292356,
+        0.7081994698811109,
+        0.7153507911364363
+      ]
+    },
+    {
+      "name": "pipeline_seconds_per_recording",
+      "kind": "seconds",
+      "places": 2,
+      "display": [
+        "2.34",
+        "2.34",
+        "2.34",
+        "2.34",
+        "2.34",
+        "2.34",
+        "2.34",
+        "2.34"
+      ],
+      "values": [
+        2.343035425,
+        2.343035425,
+        2.343035425,
+        2.343035425,
+        2.343035425,
+        2.343035425,
+        2.343035425,
+        2.343035425
+      ]
+    },
+    {
+      "name": "extraction_share_of_pipeline",
+      "kind": "metric",
+      "places": 3,
+      "display": [
+        "0.965",
+        "0.965",
+        "0.965",
+        "0.965",
+        "0.965",
+        "0.965",
+        "0.965",
+        "0.965"
+      ],
+      "values": [
+        0.9649610664764064,
+        0.9649610664764064,
+        0.9649610664764064,
+        0.9649610664764064,
+        0.9649610664764064,
+        0.9649610664764064,
+        0.9649610664764064,
+        0.9649610664764064
+      ]
+    },
+    {
+      "name": "headline_run",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "EXP-A2",
+        "EXP-A2",
+        "EXP-A2",
+        "EXP-A2",
+        "EXP-A2",
+        "EXP-A2",
+        "EXP-A2",
+        "EXP-A2"
+      ],
+      "values": null
+    }
+  ],
+  "data_omitted": false,
+  "data_omitted_reason": null
+}

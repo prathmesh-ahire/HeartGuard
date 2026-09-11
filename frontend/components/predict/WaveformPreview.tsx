@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
+import { audioBytes } from '@/lib/api';
 import { cn } from '@/lib/cn';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/States';
 import { SURFACE, TYPE_SCALE, seriesColor } from '@/lib/tokens';
@@ -103,7 +104,7 @@ export function WaveformPreview({
       try {
         const data =
           typeof source === 'string'
-            ? await (await fetch(source)).arrayBuffer()
+            ? await audioBytes(source)
             : await source.arrayBuffer();
         const result = await decode(data);
         if (disposed) return;

@@ -12,6 +12,7 @@ import {
 import { useMemo, useState } from 'react';
 
 import { cn } from '@/lib/cn';
+import { EvidenceLink } from '@/components/evidence/EvidenceLink';
 import type { GeneratedTable } from '@/lib/generated';
 import { EmptyState } from '@/components/ui/States';
 import { SURFACE, TYPE_SCALE } from '@/lib/tokens';
@@ -193,7 +194,12 @@ export function ResultsTable({
         </p>
       ) : (
         <p className={cn(TYPE_SCALE.micro, SURFACE.subtle)}>
-          {visible.length} of {source.n_rows} rows · source {source.source_csv}
+          {visible.length} of {source.n_rows} rows · source{' '}
+          <EvidenceLink
+            path={source.source_csv}
+            artifact={source.id}
+            className="normal-case tracking-normal"
+          />
         </p>
       )}
     </div>

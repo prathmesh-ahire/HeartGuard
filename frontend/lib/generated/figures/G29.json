@@ -1,6 +1,6 @@
 {
   "id": "G29",
-  "number": 12,
+  "number": 29,
   "title": "Cross Dataset Performance Drop",
   "caption": "Cross-dataset transfer from an adult cohort (PhysioNet 2016, median age 25, 0.27% of aged records under 18) to a predominantly paediatric cohort (CirCor 2022, 98.2% of age-banded patients paediatric). A large drop is the expected consequence of that mismatch and is NOT evidence that PV-MEPCG fails to generalize. Recording-level metrics. The in-domain bar is EXP-A2's 25-fold nested cross-validation mean for the same model; the external bar is one evaluation over all 3,163 CirCor recordings.",
   "exp_id": "EXP-D1",

@@ -131,6 +131,13 @@ export const UTILITY_ROUTES: readonly RouteDefinition[] = [
       'Every design-system component in every state, for visual QA. Not a results page.',
     group: 'overview',
   },
+  {
+    href: '/limitations/',
+    label: 'Limitations',
+    summary:
+      'What the results cannot support: the adult-to-paediatric population mismatch, the PASCAL sample sizes, the CirCor public subset and the recording-source confound.',
+    group: 'results',
+  },
 ];
 
 export const ALL_ROUTES: readonly RouteDefinition[] = [...ROUTES, ...UTILITY_ROUTES];

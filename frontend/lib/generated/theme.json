@@ -32,6 +32,8 @@
         "colour": "#0072B2",
         "on_light": 5.185,
         "on_dark": 3.89,
+        "on_light_display": "5.185",
+        "on_dark_display": "3.890",
         "needs_outline_on": []
       },
       {
@@ -39,6 +41,8 @@
         "colour": "#D55E00",
         "on_light": 3.867,
         "on_dark": 5.216,
+        "on_light_display": "3.867",
+        "on_dark_display": "5.216",
         "needs_outline_on": []
       },
       {
@@ -46,6 +50,8 @@
         "colour": "#009E73",
         "on_light": 3.421,
         "on_dark": 5.897,
+        "on_light_display": "3.421",
+        "on_dark_display": "5.897",
         "needs_outline_on": []
       },
       {
@@ -53,6 +59,8 @@
         "colour": "#CC79A7",
         "on_light": 3.061,
         "on_dark": 6.59,
+        "on_light_display": "3.061",
+        "on_dark_display": "6.590",
         "needs_outline_on": []
       },
       {
@@ -60,6 +68,8 @@
         "colour": "#E69F00",
         "on_light": 2.252,
         "on_dark": 8.957,
+        "on_light_display": "2.252",
+        "on_dark_display": "8.957",
         "needs_outline_on": [
           "light"
         ]
@@ -69,6 +79,8 @@
         "colour": "#56B4E9",
         "on_light": 2.307,
         "on_dark": 8.742,
+        "on_light_display": "2.307",
+        "on_dark_display": "8.742",
         "needs_outline_on": [
           "light"
         ]
@@ -78,6 +90,8 @@
         "colour": "#F0E442",
         "on_light": 1.322,
         "on_dark": 15.256,
+        "on_light_display": "1.322",
+        "on_dark_display": "15.256",
         "needs_outline_on": [
           "light"
         ]
@@ -87,6 +101,8 @@
         "colour": "#000000",
         "on_light": 21.0,
         "on_dark": 1.041,
+        "on_light_display": "21.000",
+        "on_dark_display": "1.041",
         "needs_outline_on": [
           "dark"
         ]

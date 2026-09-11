@@ -12,7 +12,9 @@
 export type ColumnKind =
   | 'count'
   | 'integer'
+  | 'mean_count'
   | 'metric'
+  | 'p_value'
   | 'percent'
   | 'preformatted'
   | 'seconds'
@@ -94,6 +96,9 @@ export interface GeneratedTheme {
       colour: string;
       on_light: number;
       on_dark: number;
+      /** The ratios as rendered text. Render these, never the numbers above. */
+      on_light_display: string;
+      on_dark_display: string;
       /** Grounds where this fill is too close to the page and needs a stroke. */
       needs_outline_on: string[];
     }[];
@@ -518,6 +523,163 @@ export interface GeneratedEvidenceEntry {
   generated_from: string;
   generated_from_sha256: string;
   upstream_sources: string[];
+  /** Site path of the served copy of `generated_from`, or null if none was copied. */
+  url: string | null;
+}
+
+export type GeneratedEvidence = GeneratedEvidenceEntry[];
+
+export interface GeneratedPayloadSource {
+  path: string;
+  sha256: string | null;
+  available: boolean;
+}
+
+export interface GeneratedExplainability {
+  available: boolean;
+  reason: string | null;
+  sources: GeneratedPayloadSource[];
+  top_n?: number;
+  importance: {
+    task: string;
+    model_id: string;
+    kind: string;
+    n_features_ranked: number;
+    n_features_ranked_display: string;
+    n_folds: number;
+    rows: {
+      rank: number;
+      feature: string;
+      family: string;
+      /** Bar geometry only. Render `importance_display`. */
+      importance: number | null;
+      importance_display: string;
+      importance_sd_display: string;
+      folds_positive_display: string;
+    }[];
+  }[];
+  families: {
+    task: string;
+    model_id: string;
+    kind: string;
+    rows: {
+      rank: number;
+      family: string;
+      n_features_display: string;
+      share: number | null;
+      share_display: string;
+      share_sd_display: string;
+      total_display: string;
+      net_negative_display: string;
+    }[];
+  }[];
+  coverage: { model_id: string; methods: string[]; excluded_reason: string | null }[];
+  example: {
+    available: boolean;
+    record_uid?: string;
+    selection_rule?: string;
+    task?: string;
+    model_id?: string;
+    method?: string;
+    units?: string;
+    true_class?: string;
+    predicted_class?: string;
+    probability_display?: string;
+    base_value_display?: string;
+    decision_value_display?: string;
+    n_shown_display?: string;
+    n_features_display?: string;
+    caveats?: string[];
+    rows?: {
+      feature: string;
+      family: string;
+      contribution: number | null;
+      contribution_display: string;
+      raw_value_display: string;
+      scaled_value_display: string;
+      weight_display: string;
+      direction: string;
+    }[];
+  };
+  notes: string[];
+}
+
+export interface GeneratedLimitationBlock {
+  available: boolean;
+  reason?: string;
+  sources: GeneratedPayloadSource[];
+}
+
+export interface GeneratedLimitations {
+  population: GeneratedLimitationBlock & {
+    design?: string;
+    framing_rule?: string;
+    second_known_cause?: string;
+    train_dataset?: string;
+    train_n_with_age_display?: string;
+    train_age_median_display?: string;
+    train_n_under_18_display?: string;
+    train_share_under_18_display?: string;
+    test_dataset?: string;
+    test_n_patients_display?: string;
+    test_n_with_age_band_display?: string;
+    test_n_paediatric_display?: string;
+    test_share_paediatric_display?: string;
+    test_age_scale?: string;
+    transfer?: {
+      level: string;
+      rule: string;
+      n_units_display: string;
+      in_domain_display: string;
+      external_display: string;
+    }[];
+  };
+  pascal: GeneratedLimitationBlock & {
+    tracks?: {
+      task: string;
+      title: string;
+      n_records_display: string;
+      smallest_class: string;
+      smallest_n_display: string;
+      classes: { class: string; n_records_display: string; n_subjects_display: string }[];
+    }[];
+  };
+  circor: GeneratedLimitationBlock & {
+    n_recordings_display?: string;
+    n_patients_display?: string;
+    unknown_murmur_patients_display?: string;
+  };
+  source_holdout: GeneratedLimitationBlock & {
+    model_id?: string;
+    n_folds_display?: string;
+    auc_pooled_display?: string;
+    auc_holdout_display?: string;
+    balanced_accuracy_pooled_display?: string;
+    balanced_accuracy_holdout_display?: string;
+  };
+}
+
+export interface GeneratedReports {
+  note: string;
+  sample: {
+    download_path: string;
+    tasks: { task: string; title: string }[];
+    contents: string;
+  };
+  experiments: {
+    exp_id: string;
+    title: string;
+    directory: string;
+    run_id: string | null;
+    download_path: string;
+  }[];
+  objective: {
+    available: boolean;
+    path: string;
+    table_id: string;
+    download_path: string;
+    reason: string | null;
+  };
 }
 
 export interface GeneratedTaskSpec {

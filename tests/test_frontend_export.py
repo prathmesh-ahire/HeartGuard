@@ -195,10 +195,19 @@ def test_a_metric_column_is_rounded_to_three_places_and_a_count_is_separated(
     payload = json.loads((exported.generated / "tables.json").read_text(encoding="utf-8"))
     checked = 0
     for table in payload.values():
+        source = pd.read_csv(PROJECT_ROOT / table["source_csv"])
         for column in table["columns"]:
             if column["kind"] == "metric":
                 assert column["places"] == 3
-                for shown in column["display"]:
+                for position, shown in enumerate(column["display"]):
+                    # `inf` is admitted ONLY where the source cell is itself
+                    # infinite: T20's "clean (no noise added)" row has an SNR of
+                    # +inf by construction, and the thesis table renders it
+                    # through the same formatter. Anywhere else it fails.
+                    if shown in ("inf", "-inf"):
+                        original = float(source[column["name"]].iloc[position])
+                        assert np.isinf(original), table["id"] + " shows inf over a finite cell"
+                        continue
                     assert shown == "n/a" or re.fullmatch(r"-?\d+\.\d{3}", shown), shown
                 checked += 1
             if column["kind"] == "count":

@@ -1,0 +1,178 @@
+{
+  "note": "Reports are produced by the running inference API, from the same files this page was exported from. The browser requests a document and saves it; nothing in a report is computed by the page.",
+  "sample": {
+    "download_path": "/report/sample",
+    "tasks": [
+      {
+        "task": "binary",
+        "title": "Binary screening (PhysioNet 2016)"
+      },
+      {
+        "task": "pascal_a",
+        "title": "PASCAL A, four classes"
+      },
+      {
+        "task": "pascal_b",
+        "title": "PASCAL B, three classes"
+      },
+      {
+        "task": "murmur",
+        "title": "CirCor murmur"
+      },
+      {
+        "task": "outcome",
+        "title": "CirCor outcome"
+      }
+    ],
+    "contents": "The recording's waveform and spectrogram, the prediction, its confidence and low-confidence flag, the features that drove it where the model is linear, the screening disclaimer and the model version."
+  },
+  "experiments": [
+    {
+      "exp_id": "EXP-A1",
+      "title": "PhysioNet binary baseline",
+      "directory": "outputs/06_binary_results/EXP-A1",
+      "run_id": "20260830T051924Z-d4345c91",
+      "download_path": "/report/experiment/EXP-A1"
+    },
+    {
+      "exp_id": "EXP-A2",
+      "title": "PhysioNet binary, nested search",
+      "directory": "outputs/06_binary_results/EXP-A2",
+      "run_id": "20260830T082326Z-94682d5d",
+      "download_path": "/report/experiment/EXP-A2"
+    },
+    {
+      "exp_id": "EXP-A2-so04_subset",
+      "title": "PhysioNet binary, nested search on the selected subset",
+      "directory": "outputs/06_binary_results/EXP-A2-so04_subset",
+      "run_id": "20260830T070943Z-c2a756ae",
+      "download_path": "/report/experiment/EXP-A2-so04_subset"
+    },
+    {
+      "exp_id": "EXP-B1",
+      "title": "PASCAL A, four classes",
+      "directory": "outputs/07_multiclass_results/EXP-B1",
+      "run_id": "20260830T052720Z-e59f08ac",
+      "download_path": "/report/experiment/EXP-B1"
+    },
+    {
+      "exp_id": "EXP-B1-defaults",
+      "title": "EXP-B1-defaults",
+      "directory": "outputs/07_multiclass_results/EXP-B1-defaults",
+      "run_id": "20260830T055942Z-e9ff128d",
+      "download_path": "/report/experiment/EXP-B1-defaults"
+    },
+    {
+      "exp_id": "EXP-B2",
+      "title": "PASCAL B, three classes",
+      "directory": "outputs/07_multiclass_results/EXP-B2",
+      "run_id": "20260830T060548Z-cf1219c6",
+      "download_path": "/report/experiment/EXP-B2"
+    },
+    {
+      "exp_id": "EXP-B2-defaults",
+      "title": "EXP-B2-defaults",
+      "directory": "outputs/07_multiclass_results/EXP-B2-defaults",
+      "run_id": "20260830T064605Z-094bf05d",
+      "download_path": "/report/experiment/EXP-B2-defaults"
+    },
+    {
+      "exp_id": "EXP-G1",
+      "title": "EXP-G1",
+      "directory": "outputs/07_multiclass_results/EXP-G1",
+      "run_id": null,
+      "download_path": "/report/experiment/EXP-G1"
+    },
+    {
+      "exp_id": "EXP-G1-within_source",
+      "title": "EXP-G1-within_source",
+      "directory": "outputs/07_multiclass_results/EXP-G1-within_source",
+      "run_id": null,
+      "download_path": "/report/experiment/EXP-G1-within_source"
+    },
+    {
+      "exp_id": "EXP-C1-three_class",
+      "title": "EXP-C1-three_class",
+      "directory": "outputs/08_circor_external_validation/EXP-C1-three_class",
+      "run_id": "20260830T103012Z-55540b37",
+      "download_path": "/report/experiment/EXP-C1-three_class"
+    },
+    {
+      "exp_id": "EXP-C1-two_class",
+      "title": "EXP-C1-two_class",
+      "directory": "outputs/08_circor_external_validation/EXP-C1-two_class",
+      "run_id": "20260830T164502Z-878eb451",
+      "download_path": "/report/experiment/EXP-C1-two_class"
+    },
+    {
+      "exp_id": "EXP-C2",
+      "title": "EXP-C2",
+      "directory": "outputs/08_circor_external_validation/EXP-C2",
+      "run_id": "20260831T025316Z-9dbd370e",
+      "download_path": "/report/experiment/EXP-C2"
+    },
+    {
+      "exp_id": "EXP-F1-A1",
+      "title": "EXP-F1-A1",
+      "directory": "outputs/09_ablation/EXP-F1-A1",
+      "run_id": "20260910T063034Z-dd0ae0c4",
+      "download_path": "/report/experiment/EXP-F1-A1"
+    },
+    {
+      "exp_id": "EXP-F1-A2",
+      "title": "EXP-F1-A2",
+      "directory": "outputs/09_ablation/EXP-F1-A2",
+      "run_id": "20260910T063034Z-dd0ae0c4",
+      "download_path": "/report/experiment/EXP-F1-A2"
+    },
+    {
+      "exp_id": "EXP-F1-A3",
+      "title": "EXP-F1-A3",
+      "directory": "outputs/09_ablation/EXP-F1-A3",
+      "run_id": "20260910T063034Z-dd0ae0c4",
+      "download_path": "/report/experiment/EXP-F1-A3"
+    },
+    {
+      "exp_id": "EXP-F1-A4",
+      "title": "EXP-F1-A4",
+      "directory": "outputs/09_ablation/EXP-F1-A4",
+      "run_id": "20260910T063034Z-dd0ae0c4",
+      "download_path": "/report/experiment/EXP-F1-A4"
+    },
+    {
+      "exp_id": "EXP-F1-A5",
+      "title": "EXP-F1-A5",
+      "directory": "outputs/09_ablation/EXP-F1-A5",
+      "run_id": "20260910T063034Z-dd0ae0c4",
+      "download_path": "/report/experiment/EXP-F1-A5"
+    },
+    {
+      "exp_id": "EXP-F1-A6",
+      "title": "EXP-F1-A6",
+      "directory": "outputs/09_ablation/EXP-F1-A6",
+      "run_id": "20260910T063034Z-dd0ae0c4",
+      "download_path": "/report/experiment/EXP-F1-A6"
+    },
+    {
+      "exp_id": "EXP-F1-A7",
+      "title": "EXP-F1-A7",
+      "directory": "outputs/09_ablation/EXP-F1-A7",
+      "run_id": "20260910T063034Z-dd0ae0c4",
+      "download_path": "/report/experiment/EXP-F1-A7"
+    },
+    {
+      "exp_id": "EXP-F1-A8",
+      "title": "EXP-F1-A8",
+      "directory": "outputs/09_ablation/EXP-F1-A8",
+      "run_id": "20260910T063034Z-dd0ae0c4",
+      "download_path": "/report/experiment/EXP-F1-A8"
+    }
+  ],
+  "objective": {
+    "available": true,
+    "path": "outputs/00_evidence_index/T29_objective_to_evidence_mapping.docx",
+    "table_id": "T29",
+    "download_path": "/report/objectives",
+    "reason": null
+  }
+}

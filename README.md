@@ -166,10 +166,38 @@ inferred from a skip count.
 | Logic tests pass: label vocabularies, config validation, atomic IO, the synthetic-signal harness | Whether the **real** split maps leak a subject (that check needs `dataset/`) |
 | **Fold safety of the pipeline**, via a synthetic leakage canary — see below | |
 | `ruff` and `mypy` are clean over `src/` | Anything needing the four dataset families |
-| From Part X: the frontend builds and contains no hand-typed metric | |
+| From Part X: the frontend builds, contains no hand-typed metric or foreign data source, and every value it renders matches its source file | |
+| The component unit tests (Vitest) | The browser tests (Playwright): they drive the real inference API, which needs the gitignored model bundles and corpus samples |
 
 That second column is covered by the phase `[TEST]` gates and the five MEGA TEST
 phases, which run locally against the real files.
+
+## The dashboard's correctness guard rail — the section 19 QA answer
+
+The dashboard's rule is that **the browser never computes, and never declares, a
+metric**. Every precomputed number is formatted in Python by
+`scripts/17_export_frontend_data.py` and imported from `frontend/lib/generated/`;
+the only runtime call is live inference (`POST /predict`), and it lives in
+`frontend/lib/api.ts`. The rule exists because a parallel implementation of this
+brief displayed a 95.82% result its pipeline never produced. It is enforced by
+four checks, and **`npm run build` fails if any of them fails**:
+
+| When | Check | What it catches |
+|---|---|---|
+| `prebuild` | `scripts/16_check_no_hardcoded_metrics.py` | A metric literal typed into `app/` or `components/` (a metric-named key given a number, a 3-decimal literal, a percentage in text), and any data source other than `lib/generated/` — a `fetch`, a directly imported `.json`/`.csv`, a foreign `generated`/`outputs` module. |
+| `prebuild` | the exporter, run last before `next build` | A site built against stale data. |
+| `postbuild` | `scripts/20_check_bundle_budget.py` | A payload that leaked into every route. |
+| `postbuild` | `scripts/45_audit_displayed_values.py` | Crawls every page of the **built** site: every metric-shaped value on screen must be a string a generated payload carries; every table and figure cell must re-format from its committed CSV to the exported string; every evidence digest must match the file today; every page footer must show the run id, commit and export time of an `export_frontend_data` run in the project's run manifest. |
+
+The audit writes a stamp bound to a digest of the exact HTML it read. Screenshots
+(`npm run screenshots`) start only after `45_audit_displayed_values.py --gate`
+confirms the site on disk is the one that passed — no screenshot of an unaudited
+page, or of a page rebuilt after its audit.
+
+Every table and figure on the site links the CSV it was read from; the evidence
+browser on `/reports/` lists every exported column and page source with its
+sha256. The whole frontend suite — build, audits, Vitest, Playwright — runs with
+`.\scripts\run_tests.ps1 -FrontendOnly`.
 
 ## Reproducibility
 

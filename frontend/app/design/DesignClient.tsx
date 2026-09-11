@@ -6,7 +6,7 @@ import { cn } from '@/lib/cn';
 import { theme } from '@/lib/generated';
 import { G01 } from '@/lib/generated/figures/G01';
 import { G04 } from '@/lib/generated/figures/G04';
-import { tables } from '@/lib/generated/tables';
+import type { GeneratedTable } from '@/lib/generated/types';
 import { PALETTE_CONTRAST, SERIES_COLORS, SURFACE, TYPE_SCALE } from '@/lib/tokens';
 import { RecordingViewer } from '@/components/audio/RecordingViewer';
 import { CalibrationCurve, ConfusionMatrix, GroupedBars, PrCurve, RocCurve, ScatterPlot } from '@/components/charts/Charts';
@@ -44,19 +44,27 @@ import { Tooltip, TooltipProvider } from '@/components/ui/Tooltip';
  * that those payloads are shaped usefully.
  */
 
-function columnOf(id: string, name: string) {
+/**
+ * The two tables this page samples, passed in by the server page rather than
+ * imported here. Importing `generated/tables` into a client component bundles
+ * EVERY table: harmless at seven tables, 113 kB gzipped at thirty-five once
+ * Phase 117 exported the results, which would have put /design over budget.
+ */
+type SampledTables = Record<string, GeneratedTable | undefined>;
+
+function columnOf(tables: SampledTables, id: string, name: string) {
   return tables[id]?.columns.find((column) => column.name === name);
 }
 
-export function DesignClient() {
+export function DesignClient({ tables }: { tables: SampledTables }) {
   const [phase, setPhase] = useState<'idle' | 'uploading' | 'done' | 'error'>('idle');
   const [fileName, setFileName] = useState<string | null>(null);
 
   const inventory = tables['T01'];
   const distribution = tables['T02'];
-  const files = columnOf('T01', 'total_files');
-  const usable = columnOf('T01', 'usable_files');
-  const share = columnOf('T02', 'share');
+  const files = columnOf(tables, 'T01', 'total_files');
+  const usable = columnOf(tables, 'T01', 'usable_files');
+  const share = columnOf(tables, 'T02', 'share');
 
   return (
     <TooltipProvider>
@@ -128,8 +136,8 @@ export function DesignClient() {
                   <tr key={entry.colour} className="border-t border-slate-200 dark:border-slate-800">
                     <td className="py-1 pr-4 tabular-nums">{entry.index}</td>
                     <td className="py-1 pr-4 font-mono">{entry.colour}</td>
-                    <td className="py-1 pr-4 tabular-nums">{entry.on_light}</td>
-                    <td className="py-1 pr-4 tabular-nums">{entry.on_dark}</td>
+                    <td className="py-1 pr-4 tabular-nums">{entry.on_light_display}</td>
+                    <td className="py-1 pr-4 tabular-nums">{entry.on_dark_display}</td>
                     <td className="py-1">
                       {entry.needs_outline_on.length === 0 ? (
                         <Badge tone="good">neither</Badge>

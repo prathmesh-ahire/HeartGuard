@@ -23,7 +23,7 @@
       "evidence": [
         {
           "dir": "outputs/06_binary_results",
-          "n_files": 787,
+          "n_files": 802,
           "status": "produced"
         }
       ],
@@ -38,12 +38,19 @@
       "wording": "To review recently published preprocessing, feature extraction, and classification techniques, as well as the state-of-the-art in phonocardiogram (PCG) signal analysis.",
       "wording_sha256": "b0510c744259016bc06e9b45627ce02c16550aea1508050202412fc6e080c54c",
       "modules": [
+        "src/reporting/literature.py",
         "src/reporting/tables.py"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "dir": "outputs/16_literature_review",
+          "n_files": 10,
+          "status": "produced"
+        }
+      ],
       "caveat": null,
-      "pending_reason": "The literature review is Phase 101 and has not run. No outputs directory is named here on purpose: pointing at one that does not exist, or at a neighbouring directory that holds something else, would turn this check into a formality.",
-      "status": "pending"
+      "pending_reason": null,
+      "status": "produced"
     },
     {
       "number": 3,
@@ -79,12 +86,12 @@
       "evidence": [
         {
           "dir": "outputs/02_preprocessing",
-          "n_files": 18,
+          "n_files": 21,
           "status": "produced"
         },
         {
           "dir": "outputs/03_features",
-          "n_files": 40,
+          "n_files": 45,
           "status": "produced"
         }
       ],
@@ -125,7 +132,7 @@
       "evidence": [
         {
           "dir": "outputs/07_multiclass_results",
-          "n_files": 401,
+          "n_files": 448,
           "status": "produced"
         }
       ],

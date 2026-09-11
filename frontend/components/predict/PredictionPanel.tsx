@@ -10,6 +10,7 @@ import { ResultCard } from '@/components/predict/ResultCard';
 import { WaveformPreview } from '@/components/predict/WaveformPreview';
 import { SURFACE, TYPE_SCALE } from '@/lib/tokens';
 import { prediction } from '@/lib/generated/prediction';
+import { rememberPrediction } from '@/lib/lastPrediction';
 import type { GeneratedSample, GeneratedTaskSpec } from '@/lib/generated/types';
 import {
   ApiError,
@@ -142,6 +143,9 @@ export function PredictionPanel({
         return;
       }
       setResult(outcome);
+      // T117.2: hand the response to /explainability, which renders its
+      // `explanation` block as the API formatted it.
+      rememberPrediction(outcome);
       setPhase('done');
     } catch (error) {
       setFailure(error instanceof ApiError ? error.message : String(error));

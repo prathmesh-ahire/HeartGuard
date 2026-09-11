@@ -25,7 +25,6 @@
 import datasetSummaryJson from './dataset_summary.json';
 import ensembleJson from './ensemble.json';
 import equationsJson from './equations.json';
-import evidenceJson from './evidence.json';
 import manifestJson from './manifest.json';
 import objectivesJson from './objectives.json';
 import pipelineJson from './pipeline.json';
@@ -36,7 +35,6 @@ import type {
   GeneratedDatasetSummary,
   GeneratedEnsemble,
   GeneratedEquations,
-  GeneratedEvidenceEntry,
   GeneratedManifest,
   GeneratedObjectives,
   GeneratedPipeline,
@@ -45,7 +43,8 @@ import type {
 } from './types';
 
 export const manifest: GeneratedManifest = manifestJson;
-export const evidence: GeneratedEvidenceEntry[] = evidenceJson;
+// `evidence` is in `generated/evidence`, not here: one row per exported column
+// is several hundred rows, and the barrel is paid for by every route.
 /** The matplotlib palette, so a browser chart and its 300 dpi PNG agree. */
 export const theme: GeneratedTheme = themeJson;
 /** The twelve architecture steps, each verified against the repository. */
@@ -78,7 +77,11 @@ export type {
   GeneratedEnsembleMember,
   GeneratedEquation,
   GeneratedEquations,
+  GeneratedEvidence,
   GeneratedEvidenceEntry,
+  GeneratedExplainability,
+  GeneratedLimitations,
+  GeneratedReports,
   GeneratedFigure,
   GeneratedManifest,
   GeneratedObjective,

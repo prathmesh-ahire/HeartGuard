@@ -98,6 +98,10 @@ outputs:
   multiclass_results: "outputs/07_multiclass_results"
   circor_external_validation: "outputs/08_circor_external_validation"
   ablation: "outputs/09_ablation"
+  # T20/T21 (Phases 72-73) were written here rather than into 10_robustness.
+  # Declared so the frontend exporter can read them by key; see Docs/note.md,
+  # 2026-09-11 Phase 117.
+  robustness_analysis: "outputs/09_robustness_analysis"
   robustness: "outputs/10_robustness"
   complexity: "outputs/11_complexity"
   statistics: "outputs/12_statistics"

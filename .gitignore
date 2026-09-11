@@ -69,6 +69,14 @@ node_modules/
 .next/
 # NOTE: frontend/out/ is deliberately NOT ignored — the exported static
 # dashboard is committed so a grader without Node can serve it from FastAPI.
+# The evidence browser's CSV copies (T117.4) are written by the exporter on
+# every build from committed outputs/, so they are a build product, not source.
+/frontend/public/evidence/
+# The displayed-value audit's stamp (T119.3/T119.4): describes one build.
+/frontend/.display-audit.json
+# Playwright and Vitest working output (Phase 118).
+/frontend/test-results/
+/frontend/playwright-report/
 
 # OS / editor noise
 .DS_Store

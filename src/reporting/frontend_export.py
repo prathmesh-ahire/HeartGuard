@@ -68,6 +68,12 @@ from src.reporting.equations import equations_payload
 from src.reporting.experiments import experiments_payload
 from src.reporting.method import features_payload, optimization_payload
 from src.reporting.objectives import objectives_payload
+from src.reporting.pages_10_12 import (
+    explainability_payload,
+    limitations_payload,
+    payload_evidence,
+    reports_payload,
+)
 from src.reporting.plot_style import (
     DIVERGING_CMAP,
     DPI,
@@ -134,6 +140,16 @@ DEFAULT_SOURCE_DIRS: tuple[str, ...] = (
     "models",
     "search_optimization",
     "figures_diagrams",
+    # Phase 117: pages 10-12 render T16, T20-T30 and T-S5 from these. They were
+    # never opt-in -- only the two results directories below carried the
+    # "being rewritten" risk -- they had simply not been needed yet.
+    "circor_external_validation",
+    "ablation",
+    "robustness_analysis",
+    "robustness",
+    "complexity",
+    "statistics",
+    "evidence_index",
 )
 
 #: Read only with ``--include-results``. See the module docstring.
@@ -159,11 +175,21 @@ GENERATED_FILES: tuple[str, ...] = (
     "features.json",
     "optimization.json",
     "segmentation.json",
+    "explainability.json",
+    "limitations.json",
+    "reports.json",
     "types.ts",
     "index.ts",
 )
 
-_TABLE_ID = re.compile(r"^T\d{2}$")
+#: Where the evidence browser's copies of the source CSVs go, under `public/`.
+#: A static export can only link to what it serves, and T117.7 asks that the
+#: link resolve. Rebuilt on every export and gitignored.
+EVIDENCE_PUBLIC_DIR = "evidence"
+
+#: T01-T30, and the supplementary T-S1..T-S5. T-S5 (EXP-F3's source hold-out)
+#: is the evidence behind Known Limitation 1 and has to be on the robustness page.
+_TABLE_ID = re.compile(r"^T(?:\d{2}|-S\d+)$")
 _FIGURE_ID = re.compile(r"^G\d{2}$")
 
 
@@ -529,6 +555,11 @@ def palette_contrast() -> list[dict[str, Any]]:
                 "colour": colour,
                 "on_light": round(on_light, 3),
                 "on_dark": round(on_dark, 3),
+                # What /design prints. It used to print the numbers above, which
+                # the T119.3 audit flagged: a page may render only strings a
+                # payload carries, never a numeric field.
+                "on_light_display": format_value(on_light, "metric"),
+                "on_dark_display": format_value(on_dark, "metric"),
                 "needs_outline_on": needs,
             }
         )
@@ -685,6 +716,9 @@ export interface GeneratedTheme {{
       colour: string;
       on_light: number;
       on_dark: number;
+      /** The ratios as rendered text. Render these, never the numbers above. */
+      on_light_display: string;
+      on_dark_display: string;
       /** Grounds where this fill is too close to the page and needs a stroke. */
       needs_outline_on: string[];
     }}[];
@@ -1109,6 +1143,163 @@ export interface GeneratedEvidenceEntry {{
   generated_from: string;
   generated_from_sha256: string;
   upstream_sources: string[];
+  /** Site path of the served copy of `generated_from`, or null if none was copied. */
+  url: string | null;
+}}
+
+export type GeneratedEvidence = GeneratedEvidenceEntry[];
+
+export interface GeneratedPayloadSource {{
+  path: string;
+  sha256: string | null;
+  available: boolean;
+}}
+
+export interface GeneratedExplainability {{
+  available: boolean;
+  reason: string | null;
+  sources: GeneratedPayloadSource[];
+  top_n?: number;
+  importance: {{
+    task: string;
+    model_id: string;
+    kind: string;
+    n_features_ranked: number;
+    n_features_ranked_display: string;
+    n_folds: number;
+    rows: {{
+      rank: number;
+      feature: string;
+      family: string;
+      /** Bar geometry only. Render `importance_display`. */
+      importance: number | null;
+      importance_display: string;
+      importance_sd_display: string;
+      folds_positive_display: string;
+    }}[];
+  }}[];
+  families: {{
+    task: string;
+    model_id: string;
+    kind: string;
+    rows: {{
+      rank: number;
+      family: string;
+      n_features_display: string;
+      share: number | null;
+      share_display: string;
+      share_sd_display: string;
+      total_display: string;
+      net_negative_display: string;
+    }}[];
+  }}[];
+  coverage: {{ model_id: string; methods: string[]; excluded_reason: string | null }}[];
+  example: {{
+    available: boolean;
+    record_uid?: string;
+    selection_rule?: string;
+    task?: string;
+    model_id?: string;
+    method?: string;
+    units?: string;
+    true_class?: string;
+    predicted_class?: string;
+    probability_display?: string;
+    base_value_display?: string;
+    decision_value_display?: string;
+    n_shown_display?: string;
+    n_features_display?: string;
+    caveats?: string[];
+    rows?: {{
+      feature: string;
+      family: string;
+      contribution: number | null;
+      contribution_display: string;
+      raw_value_display: string;
+      scaled_value_display: string;
+      weight_display: string;
+      direction: string;
+    }}[];
+  }};
+  notes: string[];
+}}
+
+export interface GeneratedLimitationBlock {{
+  available: boolean;
+  reason?: string;
+  sources: GeneratedPayloadSource[];
+}}
+
+export interface GeneratedLimitations {{
+  population: GeneratedLimitationBlock & {{
+    design?: string;
+    framing_rule?: string;
+    second_known_cause?: string;
+    train_dataset?: string;
+    train_n_with_age_display?: string;
+    train_age_median_display?: string;
+    train_n_under_18_display?: string;
+    train_share_under_18_display?: string;
+    test_dataset?: string;
+    test_n_patients_display?: string;
+    test_n_with_age_band_display?: string;
+    test_n_paediatric_display?: string;
+    test_share_paediatric_display?: string;
+    test_age_scale?: string;
+    transfer?: {{
+      level: string;
+      rule: string;
+      n_units_display: string;
+      in_domain_display: string;
+      external_display: string;
+    }}[];
+  }};
+  pascal: GeneratedLimitationBlock & {{
+    tracks?: {{
+      task: string;
+      title: string;
+      n_records_display: string;
+      smallest_class: string;
+      smallest_n_display: string;
+      classes: {{ class: string; n_records_display: string; n_subjects_display: string }}[];
+    }}[];
+  }};
+  circor: GeneratedLimitationBlock & {{
+    n_recordings_display?: string;
+    n_patients_display?: string;
+    unknown_murmur_patients_display?: string;
+  }};
+  source_holdout: GeneratedLimitationBlock & {{
+    model_id?: string;
+    n_folds_display?: string;
+    auc_pooled_display?: string;
+    auc_holdout_display?: string;
+    balanced_accuracy_pooled_display?: string;
+    balanced_accuracy_holdout_display?: string;
+  }};
+}}
+
+export interface GeneratedReports {{
+  note: string;
+  sample: {{
+    download_path: string;
+    tasks: {{ task: string; title: string }}[];
+    contents: string;
+  }};
+  experiments: {{
+    exp_id: string;
+    title: string;
+    directory: string;
+    run_id: string | null;
+    download_path: string;
+  }}[];
+  objective: {{
+    available: boolean;
+    path: string;
+    table_id: string;
+    download_path: string;
+    reason: string | null;
+  }};
 }}
 
 export interface GeneratedTaskSpec {{
@@ -1206,7 +1397,6 @@ _INDEX_TS = """// GENERATED by scripts/17_export_frontend_data.py -- do not edit
 import datasetSummaryJson from './dataset_summary.json';
 import ensembleJson from './ensemble.json';
 import equationsJson from './equations.json';
-import evidenceJson from './evidence.json';
 import manifestJson from './manifest.json';
 import objectivesJson from './objectives.json';
 import pipelineJson from './pipeline.json';
@@ -1217,7 +1407,6 @@ import type {
   GeneratedDatasetSummary,
   GeneratedEnsemble,
   GeneratedEquations,
-  GeneratedEvidenceEntry,
   GeneratedManifest,
   GeneratedObjectives,
   GeneratedPipeline,
@@ -1226,7 +1415,8 @@ import type {
 } from './types';
 
 export const manifest: GeneratedManifest = manifestJson;
-export const evidence: GeneratedEvidenceEntry[] = evidenceJson;
+// `evidence` is in `generated/evidence`, not here: one row per exported column
+// is several hundred rows, and the barrel is paid for by every route.
 /** The matplotlib palette, so a browser chart and its 300 dpi PNG agree. */
 export const theme: GeneratedTheme = themeJson;
 /** The twelve architecture steps, each verified against the repository. */
@@ -1259,7 +1449,11 @@ export type {
   GeneratedEnsembleMember,
   GeneratedEquation,
   GeneratedEquations,
+  GeneratedEvidence,
   GeneratedEvidenceEntry,
+  GeneratedExplainability,
+  GeneratedLimitations,
+  GeneratedReports,
   GeneratedFigure,
   GeneratedManifest,
   GeneratedObjective,
@@ -1336,6 +1530,36 @@ _SPLIT_MODULES: tuple[tuple[str, str, str, str, str], ...] = (
         "GeneratedPrediction",
         "The five declared label spaces and the pinned sample recordings. Used by "
         "three routes out of fifteen, so it is not in the barrel.",
+    ),
+    (
+        "evidence",
+        "evidence.json",
+        "evidence",
+        "GeneratedEvidence",
+        "Every exported column, figure and page payload, mapped to the CSV it was "
+        "read from and that file's digest. The evidence browser's data (T117.4).",
+    ),
+    (
+        "explainability",
+        "explainability.json",
+        "explainability",
+        "GeneratedExplainability",
+        "Permutation importance, family shares and one stored per-record "
+        "decomposition (T117.2).",
+    ),
+    (
+        "limitations",
+        "limitations.json",
+        "limitations",
+        "GeneratedLimitations",
+        "The caveats a reader must see before quoting a number (T117.5).",
+    ),
+    (
+        "reports",
+        "reports.json",
+        "reports",
+        "GeneratedReports",
+        "Which reports the running API can produce, and from which files (T117.3).",
     ),
 )
 
@@ -1528,6 +1752,44 @@ def _reject_constant(name: str) -> Any:
 
 
 # ---------------------------------------------------------------------------
+# T117.4 -- the evidence browser serves the files it links to
+# ---------------------------------------------------------------------------
+
+
+def _publish_evidence(evidence: list[dict[str, Any]], directory: Path) -> None:
+    """Copy each `generated_from` file under `public/evidence/` and record its URL.
+
+    A static export can only link to a file it serves. A link to a path in the
+    repository would resolve for nobody reading the dashboard, and T117.7 asks
+    that the link resolve to a real CSV. The directory is rebuilt from scratch on
+    every export, so a file that left `outputs/` leaves the site too. Only
+    committed, readable types are copied; a `url` of null states that no copy
+    exists rather than linking to a 404.
+    """
+    import shutil
+
+    if directory.is_dir():
+        shutil.rmtree(directory)
+    copied: dict[str, str] = {}
+    for entry in evidence:
+        relative = str(entry["generated_from"])
+        if relative not in copied:
+            source = _project_root() / relative
+            if (
+                relative.startswith("outputs/")
+                and source.is_file()
+                and source.suffix.lower() in READABLE_SUFFIXES
+            ):
+                target = directory / relative
+                ensure_dir(target.parent)
+                shutil.copyfile(source, target)
+                copied[relative] = "/" + EVIDENCE_PUBLIC_DIR + "/" + relative
+            else:
+                copied[relative] = ""
+        entry["url"] = copied[relative] or None
+
+
+# ---------------------------------------------------------------------------
 # the export
 # ---------------------------------------------------------------------------
 
@@ -1601,6 +1863,15 @@ def export_all(
 
     segmentation = _export_segmentation(figures_public, skipped)
 
+    # Pages 10-12 (Phase 117). Their evidence rows join the table and figure
+    # rows, so the evidence browser covers every file a page reads.
+    explainability = explainability_payload()
+    limitations = limitations_payload()
+    reports = reports_payload()
+    evidence += payload_evidence("explainability", explainability)
+    evidence += payload_evidence("limitations", limitations)
+    _publish_evidence(evidence, public_root(public_dir) / EVIDENCE_PUBLIC_DIR)
+
     run = current_run()
     git = git_info()
     manifest = {
@@ -1658,6 +1929,10 @@ def export_all(
         # T113.6: one real CirCor recording, its expert segmentation, and the
         # ODC-By notices that make redistributing it lawful.
         save_json(segmentation, target / "segmentation.json"),
+        # T117.2 / T117.5 / T117.3.
+        save_json(explainability, target / "explainability.json"),
+        save_json(limitations, target / "limitations.json"),
+        save_json(reports, target / "reports.json"),
     ]
     written += _write_figure_modules(target, figures)
     written += _write_typescript(target)

@@ -173,8 +173,8 @@
       "name": "Prediction",
       "latex": "\\hat{y} = \\arg\\max_{c} P_{\\text{final}}(c)",
       "use": "Final class",
-      "implemented_in": "src/evaluation/metrics.py",
-      "implements": "argmax",
+      "implemented_in": "src/ensemble/soft_voting.py",
+      "implements": "np.argmax(proba, axis=1)",
       "symbols": [
         {
           "symbol": "\\hat{y}",

@@ -1,6 +1,6 @@
 {
   "id": "G30",
-  "number": 13,
+  "number": 30,
   "title": "Noise Level Robustness",
   "caption": "Left: balanced accuracy by PP-08 quality group for each experiment, averaged over that experiment's models and folds -- observational, and the groups differ in more than noise. Right: the same PhysioNet recordings at 20/15/10/5/0 dB added white Gaussian noise, scored by a model refitted without their subjects; dotted lines mark the untouched control. Additive white noise is a laboratory stressor and not a model of real stethoscope contamination.",
   "exp_id": "EXP-E1",

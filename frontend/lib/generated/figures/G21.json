@@ -1,0 +1,268 @@
+{
+  "id": "G21",
+  "number": 21,
+  "title": "All Features Versus Selected Features",
+  "caption": "Every SO-04 configuration scored on the held-out outer folds: all 138 features against each selected subset, mean with the standard error across folds. Every arm was selected inside its own fold's training rows and scored once on that fold's test rows. The x-axis starts at 0.6 to separate arms that differ by a few points; the bars are therefore not proportional to the score. Sorted by balanced accuracy.",
+  "exp_id": "SO-04",
+  "objective": "O3 (search-based feature selection)",
+  "dataset": "D1 PhysioNet 2016",
+  "notes": [
+    "PV-MEPCG / PulseVision is an academic screening prototype, not a diagnostic tool."
+  ],
+  "sources": [
+    "outputs/05_search_optimization/SO-04/all_features_vs_selected.csv"
+  ],
+  "source_csv": "outputs/13_figures_diagrams/G21_all_features_versus_selected_features.csv",
+  "png": "/figures/G21_all_features_versus_selected_features.png",
+  "dpi": 300,
+  "n_rows": 7,
+  "columns": [
+    {
+      "name": "configuration",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "all_features",
+        "rf_threshold_mean",
+        "gb_threshold_median",
+        "rfecv",
+        "selected_subset",
+        "gb_threshold_mean",
+        "rf_threshold_median"
+      ],
+      "values": null
+    },
+    {
+      "name": "macro_f1_mean",
+      "kind": "metric",
+      "places": 3,
+      "display": [
+        "0.835",
+        "0.826",
+        "0.833",
+        "0.829",
+        "0.834",
+        "0.834",
+        "0.842"
+      ],
+      "values": [
+        0.8350596588745495,
+        0.8260775116799518,
+        0.8330570917705149,
+        0.8288785106057837,
+        0.8342829388781405,
+        0.8335004415140748,
+        0.8422351154954082
+      ]
+    },
+    {
+      "name": "balanced_accuracy_mean",
+      "kind": "metric",
+      "places": 3,
+      "display": [
+        "0.834",
+        "0.835",
+        "0.835",
+        "0.837",
+        "0.843",
+        "0.843",
+        "0.846"
+      ],
+      "values": [
+        0.8338959984711327,
+        0.8345584931411153,
+        0.8353501041921636,
+        0.8372236947297914,
+        0.8425691616091031,
+        0.8427375203775229,
+        0.8463832716281727
+      ]
+    },
+    {
+      "name": "sensitivity_mean",
+      "kind": "metric",
+      "places": 3,
+      "display": [
+        "0.734",
+        "0.750",
+        "0.741",
+        "0.755",
+        "0.764",
+        "0.765",
+        "0.762"
+      ],
+      "values": [
+        0.7338344974096678,
+        0.7502804919566046,
+        0.7413780895690731,
+        0.7548802649401095,
+        0.763964155526334,
+        0.7654576719022695,
+        0.7622906478966902
+      ]
+    },
+    {
+      "name": "specificity_mean",
+      "kind": "metric",
+      "places": 3,
+      "display": [
+        "0.934",
+        "0.919",
+        "0.929",
+        "0.920",
+        "0.921",
+        "0.920",
+        "0.930"
+      ],
+      "values": [
+        0.9339574995325975,
+        0.918836494325626,
+        0.9293221188152538,
+        0.9195671245194734,
+        0.9211741676918724,
+        0.9200173688527764,
+        0.9304758953596556
+      ]
+    },
+    {
+      "name": "macro_f1_se",
+      "kind": "metric",
+      "places": 3,
+      "display": [
+        "0.016",
+        "0.013",
+        "0.014",
+        "0.011",
+        "0.014",
+        "0.012",
+        "0.014"
+      ],
+      "values": [
+        0.0159653115223464,
+        0.0127476262700783,
+        0.0144765210547043,
+        0.0109781684938731,
+        0.0143591740358673,
+        0.0121256448966935,
+        0.0144216665646788
+      ]
+    },
+    {
+      "name": "balanced_accuracy_se",
+      "kind": "metric",
+      "places": 3,
+      "display": [
+        "0.019",
+        "0.019",
+        "0.019",
+        "0.015",
+        "0.016",
+        "0.015",
+        "0.018"
+      ],
+      "values": [
+        0.0192699368803118,
+        0.0187552974573096,
+        0.019383439710164,
+        0.0149257768203253,
+        0.0157184397221984,
+        0.0150808935277056,
+        0.0179685790673819
+      ]
+    },
+    {
+      "name": "sensitivity_se",
+      "kind": "metric",
+      "places": 3,
+      "display": [
+        "0.047",
+        "0.048",
+        "0.047",
+        "0.042",
+        "0.037",
+        "0.039",
+        "0.044"
+      ],
+      "values": [
+        0.0471571650400749,
+        0.0475845671940005,
+        0.047247588804258,
+        0.0418571088820049,
+        0.0374517488921793,
+        0.0391891306330905,
+        0.0438637093381061
+      ]
+    },
+    {
+      "name": "specificity_se",
+      "kind": "metric",
+      "places": 3,
+      "display": [
+        "0.019",
+        "0.017",
+        "0.018",
+        "0.018",
+        "0.018",
+        "0.018",
+        "0.018"
+      ],
+      "values": [
+        0.0194834444186965,
+        0.0174413169372378,
+        0.0176722552077788,
+        0.0181185495753244,
+        0.0180458145675878,
+        0.0177182334067636,
+        0.0177780197071806
+      ]
+    },
+    {
+      "name": "n_features",
+      "kind": "text",
+      "places": null,
+      "display": [
+        "138.0",
+        "34.0",
+        "69.0",
+        "62.0",
+        "20.0",
+        "18.8",
+        "69.0"
+      ],
+      "values": [
+        138.0,
+        34.0,
+        69.0,
+        62.0,
+        20.0,
+        18.8,
+        69.0
+      ]
+    },
+    {
+      "name": "n_folds",
+      "kind": "count",
+      "places": 0,
+      "display": [
+        "5",
+        "5",
+        "5",
+        "5",
+        "5",
+        "5",
+        "5"
+      ],
+      "values": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    }
+  ],
+  "data_omitted": false,
+  "data_omitted_reason": null
+}

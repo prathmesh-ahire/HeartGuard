@@ -1,6 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/cn';
+import { EvidenceLink } from '@/components/evidence/EvidenceLink';
 import { figure as generatedFigure } from '@/lib/generated/figures';
 import { SURFACE, TYPE_SCALE } from '@/lib/tokens';
 
@@ -53,6 +54,10 @@ export function FigureDownload({
       </a>
       <span className={cn(TYPE_SCALE.micro, SURFACE.subtle)}>
         the canonical matplotlib figure, identical to the one in the thesis
+      </span>
+      <span className={cn(TYPE_SCALE.micro, SURFACE.subtle)}>
+        plotted from{' '}
+        <EvidenceLink path={figure.source_csv} artifact={figure.id} className="normal-case tracking-normal" />
       </span>
     </div>
   );
