@@ -103,15 +103,11 @@ def significance_matrix(paired: Any, *, value: str = "p_holm") -> tuple[Any, Any
             which.loc[row["model_a"], row["model_b"]] = name
             which.loc[row["model_b"], row["model_a"]] = name
 
-        tests_used = (
-            "; ".join(sorted(set(block[test_column].astype(str)))) if test_column else ""
-        )
+        tests_used = "; ".join(sorted(set(block[test_column].astype(str)))) if test_column else ""
         for frame in (matrix, which):
             frame.reset_index(inplace=True)
             frame.rename(columns={"index": "model"}, inplace=True)
-            for offset, (key, item) in enumerate(
-                zip(keys, np.atleast_1d(values), strict=True)
-            ):
+            for offset, (key, item) in enumerate(zip(keys, np.atleast_1d(values), strict=True)):
                 frame.insert(offset, key, item)
             frame.insert(len(keys) + 1, "n", int(block["n"].iloc[0]))
             frame.insert(len(keys) + 2, "n_description", str(block["n_description"].iloc[0]))
@@ -235,9 +231,11 @@ def build_t28(
         Column("mean_b", "Mean B", kind="metric"),
         Column("mean_difference", "Difference", kind="metric", places=4),
         Column("statistic", "Statistic", kind="metric", places=3),
-        Column("p_value", "p (raw)", kind="metric", places=4),
-        Column("p_holm", "p (Holm)", kind="metric", places=4),
-        Column("p_bh", "p (BH)", kind="metric", places=4),
+        # p_value, not metric: at four places a p of 2.7e-14 printed "0.0000",
+        # which reads as exactly zero. The p_value kind prints "<0.0001".
+        Column("p_value", "p (raw)", kind="p_value", places=4),
+        Column("p_holm", "p (Holm)", kind="p_value", places=4),
+        Column("p_bh", "p (BH)", kind="p_value", places=4),
         Column("effect_size_name", "Effect size"),
         Column("effect_size", "Value", kind="metric", places=3),
         Column("underpowered", "Underpowered"),

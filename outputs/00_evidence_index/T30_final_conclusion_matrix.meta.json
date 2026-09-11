@@ -1,0 +1,284 @@
+{
+  "table_id": "T30",
+  "title": "Final Conclusion Matrix",
+  "caption": "What the evidence shows for each locked objective of PV-MEPCG / PulseVision: the measured finding, the verdict, the explicit rule that produced the verdict, and the limitation that bounds it. Every number is read from the tables and run outputs named in its row when the table is built.",
+  "exp_id": "all experiments (conclusions)",
+  "objective": "O1-O6",
+  "dataset": "D1-D4",
+  "framework": "PV-MEPCG / PulseVision",
+  "generated_utc": "2026-09-11T05:02:18.921972+00:00",
+  "git": {
+    "available": true,
+    "reason": null,
+    "commit": "f38eb9f8b1562ea033abd0dcf3c4e8ca191acb04",
+    "commit_short": "f38eb9f8",
+    "branch": "main",
+    "dirty": true,
+    "dirty_files": [
+      "outputs/00_evidence_index/evidence_index.csv",
+      "outputs/00_evidence_index/run_manifest.json",
+      "outputs/10_robustness/T27_false_positive_and_false_negative_analysis.docx",
+      "outputs/10_robustness/T27_false_positive_and_false_negative_analysis.md",
+      "outputs/10_robustness/T27_false_positive_and_false_negative_analysis.meta.json",
+      "outputs/10_robustness/T27_false_positive_and_false_negative_analysis.tex",
+      "outputs/11_complexity/T24_complexity_analysis.docx",
+      "outputs/11_complexity/T24_complexity_analysis.md",
+      "outputs/11_complexity/T24_complexity_analysis.meta.json",
+      "outputs/11_complexity/T24_complexity_analysis.tex",
+      "outputs/11_complexity/T25_training_and_inference_time.docx",
+      "outputs/11_complexity/T25_training_and_inference_time.md",
+      "outputs/11_complexity/T25_training_and_inference_time.meta.json",
+      "outputs/11_complexity/T25_training_and_inference_time.tex",
+      "outputs/11_complexity/T26_model_size_and_memory.docx",
+      "outputs/11_complexity/T26_model_size_and_memory.md",
+      "outputs/11_complexity/T26_model_size_and_memory.meta.json",
+      "outputs/11_complexity/T26_model_size_and_memory.tex",
+      "outputs/12_statistics/T28_statistical_significance_comparison.docx",
+      "outputs/12_statistics/T28_statistical_significance_comparison.md",
+      "outputs/12_statistics/T28_statistical_significance_comparison.meta.json",
+      "outputs/12_statistics/T28_statistical_significance_comparison.tex",
+      "outputs/12_statistics/statistical_summary_table.docx",
+      "outputs/13_figures_diagrams/G25_inference_time_versus_performance.meta.json",
+      "outputs/13_figures_diagrams/G25_inference_time_versus_performance.svg",
+      "outputs/13_figures_diagrams/G26_training_time_comparison.meta.json",
+      "outputs/13_figures_diagrams/G26_training_time_comparison.svg",
+      "outputs/13_figures_diagrams/G27_model_size_comparison.meta.json",
+      "outputs/13_figures_diagrams/G27_model_size_comparison.svg",
+      "outputs/13_figures_diagrams/G35_false_positive_and_false_negative_distribution.meta.json",
+      "outputs/13_figures_diagrams/G35_false_positive_and_false_negative_distribution.svg",
+      "outputs/13_figures_diagrams/figure_registry.csv",
+      "src/reporting/result_tables.py",
+      "src/reporting/statistics_report.py",
+      "tests/test_analysis_tables.py",
+      "frontend/out/",
+      "outputs/00_evidence_index/T29_objective_to_evidence_mapping.csv",
+      "outputs/00_evidence_index/T29_objective_to_evidence_mapping.docx",
+      "outputs/00_evidence_index/T29_objective_to_evidence_mapping.md",
+      "outputs/00_evidence_index/T29_objective_to_evidence_mapping.meta.json",
+      "outputs/00_evidence_index/T29_objective_to_evidence_mapping.tex",
+      "outputs/00_evidence_index/T30_final_conclusion_matrix.csv",
+      "outputs/00_evidence_index/T30_final_conclusion_matrix.docx",
+      "outputs/00_evidence_index/T30_final_conclusion_matrix.md",
+      "outputs/00_evidence_index/T30_final_conclusion_matrix.meta.json",
+      "outputs/00_evidence_index/T30_final_conclusion_matrix.tex",
+      "outputs/09_robustness_analysis/EXP-E1/sweep.log",
+      "outputs/09_robustness_analysis/EXP-E2_trunc.log",
+      "src/reporting/conclusion_tables.py",
+      "tests/test_closing_tables.py"
+    ]
+  },
+  "command": "python scripts/37_result_tables.py --tables T29 T30",
+  "rounding_rules": {
+    "metric": 3,
+    "p_value": 3,
+    "percent": 1,
+    "count": 0,
+    "integer": 0,
+    "mean_count": 1,
+    "seconds": 2,
+    "text": null,
+    "preformatted": null
+  },
+  "column_kinds": {
+    "objective": "count",
+    "handle": "text",
+    "finding": "text",
+    "verdict": "text",
+    "rule": "text",
+    "limitation": "text",
+    "tables": "text",
+    "sources": "text"
+  },
+  "column_places": {},
+  "n_rows": 6,
+  "sources": [
+    {
+      "path": "outputs/06_binary_results/final_model_selection.csv",
+      "exists": true,
+      "bytes": 363,
+      "sha256": "5b63d4bc9677e511aae5c176bfd7ecf20f504fe31f4c86949b073a986f0f5ef1",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-29T19:00:25.203458+00:00"
+    },
+    {
+      "path": "outputs/06_binary_results/EXP-A2/aggregate_metrics.csv",
+      "exists": true,
+      "bytes": 7452,
+      "sha256": "becef3140a093b177650e7bfbe50322a6287a36caf6e7f3a13d3eb8405493173",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-30T16:49:48.119485+00:00"
+    },
+    {
+      "path": "outputs/09_ablation/T-S5_leave_one_source_out_generalization.csv",
+      "exists": true,
+      "bytes": 2746,
+      "sha256": "53b2a99066170c65b338ea9aa6319c51295dc2d6654eead502ed14f466aa3268",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T08:00:13.829567+00:00"
+    },
+    {
+      "path": "outputs/08_circor_external_validation/T16_cross_dataset_generalization.csv",
+      "exists": true,
+      "bytes": 2854,
+      "sha256": "eba0ffd8a3da97bfb25c04317bb82bdb987b4b1a74812b2e55a9bf211d6effad",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-31T08:07:28.353569+00:00"
+    },
+    {
+      "path": "outputs/02_preprocessing/preprocessing_ablation.csv",
+      "exists": true,
+      "bytes": 2270,
+      "sha256": "ebb0b4e48fb094b9798a86d7ef7a3b26d9743f9277a5b0726e019e26ef9bfea6",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T06:30:26.068189+00:00"
+    },
+    {
+      "path": "outputs/09_ablation/T17_feature_family_ablation.csv",
+      "exists": true,
+      "bytes": 15546,
+      "sha256": "b90607bc6bc89c6630364dfc5a660b0f9d618662412345bb3f268d8f07209784",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T07:31:24.762025+00:00"
+    },
+    {
+      "path": "outputs/09_ablation/T18_all_features_versus_selected_features.csv",
+      "exists": true,
+      "bytes": 3289,
+      "sha256": "1192232961ac60d082ad4388068d3aa4e87dc5ee65a2944f49f6610af681eb4b",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T07:31:26.848808+00:00"
+    },
+    {
+      "path": "outputs/12_statistics/paired_fold_tests_interpreted.csv",
+      "exists": true,
+      "bytes": 335359,
+      "sha256": "5e2765130d82a108f0982c9e765b1ac1f5fb8f63488c23f8107f90ec4b09ba6c",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:10:34.101611+00:00"
+    },
+    {
+      "path": "outputs/06_binary_results/T09_equal_weight_versus_optimized_ensemble.csv",
+      "exists": true,
+      "bytes": 1025,
+      "sha256": "428d7132facf6cb5ff70a507a8b6ad415d8fa3900ea3e4b1789444434524c0b6",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T16:53:55.140303+00:00"
+    },
+    {
+      "path": "outputs/10_robustness/T23_calibration_and_confidence_summary.csv",
+      "exists": true,
+      "bytes": 8056,
+      "sha256": "0bb9b34c3a4fbb13894dea8d893b4c75f5bc4b8d41f0661177fa9020bac2df30",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:06:02.630168+00:00"
+    },
+    {
+      "path": "outputs/09_ablation/T19_search_and_optimization_ablation.csv",
+      "exists": true,
+      "bytes": 3089,
+      "sha256": "84f6288558018b8dcd7ae996e5edaf49be8251cb1cfb487e97c321e24ae8c12c",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T04:36:26.309989+00:00"
+    },
+    {
+      "path": "outputs/09_robustness_analysis/T20_noise_robustness.csv",
+      "exists": true,
+      "bytes": 22092,
+      "sha256": "9d2c50a0a4a7969fd285cfcf8e06529b077bea844cff56d462d3aae2e7971cd1",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:03:01.057423+00:00"
+    },
+    {
+      "path": "outputs/09_robustness_analysis/T21_duration_robustness.csv",
+      "exists": true,
+      "bytes": 16869,
+      "sha256": "28757e1243df1ef984046bd3be9a50ca6f1d82548f59a796182c9e6492f8e803",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:03:31.167914+00:00"
+    },
+    {
+      "path": "outputs/08_circor_external_validation/T22_auscultation_location_analysis.csv",
+      "exists": true,
+      "bytes": 16922,
+      "sha256": "21f0082013a6d60bd1c0b9a1f783c07468647f276dae7af6c762d4bd9179def2",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:03:48.673392+00:00"
+    },
+    {
+      "path": "outputs/10_robustness/T27_false_positive_and_false_negative_analysis.csv",
+      "exists": true,
+      "bytes": 6767,
+      "sha256": "416b762b8e2e0e9eb14141d6c082fb58018f46cb9068dbd007a9cacf581c1350",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:10:27.144540+00:00"
+    },
+    {
+      "path": "outputs/11_complexity/T24_complexity_analysis.csv",
+      "exists": true,
+      "bytes": 1779,
+      "sha256": "e120b514b5a3019f6f290497ef9bb784d85657666e692db331b1742d879e98e6",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:09:56.757002+00:00"
+    },
+    {
+      "path": "outputs/07_multiclass_results/T11_pascal_a_multiclass_results.csv",
+      "exists": true,
+      "bytes": 1496,
+      "sha256": "0afc452db88f9bdd09bea347f59d48d7d4db7ca8f78b42f7b04df7339d030277",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T16:53:56.060966+00:00"
+    },
+    {
+      "path": "outputs/07_multiclass_results/T12_pascal_b_multiclass_results.csv",
+      "exists": true,
+      "bytes": 1341,
+      "sha256": "8616a9321853b79c18f409076b472e58570f78aac9787a7763914126e5624df7",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T16:53:56.424812+00:00"
+    },
+    {
+      "path": "outputs/08_circor_external_validation/T13_circor_murmur_classification_results.csv",
+      "exists": true,
+      "bytes": 6549,
+      "sha256": "75f84ed3ca311833bd0ac164fa1de9e9ea1c3f92e03687fd6200c493fbc05c24",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T16:53:56.697745+00:00"
+    },
+    {
+      "path": "outputs/08_circor_external_validation/T14_circor_clinical_outcome_results.csv",
+      "exists": true,
+      "bytes": 3842,
+      "sha256": "d8194a7db8c21b7818fa50a6748ca6acdcaf139aa802ac08c84f85e28dccef93",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T16:53:57.269288+00:00"
+    },
+    {
+      "path": "outputs/07_multiclass_results/T-S3_physionet_diagnosis_multiclass_within_one_source.csv",
+      "exists": true,
+      "bytes": 3525,
+      "sha256": "09df23c5dcd6edff9088d3d54595797aba329fa378c8de35ffa06694894bb001",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T07:37:40.180021+00:00"
+    },
+    {
+      "path": "outputs/07_multiclass_results/T-S4_diagnosis_per_class_results_within_one_source.csv",
+      "exists": true,
+      "bytes": 3328,
+      "sha256": "fb84b9977d2ed5c10dbf43834aa9fd95af4dd563469028da1a37496d6887e576",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T07:37:40.770108+00:00"
+    }
+  ],
+  "written": {
+    "csv": "D:/Projects/HeartGuard/outputs/00_evidence_index/T30_final_conclusion_matrix.csv",
+    "md": "D:/Projects/HeartGuard/outputs/00_evidence_index/T30_final_conclusion_matrix.md",
+    "docx": "D:/Projects/HeartGuard/outputs/00_evidence_index/T30_final_conclusion_matrix.docx",
+    "latex": "D:/Projects/HeartGuard/outputs/00_evidence_index/T30_final_conclusion_matrix.tex"
+  },
+  "notes": [
+    "Every number in this table is generated from the files named in its row and formatted by the table engine's rules; none is typed.",
+    "Each verdict follows the rule stated beside it. The verdicts describe an academic screening and decision-support prototype evaluated on public corpora; none is a statement about clinical use.",
+    "All PhysioNet results are cross-validated within the PhysioNet 2016 corpus; objective 1's limitation states how far they fall outside it.",
+    "PV-MEPCG / PulseVision is an academic screening and decision-support prototype, not a diagnostic tool."
+  ]
+}

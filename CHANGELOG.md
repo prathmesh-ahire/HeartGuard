@@ -20,6 +20,14 @@ gate has actually passed.
 
 ---
 
+## Phase 89 — Tables T24-T30 (Complexity, Stats, Conclusion)
+**Gate:** T89.7 — T24-T30 pass the table audit; T29 quotes all six locked objectives verbatim and names an existing file for every one, with "partial" status computed from the filesystem; T30's findings re-derive from the files each row names and keep to screening language — PASS (`tests/test_closing_tables.py`)
+**Added:** `src/reporting/conclusion_tables.py`, `tests/test_closing_tables.py`, **T29** `outputs/00_evidence_index/T29_objective_to_evidence_mapping.*`, **T30** `outputs/00_evidence_index/T30_final_conclusion_matrix.*`
+**Changed:** `src/reporting/statistics_report.py` (T28 p-values use the `p_value` kind), T24-T28 renderings and metas regenerated through scripts 31/32/35, G25-G27/G35 metas, `outputs/00_evidence_index/`
+**Notes:** Objectives 1, 2 and 6 are "partial" in T29 (Phase 92 figures; Phase 101 literature table). Every T30 verdict follows a rule stated in its row. The Phase 88 push turned CI red on a gitignored source; fixed in the commit before this one. Full reasoning in `Docs/note.md`.
+
+---
+
 ## Phase 88 — Tables T16-T23 (Ablation, Robustness, Calibration)
 **Gate:** T88.7 — T16-T23 pass the table audit (all formats, renderings equal the CSV, sources portable and current), and every T17/T18/T19 row re-derives at 1e-9 from the EXP-F1 arm runs, the EXP-A1/A2 runs and the EXP-F2 A9/A10 comparison files — PASS (`tests/test_analysis_tables.py`, 21 tests)
 **Added:** `tests/test_analysis_tables.py`
