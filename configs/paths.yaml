@@ -104,6 +104,10 @@ outputs:
   figures_diagrams: "outputs/13_figures_diagrams"
   algorithms: "outputs/14_algorithms"
   dashboard_screenshots: "outputs/15_dashboard_screenshots"
+  # Objective 2's literature review (Phase 101). Not in the spec's section 17 tree,
+  # which has no home for it; THESIS_ASSETS/Ch2_Literature is Phase 104's packaging
+  # target, not a primary output. See Docs/note.md, 2026-09-11 Phases 99-101.
+  literature: "outputs/16_literature_review"
   paper_assets: "outputs/Q1_PAPER_ASSETS"
   thesis_assets: "outputs/THESIS_ASSETS"
   logs: "outputs/logs"

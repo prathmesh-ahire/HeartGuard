@@ -1,0 +1,38 @@
+Algorithm ALG-20: Objective achievement evidence generation
+PV-MEPCG / PulseVision  |  T99.5  |  objective O1-O6
+
+Purpose: Each of the 6 locked objectives is mapped to the files that evidence it and to a verdict produced by a stated rule from generated numbers.
+Input:   the locked objective wording, the generated tables and run outputs
+Output:  T29, T30 as CSV, Markdown, DOCX and LaTeX, each registered as evidence
+
+Parameters (read from the repository when this file was generated)
+  n_objectives    6                                                                                                          src/reporting/objectives.py OBJECTIVES
+  tables          T29, T30                                                                                                   src/reporting/conclusion_tables.py CONCLUSION_TABLE_IDS
+  pending_checks  outputs/13_figures_diagrams/G14_*.png, outputs/**/*literature*.csv, outputs/13_figures_diagrams/G16_*.png  src/reporting/conclusion_tables.py OBJECTIVE_EVIDENCE[*].pending
+  digest_rule     hashlib.sha256(wording.encode("utf-8")).hexdigest()                                                        src/reporting/objectives.py wording_digest
+  status_rule     "partial" if outstanding else "evidence produced"                                                          src/reporting/conclusion_tables.py build_t29
+
+Algorithm
+   1  objectives <- the 6 locked objectives, verbatim, each with digest hashlib.sha256(wording.encode("utf-8")).hexdigest()
+   2  check the wording against the blueprint PDF
+   3  T29: for each objective:
+   4      refuse to build if a named module or evidence file does not exist
+   5      outstanding <- required evidence whose glob matches nothing (outputs/13_figures_diagrams/G14_*.png, outputs/**/*literature*.csv, outputs/13_figures_diagrams/G16_*.png); status <- "partial" if outstanding else "evidence produced"
+   6  T30: for each objective:
+   7      finding <- numbers read from the named tables at build time and formatted by the table engine; none typed
+   8      verdict <- the objective's stated rule applied to those numbers; the rule and the bounding limitation travel in the row
+   9  build both tables through the table engine
+  10  register every written file in the evidence index; a missing file is recorded as missing, never ok
+
+Notes
+  The status is re-derived from the filesystem on every build, so an objective leaves partial by itself when its evidence lands.
+
+Implemented by
+  src/reporting/objectives.py:202  src.reporting.objectives:wording_digest
+  src/reporting/objectives.py:306  src.reporting.objectives:verify_against_source
+  src/reporting/conclusion_tables.py:289  src.reporting.conclusion_tables:build_t29
+  src/reporting/conclusion_tables.py:890  src.reporting.conclusion_tables:build_t30
+  src/reporting/conclusion_tables.py:970  src.reporting.conclusion_tables:build_conclusion_tables
+  src/utils/evidence.py:149  src.utils.evidence:register_evidence
+
+Regenerate: python scripts/39_export_algorithms.py --ids ALG-20

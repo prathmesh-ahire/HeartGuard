@@ -1,0 +1,45 @@
+Algorithm ALG-19: Sample-level report generation
+PV-MEPCG / PulseVision  |  T99.5  |  objective O1
+
+Purpose: One WAV file to one screening report: validated, scored by the deployed model, and rendered from the same signal and feature vector that produced the number.
+Input:   one recording, a task in binary, murmur, outcome, pascal_a, pascal_b
+Output:  a DOCX report with the disclaimer first, and the prediction object it renders
+
+Parameters (read from the repository when this file was generated)
+  suffixes           .wav                                                    src/inference/predictor.py ALLOWED_SUFFIXES
+  min_seconds        0.5                                                     src/inference/predictor.py MIN_DURATION_SECONDS
+  max_seconds        150                                                     src/inference/predictor.py MAX_DURATION_SECONDS
+  tasks              binary, murmur, outcome, pascal_a, pascal_b             src/inference/predictor.py TASKS
+  low_margin         0.2                                                     src/inference/predictor.py LOW_CONFIDENCE_MARGIN
+  top                10                                                      sample_report.feature_contributions(top=...) default
+  contribution_rule  terms = coef * scaled                                   src/reporting/sample_report.py feature_contributions
+  operating_rule     operating_threshold=0.5 if len(classes) == 2 else None  src/inference/predictor.py predict_recording
+
+Algorithm
+   1  validate: suffix in .wav, decodable, duration within [0.5, 150] s; refuse otherwise
+   2  bundle <- the saved model of the task with its manifest and feature names
+   3  signal <- ALG-02 and ALG-03 preprocessing, with quality measured
+   4  features <- ALG-04 extraction
+   5  vector <- features in the MODEL's column order; a missing or non-finite value goes to the imputer and is named in a warning
+   6  p <- pipeline.predict_proba(vector) with BLAS pinned to one thread
+   7  predicted class <- argmax p (operating_threshold=0.5 if len(classes) == 2 else None); margin <- top minus runner-up; low confidence when margin < 0.2
+   8  contributions <- for a linear model, terms = coef * scaled on the scaled vector, top 10 by magnitude; otherwise the section states it is unavailable
+   9  render: disclaimer first, recording, result, probabilities, waveform and spectrogram, contributions, warnings, model version block, disclaimer again
+  10  one pass: the report draws the very signal and vector that were scored
+
+Notes
+  A report restates what the model produced and computes no metric. It is a screening signal for decision support, not a diagnosis.
+
+Implemented by
+  src/inference/predictor.py:406  src.inference.predictor:validate_recording
+  src/inference/predictor.py:305  src.inference.predictor:load_bundle
+  src/preprocessing/pipeline.py:236  src.preprocessing.pipeline:preprocess
+  src/feature_extraction/extractor.py:142  src.feature_extraction.extractor:extract_all
+  src/inference/predictor.py:642  src.inference.predictor:_vector_for
+  src/inference/predictor.py:662  src.inference.predictor:_predict_proba
+  src/inference/predictor.py:506  src.inference.predictor:predict_recording
+  src/reporting/sample_report.py:105  src.reporting.sample_report:feature_contributions
+  src/reporting/sample_report.py:214  src.reporting.sample_report:render_sample_report
+  src/reporting/sample_report.py:372  src.reporting.sample_report:report_for_recording
+
+Regenerate: python scripts/39_export_algorithms.py --ids ALG-19

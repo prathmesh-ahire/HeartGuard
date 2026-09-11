@@ -1,0 +1,42 @@
+Algorithm ALG-18: Failure case analysis
+PV-MEPCG / PulseVision  |  T99.4  |  objective O1, O4
+
+Purpose: Back from averages to records: every prediction of the final model is labelled TP, TN, FP or FN, placed in context, and collapsed to how often each record is wrong.
+Input:   stored predictions of EXP-A2 M1 (in-domain), EXP-D1 M1 (external); per-record audit context
+Output:  per-record failure table, per-category error rates, confused pairs, examples
+
+Parameters (read from the repository when this file was generated)
+  sources           EXP-A2 M1 (in-domain), EXP-D1 M1 (external)                                                     src/evaluation/failure_analysis.py SOURCES
+  error_types       TN, FP, FN, TP                                                                                  src/evaluation/failure_analysis.py ERROR_TYPES
+  categories        duration_band, noise_flag, subset, confidence_band                                              src/evaluation/failure_analysis.py CATEGORIES
+  confidence_bands  0.50-0.60, 0.60-0.70, 0.70-0.80, 0.80-0.90, 0.90-0.95, 0.95-1.00                                src/evaluation/failure_analysis.py _CONFIDENCE_LABELS
+  min_group         30                                                                                              src/evaluation/failure_analysis.py MIN_GROUP
+  per_group         5                                                                                               failure_analysis.example_records(per_group=...) default
+  multiclass_runs   EXP-B1, EXP-B1-defaults, EXP-B2, EXP-B2-defaults, EXP-C1-three_class, EXP-C1-two_class, EXP-C2  src/evaluation/failure_analysis.py MULTICLASS_RUNS
+  confidence_rule   np.where( predicted == 1, frame["proba_1"].to_numpy(dtype=float), 1.0 - frame["proba_1"] )      src/evaluation/failure_analysis.py prediction_failures
+
+Algorithm
+   1  context <- duration band, noise flag, subset and diagnosis, each loaded from the artifact that owns it
+   2  for each source in EXP-A2 M1 (in-domain), EXP-D1 M1 (external):
+   3      label every prediction with one of TN, FP, FN, TP; keep the correct ones as denominators
+   4      confidence <- probability of the PREDICTED class, np.where( predicted == 1, frame["proba_1"].to_numpy(dtype=float), 1.0 - frame["proba_1"] ); band into 0.50-0.60, 0.60-0.70, 0.70-0.80, 0.80-0.90, 0.90-0.95, 0.95-1.00
+   5      join the context; a prediction with no context is an error
+   6  per record: n_wrong of n_evaluations; consistently_wrong when every evaluation erred
+   7  for each category in duration_band, noise_flag, subset, confidence_band: error rate, FN and FP rates with their denominators; flag groups whose class denominators are under 30 records
+   8  multiclass: every off-diagonal confusion cell of EXP-B1, EXP-B1-defaults, EXP-B2, EXP-B2-defaults, EXP-C1-three_class, EXP-C1-two_class, EXP-C2, as a share of its true class
+   9  examples <- per (source, error type), the 5 most confident consistently-wrong records (all wrong records when too few)
+  10  write T27, G35 and the report, rates always beside their denominators
+
+Notes
+  The in-domain and external sources are analysed side by side and never pooled.
+
+Implemented by
+  src/evaluation/failure_analysis.py:155  src.evaluation.failure_analysis:record_context
+  src/evaluation/failure_analysis.py:215  src.evaluation.failure_analysis:prediction_failures
+  src/evaluation/failure_analysis.py:272  src.evaluation.failure_analysis:record_failures
+  src/evaluation/failure_analysis.py:323  src.evaluation.failure_analysis:categorise
+  src/evaluation/failure_analysis.py:386  src.evaluation.failure_analysis:confusion_pairs
+  src/evaluation/failure_analysis.py:453  src.evaluation.failure_analysis:example_records
+  src/reporting/failure_report.py:345  src.reporting.failure_report:write_failure_report
+
+Regenerate: python scripts/39_export_algorithms.py --ids ALG-18

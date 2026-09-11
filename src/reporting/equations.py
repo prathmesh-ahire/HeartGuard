@@ -181,8 +181,8 @@ EQUATIONS: tuple[Equation, ...] = (
         "Prediction",
         r"\hat{y} = \arg\max_{c} P_{\text{final}}(c)",
         "Final class",
-        "src/evaluation/metrics.py",
-        "argmax",
+        "src/ensemble/soft_voting.py",
+        "np.argmax(proba, axis=1)",
         (
             (r"\hat{y}", "the predicted class"),
             (r"P_{\text{final}}(c)", "the fused probability for class c"),

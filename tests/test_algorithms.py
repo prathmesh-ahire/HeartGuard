@@ -19,6 +19,13 @@ fold-safe pipeline learns, and from which rows), ALG-06 (the one-standard-error
 guard and the consensus tie rule), ALG-08 (calibration fold count, averaging,
 and argmax agreement) and ALG-10 (the balanced sample weights). T98.7 asks for
 three; the extra two are the ones where a wording slip would change a result.
+
+Phase 99 (T99.7) extends every structural check to ALG-11..ALG-20 and adds the
+soft-voting spot-checks it asks for: ALG-11 (equal weights, the in-fold
+threshold, the fused prediction) and ALG-12 (lattice, joint threshold, exact
+standard error, one-standard-error pick), each re-implemented from the printed
+pseudocode and compared with ``src/ensemble/soft_voting.py``; plus ALG-17's
+noise rule.
 """
 
 from __future__ import annotations
@@ -41,12 +48,17 @@ from src.reporting.algorithms import (
 
 ROOT = Path(__file__).resolve().parents[1]
 PHASE_98 = ["ALG-" + str(index).zfill(2) for index in range(1, 11)]
+PHASE_99 = ["ALG-" + str(index).zfill(2) for index in range(11, 21)]
+ALL = PHASE_98 + PHASE_99
+#: Algorithms whose parameters are all module constants or signature defaults,
+#: so none of them is read from a config key the next test could re-read.
+NO_CONFIG_PARAMETERS = {"ALG-01", "ALG-04", "ALG-15", "ALG-17", "ALG-18", "ALG-19", "ALG-20"}
 
 
 @pytest.fixture(scope="module")
 def exported(tmp_path_factory: pytest.TempPathFactory) -> dict[str, dict[str, Path]]:
     target = tmp_path_factory.mktemp("algorithms")
-    return write_algorithms(PHASE_98, target, evidence_index=target / "evidence_index.csv")
+    return write_algorithms(ALL, target, evidence_index=target / "evidence_index.csv")
 
 
 def _params(alg_id: str) -> dict[str, str]:
@@ -65,7 +77,14 @@ def test_the_catalogue_declares_alg_01_to_alg_10_in_order() -> None:
         assert algorithm.task.startswith("T98."), algorithm.alg_id
 
 
-@pytest.mark.parametrize("alg_id", PHASE_98)
+def test_the_catalogue_declares_alg_11_to_alg_20_after_them() -> None:
+    """T99.7: the second ten exist, in order, owned by Phase 99's tasks."""
+    assert [algorithm.alg_id for algorithm in ALGORITHMS] == ALL
+    for algorithm in ALGORITHMS[len(PHASE_98) :]:
+        assert algorithm.task.startswith("T99."), algorithm.alg_id
+
+
+@pytest.mark.parametrize("alg_id", ALL)
 def test_each_exists_as_text_and_docx_with_the_same_steps(
     alg_id: str, exported: dict[str, dict[str, Path]]
 ) -> None:
@@ -89,17 +108,17 @@ def test_the_index_lists_every_exported_algorithm(exported: dict[str, dict[str, 
     index = next(iter(exported.values()))["txt"].parent / "algorithm_index.csv"
     with index.open(encoding="utf-8", newline="") as handle:
         rows = {row["alg_id"]: row for row in csv.DictReader(handle)}
-    assert sorted(rows) == PHASE_98
+    assert sorted(rows) == ALL
     for row in rows.values():
         assert row["implements"] and len(row["source_sha256"]) == 64
 
 
 # ---------------------------------------------------------------------------
-# T98.6 -- structural agreement, all ten
+# T98.6 / T99.6 -- structural agreement, all twenty
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.parametrize("alg_id", PHASE_98)
+@pytest.mark.parametrize("alg_id", ALL)
 def test_every_step_cites_a_function_that_exists(alg_id: str) -> None:
     algorithm = algorithm_for(alg_id)
     assert all(step.ref for step in algorithm.steps), alg_id + " has an uncited step"
@@ -111,7 +130,7 @@ def test_every_step_cites_a_function_that_exists(alg_id: str) -> None:
 _NUMBER = re.compile(r"(?<![\w\-.{])(\d+(?:\.\d+)?)(?![\w}])")
 
 
-@pytest.mark.parametrize("alg_id", PHASE_98)
+@pytest.mark.parametrize("alg_id", ALL)
 def test_no_template_types_a_number(alg_id: str) -> None:
     """Numbers come from the parameter block; 0 and 1 are arithmetic, not data."""
     algorithm = algorithm_for(alg_id)
@@ -122,14 +141,14 @@ def test_no_template_types_a_number(alg_id: str) -> None:
         assert not stray, alg_id + " types " + str(stray) + " in: " + text
 
 
-@pytest.mark.parametrize("alg_id", PHASE_98)
+@pytest.mark.parametrize("alg_id", ALL)
 def test_every_parameter_shown_is_the_live_configured_value(alg_id: str) -> None:
     from src.reporting.algorithms import _show
     from src.utils.config import load_config
 
     checked = 0
     for parameter in render(algorithm_for(alg_id)).parameters:
-        match = re.fullmatch(r"configs/(\w+)\.yaml ([\w.]+)", parameter.source)
+        match = re.fullmatch(r"configs/(\w+)\.yaml ([\w.\-]+)", parameter.source)
         if not match:
             continue
         value = load_config(match.group(1)).require(match.group(2))
@@ -137,7 +156,7 @@ def test_every_parameter_shown_is_the_live_configured_value(alg_id: str) -> None
             continue
         assert parameter.value == _show(value), parameter
         checked += 1
-    assert checked or alg_id in {"ALG-01", "ALG-04"}
+    assert checked or alg_id in NO_CONFIG_PARAMETERS
 
 
 def test_a_quoted_fragment_that_left_the_code_is_an_error() -> None:
@@ -314,3 +333,158 @@ def test_alg07_ties_go_to_the_earlier_trial() -> None:
         Trial(index=1, params={"a": 2}, score=0.8),
     ]
     assert result.best is not None and result.best.index == 0
+
+
+# ---------------------------------------------------------------------------
+# T99.7 -- ALG-11 and ALG-12, run from the printed pseudocode, against soft_voting.py
+# ---------------------------------------------------------------------------
+
+
+def _ensemble_data() -> tuple[np.ndarray, np.ndarray, list]:
+    """Small enough that every fused score is a threshold candidate (no quantile branch)."""
+    from sklearn.datasets import make_classification
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.naive_bayes import GaussianNB
+    from sklearn.tree import DecisionTreeClassifier
+
+    x, y = make_classification(
+        n_samples=150, n_features=6, n_informative=3, weights=[0.75], random_state=42
+    )
+    members = [
+        ("lr", LogisticRegression(max_iter=500)),
+        ("nb", GaussianNB()),
+        ("dt", DecisionTreeClassifier(max_depth=3, random_state=0)),
+    ]
+    return x, y, members
+
+
+def _coefficients(form: str) -> tuple[float, float]:
+    match = re.fullmatch(r"([\d.]+) x sensitivity \+ ([\d.]+) x specificity", form)
+    assert match, form
+    return float(match.group(1)), float(match.group(2))
+
+
+def _threshold_by_hand(y: np.ndarray, scores: np.ndarray, a: float, b: float) -> tuple:
+    """ALG-11 steps 10-11: midpoints plus the fixed reference, ties to the reference."""
+    unique = np.unique(scores)
+    candidates = (unique[:-1] + unique[1:]) / 2.0 if unique.size > 1 else np.array([0.5])
+    candidates = np.unique(np.concatenate([candidates, [0.5]]))
+    best = None
+    for t in candidates:
+        predicted = (scores >= t).astype(int)
+        sensitivity = predicted[y == 1].mean()
+        specificity = 1.0 - predicted[y == 0].mean()
+        key = (a * sensitivity + b * specificity, -abs(t - 0.5))
+        if best is None or key > best[0]:
+            best = (key, float(t), sensitivity, specificity)
+    assert best is not None
+    return best[1], best[0][0], best[2], best[3]
+
+
+def _lattice_by_hand(m: int, resolution: float) -> np.ndarray:
+    from itertools import product
+
+    steps = round(1.0 / resolution)
+    grid = (
+        np.array([c for c in product(range(steps + 1), repeat=m) if sum(c) == steps], dtype=float)
+        / steps
+    )
+    centre = np.full(m, 1.0 / m)
+    if not np.isclose(np.linalg.norm(grid - centre, axis=1), 0.0).any():
+        grid = np.vstack([centre, grid])
+    return grid
+
+
+def test_alg11_equal_weights_threshold_and_prediction_match_soft_voting() -> None:
+    from src.ensemble.soft_voting import SoftVotingEnsemble
+
+    p = _params("ALG-11")
+    a, b = _coefficients(p["objective_form"])
+    x, y, members = _ensemble_data()
+    ensemble = SoftVotingEnsemble(
+        members,
+        weights=p["weights"],
+        inner_cv=int(p["inner_cv"]),
+        objective=p["objective"],
+        random_state=int(p["seed"]),
+    ).fit(x, y)
+
+    m = len(members)
+    np.testing.assert_allclose(ensemble.weights_, np.full(m, 1.0 / m))
+    oof, _, _ = ensemble._out_of_fold_probabilities(x, y)
+    fused_oof = oof.mean(axis=0)[:, 1]  # step 9 with equal weights is the plain mean
+    threshold, _, _, _ = _threshold_by_hand(y, fused_oof, a, b)
+    assert ensemble.threshold_ == pytest.approx(threshold)
+
+    members_proba = ensemble.member_probabilities(x)
+    np.testing.assert_allclose(ensemble.predict_proba(x), members_proba.mean(axis=0))
+    np.testing.assert_array_equal(
+        ensemble.predict(x), (members_proba.mean(axis=0)[:, 1] >= threshold).astype(int)
+    )
+
+
+def test_alg12_one_standard_error_weights_match_soft_voting() -> None:
+    from src.ensemble.soft_voting import SoftVotingEnsemble
+
+    p = _params("ALG-12")
+    a, b = _coefficients(p["objective_form"])
+    x, y, members = _ensemble_data()
+    ensemble = SoftVotingEnsemble(
+        members,
+        weights=p["weights"],
+        inner_cv=int(p["inner_cv"]),
+        objective=p["objective"],
+        weight_resolution=float(p["resolution"]),
+        selection_standard_errors=float(p["n_se"]),
+    ).fit(x, y)
+    oof, _, _ = ensemble._out_of_fold_probabilities(x, y)
+
+    grid = _lattice_by_hand(len(members), float(p["resolution"]))
+    assert grid.shape[0] == int(p["n_candidates"])  # the printed |grid|
+    scored = []
+    for w in grid:
+        fused = np.tensordot(w / w.sum(), oof, axes=(0, 0))[:, 1]
+        scored.append(_threshold_by_hand(y, fused, a, b))
+    scores = np.array([row[1] for row in scored])
+    best = int(np.argmax(scores))
+    sens, spec = scored[best][2], scored[best][3]
+    n_pos, n_neg = int((y == 1).sum()), int((y == 0).sum())
+    se = np.sqrt(a**2 * sens * (1 - sens) / n_pos + b**2 * spec * (1 - spec) / n_neg)
+    margin = float(p["n_se"]) * se
+    within = np.flatnonzero(scores >= scores[best] - margin - 1e-12)
+    uniform = np.full(len(members), 1.0 / len(members))
+    chosen = grid[within[int(np.argmin(np.linalg.norm(grid[within] - uniform, axis=1)))]]
+
+    np.testing.assert_allclose(ensemble.weights_, chosen)
+    selection = ensemble.fit_report_.weight_selection
+    assert selection["n_within_margin"] == within.size
+    assert selection["n_candidates"] == grid.shape[0]
+    fused = np.tensordot(chosen, oof, axes=(0, 0))[:, 1]
+    assert ensemble.threshold_ == pytest.approx(_threshold_by_hand(y, fused, a, b)[0])
+
+
+def test_alg11_alg12_parameters_are_what_the_factory_builds() -> None:
+    """M6/M7 as the pipeline constructs them carry the printed settings."""
+    from src.models.estimators import make_ensemble
+
+    p11, p12 = _params("ALG-11"), _params("ALG-12")
+    m6, m7 = make_ensemble("M6"), make_ensemble("M7")
+    assert m6.weights == p11["weights"] and m6.inner_cv == int(p11["inner_cv"])
+    assert m6.objective == p11["objective"] and [n for n, _ in m6.estimators] == p11[
+        "members"
+    ].split(", ")
+    assert m7.weights == p12["weights"] and m7.objective == p12["objective"]
+    assert m7.weight_resolution == float(p12["resolution"])
+    assert m7.selection_standard_errors == float(p12["n_se"])
+
+
+def test_alg17_awgn_reaches_the_nominal_snr_on_the_raw_signal() -> None:
+    from src.evaluation.robustness import SNR_LEVELS, add_awgn, measured_snr_db
+
+    raw = _signal(200_000, 2000).astype(float)
+    for level in SNR_LEVELS:
+        noisy = add_awgn(raw, level, np.random.default_rng(42))
+        if not np.isfinite(level):
+            np.testing.assert_array_equal(noisy, raw)  # the control is untouched
+            continue
+        assert measured_snr_db(raw, noisy) == pytest.approx(level, abs=0.1)

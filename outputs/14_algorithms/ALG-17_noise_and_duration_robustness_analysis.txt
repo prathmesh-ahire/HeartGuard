@@ -1,0 +1,50 @@
+Algorithm ALG-17: Noise and duration robustness analysis
+PV-MEPCG / PulseVision  |  T99.4  |  objective O4
+
+Purpose: Two questions kept apart: how the model does on recordings that are already noisy or short (observational), and what happens when noise is added or a recording is clipped (interventional).
+Input:   stored out-of-fold predictions, PP-08 quality flags, a stratified PhysioNet sample
+Output:  metrics per quality group and duration band, and per SNR level and clip length
+
+Parameters (read from the repository when this file was generated)
+  snr_levels_db   inf, 20, 15, 10, 5, 0                                                 src/evaluation/robustness.py SNR_LEVELS
+  clip_seconds    inf, 10, 5, 3                                                         src/evaluation/duration.py TRUNCATION_SECONDS
+  quality_groups  clean, noisy, low_quality_other                                       src/evaluation/robustness.py QUALITY_GROUPS
+  duration_bands  short, medium, long                                                   src/evaluation/duration.py DURATION_BANDS
+  min_units       30                                                                    robustness.stratify_by_quality(min_units=...) default
+  noise_rule      power / (10.0 ** (float(snr_db) / 10.0))                              src/evaluation/robustness.py add_awgn
+  seed_rule       [int(seed), int(zlib.crc32(uid.encode("utf-8"))), _level_key(level)]  src/evaluation/robustness.py _sweep_one
+  window_rule     int(rng.integers(0, x.size - want + 1))                               src/evaluation/duration.py truncate
+  seed            42                                                                    robustness.sweep_features(seed=...) default
+
+Algorithm
+   1  observational: attach each prediction's quality group (clean, noisy, low_quality_other); a prediction with no flag is an error
+   2      score every (model, fold, group); a slice under 30 records is kept with reported = false, never dropped
+   3  the same per duration band (short, medium, long)
+   4  interventional: sample <- PhysioNet records stratified over (subset, class)
+   5  model <- the final configuration refitted WITHOUT every sampled subject, so no score is in-sample
+   6  for each record and each SNR level in inf, 20, 15, 10, 5, 0:
+   7      rng <- seeded by [int(seed), int(zlib.crc32(uid.encode("utf-8"))), _level_key(level)], so resuming or the worker count changes nothing
+   8      noisy <- raw + white Gaussian noise of power power / (10.0 ** (float(snr_db) / 10.0)); the infinite level is the untouched control
+   9      filter, normalize and extract all features (ALG-03, ALG-04); record the SNR that survived the band-pass
+  10  for each record and each clip length in inf, 10, 5, 3: clip the RAW signal from a seeded random window, start int(rng.integers(0, x.size - want + 1)); then the same chain
+  11  checkpoint after every batch of records; a resumed run reproduces bit for bit
+  12  score each level with the held-out model; delta against the control
+  13  score each clip length with the same held-out model; delta against the full recording
+
+Notes
+  A gap in the observational half is an association; a gap in the sweep is causal for additive white noise only, which is not the noise a stethoscope picks up. Neither is quoted as the other.
+
+Implemented by
+  src/evaluation/robustness.py:106  src.evaluation.robustness:stratify_by_quality
+  src/evaluation/duration.py:88  src.evaluation.duration:stratify_by_duration
+  scripts/23_noise_robustness.py:77  scripts.23_noise_robustness:sample_records
+  scripts/23_noise_robustness.py:115  scripts.23_noise_robustness:fit_holdout_model
+  src/evaluation/robustness.py:303  src.evaluation.robustness:_sweep_one
+  src/evaluation/robustness.py:257  src.evaluation.robustness:add_awgn
+  src/evaluation/robustness.py:278  src.evaluation.robustness:measured_snr_db
+  src/evaluation/duration.py:266  src.evaluation.duration:truncate
+  src/evaluation/robustness.py:341  src.evaluation.robustness:sweep_features
+  scripts/23_noise_robustness.py:193  scripts.23_noise_robustness:score_sweep
+  scripts/24_duration_robustness.py:154  scripts.24_duration_robustness:score_truncation
+
+Regenerate: python scripts/39_export_algorithms.py --ids ALG-17

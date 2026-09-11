@@ -1,0 +1,39 @@
+Algorithm ALG-16: Cross-dataset external validation
+PV-MEPCG / PulseVision  |  T99.3  |  objective O1
+
+Purpose: EXP-D1: the final PhysioNet model is applied unchanged to every CirCor recording. The population mismatch is written to disk before any prediction exists.
+Input:   the saved final model (binary) and the circor_outcome feature matrix
+Output:  population_mismatch.json, recording- and patient-level external metrics, and the signed drop against the in-domain result
+
+Parameters (read from the repository when this file was generated)
+  train_task       binary                           configs/experiments.yaml experiments.EXP-D1.train_task
+  test_task        circor_outcome                   configs/experiments.yaml experiments.EXP-D1.test_task
+  cv               holdout_external                 configs/experiments.yaml experiments.EXP-D1.cv
+  metadata_file    population_mismatch.json         src/evaluation/transfer.py METADATA_FILENAME
+  in_domain_exp    EXP-A2                           transfer.degradation(in_domain_exp=...) default
+  in_domain_model  M1                               transfer.degradation(model_id=...) default
+  drop_rule        (reference - value) / reference  src/evaluation/transfer.py degradation
+  selection_rule   sensitivity, balanced_accuracy   configs/experiments.yaml defaults.selection_rule
+
+Algorithm
+  1  final <- the model ranked first by sensitivity, balanced_accuracy in the in-domain run, refitted on every labelled PhysioNet record through the fold-safe pipeline
+  2  profile both populations (age groups, diagnoses) from their own metadata
+  3  write population_mismatch.json first; refuse any key that looks like a metric
+  4  load the model, refusing a feature list that differs from the registry order
+  5  predict every CirCor recording once, unchanged parameters, fold label external (holdout_external)
+  6  score at recording level and at patient level under every ALG-15 rule
+  7  for each metric: delta <- external - mean over EXP-A2 folds of M1; relative drop <- (reference - value) / reference; both fold counts recorded
+
+Notes
+  Adult-to-paediatric transfer, not a like-for-like generalization test: a drop is the expected consequence of the recorded mismatch, and leave-one-source-out (EXP-F3) shows acquisition shift alone removes the ranking.
+
+Implemented by
+  scripts/13_finalize_binary_model.py:151  scripts.13_finalize_binary_model:persist_final_model
+  src/evaluation/transfer.py:122  src.evaluation.transfer:circor_population
+  src/evaluation/transfer.py:157  src.evaluation.transfer:write_population_metadata
+  src/models/registry.py:306  src.models.registry:load_model
+  src/evaluation/transfer.py:261  src.evaluation.transfer:transfer_predictions
+  src/evaluation/transfer.py:316  src.evaluation.transfer:evaluate_transfer
+  src/evaluation/transfer.py:332  src.evaluation.transfer:degradation
+
+Regenerate: python scripts/39_export_algorithms.py --ids ALG-16

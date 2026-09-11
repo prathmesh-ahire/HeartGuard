@@ -135,14 +135,8 @@ OBJECTIVES: tuple[Objective, ...] = (
             "phonocardiogram (PCG) signal analysis."
         ),
         handle="State-of-the-art review",
-        modules=("src/reporting/tables.py",),
-        evidence_dirs=(),
-        pending_reason=(
-            "The literature review is Phase 101 and has not run. No outputs "
-            "directory is named here on purpose: pointing at one that does not "
-            "exist, or at a neighbouring directory that holds something else, "
-            "would turn this check into a formality."
-        ),
+        modules=("src/reporting/literature.py", "src/reporting/tables.py"),
+        evidence_dirs=("outputs/16_literature_review",),
     ),
     Objective(
         number=3,

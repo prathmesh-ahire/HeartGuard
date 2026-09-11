@@ -1,0 +1,35 @@
+Algorithm ALG-15: CirCor subject-level aggregation
+PV-MEPCG / PulseVision  |  T99.3  |  objective O1, O3
+
+Purpose: CirCor labels a patient but the model scores a recording, so every CirCor metric is reported at both levels, under three stated aggregation rules.
+Input:   recording-level predictions of one CirCor run (circor_murmur (EXP-C1), circor_outcome (EXP-C2, EXP-D1))
+Output:  one row per (model, fold, patient) per rule, and metrics at both levels
+
+Parameters (read from the repository when this file was generated)
+  rules        max, mean, any_present                                              src/evaluation/aggregation.py AGGREGATION_RULES
+  threshold    0.5                                                                 aggregation.aggregate_predictions(threshold=...) default
+  tasks        circor_murmur (EXP-C1), circor_outcome (EXP-C2, EXP-D1)             configs/experiments.yaml experiments, task per run
+  patient_key  circor["split_group"]                                               src/evaluation/aggregation.py _patient_of (the DA-07 map)
+  max_rule     float(np.max(group[proba_column].to_numpy(dtype=float)))            src/evaluation/aggregation.py aggregate_predictions
+  mean_rule    float(np.mean(group[proba_column].to_numpy(dtype=float)))           src/evaluation/aggregation.py aggregate_predictions
+  any_rule     (group["y_pred"].to_numpy(dtype=int) == int(positive_label)).any()  src/evaluation/aggregation.py aggregate_predictions
+
+Algorithm
+  1  patient_id <- the DA-07 map's grouping key for each record_uid (circor["split_group"]); a recording with no patient is an error
+  2  recording level: score every (model, fold) block as ALG-13 or ALG-14
+  3  for each rule in max, mean, any_present:
+  4      for each (model, fold, patient): assert the patient's recordings carry one label; a disagreement is a propagation error
+  5          max: score <- float(np.max(group[proba_column].to_numpy(dtype=float))); y <- score >= 0.5
+  6          mean: score <- float(np.mean(group[proba_column].to_numpy(dtype=float))); y <- score >= 0.5
+  7          any_present: y <- (group["y_pred"].to_numpy(dtype=int) == int(positive_label)).any(), a union over the model's own decisions
+  8      score the patient rows per (model, fold); level and rule are columns of one long table, so the recording and patient views cannot drift apart
+
+Notes
+  No rule is declared the winner: the choice between them is a screening posture about missed cases, which this prototype reports rather than decides.
+
+Implemented by
+  src/evaluation/aggregation.py:67  src.evaluation.aggregation:_patient_of
+  src/evaluation/aggregation.py:182  src.evaluation.aggregation:evaluate_aggregations
+  src/evaluation/aggregation.py:109  src.evaluation.aggregation:aggregate_predictions
+
+Regenerate: python scripts/39_export_algorithms.py --ids ALG-15

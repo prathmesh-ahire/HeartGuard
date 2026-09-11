@@ -526,6 +526,511 @@ def _params_alg10() -> list[Parameter]:
     ]
 
 
+def _default(reference: str, argument: str) -> Any:
+    """A keyword default of the implementer, read from its signature."""
+    parameter = inspect.signature(_object(reference)).parameters.get(argument)
+    if parameter is None or parameter.default is inspect.Parameter.empty:
+        raise AlgorithmError(reference + " has no default for " + repr(argument))
+    return parameter.default
+
+
+_SV = "src.ensemble.soft_voting:"
+_EV = "src.evaluation."
+
+
+def _objective_form(name: str) -> str:
+    from src.ensemble.soft_voting import OBJECTIVE_COEFFICIENTS
+
+    a, b = OBJECTIVE_COEFFICIENTS[name]
+    return _show(a) + " x sensitivity + " + _show(b) + " x specificity"
+
+
+def _params_alg11() -> list[Parameter]:
+    base = "configs/models.yaml models.M6."
+    objective = str(_cfg("models", "models.M6.defaults.objective"))
+    return [
+        _p("members", _cfg("models", "models.M6.members"), base + "members"),
+        _p(
+            "calibrate_members",
+            _cfg("models", "models.M6.calibrate_members"),
+            base + "calibrate_members",
+        ),
+        _p("weights", _cfg("models", "models.M6.defaults.weights"), base + "defaults.weights"),
+        _p("inner_cv", _cfg("models", "models.M6.defaults.inner_cv"), base + "defaults.inner_cv"),
+        _p(
+            "tune_threshold",
+            _cfg("models", "models.M6.defaults.tune_threshold"),
+            base + "defaults.tune_threshold",
+        ),
+        _p("objective", objective, base + "defaults.objective"),
+        _p("objective_form", _objective_form(objective), "soft_voting.OBJECTIVE_COEFFICIENTS"),
+        _p("seed", _cfg("experiments", "defaults.seed"), "configs/experiments.yaml defaults.seed"),
+        _p(
+            "fuse_rule",
+            _quoted(_SV + "fuse_probabilities", "np.tensordot(vector / total, stack, axes=(0, 0))"),
+            "src/ensemble/soft_voting.py fuse_probabilities",
+        ),
+        _p(
+            "candidate_rule",
+            _quoted(_SV + "select_threshold", "(unique[:-1] + unique[1:]) / 2.0"),
+            "src/ensemble/soft_voting.py select_threshold",
+        ),
+        _p(
+            "max_candidates",
+            _default(_SV + "select_threshold", "max_candidates"),
+            "soft_voting.select_threshold(max_candidates=...) default",
+        ),
+        _p(
+            "reference_rule",
+            _quoted(_SV + "select_threshold", "np.unique(np.concatenate([candidates, [0.5]]))"),
+            "src/ensemble/soft_voting.py select_threshold",
+        ),
+        _p(
+            "tie_rule",
+            _quoted(_SV + "select_threshold", "-abs(float(threshold) - 0.5)"),
+            "src/ensemble/soft_voting.py select_threshold",
+        ),
+    ]
+
+
+def _params_alg12() -> list[Parameter]:
+    from src.ensemble.soft_voting import weight_candidates
+
+    base = "configs/models.yaml models.M7."
+    members = list(_cfg("models", "models.M7.members"))
+    resolution = float(_cfg("models", "models.M7.weight_search.resolution"))
+    objective = str(_cfg("models", "models.M7.weight_search.objective"))
+    return [
+        _p("members", members, base + "members"),
+        _p("weights", _cfg("models", "models.M7.defaults.weights"), base + "defaults.weights"),
+        _p("inner_cv", _cfg("models", "models.M7.defaults.inner_cv"), base + "defaults.inner_cv"),
+        _p("objective", objective, base + "weight_search.objective"),
+        _p("objective_form", _objective_form(objective), "soft_voting.OBJECTIVE_COEFFICIENTS"),
+        _p("resolution", resolution, base + "weight_search.resolution"),
+        _p(
+            "selection_rule",
+            _cfg("models", "models.M7.weight_search.selection_rule"),
+            base + "weight_search.selection_rule",
+        ),
+        _p(
+            "n_se",
+            _cfg("models", "models.M7.weight_search.n_standard_errors"),
+            base + "weight_search.n_standard_errors",
+        ),
+        _p(
+            "n_candidates",
+            int(weight_candidates(len(members), resolution).shape[0]),
+            "soft_voting.weight_candidates(len(members), resolution)",
+        ),
+        _p(
+            "centre_rule",
+            _quoted(_SV + "weight_candidates", "np.vstack([centre[None, :], lattice])"),
+            "src/ensemble/soft_voting.py weight_candidates",
+        ),
+        _p(
+            "se_rule",
+            _quoted(
+                _SV + "objective_standard_error",
+                "(a**2) * sensitivity * (1.0 - sensitivity) / n_positive",
+            )
+            + " + (b**2) * specificity * (1.0 - specificity) / n_negative, square-rooted",
+            "src/ensemble/soft_voting.py objective_standard_error",
+        ),
+        _p(
+            "within_rule",
+            _quoted(_SV + "_pick_among_ties", "scores >= best - margin - 1e-12"),
+            "src/ensemble/soft_voting.py _pick_among_ties",
+        ),
+        _p(
+            "pick_rule",
+            _quoted(_SV + "_pick_among_ties", "np.linalg.norm(grid[within] - uniform, axis=1)"),
+            "src/ensemble/soft_voting.py _pick_among_ties",
+        ),
+        _p(
+            "multiclass_score",
+            _quoted(
+                _SV + "SoftVotingEnsemble._optimize_weights_multiclass",
+                'f1_score(targets, predicted, average="macro", zero_division=0) '
+                "+ balanced_accuracy_score(targets, predicted)",
+            ),
+            "src/ensemble/soft_voting.py SoftVotingEnsemble._optimize_weights_multiclass",
+        ),
+    ]
+
+
+def _params_alg13() -> list[Parameter]:
+    from src.evaluation.metrics import DEFAULT_BOOTSTRAP, ECE_BINS
+
+    scheme = "configs/experiments.yaml cv_schemes.repeated_5x5_grouped"
+    return [
+        _p(
+            "cv",
+            _cfg("experiments", "experiments.EXP-A2.cv"),
+            "configs/experiments.yaml experiments.EXP-A2.cv",
+        ),
+        _p("repeats", _cfg("experiments", "cv_schemes.repeated_5x5_grouped.n_repeats"), scheme),
+        _p("splits", _cfg("experiments", "cv_schemes.repeated_5x5_grouped.n_splits"), scheme),
+        _p("group_key", _cfg("experiments", "cv_schemes.repeated_5x5_grouped.group_key"), scheme),
+        _p(
+            "scoring",
+            _cfg("experiments", "defaults.scoring.binary"),
+            "configs/experiments.yaml defaults.scoring.binary",
+        ),
+        _p(
+            "report_metrics",
+            _cfg("experiments", "defaults.report_metrics_binary"),
+            "configs/experiments.yaml defaults.report_metrics_binary",
+        ),
+        _p(
+            "selection_rule",
+            _cfg("experiments", "defaults.selection_rule"),
+            "configs/experiments.yaml defaults.selection_rule",
+        ),
+        _p(
+            "positive_label",
+            _default(_EV + "metrics:binary_metrics", "positive_label"),
+            "metrics.binary_metrics(positive_label=...) default",
+        ),
+        _p(
+            "specificity_rule",
+            _quoted(_EV + "metrics:binary_metrics", "tn / (tn + fp)"),
+            "src/evaluation/metrics.py binary_metrics",
+        ),
+        _p(
+            "balanced_rule",
+            _quoted(_EV + "metrics:binary_metrics", "np.nanmean([sensitivity, specificity])"),
+            "src/evaluation/metrics.py binary_metrics",
+        ),
+        _p("ece_bins", ECE_BINS, "src/evaluation/metrics.py ECE_BINS"),
+        _p(
+            "sd_rule",
+            _quoted(_EV + "experiment:ExperimentResult.aggregate_frame", "np.std(finite, ddof=1)"),
+            "src/evaluation/experiment.py ExperimentResult.aggregate_frame",
+        ),
+        _p("n_bootstrap", DEFAULT_BOOTSTRAP, "src/evaluation/metrics.py DEFAULT_BOOTSTRAP"),
+        _p(
+            "alpha",
+            _default(_EV + "metrics:bootstrap_ci", "alpha"),
+            "metrics.bootstrap_ci(alpha=...) default",
+        ),
+    ]
+
+
+def _params_alg14() -> list[Parameter]:
+    base = "configs/experiments.yaml "
+    return [
+        _p(
+            "tasks",
+            "pascal_a (EXP-B1), pascal_b (EXP-B2), circor_murmur (EXP-C1)",
+            base + "experiments, task per run",
+        ),
+        _p(
+            "pascal_a_scheme",
+            _cfg("experiments", "experiments.EXP-B1.cv"),
+            base + "experiments.EXP-B1.cv",
+        ),
+        _p(
+            "pascal_b_scheme",
+            _cfg("experiments", "experiments.EXP-B2.cv"),
+            base + "experiments.EXP-B2.cv",
+        ),
+        _p(
+            "pascal_a_repeats",
+            _cfg("experiments", "cv_schemes.repeated_5x2_stratified.n_repeats"),
+            base + "cv_schemes.repeated_5x2_stratified.n_repeats",
+        ),
+        _p(
+            "pascal_a_splits",
+            _cfg("experiments", "cv_schemes.repeated_5x2_stratified.n_splits"),
+            base + "cv_schemes.repeated_5x2_stratified.n_splits",
+        ),
+        _p(
+            "scoring",
+            _cfg("experiments", "defaults.scoring.multiclass"),
+            base + "defaults.scoring.multiclass",
+        ),
+        _p(
+            "report_metrics",
+            _cfg("experiments", "defaults.report_metrics_multiclass"),
+            base + "defaults.report_metrics_multiclass",
+        ),
+        _p(
+            "macro_rule",
+            _quoted(
+                _EV + "metrics:multiclass_metrics",
+                'f1_score(true, pred, labels=ordering, average="macro", zero_division=0)',
+            ),
+            "src/evaluation/metrics.py multiclass_metrics",
+        ),
+        _p(
+            "auc_rule",
+            _quoted(
+                _EV + "metrics:multiclass_metrics",
+                'roc_auc_score(true, proba, multi_class="ovr", average="macro", labels=ordering)',
+            ),
+            "src/evaluation/metrics.py multiclass_metrics",
+        ),
+        _p(
+            "degenerate_rule",
+            _quoted("src.reporting.multiclass_report:coverage", "len(emitted) <= 1"),
+            "src/reporting/multiclass_report.py coverage",
+        ),
+        _p(
+            "n_resamples",
+            _default("src.reporting.multiclass_report:record_interval", "n_resamples"),
+            "multiclass_report.record_interval(n_resamples=...) default",
+        ),
+        _p(
+            "seed_rule",
+            _quoted("src.reporting.multiclass_report:record_interval", "int(seed) + int(repeat)"),
+            "src/reporting/multiclass_report.py record_interval",
+        ),
+    ]
+
+
+def _params_alg15() -> list[Parameter]:
+    from src.evaluation.aggregation import AGGREGATION_RULES
+
+    ref = _EV + "aggregation:aggregate_predictions"
+    return [
+        _p("rules", list(AGGREGATION_RULES), "src/evaluation/aggregation.py AGGREGATION_RULES"),
+        _p(
+            "threshold",
+            _default(ref, "threshold"),
+            "aggregation.aggregate_predictions(threshold=...) default",
+        ),
+        _p(
+            "tasks",
+            "circor_murmur (EXP-C1), circor_outcome (EXP-C2, EXP-D1)",
+            "configs/experiments.yaml experiments, task per run",
+        ),
+        _p(
+            "patient_key",
+            _quoted(_EV + "aggregation:_patient_of", 'circor["split_group"]'),
+            "src/evaluation/aggregation.py _patient_of (the DA-07 map)",
+        ),
+        _p(
+            "max_rule",
+            _quoted(ref, "float(np.max(group[proba_column].to_numpy(dtype=float)))"),
+            "src/evaluation/aggregation.py aggregate_predictions",
+        ),
+        _p(
+            "mean_rule",
+            _quoted(ref, "float(np.mean(group[proba_column].to_numpy(dtype=float)))"),
+            "src/evaluation/aggregation.py aggregate_predictions",
+        ),
+        _p(
+            "any_rule",
+            _quoted(ref, '(group["y_pred"].to_numpy(dtype=int) == int(positive_label)).any()'),
+            "src/evaluation/aggregation.py aggregate_predictions",
+        ),
+    ]
+
+
+def _params_alg16() -> list[Parameter]:
+    from src.evaluation.transfer import METADATA_FILENAME
+
+    ref = _EV + "transfer:degradation"
+    return [
+        _p(
+            "train_task",
+            _cfg("experiments", "experiments.EXP-D1.train_task"),
+            "configs/experiments.yaml experiments.EXP-D1.train_task",
+        ),
+        _p(
+            "test_task",
+            _cfg("experiments", "experiments.EXP-D1.test_task"),
+            "configs/experiments.yaml experiments.EXP-D1.test_task",
+        ),
+        _p(
+            "cv",
+            _cfg("experiments", "experiments.EXP-D1.cv"),
+            "configs/experiments.yaml experiments.EXP-D1.cv",
+        ),
+        _p("metadata_file", METADATA_FILENAME, "src/evaluation/transfer.py METADATA_FILENAME"),
+        _p(
+            "in_domain_exp",
+            _default(ref, "in_domain_exp"),
+            "transfer.degradation(in_domain_exp=...) default",
+        ),
+        _p(
+            "in_domain_model",
+            _default(ref, "model_id"),
+            "transfer.degradation(model_id=...) default",
+        ),
+        _p(
+            "drop_rule",
+            _quoted(ref, "(reference - value) / reference"),
+            "src/evaluation/transfer.py degradation",
+        ),
+        _p(
+            "selection_rule",
+            _cfg("experiments", "defaults.selection_rule"),
+            "configs/experiments.yaml defaults.selection_rule",
+        ),
+    ]
+
+
+def _params_alg17() -> list[Parameter]:
+    from src.evaluation.duration import DURATION_BANDS, TRUNCATION_SECONDS
+    from src.evaluation.robustness import QUALITY_GROUPS, SNR_LEVELS
+
+    return [
+        _p("snr_levels_db", list(SNR_LEVELS), "src/evaluation/robustness.py SNR_LEVELS"),
+        _p(
+            "clip_seconds",
+            list(TRUNCATION_SECONDS),
+            "src/evaluation/duration.py TRUNCATION_SECONDS",
+        ),
+        _p("quality_groups", list(QUALITY_GROUPS), "src/evaluation/robustness.py QUALITY_GROUPS"),
+        _p("duration_bands", list(DURATION_BANDS), "src/evaluation/duration.py DURATION_BANDS"),
+        _p(
+            "min_units",
+            _default(_EV + "robustness:stratify_by_quality", "min_units"),
+            "robustness.stratify_by_quality(min_units=...) default",
+        ),
+        _p(
+            "noise_rule",
+            _quoted(_EV + "robustness:add_awgn", "power / (10.0 ** (float(snr_db) / 10.0))"),
+            "src/evaluation/robustness.py add_awgn",
+        ),
+        _p(
+            "seed_rule",
+            _quoted(
+                _EV + "robustness:_sweep_one",
+                '[int(seed), int(zlib.crc32(uid.encode("utf-8"))), _level_key(level)]',
+            ),
+            "src/evaluation/robustness.py _sweep_one",
+        ),
+        _p(
+            "window_rule",
+            _quoted(_EV + "duration:truncate", "int(rng.integers(0, x.size - want + 1))"),
+            "src/evaluation/duration.py truncate",
+        ),
+        _p(
+            "seed",
+            _default(_EV + "robustness:sweep_features", "seed"),
+            "robustness.sweep_features(seed=...) default",
+        ),
+    ]
+
+
+def _params_alg18() -> list[Parameter]:
+    from src.evaluation import failure_analysis as fa
+
+    return [
+        _p(
+            "sources",
+            [source.name for source in fa.SOURCES],
+            "src/evaluation/failure_analysis.py SOURCES",
+        ),
+        _p("error_types", list(fa.ERROR_TYPES), "src/evaluation/failure_analysis.py ERROR_TYPES"),
+        _p("categories", list(fa.CATEGORIES), "src/evaluation/failure_analysis.py CATEGORIES"),
+        _p(
+            "confidence_bands",
+            list(fa._CONFIDENCE_LABELS),
+            "src/evaluation/failure_analysis.py _CONFIDENCE_LABELS",
+        ),
+        _p("min_group", fa.MIN_GROUP, "src/evaluation/failure_analysis.py MIN_GROUP"),
+        _p(
+            "per_group",
+            _default(_EV + "failure_analysis:example_records", "per_group"),
+            "failure_analysis.example_records(per_group=...) default",
+        ),
+        _p(
+            "multiclass_runs",
+            [run for run, _ in fa.MULTICLASS_RUNS],
+            "src/evaluation/failure_analysis.py MULTICLASS_RUNS",
+        ),
+        _p(
+            "confidence_rule",
+            _quoted(
+                _EV + "failure_analysis:prediction_failures",
+                'np.where( predicted == 1, frame["proba_1"].to_numpy(dtype=float), '
+                '1.0 - frame["proba_1"] )',
+            ),
+            "src/evaluation/failure_analysis.py prediction_failures",
+        ),
+    ]
+
+
+def _params_alg19() -> list[Parameter]:
+    from src.inference import predictor as pr
+
+    return [
+        _p("suffixes", sorted(pr.ALLOWED_SUFFIXES), "src/inference/predictor.py ALLOWED_SUFFIXES"),
+        _p(
+            "min_seconds",
+            pr.MIN_DURATION_SECONDS,
+            "src/inference/predictor.py MIN_DURATION_SECONDS",
+        ),
+        _p(
+            "max_seconds",
+            pr.MAX_DURATION_SECONDS,
+            "src/inference/predictor.py MAX_DURATION_SECONDS",
+        ),
+        _p("tasks", sorted(pr.TASKS), "src/inference/predictor.py TASKS"),
+        _p(
+            "low_margin",
+            pr.LOW_CONFIDENCE_MARGIN,
+            "src/inference/predictor.py LOW_CONFIDENCE_MARGIN",
+        ),
+        _p(
+            "top",
+            _default("src.reporting.sample_report:feature_contributions", "top"),
+            "sample_report.feature_contributions(top=...) default",
+        ),
+        _p(
+            "contribution_rule",
+            _quoted("src.reporting.sample_report:feature_contributions", "terms = coef * scaled"),
+            "src/reporting/sample_report.py feature_contributions",
+        ),
+        _p(
+            "operating_rule",
+            _quoted(
+                "src.inference.predictor:predict_recording",
+                "operating_threshold=0.5 if len(classes) == 2 else None",
+            ),
+            "src/inference/predictor.py predict_recording",
+        ),
+    ]
+
+
+def _params_alg20() -> list[Parameter]:
+    from src.reporting.conclusion_tables import CONCLUSION_TABLE_IDS, OBJECTIVE_EVIDENCE
+    from src.reporting.objectives import OBJECTIVES
+
+    return [
+        _p("n_objectives", len(OBJECTIVES), "src/reporting/objectives.py OBJECTIVES"),
+        _p(
+            "tables",
+            list(CONCLUSION_TABLE_IDS),
+            "src/reporting/conclusion_tables.py CONCLUSION_TABLE_IDS",
+        ),
+        _p(
+            "pending_checks",
+            [pattern for item in OBJECTIVE_EVIDENCE for _, pattern in item.pending] or "none",
+            "src/reporting/conclusion_tables.py OBJECTIVE_EVIDENCE[*].pending",
+        ),
+        _p(
+            "digest_rule",
+            _quoted(
+                "src.reporting.objectives:wording_digest",
+                'hashlib.sha256(wording.encode("utf-8")).hexdigest()',
+            ),
+            "src/reporting/objectives.py wording_digest",
+        ),
+        _p(
+            "status_rule",
+            _quoted(
+                "src.reporting.conclusion_tables:build_t29",
+                '"partial" if outstanding else "evidence produced"',
+            ),
+            "src/reporting/conclusion_tables.py build_t29",
+        ),
+    ]
+
+
 # ---------------------------------------------------------------------------
 # the catalogue
 # ---------------------------------------------------------------------------
@@ -1130,6 +1635,703 @@ ALGORITHMS: tuple[Algorithm, ...] = (
             "Searched space: learning_rate {learning_rate_space}, max_depth "
             "{max_depth_space}. Without the wrapper M5 would be the only ensemble member "
             "with no imbalance handling at all.",
+        ),
+    ),
+    Algorithm(
+        "ALG-11",
+        "Equal-weight soft voting",
+        "T99.1",
+        "O3",
+        "M6, the mandatory baseline ensemble: the members' calibrated probabilities are "
+        "averaged with equal weights, and the binary decision threshold is chosen inside "
+        "the training fold rather than fixed.",
+        ("training rows X, y and the training fold's own subject groups",),
+        ("fused class probabilities, and for binary tasks the in-fold threshold t*",),
+        (
+            Step(
+                "members <- {members}, built from config; members in {calibrate_members} are "
+                "wrapped in the explicit sigmoid calibration of ALG-08",
+                ref=_SV + "ensemble_members",
+            ),
+            Step(
+                "M6 <- SoftVotingEnsemble(members, weights {weights}, inner_cv {inner_cv}, "
+                "objective {objective}, tune_threshold {tune_threshold}, seed {seed}); "
+                "groups are the training fold's, never the full matrix's",
+                ref="src.models.estimators:make_ensemble",
+            ),
+            Step("fit(X, y): refuse anything but soft voting", ref=_SV + "SoftVotingEnsemble.fit"),
+            Step(
+                "w <- (1/m, ..., 1/m) over the m members",
+                depth=1,
+                ref=_SV + "SoftVotingEnsemble.fit",
+            ),
+            Step(
+                "if the task is binary and tune_threshold:",
+                depth=1,
+                ref=_SV + "SoftVotingEnsemble.fit",
+            ),
+            Step(
+                "inner <- {inner_cv} stratified splits of the training rows, subject-grouped "
+                "when groups are supplied",
+                depth=2,
+                ref=_SV + "SoftVotingEnsemble._inner_splits",
+            ),
+            Step(
+                "for each member and each inner split (T, V): fit a fresh clone on T; "
+                "oof[member, V] <- its predict_proba on V",
+                depth=2,
+                ref=_SV + "SoftVotingEnsemble._out_of_fold_probabilities",
+            ),
+            Step(
+                "reorder every member's columns to the ensemble's class order; refuse a "
+                "member that never saw a class; assert every training row got a probability",
+                depth=2,
+                ref=_SV + "_align_columns",
+            ),
+            Step(
+                "p_oof <- fuse(oof, w) = {fuse_rule}",
+                depth=2,
+                ref=_SV + "fuse_probabilities",
+            ),
+            Step(
+                "candidates <- midpoints between adjacent distinct scores, {candidate_rule} "
+                "(quantiles when more than {max_candidates}), plus the fixed reference: "
+                "{reference_rule}",
+                depth=2,
+                ref=_SV + "select_threshold",
+            ),
+            Step(
+                "t* <- the candidate maximising {objective} = {objective_form}; ties to the "
+                "cut-off nearest the fixed reference, key {tie_rule}; the fixed-reference "
+                "metrics are recorded beside it",
+                depth=2,
+                ref=_SV + "select_threshold",
+            ),
+            Step(
+                "refit every member on the whole training fold", ref=_SV + "SoftVotingEnsemble.fit"
+            ),
+            Step(
+                "predict_proba(X) <- fuse(member probabilities on X, w)",
+                ref=_SV + "SoftVotingEnsemble.predict_proba",
+            ),
+            Step(
+                "predict(X) <- positive class where p(positive) >= t* for binary tasks; "
+                "argmax of the fused vector otherwise",
+                ref=_SV + "SoftVotingEnsemble.predict",
+            ),
+        ),
+        _params_alg11,
+        notes=(
+            "The outer test fold is never scored while w or t* is chosen: both come from "
+            "out-of-fold probabilities over inner splits of the training rows.",
+        ),
+    ),
+    Algorithm(
+        "ALG-12",
+        "Optimized-weight soft voting",
+        "T99.1",
+        "O3, O5",
+        "M7, the proposed ensemble: the same members and decision rule as M6, with the "
+        "weights chosen by an exhaustive simplex search on out-of-fold probabilities under "
+        "a one-standard-error rule that shrinks toward equal weights.",
+        ("training rows X, y and the training fold's own subject groups",),
+        ("the chosen weights w*, the in-fold threshold t*, and the selection record",),
+        (
+            Step(
+                "members, inner splits and out-of-fold probabilities oof exactly as in ALG-11 "
+                "({members}, weights {weights}, inner_cv {inner_cv})",
+                ref=_SV + "SoftVotingEnsemble._out_of_fold_probabilities",
+            ),
+            Step(
+                "grid <- every non-negative weight vector on the simplex at resolution "
+                "{resolution}, from an integer lattice",
+                ref=_SV + "simplex_grid",
+            ),
+            Step(
+                "if the exact equal-weight vector is not on the lattice: add it, "
+                "{centre_rule}; |grid| = {n_candidates}",
+                ref=_SV + "weight_candidates",
+            ),
+            Step("if the task is binary:", ref=_SV + "SoftVotingEnsemble._optimize_weights"),
+            Step(
+                "for each candidate w: t(w) <- select_threshold(fuse(oof, w)); score(w) <- "
+                "{objective} = {objective_form} at t(w) -- weights and threshold chosen "
+                "jointly",
+                depth=1,
+                ref=_SV + "SoftVotingEnsemble._optimize_weights",
+            ),
+            Step(
+                "b <- argmax score; SE <- exact binomial standard error of b's objective, "
+                "{se_rule}",
+                depth=1,
+                ref=_SV + "objective_standard_error",
+            ),
+            Step(
+                "margin <- {n_se} x SE ({selection_rule})",
+                depth=1,
+                ref=_SV + "SoftVotingEnsemble._optimize_weights",
+            ),
+            Step(
+                "within <- candidates with {within_rule}; w* <- the one closest to equal "
+                "weights in L2, {pick_rule}",
+                depth=1,
+                ref=_SV + "_pick_among_ties",
+            ),
+            Step(
+                "else (multiclass): score(w) <- {multiclass_score} on the fused argmax; "
+                "w* <- exact ties only (margin 0), broken toward equal weights",
+                ref=_SV + "SoftVotingEnsemble._optimize_weights_multiclass",
+            ),
+            Step(
+                "record the candidate count, how many fell within the margin, the best and "
+                "chosen scores, and the argmax weights beside w*",
+                ref=_SV + "SoftVotingEnsemble._optimize_weights",
+            ),
+            Step(
+                "t* <- select_threshold on fuse(oof, w*), as in ALG-11; refit every "
+                "member on the whole training fold",
+                ref=_SV + "SoftVotingEnsemble.fit",
+            ),
+            Step(
+                "predict as ALG-11 with w* in place of equal weights",
+                ref=_SV + "SoftVotingEnsemble.predict",
+            ),
+        ),
+        _params_alg12,
+        notes=(
+            "A grid, not a gradient optimiser: {objective} is a step function of the "
+            "weights, so it has zero gradient almost everywhere. The grid needs no seed.",
+            "The one-standard-error rule is a selection rule fixed before any result; it is "
+            "never tuned to a score. When no candidate beats the noise, M7 returns equal "
+            "weights and equals M6.",
+        ),
+    ),
+    Algorithm(
+        "ALG-13",
+        "Binary evaluation workflow",
+        "T99.2",
+        "O1",
+        "Every binary model is scored on the same stored, subject-grouped fold map, and "
+        "reported with sensitivity, specificity, balanced accuracy and AUC -- never "
+        "accuracy alone.",
+        ("the D1 feature matrix, the stored {cv} fold map, the experiment's model list",),
+        (
+            "per_fold_metrics.csv, aggregate_metrics.csv, predictions.parquet, "
+            "confusion_matrices.json, and the selected final model",
+        ),
+        (
+            Step(
+                "folds <- the stored {cv} map ({repeats} x {splits}, grouped on {group_key}), "
+                "loaded and validated against config, never re-derived",
+                ref=_EV + "cv:load_folds",
+            ),
+            Step(
+                "for each model and each fold (resuming any unit already checkpointed):",
+                ref=_EV + "experiment:run_experiment",
+            ),
+            Step(
+                "assert subject groups disjoint on the map and again on the arrays fed to "
+                "the estimator; assert train and test rows disjoint",
+                depth=1,
+                ref=_EV + "cv:assert_group_disjoint",
+            ),
+            Step(
+                "plan the model: config defaults, or the fold's own nested search (ALG-07) "
+                "when the experiment is tuned",
+                depth=1,
+                ref="src.evaluation.tuned:NestedSearchPlanner.plan",
+            ),
+            Step(
+                "P <- the fold-safe pipeline of ALG-05; fit on the training rows; predict "
+                "and predict_proba the test rows",
+                depth=1,
+                ref=_EV + "experiment:_run_unit",
+            ),
+            Step(
+                "(TN, FP, FN, TP) <- confusion over (negative, positive = {positive_label})",
+                depth=1,
+                ref=_EV + "metrics:confusion",
+            ),
+            Step(
+                "sensitivity <- TP / (TP + FN); specificity <- {specificity_rule}; balanced "
+                "accuracy <- {balanced_rule}; precision, F1, MCC",
+                depth=1,
+                ref=_EV + "metrics:binary_metrics",
+            ),
+            Step(
+                "ROC-AUC and PR-AUC from the positive-class probability; NaN, never a "
+                "substitute, when the fold holds one class",
+                depth=1,
+                ref=_EV + "metrics:binary_metrics",
+            ),
+            Step(
+                "Brier score, and ECE over {ece_bins} equal-width confidence bins",
+                depth=1,
+                ref=_EV + "experiment:_score",
+            ),
+            Step(
+                "aggregate per model: mean and sample SD, {sd_rule}, NaN folds excluded "
+                "and counted",
+                ref=_EV + "experiment:ExperimentResult.aggregate_frame",
+            ),
+            Step(
+                "write the output contract with the run manifest (seed, fold map, "
+                "hyperparameters, package versions)",
+                ref=_EV + "experiment:write_outputs",
+            ),
+            Step(
+                "rank models lexicographically by {selection_rule}; record what accuracy "
+                "alone would have chosen",
+                ref="src.evaluation.tuned:select_final_model",
+            ),
+            Step(
+                "confidence intervals: percentile bootstrap over records, {n_bootstrap} "
+                "resamples, alpha {alpha}, seeded; unscorable draws excluded and counted",
+                ref=_EV + "metrics:bootstrap_ci",
+            ),
+        ),
+        _params_alg13,
+        notes=("Reported for every binary run: {report_metrics}. Search objective: {scoring}.",),
+    ),
+    Algorithm(
+        "ALG-14",
+        "Multiclass evaluation workflow",
+        "T99.2",
+        "O6",
+        "Each multiclass task keeps its own label space and is scored with macro-F1 and "
+        "per-class recall, with a check that the model actually emits every class.",
+        ("one task's feature matrix and stored fold map; its declared labels",),
+        ("per-fold and aggregate multiclass metrics, per-class recall, coverage flags",),
+        (
+            Step(
+                "for each task in {tasks}: labels <- that task's own label space, never "
+                "merged with another's",
+                ref=_EV + "experiment:Experiment.load",
+            ),
+            Step(
+                "drop only rows whose label the variant does not declare; refuse any other "
+                "shrinkage",
+                ref=_EV + "experiment:restrict_to_label_space",
+            ),
+            Step(
+                "folds <- the task's stored map (PASCAL A {pascal_a_scheme}: {pascal_a_repeats} "
+                "x {pascal_a_splits}; PASCAL B {pascal_b_scheme})",
+                ref=_EV + "cv:load_folds",
+            ),
+            Step(
+                "for each model and fold: leakage checks, fit and predict exactly as in ALG-13",
+                ref=_EV + "experiment:_run_unit",
+            ),
+            Step(
+                "per class c: precision, recall, F1 and support; accuracy, balanced accuracy, "
+                "weighted F1",
+                depth=1,
+                ref=_EV + "metrics:multiclass_metrics",
+            ),
+            Step(
+                "macro-F1 <- {macro_rule}",
+                depth=1,
+                ref=_EV + "metrics:multiclass_metrics",
+            ),
+            Step(
+                "one-vs-rest AUC <- {auc_rule} when every class is present in the fold; "
+                "NaN otherwise",
+                depth=1,
+                ref=_EV + "metrics:multiclass_metrics",
+            ),
+            Step(
+                "aggregate mean and sample SD over folds, as in ALG-13",
+                ref=_EV + "experiment:ExperimentResult.aggregate_frame",
+            ),
+            Step(
+                "coverage <- classes the model ever emitted; missing classes named; "
+                "degenerate if {degenerate_rule}",
+                ref="src.reporting.multiclass_report:coverage",
+            ),
+            Step(
+                "record-level intervals: bootstrap within each repeat ({n_resamples} draws, "
+                "seed {seed_rule}), averaged over repeats",
+                ref="src.reporting.multiclass_report:record_interval",
+            ),
+        ),
+        _params_alg14,
+        notes=(
+            "Reported for every multiclass run: {report_metrics}. Search objective: {scoring}.",
+            "PASCAL's artifact class is a recording-quality label, so a four-class PASCAL A "
+            "result is never described as a four-class cardiac classifier.",
+        ),
+    ),
+    Algorithm(
+        "ALG-15",
+        "CirCor subject-level aggregation",
+        "T99.3",
+        "O1, O3",
+        "CirCor labels a patient but the model scores a recording, so every CirCor metric is "
+        "reported at both levels, under three stated aggregation rules.",
+        ("recording-level predictions of one CirCor run ({tasks})",),
+        ("one row per (model, fold, patient) per rule, and metrics at both levels",),
+        (
+            Step(
+                "patient_id <- the DA-07 map's grouping key for each record_uid ({patient_key}); "
+                "a recording with no patient is an error",
+                ref=_EV + "aggregation:_patient_of",
+            ),
+            Step(
+                "recording level: score every (model, fold) block as ALG-13 or ALG-14",
+                ref=_EV + "aggregation:evaluate_aggregations",
+            ),
+            Step("for each rule in {rules}:", ref=_EV + "aggregation:evaluate_aggregations"),
+            Step(
+                "for each (model, fold, patient): assert the patient's recordings carry one "
+                "label; a disagreement is a propagation error",
+                depth=1,
+                ref=_EV + "aggregation:aggregate_predictions",
+            ),
+            Step(
+                "max: score <- {max_rule}; y <- score >= {threshold}",
+                depth=2,
+                ref=_EV + "aggregation:aggregate_predictions",
+            ),
+            Step(
+                "mean: score <- {mean_rule}; y <- score >= {threshold}",
+                depth=2,
+                ref=_EV + "aggregation:aggregate_predictions",
+            ),
+            Step(
+                "any_present: y <- {any_rule}, a union over the model's own decisions",
+                depth=2,
+                ref=_EV + "aggregation:aggregate_predictions",
+            ),
+            Step(
+                "score the patient rows per (model, fold); level and rule are columns of one "
+                "long table, so the recording and patient views cannot drift apart",
+                depth=1,
+                ref=_EV + "aggregation:evaluate_aggregations",
+            ),
+        ),
+        _params_alg15,
+        notes=(
+            "No rule is declared the winner: the choice between them is a screening posture "
+            "about missed cases, which this prototype reports rather than decides.",
+        ),
+    ),
+    Algorithm(
+        "ALG-16",
+        "Cross-dataset external validation",
+        "T99.3",
+        "O1",
+        "EXP-D1: the final PhysioNet model is applied unchanged to every CirCor recording. "
+        "The population mismatch is written to disk before any prediction exists.",
+        ("the saved final model ({train_task}) and the {test_task} feature matrix",),
+        (
+            "{metadata_file}, recording- and patient-level external metrics, and the signed "
+            "drop against the in-domain result",
+        ),
+        (
+            Step(
+                "final <- the model ranked first by {selection_rule} in the in-domain run, "
+                "refitted on every labelled PhysioNet record through the fold-safe pipeline",
+                ref="scripts.13_finalize_binary_model:persist_final_model",
+            ),
+            Step(
+                "profile both populations (age groups, diagnoses) from their own metadata",
+                ref=_EV + "transfer:circor_population",
+            ),
+            Step(
+                "write {metadata_file} first; refuse any key that looks like a metric",
+                ref=_EV + "transfer:write_population_metadata",
+            ),
+            Step(
+                "load the model, refusing a feature list that differs from the registry order",
+                ref="src.models.registry:load_model",
+            ),
+            Step(
+                "predict every CirCor recording once, unchanged parameters, fold label "
+                "external ({cv})",
+                ref=_EV + "transfer:transfer_predictions",
+            ),
+            Step(
+                "score at recording level and at patient level under every ALG-15 rule",
+                ref=_EV + "transfer:evaluate_transfer",
+            ),
+            Step(
+                "for each metric: delta <- external - mean over {in_domain_exp} folds of "
+                "{in_domain_model}; relative drop <- {drop_rule}; both fold counts recorded",
+                ref=_EV + "transfer:degradation",
+            ),
+        ),
+        _params_alg16,
+        notes=(
+            "Adult-to-paediatric transfer, not a like-for-like generalization test: a drop "
+            "is the expected consequence of the recorded mismatch, and leave-one-source-out "
+            "(EXP-F3) shows acquisition shift alone removes the ranking.",
+        ),
+    ),
+    Algorithm(
+        "ALG-17",
+        "Noise and duration robustness analysis",
+        "T99.4",
+        "O4",
+        "Two questions kept apart: how the model does on recordings that are already noisy "
+        "or short (observational), and what happens when noise is added or a recording is "
+        "clipped (interventional).",
+        ("stored out-of-fold predictions, PP-08 quality flags, a stratified PhysioNet sample",),
+        ("metrics per quality group and duration band, and per SNR level and clip length",),
+        (
+            Step(
+                "observational: attach each prediction's quality group ({quality_groups}); "
+                "a prediction with no flag is an error",
+                ref=_EV + "robustness:stratify_by_quality",
+            ),
+            Step(
+                "score every (model, fold, group); a slice under {min_units} records is kept "
+                "with reported = false, never dropped",
+                depth=1,
+                ref=_EV + "robustness:stratify_by_quality",
+            ),
+            Step(
+                "the same per duration band ({duration_bands})",
+                ref=_EV + "duration:stratify_by_duration",
+            ),
+            Step(
+                "interventional: sample <- PhysioNet records stratified over (subset, class)",
+                ref="scripts.23_noise_robustness:sample_records",
+            ),
+            Step(
+                "model <- the final configuration refitted WITHOUT every sampled subject, so "
+                "no score is in-sample",
+                ref="scripts.23_noise_robustness:fit_holdout_model",
+            ),
+            Step(
+                "for each record and each SNR level in {snr_levels_db}:",
+                ref=_EV + "robustness:_sweep_one",
+            ),
+            Step(
+                "rng <- seeded by {seed_rule}, so resuming or the worker count changes nothing",
+                depth=1,
+                ref=_EV + "robustness:_sweep_one",
+            ),
+            Step(
+                "noisy <- raw + white Gaussian noise of power {noise_rule}; the infinite "
+                "level is the untouched control",
+                depth=1,
+                ref=_EV + "robustness:add_awgn",
+            ),
+            Step(
+                "filter, normalize and extract all features (ALG-03, ALG-04); record the SNR "
+                "that survived the band-pass",
+                depth=1,
+                ref=_EV + "robustness:measured_snr_db",
+            ),
+            Step(
+                "for each record and each clip length in {clip_seconds}: clip the RAW signal "
+                "from a seeded random window, start {window_rule}; then the same chain",
+                ref=_EV + "duration:truncate",
+            ),
+            Step(
+                "checkpoint after every batch of records; a resumed run reproduces bit for bit",
+                ref=_EV + "robustness:sweep_features",
+            ),
+            Step(
+                "score each level with the held-out model; delta against the control",
+                ref="scripts.23_noise_robustness:score_sweep",
+            ),
+            Step(
+                "score each clip length with the same held-out model; delta against the "
+                "full recording",
+                ref="scripts.24_duration_robustness:score_truncation",
+            ),
+        ),
+        _params_alg17,
+        notes=(
+            "A gap in the observational half is an association; a gap in the sweep is "
+            "causal for additive white noise only, which is not the noise a stethoscope "
+            "picks up. Neither is quoted as the other.",
+        ),
+    ),
+    Algorithm(
+        "ALG-18",
+        "Failure case analysis",
+        "T99.4",
+        "O1, O4",
+        "Back from averages to records: every prediction of the final model is labelled "
+        "TP, TN, FP or FN, placed in context, and collapsed to how often each record is "
+        "wrong.",
+        ("stored predictions of {sources}; per-record audit context",),
+        ("per-record failure table, per-category error rates, confused pairs, examples",),
+        (
+            Step(
+                "context <- duration band, noise flag, subset and diagnosis, each loaded from "
+                "the artifact that owns it",
+                ref=_EV + "failure_analysis:record_context",
+            ),
+            Step("for each source in {sources}:", ref=_EV + "failure_analysis:prediction_failures"),
+            Step(
+                "label every prediction with one of {error_types}; keep the correct ones as "
+                "denominators",
+                depth=1,
+                ref=_EV + "failure_analysis:prediction_failures",
+            ),
+            Step(
+                "confidence <- probability of the PREDICTED class, {confidence_rule}; band "
+                "into {confidence_bands}",
+                depth=1,
+                ref=_EV + "failure_analysis:prediction_failures",
+            ),
+            Step(
+                "join the context; a prediction with no context is an error",
+                depth=1,
+                ref=_EV + "failure_analysis:prediction_failures",
+            ),
+            Step(
+                "per record: n_wrong of n_evaluations; consistently_wrong when every "
+                "evaluation erred",
+                ref=_EV + "failure_analysis:record_failures",
+            ),
+            Step(
+                "for each category in {categories}: error rate, FN and FP rates with their "
+                "denominators; flag groups whose class denominators are under {min_group} "
+                "records",
+                ref=_EV + "failure_analysis:categorise",
+            ),
+            Step(
+                "multiclass: every off-diagonal confusion cell of {multiclass_runs}, as a "
+                "share of its true class",
+                ref=_EV + "failure_analysis:confusion_pairs",
+            ),
+            Step(
+                "examples <- per (source, error type), the {per_group} most confident "
+                "consistently-wrong records (all wrong records when too few)",
+                ref=_EV + "failure_analysis:example_records",
+            ),
+            Step(
+                "write T27, G35 and the report, rates always beside their denominators",
+                ref="src.reporting.failure_report:write_failure_report",
+            ),
+        ),
+        _params_alg18,
+        notes=("The in-domain and external sources are analysed side by side and never pooled.",),
+    ),
+    Algorithm(
+        "ALG-19",
+        "Sample-level report generation",
+        "T99.5",
+        "O1",
+        "One WAV file to one screening report: validated, scored by the deployed model, and "
+        "rendered from the same signal and feature vector that produced the number.",
+        ("one recording, a task in {tasks}",),
+        ("a DOCX report with the disclaimer first, and the prediction object it renders",),
+        (
+            Step(
+                "validate: suffix in {suffixes}, decodable, duration within [{min_seconds}, "
+                "{max_seconds}] s; refuse otherwise",
+                ref="src.inference.predictor:validate_recording",
+            ),
+            Step(
+                "bundle <- the saved model of the task with its manifest and feature names",
+                ref="src.inference.predictor:load_bundle",
+            ),
+            Step(
+                "signal <- ALG-02 and ALG-03 preprocessing, with quality measured",
+                ref="src.preprocessing.pipeline:preprocess",
+            ),
+            Step(
+                "features <- ALG-04 extraction", ref="src.feature_extraction.extractor:extract_all"
+            ),
+            Step(
+                "vector <- features in the MODEL's column order; a missing or non-finite "
+                "value goes to the imputer and is named in a warning",
+                ref="src.inference.predictor:_vector_for",
+            ),
+            Step(
+                "p <- pipeline.predict_proba(vector) with BLAS pinned to one thread",
+                ref="src.inference.predictor:_predict_proba",
+            ),
+            Step(
+                "predicted class <- argmax p ({operating_rule}); margin <- top minus runner-up; "
+                "low confidence when margin < {low_margin}",
+                ref="src.inference.predictor:predict_recording",
+            ),
+            Step(
+                "contributions <- for a linear model, {contribution_rule} on the scaled "
+                "vector, top {top} by magnitude; otherwise the section states it is "
+                "unavailable",
+                ref="src.reporting.sample_report:feature_contributions",
+            ),
+            Step(
+                "render: disclaimer first, recording, result, probabilities, waveform and "
+                "spectrogram, contributions, warnings, model version block, disclaimer again",
+                ref="src.reporting.sample_report:render_sample_report",
+            ),
+            Step(
+                "one pass: the report draws the very signal and vector that were scored",
+                ref="src.reporting.sample_report:report_for_recording",
+            ),
+        ),
+        _params_alg19,
+        notes=(
+            "A report restates what the model produced and computes no metric. It is a "
+            "screening signal for decision support, not a diagnosis.",
+        ),
+    ),
+    Algorithm(
+        "ALG-20",
+        "Objective achievement evidence generation",
+        "T99.5",
+        "O1-O6",
+        "Each of the {n_objectives} locked objectives is mapped to the files that evidence "
+        "it and to a verdict produced by a stated rule from generated numbers.",
+        ("the locked objective wording, the generated tables and run outputs",),
+        ("{tables} as CSV, Markdown, DOCX and LaTeX, each registered as evidence",),
+        (
+            Step(
+                "objectives <- the {n_objectives} locked objectives, verbatim, each with "
+                "digest {digest_rule}",
+                ref="src.reporting.objectives:wording_digest",
+            ),
+            Step(
+                "check the wording against the blueprint PDF",
+                ref="src.reporting.objectives:verify_against_source",
+            ),
+            Step("T29: for each objective:", ref="src.reporting.conclusion_tables:build_t29"),
+            Step(
+                "refuse to build if a named module or evidence file does not exist",
+                depth=1,
+                ref="src.reporting.conclusion_tables:build_t29",
+            ),
+            Step(
+                "outstanding <- required evidence whose glob matches nothing ({pending_checks}); "
+                "status <- {status_rule}",
+                depth=1,
+                ref="src.reporting.conclusion_tables:build_t29",
+            ),
+            Step("T30: for each objective:", ref="src.reporting.conclusion_tables:build_t30"),
+            Step(
+                "finding <- numbers read from the named tables at build time and formatted "
+                "by the table engine; none typed",
+                depth=1,
+                ref="src.reporting.conclusion_tables:build_t30",
+            ),
+            Step(
+                "verdict <- the objective's stated rule applied to those numbers; the rule "
+                "and the bounding limitation travel in the row",
+                depth=1,
+                ref="src.reporting.conclusion_tables:build_t30",
+            ),
+            Step(
+                "build both tables through the table engine",
+                ref="src.reporting.conclusion_tables:build_conclusion_tables",
+            ),
+            Step(
+                "register every written file in the evidence index; a missing file is "
+                "recorded as missing, never ok",
+                ref="src.utils.evidence:register_evidence",
+            ),
+        ),
+        _params_alg20,
+        notes=(
+            "The status is re-derived from the filesystem on every build, so an objective "
+            "leaves partial by itself when its evidence lands.",
         ),
     ),
 )

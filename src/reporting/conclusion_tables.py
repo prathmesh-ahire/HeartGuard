@@ -42,6 +42,9 @@ __all__ = [
 
 log = get_logger("reporting.conclusion_tables")
 
+#: Objective 2's literature review (Phase 101), written by scripts/41_literature_review.py.
+LITERATURE_CSV = "outputs/16_literature_review/LIT-01_literature_review_and_state_of_the_art.csv"
+
 CONCLUSION_TABLE_IDS: tuple[str, ...] = ("T29", "T30")
 
 _CI = re.compile(r"\[\s*([-+0-9.eE]+)\s*,\s*([-+0-9.eE]+)\s*\]")
@@ -157,13 +160,15 @@ OBJECTIVE_EVIDENCE: tuple[ObjectiveEvidence, ...] = (
             "src/preprocessing/ablation_run.py",
             "src/evaluation/feature_ablation.py",
             "src/reporting/ablation_report.py",
+            "src/reporting/literature.py",
         ),
         evidence=(
             "outputs/02_preprocessing/preprocessing_ablation.csv",
             _t("T17"),
             _t("T18"),
+            LITERATURE_CSV,
         ),
-        tables=("PP-09", "T17", "T18"),
+        tables=("PP-09", "T17", "T18", "LIT-01", "LIT-02"),
         pending=(
             (
                 "Literature review table (Phase 101)",
@@ -547,8 +552,8 @@ def _o2(final: str) -> dict[str, Any]:
         ),
         "rule": "Partial while any evidence the blueprint requires is missing (T29).",
         "limitation": limitation,
-        "tables": "PP-09, T17, T18, T29",
-        "sources": [pp_path, _t("T17"), _t("T18")],
+        "tables": "PP-09, T17, T18, LIT-01, LIT-02, T29",
+        "sources": [pp_path, _t("T17"), _t("T18")] + ([LITERATURE_CSV] if literature else []),
     }
 
 
