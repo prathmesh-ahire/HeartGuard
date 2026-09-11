@@ -157,6 +157,28 @@ def table_frame(table_id: str) -> Any:
     return _read(directory / (stem + ".csv"))
 
 
+def _gitignored(relative: str) -> bool:
+    """True when git ignores ``relative``, so it can never exist in a CI checkout.
+
+    T17 and T18 record the FE-03 feature matrix (a ``.parquet``) as a source.
+    It is gitignored, so CI never has it and the Phase 88 audit failed there
+    while passing here -- the standing rule's trap. Asked of git itself rather
+    than a suffix list, so a new ignore rule cannot drift out of sync with it.
+    """
+    import subprocess
+
+    try:
+        result = subprocess.run(
+            ["git", "check-ignore", "-q", "--", relative],
+            cwd=_root(),
+            capture_output=True,
+            check=False,
+        )
+    except OSError:  # no git on PATH: fall back to the two large-binary suffixes
+        return Path(relative).suffix in (".parquet", ".joblib")
+    return result.returncode == 0
+
+
 _SUFFIXES: tuple[str, ...] = (".csv", ".md", ".docx", ".tex", ".meta.json")
 
 
@@ -247,7 +269,11 @@ def audit_table(table_id: str) -> list[str]:
             continue
         source = _root() / recorded
         if not source.is_file():
-            problems.append(table_id + ": source missing " + recorded)
+            # A gitignored source (the FE-03 parquet matrix, dataset/, cache/)
+            # never reaches CI. Its absence there says nothing about the table;
+            # where it IS present it is digest-checked like any other source.
+            if not _gitignored(recorded):
+                problems.append(table_id + ": source missing " + recorded)
             continue
         if tb.content_digest(source)[0] != fingerprint.get("sha256"):
             problems.append(table_id + ": stale -- " + recorded + " changed since it was built")

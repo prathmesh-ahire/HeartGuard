@@ -69,6 +69,19 @@ def _arm(config_id: str) -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 
 
+def test_the_audit_excuses_only_sources_git_ignores() -> None:
+    """The CI failure behind this: T17/T18 cite the gitignored FE-03 parquet.
+
+    A missing gitignored source is 'not in this checkout'; a missing committed
+    source is still a failure. Both halves are pinned so the excuse cannot widen.
+    """
+    from src.reporting.result_tables import _gitignored
+
+    assert _gitignored("outputs/03_features/all_features_matrix.parquet")
+    assert not _gitignored("outputs/09_ablation/T17_feature_family_ablation.csv")
+    assert not _gitignored("outputs/09_ablation/no_such_committed_file.csv")
+
+
 @pytest.mark.parametrize("table_id", PHASE_88)
 def test_table_passes_the_audit(table_id: str) -> None:
     directory, _ = location_of(table_id)
