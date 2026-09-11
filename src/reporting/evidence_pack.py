@@ -911,6 +911,39 @@ def row_status(row: dict[str, str]) -> tuple[str, str]:
 # ---------------------------------------------------------------------------
 
 
+def ignored_by_git(path: str) -> bool:
+    """True when git ignores ``path`` -- a file a fresh clone can never have."""
+    import subprocess
+
+    result = subprocess.run(
+        ["git", "check-ignore", "-q", path],
+        cwd=PROJECT_ROOT,
+        capture_output=True,
+        check=False,
+    )
+    return result.returncode == 0
+
+
+def fails_only_on_ignored_files(item: dict[str, str], rows: list[dict[str, str]]) -> bool:
+    """True when a failed item fails ONLY because its files are gitignored.
+
+    The standing rule: a check needing a gitignored input must skip, not fail.
+    FE-03 (the feature matrix parquet) is the case -- present locally, absent on
+    every CI runner by design. An id missing from the index is never excused.
+    """
+    by_id = {row["evidence_id"]: row for row in rows}
+    ids = [evidence_id for evidence_id in item["evidence_ids"].split("; ") if evidence_id]
+    if any(evidence_id not in by_id for evidence_id in ids):
+        return False
+    missing = [
+        by_id[evidence_id]["filename"]
+        for evidence_id in ids
+        if row_status(by_id[evidence_id])[0] == "failed"
+    ]
+    missing += [path for path in item["paths"].split("; ") if path and not _resolve(path).exists()]
+    return bool(missing) and all(ignored_by_git(path) for path in missing)
+
+
 def check_mandatory(rows: list[dict[str, str]] | None = None) -> list[dict[str, str]]:
     """One result per :data:`MANDATORY` item: present / not produced / failed."""
     rows = read_evidence() if rows is None else rows

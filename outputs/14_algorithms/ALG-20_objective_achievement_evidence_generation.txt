@@ -28,11 +28,11 @@ Notes
   The status is re-derived from the filesystem on every build, so an objective leaves partial by itself when its evidence lands.
 
 Implemented by
-  src/reporting/objectives.py:202  src.reporting.objectives:wording_digest
-  src/reporting/objectives.py:306  src.reporting.objectives:verify_against_source
-  src/reporting/conclusion_tables.py:289  src.reporting.conclusion_tables:build_t29
-  src/reporting/conclusion_tables.py:890  src.reporting.conclusion_tables:build_t30
-  src/reporting/conclusion_tables.py:970  src.reporting.conclusion_tables:build_conclusion_tables
+  src/reporting/objectives.py:196  src.reporting.objectives:wording_digest
+  src/reporting/objectives.py:300  src.reporting.objectives:verify_against_source
+  src/reporting/conclusion_tables.py:294  src.reporting.conclusion_tables:build_t29
+  src/reporting/conclusion_tables.py:895  src.reporting.conclusion_tables:build_t30
+  src/reporting/conclusion_tables.py:975  src.reporting.conclusion_tables:build_conclusion_tables
   src/utils/evidence.py:149  src.utils.evidence:register_evidence
 
 Regenerate: python scripts/39_export_algorithms.py --ids ALG-20

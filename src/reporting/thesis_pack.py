@@ -199,14 +199,21 @@ def planned_copies() -> list[Copy]:
 
 
 def _sha256(path: Path) -> str:
-    """Content digest, newline-normalized for text (``tables.content_digest``).
+    """Content digest, newline-normalized for text and SVG, raw for binary.
 
-    A raw byte hash calls a git-checked-out CRLF copy of an LF file "changed";
-    the text is the same, so the digest must be too. Binary files hash raw.
+    A raw byte hash calls a git-checked-out LF copy of a CRLF file "changed";
+    the text is the same, so the digest must be too. ``tables.content_digest``
+    normalizes its text suffixes but not ``.svg``, which is XML text and was
+    the first thing to fail on CI (40 diagram copies).
     """
-    from src.reporting.tables import content_digest
+    import hashlib
 
-    return content_digest(path)[0]
+    from src.reporting.tables import TEXT_SUFFIXES
+
+    data = path.read_bytes()
+    if path.suffix.lower() in TEXT_SUFFIXES or path.suffix.lower() == ".svg":
+        data = data.replace(b"\r\n", b"\n")
+    return hashlib.sha256(data).hexdigest()
 
 
 # ---------------------------------------------------------------------------

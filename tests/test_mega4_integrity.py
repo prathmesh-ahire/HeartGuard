@@ -231,9 +231,12 @@ def test_t105_5_every_q1_number_matches_its_source(outputs_present: None) -> Non
 def test_t105_6_every_unproduced_mandatory_item_is_reported_with_a_reason(
     outputs_present: None,
 ) -> None:
-    results = ep.check_mandatory()
+    rows = read_evidence()
+    results = ep.check_mandatory(rows)
     failed = [
-        item["item_id"] + ": " + item["detail"] for item in results if item["status"] == "failed"
+        item["item_id"] + ": " + item["detail"]
+        for item in results
+        if item["status"] == "failed" and not ep.fails_only_on_ignored_files(item, rows)
     ]
     assert not failed, "mandatory items missing with no reason:\n" + "\n".join(failed)
 

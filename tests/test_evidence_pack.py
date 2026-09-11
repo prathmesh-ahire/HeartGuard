@@ -69,22 +69,10 @@ def test_t102_7_every_mandatory_item_is_present_or_accounted_for(
     rows: list[dict[str, str]],
 ) -> None:
     results = ep.check_mandatory(rows)
-    failed = [item for item in results if item["status"] == "failed"]
-    # On a fresh clone an item can only fail through a gitignored file.
-    by_id = {row["evidence_id"]: row for row in rows}
     unexplained = [
         item["item_id"] + ": " + item["detail"]
-        for item in failed
-        if not all(
-            _gitignored(by_id[evidence_id]["filename"])
-            for evidence_id in item["evidence_ids"].split("; ")
-            if evidence_id in by_id and ep.row_status(by_id[evidence_id])[0] == "failed"
-        )
-        or any(
-            evidence_id not in by_id
-            for evidence_id in item["evidence_ids"].split("; ")
-            if evidence_id
-        )
+        for item in results
+        if item["status"] == "failed" and not ep.fails_only_on_ignored_files(item, rows)
     ]
     assert not unexplained, "mandatory items missing with no declared reason:\n" + "\n".join(
         unexplained
@@ -100,6 +88,8 @@ def test_t102_6_every_unproduced_item_is_in_the_missing_outputs_report(
     for item in ep.check_mandatory(rows):
         if item["status"] == "present":
             continue
+        if item["status"] == "failed" and ep.fails_only_on_ignored_files(item, rows):
+            continue  # a fresh clone lacks the file; the report was written where it exists
         assert "] " + item["item_id"] + " -- " in block, (
             item["item_id"] + " is absent from the report"
         )
