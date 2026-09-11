@@ -1,0 +1,68 @@
+fact_id,value_as_written,value_full_precision,source_file,selector
+final_model,M1,M1,outputs/06_binary_results/final_model_selection.csv,first of model_id where all rows
+D1_name,PhysioNet 2016,PhysioNet 2016,outputs/01_dataset_audit/T01_dataset_inventory.csv,value of dataset_name where dataset_source=D1
+D1_records,"3,240",3240,outputs/01_dataset_audit/T01_dataset_inventory.csv,value of usable_files where dataset_source=D1
+D1_subjects,857,857,outputs/01_dataset_audit/T01_dataset_inventory.csv,value of n_subjects where dataset_source=D1
+D2_name,PASCAL set_a,PASCAL set_a,outputs/01_dataset_audit/T01_dataset_inventory.csv,value of dataset_name where dataset_source=D2
+D2_records,124,124,outputs/01_dataset_audit/T01_dataset_inventory.csv,value of usable_files where dataset_source=D2
+D2_subjects,123,123,outputs/01_dataset_audit/T01_dataset_inventory.csv,value of n_subjects where dataset_source=D2
+D3_name,PASCAL set_b,PASCAL set_b,outputs/01_dataset_audit/T01_dataset_inventory.csv,value of dataset_name where dataset_source=D3
+D3_records,461,461,outputs/01_dataset_audit/T01_dataset_inventory.csv,value of usable_files where dataset_source=D3
+D3_subjects,165,165,outputs/01_dataset_audit/T01_dataset_inventory.csv,value of n_subjects where dataset_source=D3
+D4_name,CirCor 2022,CirCor 2022,outputs/01_dataset_audit/T01_dataset_inventory.csv,value of dataset_name where dataset_source=D4
+D4_records,"3,163",3163,outputs/01_dataset_audit/T01_dataset_inventory.csv,value of usable_files where dataset_source=D4
+D4_subjects,942,942,outputs/01_dataset_audit/T01_dataset_inventory.csv,value of n_subjects where dataset_source=D4
+D1_abnormal_share,0.205,0.205247,outputs/01_dataset_audit/T02_class_distribution_and_imbalance_ratio.csv,"value of share where dataset_source=D1, task=binary, class=abnormal"
+n_features,138,138,outputs/03_features/T05_feature_inventory_and_counts.csv,sum of counted_features where all rows
+n_families,6,6,outputs/03_features/T05_feature_inventory_and_counts.csv,count of family where all rows
+final_n_folds,25,25,outputs/06_binary_results/T08_physionet_individual_model_comparison.csv,"value of n_folds where run=EXP-A2, model_id=M1"
+final_sensitivity_mean,0.865,0.8648233891627352,outputs/06_binary_results/T08_physionet_individual_model_comparison.csv,"value of sensitivity_mean where run=EXP-A2, model_id=M1"
+final_sensitivity_sd,0.045,0.0446049465330146,outputs/06_binary_results/T08_physionet_individual_model_comparison.csv,"value of sensitivity_sd where run=EXP-A2, model_id=M1"
+final_specificity_mean,0.829,0.8287854063424053,outputs/06_binary_results/T08_physionet_individual_model_comparison.csv,"value of specificity_mean where run=EXP-A2, model_id=M1"
+final_balanced_accuracy_mean,0.847,0.8468043977525701,outputs/06_binary_results/T08_physionet_individual_model_comparison.csv,"value of balanced_accuracy_mean where run=EXP-A2, model_id=M1"
+final_roc_auc_mean,0.921,0.9212095305753734,outputs/06_binary_results/T08_physionet_individual_model_comparison.csv,"value of roc_auc_mean where run=EXP-A2, model_id=M1"
+m6_n_folds,25,25,outputs/06_binary_results/T08_physionet_individual_model_comparison.csv,"value of n_folds where run=EXP-A2, model_id=M6"
+m6_sensitivity_mean,0.862,0.8615469513693752,outputs/06_binary_results/T08_physionet_individual_model_comparison.csv,"value of sensitivity_mean where run=EXP-A2, model_id=M6"
+m6_sensitivity_sd,0.067,0.0669761076003219,outputs/06_binary_results/T08_physionet_individual_model_comparison.csv,"value of sensitivity_sd where run=EXP-A2, model_id=M6"
+m6_specificity_mean,0.850,0.8501793885246874,outputs/06_binary_results/T08_physionet_individual_model_comparison.csv,"value of specificity_mean where run=EXP-A2, model_id=M6"
+m6_balanced_accuracy_mean,0.856,0.8558631699470313,outputs/06_binary_results/T08_physionet_individual_model_comparison.csv,"value of balanced_accuracy_mean where run=EXP-A2, model_id=M6"
+m6_roc_auc_mean,0.938,0.938400689122729,outputs/06_binary_results/T08_physionet_individual_model_comparison.csv,"value of roc_auc_mean where run=EXP-A2, model_id=M6"
+tie_test,paired t-test,paired t-test,outputs/12_statistics/T28_statistical_significance_comparison.csv,"value of chosen_test where run=EXP-A2, metric=sensitivity, model_a=M1, model_b=M6"
+tie_n,25,25,outputs/12_statistics/T28_statistical_significance_comparison.csv,"value of n where run=EXP-A2, metric=sensitivity, model_a=M1, model_b=M6"
+tie_p,0.725,0.7248493270838093,outputs/12_statistics/T28_statistical_significance_comparison.csv,"value of p_value where run=EXP-A2, metric=sensitivity, model_a=M1, model_b=M6"
+m7_delta,-0.0003,-0.0002751037642429,outputs/06_binary_results/T09_equal_weight_versus_optimized_ensemble.csv,value of delta_mean where metric=balanced_accuracy
+m7_identical,23,23,outputs/06_binary_results/T09_equal_weight_versus_optimized_ensemble.csv,value of n_folds_identical where metric=balanced_accuracy
+m7_folds,25,25,outputs/06_binary_results/T09_equal_weight_versus_optimized_ensemble.csv,value of n_folds where metric=balanced_accuracy
+subset_selected,20,20,outputs/09_ablation/T18_all_features_versus_selected_features.csv,value of n_features_selected where model_id=M1
+subset_all,138,138,outputs/09_ablation/T18_all_features_versus_selected_features.csv,value of n_features_all where model_id=M1
+subset_bal_selected,0.837,0.8374601072788559,outputs/09_ablation/T18_all_features_versus_selected_features.csv,value of balanced_accuracy_selected where model_id=M1
+subset_bal_all,0.843,0.8429231859881168,outputs/09_ablation/T18_all_features_versus_selected_features.csv,value of balanced_accuracy_all where model_id=M1
+stage_default_single_label,"Best individual model, default parameters","Best individual model, default parameters",outputs/09_ablation/T19_search_and_optimization_ablation.csv,value of comparison where stage=default_single
+stage_default_single_bal,0.843,0.8429231859881168,outputs/09_ablation/T19_search_and_optimization_ablation.csv,value of balanced_accuracy where stage=default_single
+stage_default_ensemble_label,"Equal-weight ensemble, default parameters","Equal-weight ensemble, default parameters",outputs/09_ablation/T19_search_and_optimization_ablation.csv,value of comparison where stage=default_ensemble
+stage_default_ensemble_bal,0.859,0.8587565599146746,outputs/09_ablation/T19_search_and_optimization_ablation.csv,value of balanced_accuracy where stage=default_ensemble
+stage_tuned_single_label,"Best individual model, tuned parameters","Best individual model, tuned parameters",outputs/09_ablation/T19_search_and_optimization_ablation.csv,value of comparison where stage=tuned_single
+stage_tuned_single_bal,0.847,0.8468043977525701,outputs/09_ablation/T19_search_and_optimization_ablation.csv,value of balanced_accuracy where stage=tuned_single
+stage_tuned_ensemble_equal_label,"Equal-weight ensemble, tuned members","Equal-weight ensemble, tuned members",outputs/09_ablation/T19_search_and_optimization_ablation.csv,value of comparison where stage=tuned_ensemble_equal
+stage_tuned_ensemble_equal_bal,0.856,0.8558631699470313,outputs/09_ablation/T19_search_and_optimization_ablation.csv,value of balanced_accuracy where stage=tuned_ensemble_equal
+stage_tuned_ensemble_optimized_label,"Optimized-weight ensemble, tuned members","Optimized-weight ensemble, tuned members",outputs/09_ablation/T19_search_and_optimization_ablation.csv,value of comparison where stage=tuned_ensemble_optimized
+stage_tuned_ensemble_optimized_bal,0.856,0.8555880661827883,outputs/09_ablation/T19_search_and_optimization_ablation.csv,value of balanced_accuracy where stage=tuned_ensemble_optimized
+pascal_a_model,M4,M4,outputs/07_multiclass_results/T11_pascal_a_multiclass_results.csv,first of model_id where all rows
+pascal_a_macro_f1,0.626,0.6263469691986043,outputs/07_multiclass_results/T11_pascal_a_multiclass_results.csv,first of macro_f1_mean where all rows
+pascal_a_ci,"[0.5529, 0.7026]","[0.5529, 0.7026]",outputs/07_multiclass_results/T11_pascal_a_multiclass_results.csv,first of macro_f1_record_ci where all rows
+pascal_b_model,M1,M1,outputs/07_multiclass_results/T12_pascal_b_multiclass_results.csv,first of model_id where all rows
+pascal_b_macro_f1,0.470,0.4704075427892693,outputs/07_multiclass_results/T12_pascal_b_multiclass_results.csv,first of macro_f1_mean where all rows
+pascal_b_ci,"[0.4239, 0.5155]","[0.4239, 0.5155]",outputs/07_multiclass_results/T12_pascal_b_multiclass_results.csv,first of macro_f1_record_ci where all rows
+d1_in_domain,0.847,0.8468043977525701,outputs/08_circor_external_validation/T16_cross_dataset_generalization.csv,"value of in_domain_mean where metric=balanced_accuracy, level=recording, rule=none"
+d1_external,0.526,0.525795528041393,outputs/08_circor_external_validation/T16_cross_dataset_generalization.csv,"value of external_value where metric=balanced_accuracy, level=recording, rule=none"
+f3_auc_pooled,0.922,0.9221754145146952,outputs/09_ablation/T-S5_leave_one_source_out_generalization.csv,value of roc_auc_pooled where model_id=M1
+f3_auc_holdout,0.533,0.5329753406964535,outputs/09_ablation/T-S5_leave_one_source_out_generalization.csv,value of roc_auc_holdout where model_id=M1
+f3_collections,6,6,outputs/09_ablation/T-S5_leave_one_source_out_generalization.csv,value of n_folds_holdout where model_id=M1
+final_mb,0.007,0.007153,outputs/11_complexity/T24_complexity_analysis.csv,value of model_mb where model_id=M1
+final_predict_s,0.0014,0.0014054666656496,outputs/11_complexity/T24_complexity_analysis.csv,value of single_predict_seconds where model_id=M1
+m6_mb,15.562,15.561636,outputs/11_complexity/T24_complexity_analysis.csv,value of model_mb where model_id=M6
+m6_predict_s,0.1829,0.1829141000004407,outputs/11_complexity/T24_complexity_analysis.csv,value of single_predict_seconds where model_id=M6
+noise_clean,0.886,0.8856496708990033,outputs/09_robustness_analysis/T20_noise_robustness.csv,"value of balanced_accuracy_mean where analysis=observational_pp08, run=EXP-A2, model_id=M1, group=clean"
+noise_noisy,0.600,0.5997674603997605,outputs/09_robustness_analysis/T20_noise_robustness.csv,"value of balanced_accuracy_mean where analysis=observational_pp08, run=EXP-A2, model_id=M1, group=noisy"
+duration_long,0.897,0.8970306652289404,outputs/09_robustness_analysis/T21_duration_robustness.csv,"value of balanced_accuracy_mean where analysis=observational_bands, run=EXP-A2, model_id=M1, group=long"
+duration_medium,0.759,0.7590246915031443,outputs/09_robustness_analysis/T21_duration_robustness.csv,"value of balanced_accuracy_mean where analysis=observational_bands, run=EXP-A2, model_id=M1, group=medium"

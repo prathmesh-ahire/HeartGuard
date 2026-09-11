@@ -1,0 +1,59 @@
+{
+  "figure_id": "G18",
+  "figure_number": 18,
+  "title": "Feature Importance Plot",
+  "caption": "Left: each feature family's share of the positive permutation importance, per model, averaged over the five folds of a complete partition of the corpus with SD whiskers. Families are in registry order, the same order the feature vector uses. The family total is the stable quantity: individual importances of correlated features -- 39 MFCC columns, 24 wavelet columns -- are close to arbitrary between members. Right: every feature's impurity rank against its permutation rank. Points off the diagonal are features the training rows and the held-out rows disagree about, which is exactly what impurity importance is reported here to expose.",
+  "exp_id": "n/a (fitted for this analysis, config defaults)",
+  "objective": "O2 (feature contribution)",
+  "dataset": "D1 PhysioNet 2016",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-09-10T14:51:27.305722+00:00",
+  "command": "python scripts/33_explainability.py",
+  "plotted_rows": 48,
+  "plotted_csv": "G18_feature_importance_plot.csv",
+  "plotted_csv_sha256": "da95e026aeeba4a674b481b45d02d7ec6ebb921c9c5e003773d89807810c0834",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "outputs/04_models/explainability/importance_per_fold.csv",
+      "exists": true,
+      "bytes": 648266,
+      "sha256": "fa7ed6939cb01848a8548d4ea8ebbee23203a74bd04a147988c525cd1a7bd91d",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T14:49:02.675530+00:00"
+    },
+    {
+      "path": "outputs/04_models/explainability/importance_summary.csv",
+      "exists": true,
+      "bytes": 176808,
+      "sha256": "347faa100df1a55b58c32c82aa73451594d70f5535cfa7467f5f2fd17b279d3b",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T14:49:03.315406+00:00"
+    },
+    {
+      "path": "outputs/04_models/explainability/feature_family_importance.csv",
+      "exists": true,
+      "bytes": 5841,
+      "sha256": "da95e026aeeba4a674b481b45d02d7ec6ebb921c9c5e003773d89807810c0834",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T14:49:03.327501+00:00"
+    },
+    {
+      "path": "outputs/04_models/explainability/shap_importance.csv",
+      "exists": true,
+      "bytes": 35773,
+      "sha256": "ea323755bbef114e186b6c38a312c97c9e86a458376ddb11a2c6c6ed12924446",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T14:51:09.812647+00:00"
+    }
+  ],
+  "written": {
+    "csv": "outputs/13_figures_diagrams/G18_feature_importance_plot.csv",
+    "png": "outputs/13_figures_diagrams/G18_feature_importance_plot.png",
+    "svg": "outputs/13_figures_diagrams/G18_feature_importance_plot.svg"
+  },
+  "notes": []
+}

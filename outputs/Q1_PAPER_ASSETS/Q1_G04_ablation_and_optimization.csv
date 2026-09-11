@@ -1,0 +1,14 @@
+panel,label,n_features,value,sd,model_id,source_file
+Feature-family ablation (EXP-F1),A1,24.0,0.8106249558641881,0.0293320306533292,M1,outputs/09_ablation/T17_feature_family_ablation.csv
+Feature-family ablation (EXP-F1),A2,22.0,0.8159212090076972,0.0313576363420543,M1,outputs/09_ablation/T17_feature_family_ablation.csv
+Feature-family ablation (EXP-F1),A3,39.0,0.8067470266173972,0.0289217774127399,M1,outputs/09_ablation/T17_feature_family_ablation.csv
+Feature-family ablation (EXP-F1),A4,24.0,0.8142512398540123,0.0305265080286176,M1,outputs/09_ablation/T17_feature_family_ablation.csv
+Feature-family ablation (EXP-F1),A5,46.0,0.8358554842923996,0.0310493461356142,M1,outputs/09_ablation/T17_feature_family_ablation.csv
+Feature-family ablation (EXP-F1),A6,63.0,0.8303285220027833,0.0251801997853658,M1,outputs/09_ablation/T17_feature_family_ablation.csv
+Feature-family ablation (EXP-F1),A7,138.0,0.8429231859881168,0.0262694823331333,M1,outputs/09_ablation/T17_feature_family_ablation.csv
+Feature-family ablation (EXP-F1),A8,20.0,0.8374601072788559,0.0289715383534014,M1,outputs/09_ablation/T17_feature_family_ablation.csv
+Optimization stages (EXP-F2),default_single,,0.8429231859881168,0.0262694823331333,M1,outputs/13_figures_diagrams/G24_baseline_versus_optimized.csv
+Optimization stages (EXP-F2),default_ensemble,,0.8587565599146746,0.0254585449429106,M6,outputs/13_figures_diagrams/G24_baseline_versus_optimized.csv
+Optimization stages (EXP-F2),tuned_single,,0.8468043977525701,0.0260884893092399,M1,outputs/13_figures_diagrams/G24_baseline_versus_optimized.csv
+Optimization stages (EXP-F2),tuned_ensemble_equal,,0.8558631699470313,0.0251013763457511,M6,outputs/13_figures_diagrams/G24_baseline_versus_optimized.csv
+Optimization stages (EXP-F2),tuned_ensemble_optimized,,0.8555880661827883,0.0253210492991001,M7,outputs/13_figures_diagrams/G24_baseline_versus_optimized.csv

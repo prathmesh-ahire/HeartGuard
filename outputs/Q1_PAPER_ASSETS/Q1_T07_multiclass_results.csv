@@ -1,0 +1,13 @@
+dataset,model_id,model_name,n_folds,macro_f1_mean,macro_f1_sd,macro_f1_record_ci,balanced_accuracy_mean,n_classes_predicted,degenerate,source_file
+PASCAL A (EXP-B1),M4,Random Forest,10,0.6263469691986043,0.0300223030261936,"[0.5529, 0.7026]",0.6639440359477125,4,False,outputs/07_multiclass_results/T11_pascal_a_multiclass_results.csv
+PASCAL A (EXP-B1),M1,Logistic Regression,10,0.6194446081250057,0.037526512799328,"[0.5387, 0.6960]",0.6282720588235294,4,False,outputs/07_multiclass_results/T11_pascal_a_multiclass_results.csv
+PASCAL A (EXP-B1),M5,Gradient Boosting,10,0.6158550205758606,0.0553675255734177,"[0.5364, 0.6934]",0.6259926470588235,4,False,outputs/07_multiclass_results/T11_pascal_a_multiclass_results.csv
+PASCAL A (EXP-B1),M7,Soft Voting (optimized weights),10,0.6017954879917007,0.0432986952669864,"[0.5294, 0.6834]",0.6197426470588236,4,False,outputs/07_multiclass_results/T11_pascal_a_multiclass_results.csv
+PASCAL A (EXP-B1),M6,Soft Voting (equal weights),10,0.5887179028047618,0.0328689490943371,"[0.5234, 0.6808]",0.6116891339869281,4,False,outputs/07_multiclass_results/T11_pascal_a_multiclass_results.csv
+PASCAL A (EXP-B1),M3,SVM (RBF kernel),10,0.5586488141800161,0.0458649409031252,"[0.5030, 0.6628]",0.5973386437908496,4,False,outputs/07_multiclass_results/T11_pascal_a_multiclass_results.csv
+PASCAL B (EXP-B2),M1,Logistic Regression,5,0.4704075427892693,0.0295306033442093,"[0.4239, 0.5155]",0.4887889863547757,3,False,outputs/07_multiclass_results/T12_pascal_b_multiclass_results.csv
+PASCAL B (EXP-B2),M5,Gradient Boosting,5,0.4328309700984857,0.0810305843060761,"[0.3887, 0.4715]",0.4283503898635477,3,False,outputs/07_multiclass_results/T12_pascal_b_multiclass_results.csv
+PASCAL B (EXP-B2),M4,Random Forest,5,0.4204742448052114,0.048911301868404,"[0.3821, 0.4737]",0.4291910331384015,3,False,outputs/07_multiclass_results/T12_pascal_b_multiclass_results.csv
+PASCAL B (EXP-B2),M6,Soft Voting (equal weights),5,0.4199312329924757,0.0382249209578916,"[0.3811, 0.4617]",0.4224780701754386,2,False,outputs/07_multiclass_results/T12_pascal_b_multiclass_results.csv
+PASCAL B (EXP-B2),M7,Soft Voting (optimized weights),5,0.4187190323855204,0.0422422764996963,"[0.3834, 0.4614]",0.4202302631578947,3,False,outputs/07_multiclass_results/T12_pascal_b_multiclass_results.csv
+PASCAL B (EXP-B2),M3,SVM (RBF kernel),5,0.3896085375923142,0.0454133060294959,"[0.3513, 0.4312]",0.4007675438596491,2,False,outputs/07_multiclass_results/T12_pascal_b_multiclass_results.csv

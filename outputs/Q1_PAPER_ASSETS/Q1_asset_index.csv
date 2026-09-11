@@ -1,0 +1,21 @@
+asset_id,kind,derived_from,how
+Q1_T01,table,outputs/01_dataset_audit/T01_dataset_inventory.csv,row filter and column selection
+Q1_T02,table,outputs/03_features/T05_feature_inventory_and_counts.csv,row filter and column selection
+Q1_T03,table,outputs/05_search_optimization/T07_search_space_and_best_parameters.csv,row filter and column selection
+Q1_T04,table,outputs/06_binary_results/T08_physionet_individual_model_comparison.csv,row filter and column selection
+Q1_T05,table,outputs/09_ablation/T17_feature_family_ablation.csv,row filter and column selection
+Q1_T06,table,outputs/09_ablation/T19_search_and_optimization_ablation.csv,row filter and column selection
+Q1_T07,table,outputs/07_multiclass_results/T11_pascal_a_multiclass_results.csv; outputs/07_multiclass_results/T12_pascal_b_multiclass_results.csv,row filter and column selection
+Q1_T08,table,outputs/08_circor_external_validation/T13_circor_murmur_classification_results.csv; outputs/08_circor_external_validation/T14_circor_clinical_outcome_results.csv; outputs/08_circor_external_validation/T16_cross_dataset_generalization.csv; outputs/09_ablation/T-S5_leave_one_source_out_generalization.csv,row filter and column selection
+Q1_T09,table,outputs/11_complexity/T24_complexity_analysis.csv; outputs/09_robustness_analysis/T20_noise_robustness.csv; outputs/09_robustness_analysis/T21_duration_robustness.csv,row filter and column selection
+Q1_G01,graph,outputs/13_figures_diagrams/G12_binary_roc_curve.csv; outputs/13_figures_diagrams/G13_binary_precision_recall_curve.csv,re-plotted from the selected rows
+Q1_G02,graph,outputs/13_figures_diagrams/G14_binary_confusion_matrix.csv,re-plotted from the selected rows
+Q1_G03,graph,outputs/13_figures_diagrams/G15_pascal_a_confusion_matrix.csv; outputs/13_figures_diagrams/G16_pascal_b_confusion_matrix.csv,re-plotted from the selected rows
+Q1_G04,graph,outputs/09_ablation/T17_feature_family_ablation.csv; outputs/13_figures_diagrams/G24_baseline_versus_optimized.csv,re-plotted from the selected rows
+Q1_G05,graph,outputs/13_figures_diagrams/G29_cross_dataset_performance_drop.csv; outputs/13_figures_diagrams/G25_inference_time_versus_performance.csv,re-plotted from the selected rows
+Q1_F01,figure,outputs/13_figures_diagrams/F01_overall_pv_mepcg_proposed_architecture.svg,copied
+Q1_F02,figure,outputs/13_figures_diagrams/F08_feature_family_fusion.svg; outputs/13_figures_diagrams/F10_svm_rf_gb_optimized_soft_voting_architecture.svg,"stacked, vector preserved"
+Q1_ALG01,algorithm,outputs/14_algorithms/ALG-04_multi_domain_138_feature_extraction.docx,copied
+Q1_ALG02,algorithm,outputs/14_algorithms/ALG-07_hyperparameter_optimization.docx,copied
+Q1_ALG03,algorithm,outputs/14_algorithms/ALG-12_optimized_weight_soft_voting.docx,copied
+Q1_NARRATIVE,narrative,Q1_results_narrative_sources.csv,sentences around facts read from result files

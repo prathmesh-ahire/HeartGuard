@@ -192,3 +192,95 @@ ENTRIES (newest last)
     the project's own rule requires every blocked task to have a matching entry
     here, and `test_extra_declared_gaps_match_the_blocked_tasks` enforces it, but
     that test is `needs_data` and had not been run since T97.7 was marked `[!]`.
+
+=== BEGIN GENERATED COMPLETENESS AUDIT (Phase 102; rewritten by python scripts/42_evidence_index.py -- do not edit inside this block) ===
+Generated 2026-09-11T14:24:14.280890+00:00. Every mandatory item of the
+extraction spec and the developer blueprint that is not present on disk, with its
+technical reason. 340 items checked; 319 present; 21 listed below. The full table is the 'mandatory_items' sheet
+of outputs/00_evidence_index/evidence_index.xlsx.
+
+[2026-09-11] SPEC-M9 -- 1D-CNN (optional) (extraction spec (KP_KHARAT_22366.docx), section 6 models)
+  Status: not produced
+  Reason: M9 (1D-CNN) is out of scope, decided 2026-08-27 by the user: this machine has no GPU and the same 25-fold map is required for comparability (T52.4). See the M9 entry above in this file.
+
+[2026-09-11] SPEC-SS01 -- Home and project overview (extraction spec (KP_KHARAT_22366.docx), section 14 dashboard screenshots)
+  Status: not produced
+  Reason: Dashboard screenshots are Phase 120 (Part X). T119.4 makes the displayed-value audit a hard gate before any screenshot is taken, and that audit (Phase 119) has not run, so no screenshot may exist yet.
+
+[2026-09-11] SPEC-SS02 -- Dataset inventory and class distribution (extraction spec (KP_KHARAT_22366.docx), section 14 dashboard screenshots)
+  Status: not produced
+  Reason: Dashboard screenshots are Phase 120 (Part X). T119.4 makes the displayed-value audit a hard gate before any screenshot is taken, and that audit (Phase 119) has not run, so no screenshot may exist yet.
+
+[2026-09-11] SPEC-SS03 -- Signal upload and waveform (extraction spec (KP_KHARAT_22366.docx), section 14 dashboard screenshots)
+  Status: not produced
+  Reason: Dashboard screenshots are Phase 120 (Part X). T119.4 makes the displayed-value audit a hard gate before any screenshot is taken, and that audit (Phase 119) has not run, so no screenshot may exist yet.
+
+[2026-09-11] SPEC-SS04 -- Preprocessing before/after (extraction spec (KP_KHARAT_22366.docx), section 14 dashboard screenshots)
+  Status: not produced
+  Reason: Dashboard screenshots are Phase 120 (Part X). T119.4 makes the displayed-value audit a hard gate before any screenshot is taken, and that audit (Phase 119) has not run, so no screenshot may exist yet.
+
+[2026-09-11] SPEC-SS05 -- Feature extraction summary (extraction spec (KP_KHARAT_22366.docx), section 14 dashboard screenshots)
+  Status: not produced
+  Reason: Dashboard screenshots are Phase 120 (Part X). T119.4 makes the displayed-value audit a hard gate before any screenshot is taken, and that audit (Phase 119) has not run, so no screenshot may exist yet.
+
+[2026-09-11] SPEC-SS06 -- Model comparison dashboard (extraction spec (KP_KHARAT_22366.docx), section 14 dashboard screenshots)
+  Status: not produced
+  Reason: Dashboard screenshots are Phase 120 (Part X). T119.4 makes the displayed-value audit a hard gate before any screenshot is taken, and that audit (Phase 119) has not run, so no screenshot may exist yet.
+
+[2026-09-11] SPEC-SS07 -- Search optimization dashboard (extraction spec (KP_KHARAT_22366.docx), section 14 dashboard screenshots)
+  Status: not produced
+  Reason: Dashboard screenshots are Phase 120 (Part X). T119.4 makes the displayed-value audit a hard gate before any screenshot is taken, and that audit (Phase 119) has not run, so no screenshot may exist yet.
+
+[2026-09-11] SPEC-SS08 -- Binary prediction output (extraction spec (KP_KHARAT_22366.docx), section 14 dashboard screenshots)
+  Status: not produced
+  Reason: Dashboard screenshots are Phase 120 (Part X). T119.4 makes the displayed-value audit a hard gate before any screenshot is taken, and that audit (Phase 119) has not run, so no screenshot may exist yet.
+
+[2026-09-11] SPEC-SS09 -- Multiclass prediction output (extraction spec (KP_KHARAT_22366.docx), section 14 dashboard screenshots)
+  Status: not produced
+  Reason: Dashboard screenshots are Phase 120 (Part X). T119.4 makes the displayed-value audit a hard gate before any screenshot is taken, and that audit (Phase 119) has not run, so no screenshot may exist yet.
+
+[2026-09-11] SPEC-SS10 -- CirCor murmur/outcome output (extraction spec (KP_KHARAT_22366.docx), section 14 dashboard screenshots)
+  Status: not produced
+  Reason: Dashboard screenshots are Phase 120 (Part X). T119.4 makes the displayed-value audit a hard gate before any screenshot is taken, and that audit (Phase 119) has not run, so no screenshot may exist yet.
+
+[2026-09-11] SPEC-SS11 -- Robustness analytics (extraction spec (KP_KHARAT_22366.docx), section 14 dashboard screenshots)
+  Status: not produced
+  Reason: Dashboard screenshots are Phase 120 (Part X). T119.4 makes the displayed-value audit a hard gate before any screenshot is taken, and that audit (Phase 119) has not run, so no screenshot may exist yet.
+
+[2026-09-11] SPEC-SS12 -- Feature importance/explainability (extraction spec (KP_KHARAT_22366.docx), section 14 dashboard screenshots)
+  Status: not produced
+  Reason: Dashboard screenshots are Phase 120 (Part X). T119.4 makes the displayed-value audit a hard gate before any screenshot is taken, and that audit (Phase 119) has not run, so no screenshot may exist yet.
+
+[2026-09-11] SPEC-SS13 -- Exported report preview (extraction spec (KP_KHARAT_22366.docx), section 14 dashboard screenshots)
+  Status: not produced
+  Reason: Dashboard screenshots are Phase 120 (Part X). T119.4 makes the displayed-value audit a hard gate before any screenshot is taken, and that audit (Phase 119) has not run, so no screenshot may exist yet.
+
+[2026-09-11] SPEC-THESIS-SCREENSHOTS -- dashboard screenshots with captions (extraction spec (KP_KHARAT_22366.docx), section 16 thesis assets)
+  Status: not produced
+  Reason: Dashboard screenshots are Phase 120 (Part X). T119.4 makes the displayed-value audit a hard gate before any screenshot is taken, and that audit (Phase 119) has not run, so no screenshot may exist yet.
+
+[2026-09-11] SPEC-ONE-COMMAND -- one-command reproduction instructions (extraction spec (KP_KHARAT_22366.docx), section 19 checklist)
+  Status: not produced
+  Reason: The single command reproducing the pipeline end to end is T122.1 (scripts/00_run_everything.py, Phase 122). Every artifact already carries its own reproduction command in this index; the one-command wrapper does not exist yet.
+
+[2026-09-11] SPEC-ZIP -- final delivery ZIP (extraction spec (KP_KHARAT_22366.docx), section 20 final delivery)
+  Status: not produced
+  Reason: The delivery ZIP is packaged in Phase 126 (T126.3), after every other deliverable.
+
+[2026-09-11] BP-MODEL-M9 -- 1D-CNN (optional) (developer blueprint (PDF), section 7 algorithm plan)
+  Status: not produced
+  Reason: M9 (1D-CNN) is out of scope, decided 2026-08-27 by the user: this machine has no GPU and the same 25-fold map is required for comparability (T52.4). See the M9 entry above in this file.
+
+[2026-09-11] BP-TABLE20 -- Table 20 Final System Outputs (developer blueprint (PDF), section 9 tables)
+  Status: not produced
+  Reason: No committed artifact holds per-recording system outputs. src/reporting/sample_report.py (Phase 107) generates a per-recording report on demand from an uploaded WAV, and its batch CSV/JSON export runs through the dashboard (Part X). A table of sample outputs would be generated through that path, not typed; the exported-report preview is dashboard screenshot 13 (Phase 120).
+
+[2026-09-11] BP-DASHBOARD -- dashboard pages, evidenced by the section 14 screenshots (developer blueprint (PDF), section 15 dashboard)
+  Status: not produced
+  Reason: Dashboard screenshots are Phase 120 (Part X). T119.4 makes the displayed-value audit a hard gate before any screenshot is taken, and that audit (Phase 119) has not run, so no screenshot may exist yet.
+
+[2026-09-11] BP-SAMPLE-REPORTS -- sample-level exportable reports (developer blueprint (PDF), section 19 final deliverables)
+  Status: not produced
+  Reason: No committed artifact holds per-recording system outputs. src/reporting/sample_report.py (Phase 107) generates a per-recording report on demand from an uploaded WAV, and its batch CSV/JSON export runs through the dashboard (Part X). A table of sample outputs would be generated through that path, not typed; the exported-report preview is dashboard screenshot 13 (Phase 120).
+
+=== END GENERATED COMPLETENESS AUDIT ===

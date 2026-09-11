@@ -1,0 +1,45 @@
+{
+  "figure_id": "Q1_G04",
+  "figure_number": 4,
+  "title": "Ablation and Optimization",
+  "caption": "Left: feature-family ablation for M1. Right: the optimization stages in pipeline order. Error bars are fold SDs and overlap throughout; neither panel is a ranking.",
+  "exp_id": "EXP-F1, EXP-F2",
+  "objective": "O3, O5",
+  "dataset": "D1 PhysioNet 2016",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-09-11T14:19:07.896138+00:00",
+  "command": "python scripts/43_q1_assets.py",
+  "plotted_rows": 13,
+  "plotted_csv": "Q1_G04_ablation_and_optimization.csv",
+  "plotted_csv_sha256": "ec67b6ec9ee8227d8766b37b9369214b3909a0af0d71d768e186f71d236866ba",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "outputs/09_ablation/T17_feature_family_ablation.csv",
+      "exists": true,
+      "bytes": 15546,
+      "sha256": "b90607bc6bc89c6630364dfc5a660b0f9d618662412345bb3f268d8f07209784",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T07:31:24.762025+00:00"
+    },
+    {
+      "path": "outputs/13_figures_diagrams/G24_baseline_versus_optimized.csv",
+      "exists": true,
+      "bytes": 3089,
+      "sha256": "f3d5ae21b1ded919fba836b14bdce28fbdc31c46686a38dc777614f5d25ea267",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-11T05:48:23.886183+00:00"
+    }
+  ],
+  "written": {
+    "csv": "outputs/Q1_PAPER_ASSETS/Q1_G04_ablation_and_optimization.csv",
+    "png": "outputs/Q1_PAPER_ASSETS/Q1_G04_ablation_and_optimization.png",
+    "svg": "outputs/Q1_PAPER_ASSETS/Q1_G04_ablation_and_optimization.svg"
+  },
+  "notes": [
+    "PV-MEPCG / PulseVision is an academic screening and decision-support prototype. It does not diagnose, and nothing here is a diagnosis, a treatment recommendation or a substitute for clinical judgement."
+  ]
+}

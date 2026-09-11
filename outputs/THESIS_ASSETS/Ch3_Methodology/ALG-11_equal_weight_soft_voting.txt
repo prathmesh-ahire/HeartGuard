@@ -1,0 +1,54 @@
+Algorithm ALG-11: Equal-weight soft voting
+PV-MEPCG / PulseVision  |  T99.1  |  objective O3
+
+Purpose: M6, the mandatory baseline ensemble: the members' calibrated probabilities are averaged with equal weights, and the binary decision threshold is chosen inside the training fold rather than fixed.
+Input:   training rows X, y and the training fold's own subject groups
+Output:  fused class probabilities, and for binary tasks the in-fold threshold t*
+
+Parameters (read from the repository when this file was generated)
+  members            M3, M4, M5                                        configs/models.yaml models.M6.members
+  calibrate_members  M5                                                configs/models.yaml models.M6.calibrate_members
+  weights            equal                                             configs/models.yaml models.M6.defaults.weights
+  inner_cv           3                                                 configs/models.yaml models.M6.defaults.inner_cv
+  tune_threshold     true                                              configs/models.yaml models.M6.defaults.tune_threshold
+  objective          balanced_accuracy                                 configs/models.yaml models.M6.defaults.objective
+  objective_form     0.5 x sensitivity + 0.5 x specificity             soft_voting.OBJECTIVE_COEFFICIENTS
+  seed               42                                                configs/experiments.yaml defaults.seed
+  fuse_rule          np.tensordot(vector / total, stack, axes=(0, 0))  src/ensemble/soft_voting.py fuse_probabilities
+  candidate_rule     (unique[:-1] + unique[1:]) / 2.0                  src/ensemble/soft_voting.py select_threshold
+  max_candidates     200                                               soft_voting.select_threshold(max_candidates=...) default
+  reference_rule     np.unique(np.concatenate([candidates, [0.5]]))    src/ensemble/soft_voting.py select_threshold
+  tie_rule           -abs(float(threshold) - 0.5)                      src/ensemble/soft_voting.py select_threshold
+
+Algorithm
+   1  members <- M3, M4, M5, built from config; members in M5 are wrapped in the explicit sigmoid calibration of ALG-08
+   2  M6 <- SoftVotingEnsemble(members, weights equal, inner_cv 3, objective balanced_accuracy, tune_threshold true, seed 42); groups are the training fold's, never the full matrix's
+   3  fit(X, y): refuse anything but soft voting
+   4      w <- (1/m, ..., 1/m) over the m members
+   5      if the task is binary and tune_threshold:
+   6          inner <- 3 stratified splits of the training rows, subject-grouped when groups are supplied
+   7          for each member and each inner split (T, V): fit a fresh clone on T; oof[member, V] <- its predict_proba on V
+   8          reorder every member's columns to the ensemble's class order; refuse a member that never saw a class; assert every training row got a probability
+   9          p_oof <- fuse(oof, w) = np.tensordot(vector / total, stack, axes=(0, 0))
+  10          candidates <- midpoints between adjacent distinct scores, (unique[:-1] + unique[1:]) / 2.0 (quantiles when more than 200), plus the fixed reference: np.unique(np.concatenate([candidates, [0.5]]))
+  11          t* <- the candidate maximising balanced_accuracy = 0.5 x sensitivity + 0.5 x specificity; ties to the cut-off nearest the fixed reference, key -abs(float(threshold) - 0.5); the fixed-reference metrics are recorded beside it
+  12  refit every member on the whole training fold
+  13  predict_proba(X) <- fuse(member probabilities on X, w)
+  14  predict(X) <- positive class where p(positive) >= t* for binary tasks; argmax of the fused vector otherwise
+
+Notes
+  The outer test fold is never scored while w or t* is chosen: both come from out-of-fold probabilities over inner splits of the training rows.
+
+Implemented by
+  src/ensemble/soft_voting.py:911  src.ensemble.soft_voting:ensemble_members
+  src/models/estimators.py:540  src.models.estimators:make_ensemble
+  src/ensemble/soft_voting.py:537  src.ensemble.soft_voting:SoftVotingEnsemble.fit
+  src/ensemble/soft_voting.py:661  src.ensemble.soft_voting:SoftVotingEnsemble._inner_splits
+  src/ensemble/soft_voting.py:689  src.ensemble.soft_voting:SoftVotingEnsemble._out_of_fold_probabilities
+  src/ensemble/soft_voting.py:883  src.ensemble.soft_voting:_align_columns
+  src/ensemble/soft_voting.py:84  src.ensemble.soft_voting:fuse_probabilities
+  src/ensemble/soft_voting.py:308  src.ensemble.soft_voting:select_threshold
+  src/ensemble/soft_voting.py:841  src.ensemble.soft_voting:SoftVotingEnsemble.predict_proba
+  src/ensemble/soft_voting.py:844  src.ensemble.soft_voting:SoftVotingEnsemble.predict
+
+Regenerate: python scripts/39_export_algorithms.py --ids ALG-11

@@ -157,6 +157,7 @@ module = [
     "threadpoolctl.*",
     "tqdm.*",
     "docx.*",
+    "openpyxl.*",
     "kaleido.*",
     # pypdf is deliberately NOT a project dependency. It is installed to extract
     # the blueprint's equations (Phase 113) and locked objectives (Phase 114),

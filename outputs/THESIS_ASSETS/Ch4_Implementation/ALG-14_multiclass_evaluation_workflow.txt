@@ -1,0 +1,48 @@
+Algorithm ALG-14: Multiclass evaluation workflow
+PV-MEPCG / PulseVision  |  T99.2  |  objective O6
+
+Purpose: Each multiclass task keeps its own label space and is scored with macro-F1 and per-class recall, with a check that the model actually emits every class.
+Input:   one task's feature matrix and stored fold map; its declared labels
+Output:  per-fold and aggregate multiclass metrics, per-class recall, coverage flags
+
+Parameters (read from the repository when this file was generated)
+  tasks             pascal_a (EXP-B1), pascal_b (EXP-B2), circor_murmur (EXP-C1)                                             configs/experiments.yaml experiments, task per run
+  pascal_a_scheme   repeated_5x2_stratified                                                                                  configs/experiments.yaml experiments.EXP-B1.cv
+  pascal_b_scheme   grouped_5fold                                                                                            configs/experiments.yaml experiments.EXP-B2.cv
+  pascal_a_repeats  5                                                                                                        configs/experiments.yaml cv_schemes.repeated_5x2_stratified.n_repeats
+  pascal_a_splits   2                                                                                                        configs/experiments.yaml cv_schemes.repeated_5x2_stratified.n_splits
+  scoring           macro_f1                                                                                                 configs/experiments.yaml defaults.scoring.multiclass
+  report_metrics    accuracy, macro_f1, weighted_f1, balanced_accuracy, per_class_precision, per_class_recall, ovr_auc, mcc  configs/experiments.yaml defaults.report_metrics_multiclass
+  macro_rule        f1_score(true, pred, labels=ordering, average="macro", zero_division=0)                                  src/evaluation/metrics.py multiclass_metrics
+  auc_rule          roc_auc_score(true, proba, multi_class="ovr", average="macro", labels=ordering)                          src/evaluation/metrics.py multiclass_metrics
+  degenerate_rule   len(emitted) <= 1                                                                                        src/reporting/multiclass_report.py coverage
+  n_resamples       2000                                                                                                     multiclass_report.record_interval(n_resamples=...) default
+  seed_rule         int(seed) + int(repeat)                                                                                  src/reporting/multiclass_report.py record_interval
+
+Algorithm
+   1  for each task in pascal_a (EXP-B1), pascal_b (EXP-B2), circor_murmur (EXP-C1): labels <- that task's own label space, never merged with another's
+   2  drop only rows whose label the variant does not declare; refuse any other shrinkage
+   3  folds <- the task's stored map (PASCAL A repeated_5x2_stratified: 5 x 2; PASCAL B grouped_5fold)
+   4  for each model and fold: leakage checks, fit and predict exactly as in ALG-13
+   5      per class c: precision, recall, F1 and support; accuracy, balanced accuracy, weighted F1
+   6      macro-F1 <- f1_score(true, pred, labels=ordering, average="macro", zero_division=0)
+   7      one-vs-rest AUC <- roc_auc_score(true, proba, multi_class="ovr", average="macro", labels=ordering) when every class is present in the fold; NaN otherwise
+   8  aggregate mean and sample SD over folds, as in ALG-13
+   9  coverage <- classes the model ever emitted; missing classes named; degenerate if len(emitted) <= 1
+  10  record-level intervals: bootstrap within each repeat (2000 draws, seed int(seed) + int(repeat)), averaged over repeats
+
+Notes
+  Reported for every multiclass run: accuracy, macro_f1, weighted_f1, balanced_accuracy, per_class_precision, per_class_recall, ovr_auc, mcc. Search objective: macro_f1.
+  PASCAL's artifact class is a recording-quality label, so a four-class PASCAL A result is never described as a four-class cardiac classifier.
+
+Implemented by
+  src/evaluation/experiment.py:183  src.evaluation.experiment:Experiment.load
+  src/evaluation/experiment.py:909  src.evaluation.experiment:restrict_to_label_space
+  src/evaluation/cv.py:249  src.evaluation.cv:load_folds
+  src/evaluation/experiment.py:684  src.evaluation.experiment:_run_unit
+  src/evaluation/metrics.py:255  src.evaluation.metrics:multiclass_metrics
+  src/evaluation/experiment.py:827  src.evaluation.experiment:ExperimentResult.aggregate_frame
+  src/reporting/multiclass_report.py:148  src.reporting.multiclass_report:coverage
+  src/reporting/multiclass_report.py:180  src.reporting.multiclass_report:record_interval
+
+Regenerate: python scripts/39_export_algorithms.py --ids ALG-14

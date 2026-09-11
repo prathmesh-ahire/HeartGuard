@@ -1,0 +1,42 @@
+Algorithm ALG-01: Dataset loading and master metadata construction
+PV-MEPCG / PulseVision  |  T98.1  |  objective O1, O6
+
+Purpose: Four public corpora become one table with one row per recording, each label written only into the task its corpus owns.
+Input:   the four corpus folders named in configs/paths.yaml
+Output:  metadata_master.csv and .parquet (DA-08), one row per recording
+
+Parameters (read from the repository when this file was generated)
+  datasets  PhysioNet 2016, PASCAL set_a, PASCAL set_b, CirCor 2022    src/data_loader/catalog.py
+  tasks     binary, pascal_a, pascal_b, circor_murmur, circor_outcome  src/data_loader/catalog.py DATASET_TASKS
+  uid_rule  {dataset}_{subset}_{record_id}                             src/data_loader/master.py
+
+Algorithm
+   1  D1 <- read every PhysioNet header and REFERENCE label; map each validation copy to its training twin
+   2  D2, D3 <- read PASCAL set_a and set_b; take labels from the Heartbeat_Sound folder structure, derive subject ids from filenames or set subject_derived <- false
+   3  D4 <- read CirCor; parse #Outcome from each patient .txt file; patient_id is native
+   4  catalog <- concatenate D1..D4 (PhysioNet 2016, PASCAL set_a, PASCAL set_b, CirCor 2022); each corpus writes only the class columns of the tasks it owns (binary, pascal_a, pascal_b, circor_murmur, circor_outcome)
+   5      assert no record carries a label of a task its corpus does not own
+   6  scan <- decode every file; record silence, clipping and a content hash
+   7  for each group of exact, content or near duplicates:
+   8      keep one member: never a Heartbeat_Sound entry, never a validation copy over its training twin, otherwise the smallest record_uid; mark the rest is_duplicate
+   9  master <- catalog + task labels + quality flags + duplicate decision
+  10      split_group <- subject_id if use_in_supervised else blank
+  11  validate: schema order and dtypes, record_uid = {dataset}_{subset}_{record_id} and unique, duration > 0, split_group present exactly for supervised rows, no cross-task label
+  12  write master as CSV and Parquet
+
+Notes
+  Heartbeat_Sound is a byte-identical copy of set_a and set_b and is used only as the label source; including it as data would double those corpora.
+
+Implemented by
+  src/data_loader/physionet.py:1293  src.data_loader.physionet:load_physionet
+  src/data_loader/pascal.py:843  src.data_loader.pascal:load_pascal
+  src/data_loader/circor.py:1235  src.data_loader.circor:load_circor
+  src/data_loader/catalog.py:121  src.data_loader.catalog:build_catalog
+  src/data_loader/integrity.py:372  src.data_loader.integrity:scan_corpus
+  src/data_loader/duplicates.py:247  src.data_loader.duplicates:build_duplicate_report
+  src/data_loader/duplicates.py:101  src.data_loader.duplicates:keep_priority
+  src/data_loader/master.py:271  src.data_loader.master:build_master
+  src/data_loader/master.py:494  src.data_loader.master:validate_master
+  src/data_loader/master.py:605  src.data_loader.master:write_master
+
+Regenerate: python scripts/39_export_algorithms.py --ids ALG-01

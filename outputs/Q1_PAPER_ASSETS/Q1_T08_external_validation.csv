@@ -1,0 +1,39 @@
+evaluation,model_id,level,rule,metric,value,source_file
+"CirCor murmur, three-class (EXP-C1)",M3,recording,none,balanced_accuracy,0.4165377939720351,outputs/08_circor_external_validation/T13_circor_murmur_classification_results.csv
+"CirCor murmur, three-class (EXP-C1)",M4,recording,none,balanced_accuracy,0.5471122132238819,outputs/08_circor_external_validation/T13_circor_murmur_classification_results.csv
+"CirCor murmur, three-class (EXP-C1)",M5,recording,none,balanced_accuracy,0.5454591693542291,outputs/08_circor_external_validation/T13_circor_murmur_classification_results.csv
+"CirCor murmur, three-class (EXP-C1)",M6,recording,none,balanced_accuracy,0.4182155139817198,outputs/08_circor_external_validation/T13_circor_murmur_classification_results.csv
+"CirCor murmur, three-class (EXP-C1)",M7,recording,none,balanced_accuracy,0.4615926756793295,outputs/08_circor_external_validation/T13_circor_murmur_classification_results.csv
+"CirCor murmur, three-class (EXP-C1)",M3,recording,none,macro_f1,0.4248288419357172,outputs/08_circor_external_validation/T13_circor_murmur_classification_results.csv
+"CirCor murmur, three-class (EXP-C1)",M4,recording,none,macro_f1,0.5338709573937482,outputs/08_circor_external_validation/T13_circor_murmur_classification_results.csv
+"CirCor murmur, three-class (EXP-C1)",M5,recording,none,macro_f1,0.5223226566508189,outputs/08_circor_external_validation/T13_circor_murmur_classification_results.csv
+"CirCor murmur, three-class (EXP-C1)",M6,recording,none,macro_f1,0.4268733845834679,outputs/08_circor_external_validation/T13_circor_murmur_classification_results.csv
+"CirCor murmur, three-class (EXP-C1)",M7,recording,none,macro_f1,0.4714534513687934,outputs/08_circor_external_validation/T13_circor_murmur_classification_results.csv
+CirCor clinical outcome (EXP-C2),M3,recording,none,sensitivity,0.4455174469353431,outputs/08_circor_external_validation/T14_circor_clinical_outcome_results.csv
+CirCor clinical outcome (EXP-C2),M4,recording,none,sensitivity,0.4834003959890145,outputs/08_circor_external_validation/T14_circor_clinical_outcome_results.csv
+CirCor clinical outcome (EXP-C2),M5,recording,none,sensitivity,0.4912350173511315,outputs/08_circor_external_validation/T14_circor_clinical_outcome_results.csv
+CirCor clinical outcome (EXP-C2),M6,recording,none,sensitivity,0.4572587341125375,outputs/08_circor_external_validation/T14_circor_clinical_outcome_results.csv
+CirCor clinical outcome (EXP-C2),M7,recording,none,sensitivity,0.4572587341125375,outputs/08_circor_external_validation/T14_circor_clinical_outcome_results.csv
+CirCor clinical outcome (EXP-C2),M3,recording,none,specificity,0.7579520084050956,outputs/08_circor_external_validation/T14_circor_clinical_outcome_results.csv
+CirCor clinical outcome (EXP-C2),M4,recording,none,specificity,0.7175174949813324,outputs/08_circor_external_validation/T14_circor_clinical_outcome_results.csv
+CirCor clinical outcome (EXP-C2),M5,recording,none,specificity,0.6997523498621039,outputs/08_circor_external_validation/T14_circor_clinical_outcome_results.csv
+CirCor clinical outcome (EXP-C2),M6,recording,none,specificity,0.7358830040712181,outputs/08_circor_external_validation/T14_circor_clinical_outcome_results.csv
+CirCor clinical outcome (EXP-C2),M7,recording,none,specificity,0.7358830040712181,outputs/08_circor_external_validation/T14_circor_clinical_outcome_results.csv
+CirCor clinical outcome (EXP-C2),M3,recording,none,balanced_accuracy,0.6017347276702193,outputs/08_circor_external_validation/T14_circor_clinical_outcome_results.csv
+CirCor clinical outcome (EXP-C2),M4,recording,none,balanced_accuracy,0.6004589454851734,outputs/08_circor_external_validation/T14_circor_clinical_outcome_results.csv
+CirCor clinical outcome (EXP-C2),M5,recording,none,balanced_accuracy,0.5954936836066176,outputs/08_circor_external_validation/T14_circor_clinical_outcome_results.csv
+CirCor clinical outcome (EXP-C2),M6,recording,none,balanced_accuracy,0.596570869091878,outputs/08_circor_external_validation/T14_circor_clinical_outcome_results.csv
+CirCor clinical outcome (EXP-C2),M7,recording,none,balanced_accuracy,0.596570869091878,outputs/08_circor_external_validation/T14_circor_clinical_outcome_results.csv
+CirCor clinical outcome (EXP-C2),M3,recording,none,roc_auc,0.6232578947672216,outputs/08_circor_external_validation/T14_circor_clinical_outcome_results.csv
+CirCor clinical outcome (EXP-C2),M4,recording,none,roc_auc,0.6283325401978516,outputs/08_circor_external_validation/T14_circor_clinical_outcome_results.csv
+CirCor clinical outcome (EXP-C2),M5,recording,none,roc_auc,0.6272263388102426,outputs/08_circor_external_validation/T14_circor_clinical_outcome_results.csv
+CirCor clinical outcome (EXP-C2),M6,recording,none,roc_auc,0.6319076439109221,outputs/08_circor_external_validation/T14_circor_clinical_outcome_results.csv
+CirCor clinical outcome (EXP-C2),M7,recording,none,roc_auc,0.6319076439109221,outputs/08_circor_external_validation/T14_circor_clinical_outcome_results.csv
+"PhysioNet to CirCor, no retuning (EXP-D1)",M1,recording,none,sensitivity,0.3781841933376877,outputs/08_circor_external_validation/T16_cross_dataset_generalization.csv
+"PhysioNet to CirCor, no retuning (EXP-D1)",M1,recording,none,specificity,0.6734068627450981,outputs/08_circor_external_validation/T16_cross_dataset_generalization.csv
+"PhysioNet to CirCor, no retuning (EXP-D1)",M1,recording,none,balanced_accuracy,0.525795528041393,outputs/08_circor_external_validation/T16_cross_dataset_generalization.csv
+"PhysioNet to CirCor, no retuning (EXP-D1)",M1,recording,none,roc_auc,0.5358802077329953,outputs/08_circor_external_validation/T16_cross_dataset_generalization.csv
+Unseen PhysioNet recording collection (EXP-F3),M1,recording,none,sensitivity,0.7188775285258489,outputs/09_ablation/T-S5_leave_one_source_out_generalization.csv
+Unseen PhysioNet recording collection (EXP-F3),M1,recording,none,specificity,0.3191237838564205,outputs/09_ablation/T-S5_leave_one_source_out_generalization.csv
+Unseen PhysioNet recording collection (EXP-F3),M1,recording,none,balanced_accuracy,0.5190006561911348,outputs/09_ablation/T-S5_leave_one_source_out_generalization.csv
+Unseen PhysioNet recording collection (EXP-F3),M1,recording,none,roc_auc,0.5329753406964535,outputs/09_ablation/T-S5_leave_one_source_out_generalization.csv

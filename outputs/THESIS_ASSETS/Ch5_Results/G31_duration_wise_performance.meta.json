@@ -1,0 +1,51 @@
+{
+  "figure_id": "G31",
+  "figure_number": 31,
+  "title": "Duration Wise Performance",
+  "caption": "Left: balanced accuracy by T18.3 duration band for each experiment, averaged over that experiment's models and folds. Duration is confounded with corpus here -- every recording under 5 s is PASCAL -- and hatched bars fall below the 30-record reporting floor. Right: the same PhysioNet recordings clipped to 10, 5 and 3 seconds and re-extracted, scored by a model refitted without their subjects; dotted lines mark the untruncated control.",
+  "exp_id": "EXP-E2",
+  "objective": "O4 (robustness)",
+  "dataset": "D1 PhysioNet 2016, D2/D3 PASCAL, D4 CirCor 2022",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-09-10T17:03:34.646177+00:00",
+  "command": "python scripts/24_duration_robustness.py",
+  "plotted_rows": 68,
+  "plotted_csv": "G31_duration_wise_performance.csv",
+  "plotted_csv_sha256": "28757e1243df1ef984046bd3be9a50ca6f1d82548f59a796182c9e6492f8e803",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "outputs/09_robustness_analysis/EXP-E2/per_band_summary.csv",
+      "exists": true,
+      "bytes": 14800,
+      "sha256": "629bd066f2ec2a9c25846ef605159bded2cab95bd32b7e3035b88426d3899470",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:03:26.475022+00:00"
+    },
+    {
+      "path": "outputs/09_robustness_analysis/EXP-E2/truncation_metrics.csv",
+      "exists": true,
+      "bytes": 1529,
+      "sha256": "e592a42c361e2a90d60e8e430b56a32fb6665d3c7a0a0cb7de0918642ac89a53",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:03:31.157827+00:00"
+    },
+    {
+      "path": "outputs/09_robustness_analysis/EXP-E2/short_record_diagnostics.csv",
+      "exists": true,
+      "bytes": 2379,
+      "sha256": "833103868519becac1cd8ea2aee3c322f8f6c36c4b4646b8c29996f04c8f4ff1",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:03:27.240529+00:00"
+    }
+  ],
+  "written": {
+    "csv": "outputs/13_figures_diagrams/G31_duration_wise_performance.csv",
+    "png": "outputs/13_figures_diagrams/G31_duration_wise_performance.png",
+    "svg": "outputs/13_figures_diagrams/G31_duration_wise_performance.svg"
+  },
+  "notes": []
+}

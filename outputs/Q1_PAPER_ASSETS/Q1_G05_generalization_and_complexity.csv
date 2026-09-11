@@ -1,0 +1,15 @@
+panel,metric,level,rule,in_domain_mean,external_value,source_file,model_id,single_predict_seconds,balanced_accuracy,model_mb
+cross-dataset,sensitivity,recording,none,0.8648233891627352,0.3781841933376877,outputs/13_figures_diagrams/G29_cross_dataset_performance_drop.csv,,,,
+cross-dataset,specificity,recording,none,0.8287854063424053,0.6734068627450981,outputs/13_figures_diagrams/G29_cross_dataset_performance_drop.csv,,,,
+cross-dataset,balanced_accuracy,recording,none,0.8468043977525701,0.525795528041393,outputs/13_figures_diagrams/G29_cross_dataset_performance_drop.csv,,,,
+cross-dataset,roc_auc,recording,none,0.9212095305753734,0.5358802077329953,outputs/13_figures_diagrams/G29_cross_dataset_performance_drop.csv,,,,
+cross-dataset,accuracy,recording,none,0.8362042167620645,0.5305090104331331,outputs/13_figures_diagrams/G29_cross_dataset_performance_drop.csv,,,,
+cross-dataset,f1,recording,none,0.6867062637528286,0.438138479001135,outputs/13_figures_diagrams/G29_cross_dataset_performance_drop.csv,,,,
+complexity,,,,,,outputs/13_figures_diagrams/G25_inference_time_versus_performance.csv,M1,0.0014054666656496,0.8468043977525703,0.007153
+complexity,,,,,,outputs/13_figures_diagrams/G25_inference_time_versus_performance.csv,M2,0.0062446666658312,,2.889406
+complexity,,,,,,outputs/13_figures_diagrams/G25_inference_time_versus_performance.csv,M3,0.0076712999992499,0.7997979696844384,2.214025
+complexity,,,,,,outputs/13_figures_diagrams/G25_inference_time_versus_performance.csv,M4,0.1771607333333425,0.8523598911722675,12.471058
+complexity,,,,,,outputs/13_figures_diagrams/G25_inference_time_versus_performance.csv,M5,0.001407533333501,0.8471607213499192,0.273177
+complexity,,,,,,outputs/13_figures_diagrams/G25_inference_time_versus_performance.csv,M6,0.1829141000004407,0.8558631699470313,15.561636
+complexity,,,,,,outputs/13_figures_diagrams/G25_inference_time_versus_performance.csv,M7,0.1692589666684701,0.8555880661827884,15.561896
+complexity,,,,,,outputs/13_figures_diagrams/G25_inference_time_versus_performance.csv,M8,0.0038353666653468,0.8482519737790062,0.672657

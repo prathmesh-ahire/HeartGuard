@@ -1,0 +1,151 @@
+{
+  "table_id": "T28",
+  "title": "Statistical Significance Comparison",
+  "caption": "Every model pair on sensitivity, tested over fold-level paired observations. The test is chosen per pair by a Shapiro-Wilk check on the paired differences -- the paired t-test where they are normal, Wilcoxon signed-rank where they are not -- and both results are kept in the source CSV so the choice is auditable. p-values are reported raw and under two multiple-comparison corrections.",
+  "exp_id": "EXP-A1, EXP-A2, EXP-B1, EXP-B2, EXP-C1, EXP-C2",
+  "objective": "O3 (model comparison)",
+  "dataset": "D1 PhysioNet 2016, D2/D3 PASCAL, D4 CirCor 2022",
+  "framework": "PV-MEPCG / PulseVision",
+  "generated_utc": "2026-09-10T17:10:40.455212+00:00",
+  "git": {
+    "available": true,
+    "reason": null,
+    "commit": "f38eb9f8b1562ea033abd0dcf3c4e8ca191acb04",
+    "commit_short": "f38eb9f8",
+    "branch": "main",
+    "dirty": true,
+    "dirty_files": [
+      "outputs/00_evidence_index/evidence_index.csv",
+      "outputs/00_evidence_index/run_manifest.json",
+      "outputs/10_robustness/T27_false_positive_and_false_negative_analysis.docx",
+      "outputs/10_robustness/T27_false_positive_and_false_negative_analysis.md",
+      "outputs/10_robustness/T27_false_positive_and_false_negative_analysis.meta.json",
+      "outputs/10_robustness/T27_false_positive_and_false_negative_analysis.tex",
+      "outputs/11_complexity/T24_complexity_analysis.docx",
+      "outputs/11_complexity/T24_complexity_analysis.md",
+      "outputs/11_complexity/T24_complexity_analysis.meta.json",
+      "outputs/11_complexity/T24_complexity_analysis.tex",
+      "outputs/11_complexity/T25_training_and_inference_time.docx",
+      "outputs/11_complexity/T25_training_and_inference_time.md",
+      "outputs/11_complexity/T25_training_and_inference_time.meta.json",
+      "outputs/11_complexity/T25_training_and_inference_time.tex",
+      "outputs/11_complexity/T26_model_size_and_memory.docx",
+      "outputs/11_complexity/T26_model_size_and_memory.md",
+      "outputs/11_complexity/T26_model_size_and_memory.meta.json",
+      "outputs/11_complexity/T26_model_size_and_memory.tex",
+      "outputs/12_statistics/T28_statistical_significance_comparison.docx",
+      "outputs/12_statistics/T28_statistical_significance_comparison.md",
+      "outputs/12_statistics/T28_statistical_significance_comparison.tex",
+      "outputs/12_statistics/statistical_summary_table.docx",
+      "outputs/13_figures_diagrams/G25_inference_time_versus_performance.meta.json",
+      "outputs/13_figures_diagrams/G25_inference_time_versus_performance.svg",
+      "outputs/13_figures_diagrams/G26_training_time_comparison.meta.json",
+      "outputs/13_figures_diagrams/G26_training_time_comparison.svg",
+      "outputs/13_figures_diagrams/G27_model_size_comparison.meta.json",
+      "outputs/13_figures_diagrams/G27_model_size_comparison.svg",
+      "outputs/13_figures_diagrams/G35_false_positive_and_false_negative_distribution.meta.json",
+      "outputs/13_figures_diagrams/G35_false_positive_and_false_negative_distribution.svg",
+      "outputs/13_figures_diagrams/figure_registry.csv",
+      "src/reporting/statistics_report.py",
+      "frontend/out/",
+      "outputs/09_robustness_analysis/EXP-E1/sweep.log",
+      "outputs/09_robustness_analysis/EXP-E2_trunc.log"
+    ]
+  },
+  "command": "python scripts/35_statistical_reporting.py",
+  "rounding_rules": {
+    "metric": 3,
+    "p_value": 3,
+    "percent": 1,
+    "count": 0,
+    "integer": 0,
+    "mean_count": 1,
+    "seconds": 2,
+    "text": null,
+    "preformatted": null
+  },
+  "column_kinds": {
+    "run": "text",
+    "metric": "text",
+    "model_a": "text",
+    "model_b": "text",
+    "chosen_test": "text",
+    "n": "integer",
+    "n_description": "text",
+    "mean_a": "metric",
+    "mean_b": "metric",
+    "mean_difference": "metric",
+    "statistic": "metric",
+    "p_value": "p_value",
+    "p_holm": "p_value",
+    "p_bh": "p_value",
+    "effect_size_name": "text",
+    "effect_size": "metric",
+    "underpowered": "text",
+    "interpretation": "text"
+  },
+  "column_places": {
+    "mean_difference": 4,
+    "statistic": 3,
+    "p_value": 4,
+    "p_holm": 4,
+    "p_bh": 4,
+    "effect_size": 3
+  },
+  "n_rows": 56,
+  "sources": [
+    {
+      "path": "outputs/12_statistics/paired_fold_tests.csv",
+      "exists": true,
+      "bytes": 249455,
+      "sha256": "e2fd0b0b1f2732dcca64c11128ce9d70373b7324bacfb197922eaa0a1f7f7bb5",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T12:44:21.173507+00:00"
+    },
+    {
+      "path": "outputs/12_statistics/friedman_omnibus.csv",
+      "exists": true,
+      "bytes": 11819,
+      "sha256": "4318cc5ae2145adcc54b7cdec8df91655589f66b697abe7b2a36edb730048ac6",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T12:44:21.979600+00:00"
+    },
+    {
+      "path": "outputs/12_statistics/mcnemar_paired_predictions.csv",
+      "exists": true,
+      "bytes": 35217,
+      "sha256": "ca447f5dee74776f7963a79e46606bf72f8d56343a7d542fe977b86f93ccba20",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T12:50:10.063467+00:00"
+    },
+    {
+      "path": "outputs/12_statistics/bootstrap_auc_ci.csv",
+      "exists": true,
+      "bytes": 9807,
+      "sha256": "d3242de50ea17241555cd5fa82bc32f7f4f93337b61442024f3d7966c9b0cddb",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T12:50:09.228259+00:00"
+    },
+    {
+      "path": "outputs/12_statistics/foldwise_mean_sd.csv",
+      "exists": true,
+      "bytes": 36262,
+      "sha256": "6bf44b154391b6054091d0de7c07c56014dcea4de2096221fa31a6baf33f1fd1",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T12:44:09.784018+00:00"
+    }
+  ],
+  "written": {
+    "csv": "D:/Projects/HeartGuard/outputs/12_statistics/T28_statistical_significance_comparison.csv",
+    "md": "D:/Projects/HeartGuard/outputs/12_statistics/T28_statistical_significance_comparison.md",
+    "docx": "D:/Projects/HeartGuard/outputs/12_statistics/T28_statistical_significance_comparison.docx",
+    "latex": "D:/Projects/HeartGuard/outputs/12_statistics/T28_statistical_significance_comparison.tex"
+  },
+  "notes": [
+    "EVERY p-VALUE STATES ITS n, AND n IS THE NUMBER OF FOLDS. The repeated 5x5 binary map gives n=25. EXP-B2 is a plain 5-fold map, so n=5 there, and a two-sided Wilcoxon on five pairs cannot go below 0.0625 however large the effect. The 'Underpowered' column marks exactly those rows: a non-significant result there is a statement about the design, not about the models.",
+    "AN EFFECT SIZE ACCOMPANIES EVERY p-VALUE. A significant result on 25 folds can sit on a 0.001 difference; the effect size is what stops that being written up as a finding.",
+    "TWO CORRECTIONS, BOTH REPORTED. Holm controls the family-wise error rate and is the conservative choice for a claim about one pair; Benjamini-Hochberg controls the false discovery rate and is the right one for screening many pairs. The family is one (run, metric) group -- correcting across metrics would treat sensitivity and specificity on the same folds as independent tests.",
+    "Fold-level tests use folds as the unit of observation. Record-level tests (McNemar, the AUC bootstrap) run on ONE repeat of the map, which is a complete partition of the corpus; pooling all 25 folds would put every record in the sample five times.",
+    "PV-MEPCG / PulseVision is an academic screening and decision-support prototype, not a diagnostic tool."
+  ]
+}

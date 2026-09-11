@@ -1,0 +1,53 @@
+{
+  "diagram_id": "F11",
+  "diagram_number": 11,
+  "title": "Binary classification pipeline",
+  "caption": "The normal versus abnormal task end to end, from PhysioNet recordings to the reported sensitivity and balanced accuracy.",
+  "task": "T96.1",
+  "objective": "O1",
+  "framework": "PV-MEPCG / PulseVision",
+  "toolchain": "matplotlib (src/reporting/diagrams)",
+  "dpi": 300,
+  "formats": [
+    "png",
+    "svg"
+  ],
+  "palette": "Okabe-Ito (colourblind-safe); shape carries meaning, colour repeats it",
+  "source_module": "src/reporting/diagrams/pipeline_figures.py",
+  "source_function": "build_f11",
+  "source_sha256": "41e7a85f242917171c475ad347e10e230d76e1db7f0e56901e6f7ee64a7dec5f",
+  "legibility": {
+    "clipped": [],
+    "figure_inches": [
+      9.0,
+      8.2
+    ],
+    "print_scale": 0.6667,
+    "min_effective_pt": 7.48,
+    "threshold_pt": 7.0,
+    "roles": {
+      "annotation": 7.48,
+      "edge_label": 7.48,
+      "lane": 7.48,
+      "legend": 7.48,
+      "node_label": 8.5,
+      "node_sublabel": 7.48,
+      "subtitle": 7.48,
+      "title": 11.05
+    },
+    "strings": 36,
+    "overflowing_nodes": [],
+    "overlapping_nodes": [],
+    "nodes_off_canvas": [],
+    "text_over_nodes": [],
+    "violations": []
+  },
+  "generated_utc": "2026-09-11T07:50:08.371264+00:00",
+  "command": "python scripts/05_render_diagrams.py --only F11",
+  "sources": [],
+  "written": {
+    "png": "outputs/13_figures_diagrams/F11_binary_classification_pipeline.png",
+    "svg": "outputs/13_figures_diagrams/F11_binary_classification_pipeline.svg"
+  },
+  "notes": []
+}

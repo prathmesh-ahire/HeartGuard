@@ -1,0 +1,67 @@
+{
+  "figure_id": "G33",
+  "figure_number": 33,
+  "title": "Confidence Histogram",
+  "caption": "Left: every out-of-fold prediction of the deployed model on the EXP-A2 run, binned by the confidence of its predicted class and stacked into the ones it got right and the ones it got wrong. Errors at high confidence are the failure mode no scalar metric shows. Right: the same distribution as a share, for every model of that run. Counts are pooled over the 25 folds of the repeated 5x5 map, so each record contributes once per repeat -- the shape is comparable, the absolute height is five times the corpus.",
+  "exp_id": "EXP-A2",
+  "objective": "O3 (model comparison), O4 (reliability)",
+  "dataset": "D1 PhysioNet 2016",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-09-10T17:06:05.952162+00:00",
+  "command": "python scripts/30_calibration_analysis.py",
+  "plotted_rows": 820,
+  "plotted_csv": "G33_confidence_histogram.csv",
+  "plotted_csv_sha256": "a39f7f75e2747940fddf7d6548adc8b720058209c7e6c5549b721b5f63903d1b",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "outputs/10_robustness/calibration/calibration_summary.csv",
+      "exists": true,
+      "bytes": 9736,
+      "sha256": "e08ba45d3f17f56148140b7b7e5327f67c885505c7a29f76ef89e0e8063d1aed",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:06:00.623587+00:00"
+    },
+    {
+      "path": "outputs/10_robustness/calibration/calibration_per_fold.csv",
+      "exists": true,
+      "bytes": 256106,
+      "sha256": "1e2e0044ebf103a001f747053b9f8073e9a7ed34611cd2cab05e0ff216817253",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:06:00.611983+00:00"
+    },
+    {
+      "path": "outputs/10_robustness/calibration/reliability_points.csv",
+      "exists": true,
+      "bytes": 31051,
+      "sha256": "c78a6438492546ffe980c7aeb7c820ed0e1f1d94cee604eba70e8855066dcbd4",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:06:00.629625+00:00"
+    },
+    {
+      "path": "outputs/10_robustness/calibration/confidence_histogram.csv",
+      "exists": true,
+      "bytes": 68800,
+      "sha256": "a39f7f75e2747940fddf7d6548adc8b720058209c7e6c5549b721b5f63903d1b",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:06:00.638169+00:00"
+    },
+    {
+      "path": "outputs/10_robustness/calibration/svm_calibration_method_comparison.csv",
+      "exists": true,
+      "bytes": 15293,
+      "sha256": "63734550f924ff6306fda53ae93e9f96fe15b8cafa730c305911eda9d726779c",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T05:16:53.415485+00:00"
+    }
+  ],
+  "written": {
+    "csv": "outputs/13_figures_diagrams/G33_confidence_histogram.csv",
+    "png": "outputs/13_figures_diagrams/G33_confidence_histogram.png",
+    "svg": "outputs/13_figures_diagrams/G33_confidence_histogram.svg"
+  },
+  "notes": []
+}

@@ -1,0 +1,26 @@
+panel,run,model_id,true_index,true_class,pred_index,pred_class,count_all_folds,row_share_all_folds,n_folds_all,source_file
+PASCAL A,EXP-B1,M4,0,normal,0,normal,38,0.2451612903225806,10,outputs/13_figures_diagrams/G15_pascal_a_confusion_matrix.csv
+PASCAL A,EXP-B1,M4,0,normal,1,murmur,39,0.2516129032258064,10,outputs/13_figures_diagrams/G15_pascal_a_confusion_matrix.csv
+PASCAL A,EXP-B1,M4,0,normal,2,extrahls,67,0.432258064516129,10,outputs/13_figures_diagrams/G15_pascal_a_confusion_matrix.csv
+PASCAL A,EXP-B1,M4,0,normal,3,artifact,11,0.0709677419354838,10,outputs/13_figures_diagrams/G15_pascal_a_confusion_matrix.csv
+PASCAL A,EXP-B1,M4,1,murmur,0,normal,20,0.1176470588235294,10,outputs/13_figures_diagrams/G15_pascal_a_confusion_matrix.csv
+PASCAL A,EXP-B1,M4,1,murmur,1,murmur,132,0.7764705882352941,10,outputs/13_figures_diagrams/G15_pascal_a_confusion_matrix.csv
+PASCAL A,EXP-B1,M4,1,murmur,2,extrahls,18,0.1058823529411764,10,outputs/13_figures_diagrams/G15_pascal_a_confusion_matrix.csv
+PASCAL A,EXP-B1,M4,1,murmur,3,artifact,0,0.0,10,outputs/13_figures_diagrams/G15_pascal_a_confusion_matrix.csv
+PASCAL A,EXP-B1,M4,2,extrahls,0,normal,30,0.3157894736842105,10,outputs/13_figures_diagrams/G15_pascal_a_confusion_matrix.csv
+PASCAL A,EXP-B1,M4,2,extrahls,1,murmur,0,0.0,10,outputs/13_figures_diagrams/G15_pascal_a_confusion_matrix.csv
+PASCAL A,EXP-B1,M4,2,extrahls,2,extrahls,65,0.6842105263157895,10,outputs/13_figures_diagrams/G15_pascal_a_confusion_matrix.csv
+PASCAL A,EXP-B1,M4,2,extrahls,3,artifact,0,0.0,10,outputs/13_figures_diagrams/G15_pascal_a_confusion_matrix.csv
+PASCAL A,EXP-B1,M4,3,artifact,0,normal,7,0.035,10,outputs/13_figures_diagrams/G15_pascal_a_confusion_matrix.csv
+PASCAL A,EXP-B1,M4,3,artifact,1,murmur,2,0.01,10,outputs/13_figures_diagrams/G15_pascal_a_confusion_matrix.csv
+PASCAL A,EXP-B1,M4,3,artifact,2,extrahls,2,0.01,10,outputs/13_figures_diagrams/G15_pascal_a_confusion_matrix.csv
+PASCAL A,EXP-B1,M4,3,artifact,3,artifact,189,0.945,10,outputs/13_figures_diagrams/G15_pascal_a_confusion_matrix.csv
+PASCAL B,EXP-B2,M1,0,normal,0,normal,194,0.60625,5,outputs/13_figures_diagrams/G16_pascal_b_confusion_matrix.csv
+PASCAL B,EXP-B2,M1,0,normal,1,murmur,39,0.121875,5,outputs/13_figures_diagrams/G16_pascal_b_confusion_matrix.csv
+PASCAL B,EXP-B2,M1,0,normal,2,extrastole,87,0.271875,5,outputs/13_figures_diagrams/G16_pascal_b_confusion_matrix.csv
+PASCAL B,EXP-B2,M1,1,murmur,0,normal,29,0.3052631578947368,5,outputs/13_figures_diagrams/G16_pascal_b_confusion_matrix.csv
+PASCAL B,EXP-B2,M1,1,murmur,1,murmur,53,0.5578947368421052,5,outputs/13_figures_diagrams/G16_pascal_b_confusion_matrix.csv
+PASCAL B,EXP-B2,M1,1,murmur,2,extrastole,13,0.1368421052631579,5,outputs/13_figures_diagrams/G16_pascal_b_confusion_matrix.csv
+PASCAL B,EXP-B2,M1,2,extrastole,0,normal,29,0.6304347826086957,5,outputs/13_figures_diagrams/G16_pascal_b_confusion_matrix.csv
+PASCAL B,EXP-B2,M1,2,extrastole,1,murmur,3,0.0652173913043478,5,outputs/13_figures_diagrams/G16_pascal_b_confusion_matrix.csv
+PASCAL B,EXP-B2,M1,2,extrastole,2,extrastole,14,0.3043478260869565,5,outputs/13_figures_diagrams/G16_pascal_b_confusion_matrix.csv

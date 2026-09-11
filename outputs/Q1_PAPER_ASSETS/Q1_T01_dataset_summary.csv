@@ -1,0 +1,5 @@
+dataset,dataset_name,recordings_used,files_in_folder,subjects,subject_id_origin,classes,native_fs_hz,analysis_fs_hz,total_hours,role,source_file
+D1,PhysioNet 2016,3240,3541,857,derived (filename and appendix patterns),2,2000,2000,21.979,"primary binary track (EXP-A1, EXP-A2, EXP-F1, EXP-F2, EXP-G1)",outputs/01_dataset_audit/T01_dataset_inventory.csv
+D2,PASCAL set_a,124,176,123,none (record-level only),4,44100,2000,0.3935,four-class audio track (EXP-B1),outputs/01_dataset_audit/T01_dataset_inventory.csv
+D3,PASCAL set_b,461,656,165,derived (filename subject and timestamp),3,4000,2000,1.1935,three-class track (EXP-B2),outputs/01_dataset_audit/T01_dataset_inventory.csv
+D4,CirCor 2022,3163,3163,942,native (patient id),5,4000,2000,20.0941,"murmur and outcome tracks, external validation (EXP-C1..C3, EXP-D1)",outputs/01_dataset_audit/T01_dataset_inventory.csv

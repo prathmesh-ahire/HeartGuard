@@ -1,0 +1,45 @@
+{
+  "figure_id": "Q1_G03",
+  "figure_number": 3,
+  "title": "Multiclass Confusion Matrix",
+  "caption": "Confusion matrices of the top model by macro-F1 on PASCAL A and PASCAL B, over all folds. Two separate tasks; 'artifact' is a recording-quality label.",
+  "exp_id": "EXP-B1, EXP-B2",
+  "objective": "O6",
+  "dataset": "D2 PASCAL A; D3 PASCAL B",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-09-11T14:19:06.885769+00:00",
+  "command": "python scripts/43_q1_assets.py",
+  "plotted_rows": 25,
+  "plotted_csv": "Q1_G03_multiclass_confusion_matrix.csv",
+  "plotted_csv_sha256": "b4625bbbe338ca63f51548d95335c6c4af562ee15745aaa51f9d1f70197c8c7d",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "outputs/13_figures_diagrams/G15_pascal_a_confusion_matrix.csv",
+      "exists": true,
+      "bytes": 1150,
+      "sha256": "1ed775b0997af6c5e1221128e47567f000bcdf33cc9e4f2636279d5d17591e4c",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-11T05:47:21.103255+00:00"
+    },
+    {
+      "path": "outputs/13_figures_diagrams/G16_pascal_b_confusion_matrix.csv",
+      "exists": true,
+      "bytes": 1262,
+      "sha256": "097533692c7e7473ec684da3ff3fbbb8b67c98e0253603718f4b6bd05807a1f7",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-11T05:47:22.030260+00:00"
+    }
+  ],
+  "written": {
+    "csv": "outputs/Q1_PAPER_ASSETS/Q1_G03_multiclass_confusion_matrix.csv",
+    "png": "outputs/Q1_PAPER_ASSETS/Q1_G03_multiclass_confusion_matrix.png",
+    "svg": "outputs/Q1_PAPER_ASSETS/Q1_G03_multiclass_confusion_matrix.svg"
+  },
+  "notes": [
+    "PV-MEPCG / PulseVision is an academic screening and decision-support prototype. It does not diagnose, and nothing here is a diagnosis, a treatment recommendation or a substitute for clinical judgement."
+  ]
+}

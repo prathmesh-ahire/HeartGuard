@@ -1,0 +1,321 @@
+search,label,family,objective,model_id,step,best_so_far
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,1,0.842119
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,2,0.842119
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,3,0.848634
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,4,0.848634
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,5,0.848634
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,6,0.848634
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,7,0.848634
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,8,0.848634
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,9,0.848634
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,10,0.848634
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,11,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,12,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,13,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,14,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,15,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,16,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,17,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,18,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,19,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,20,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,21,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,22,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,23,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,24,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,25,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,26,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,27,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,28,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,29,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,30,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,31,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,32,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,33,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,34,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,35,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,36,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,37,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,38,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,39,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M1,40,0.853236
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,1,0.80036
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,2,0.80036
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,3,0.80036
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,4,0.80036
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,5,0.80036
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,6,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,7,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,8,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,9,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,10,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,11,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,12,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,13,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,14,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,15,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,16,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,17,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,18,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,19,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,20,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,21,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,22,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,23,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,24,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,25,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,26,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,27,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,28,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,29,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,30,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,31,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,32,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,33,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,34,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,35,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,36,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,37,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,38,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,39,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M3,40,0.801297
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,1,0.831377
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,2,0.844747
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,3,0.844747
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,4,0.844747
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,5,0.844747
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,6,0.844747
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,7,0.844747
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,8,0.844747
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,9,0.844747
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,10,0.844747
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,11,0.844747
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,12,0.845374
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,13,0.845374
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,14,0.845374
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,15,0.845374
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,16,0.845374
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,17,0.845374
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,18,0.845374
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,19,0.845374
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,20,0.845374
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,21,0.845374
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,22,0.845374
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,23,0.845374
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,24,0.845374
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,25,0.845374
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,26,0.846834
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,27,0.846834
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,28,0.846834
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,29,0.846834
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,30,0.846834
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,31,0.846834
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,32,0.846834
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,33,0.846834
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,34,0.846834
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,35,0.848788
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,36,0.848788
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,37,0.848788
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,38,0.848788
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,39,0.848788
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M4,40,0.848788
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M5,1,0.826949
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M5,2,0.833469
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M5,3,0.837505
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M5,4,0.837505
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M5,5,0.837505
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M5,6,0.844525
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M5,7,0.844525
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M5,8,0.844525
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M5,9,0.844525
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M5,10,0.844525
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M5,11,0.844525
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M5,12,0.844525
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M5,13,0.844525
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M5,14,0.844525
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M5,15,0.844525
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,1,0.837134
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,2,0.838554
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,3,0.838554
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,4,0.844912
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,5,0.844912
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,6,0.845428
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,7,0.845428
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,8,0.845428
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,9,0.845428
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,10,0.845428
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,11,0.845428
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,12,0.845428
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,13,0.845428
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,14,0.845428
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,15,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,16,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,17,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,18,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,19,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,20,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,21,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,22,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,23,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,24,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,25,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,26,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,27,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,28,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,29,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,30,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,31,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,32,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,33,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,34,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,35,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,36,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,37,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,38,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,39,0.84998
+SO-01,SO-01 Randomized,hyperparameter,"balanced accuracy, maximised",M8,40,0.84998
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,1,0.713107
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,2,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,3,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,4,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,5,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,6,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,7,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,8,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,9,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,10,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,11,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,12,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,13,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,14,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,15,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,16,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,17,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,18,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,19,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,20,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,21,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,22,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,23,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,24,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,25,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,26,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,27,0.804118
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,28,0.805059
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,29,0.805059
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,30,0.805059
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,31,0.805059
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,32,0.805059
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,33,0.805059
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,34,0.805059
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,35,0.805059
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,36,0.805669
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,37,0.805669
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,38,0.805669
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,39,0.805669
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M3,40,0.805669
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,1,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,2,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,3,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,4,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,5,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,6,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,7,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,8,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,9,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,10,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,11,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,12,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,13,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,14,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,15,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,16,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,17,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,18,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,19,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,20,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,21,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,22,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,23,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,24,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,25,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,26,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,27,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,28,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,29,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,30,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,31,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,32,0.846413
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,33,0.846834
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,34,0.846834
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,35,0.846834
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,36,0.846834
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,37,0.846834
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,38,0.846834
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,39,0.846834
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M4,40,0.846834
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M5,1,0.84115
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M5,2,0.84115
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M5,3,0.84115
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M5,4,0.84115
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M5,5,0.843029
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M5,6,0.846453
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M5,7,0.846453
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M5,8,0.846453
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M5,9,0.846453
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M5,10,0.846453
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M5,11,0.846453
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M5,12,0.846453
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M5,13,0.846453
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M5,14,0.846453
+SO-02,SO-02 Bayesian,hyperparameter,"balanced accuracy, maximised",M5,15,0.846453
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,1,0.3236765991044394
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,2,0.3232848917220423
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,3,0.3180718273617556
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,4,0.3099280800382334
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,5,0.3099280800382334
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,6,0.3064785671599968
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,7,0.3034575620463733
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,8,0.3000080477416363
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,9,0.2954132509268983
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,10,0.2900920622286868
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,11,0.2856567682070358
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,12,0.2856567682070358
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,13,0.2781891734154046
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,14,0.2767868673184577
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,15,0.2749130580564908
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,16,0.2749130580564908
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,17,0.2749130580564908
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,18,0.2736638563664664
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,19,0.2717902625808337
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,20,0.2707448002148961
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,21,0.2669404082739569
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,22,0.2669404082739569
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,23,0.2669404082739569
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,24,0.2669404082739569
+SO-03a,SO-03a Genetic,feature_mask,"J, minimised",M3,25,0.2669404082739569
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,1,0.3234988348348725
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,2,0.3221110687902736
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,3,0.3155171869088182
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,4,0.3146974570507487
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,5,0.3146974570507487
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,6,0.3141122197892284
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,7,0.313523341957678
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,8,0.3119501410701659
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,9,0.3119501410701659
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,10,0.3119501410701659
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,11,0.311308275169423
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,12,0.311308275169423
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,13,0.311308275169423
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,14,0.3109760607451337
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,15,0.3109760607451337
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,16,0.3109760607451337
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,17,0.3093201232666338
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,18,0.3083510638270722
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,19,0.3081261486327024
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,20,0.3043699586588198
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,21,0.3043699586588198
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,22,0.3043699586588198
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,23,0.3040204799256302
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,24,0.3040204799256302
+SO-03b,SO-03b PSO,feature_mask,"J, minimised",M3,25,0.3040204799256302

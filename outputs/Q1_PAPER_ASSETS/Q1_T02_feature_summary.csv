@@ -1,0 +1,7 @@
+family,extractor,n_features,first_index,matches_locked_count,source_file
+time,time_domain,24,0,True,outputs/03_features/T05_feature_inventory_and_counts.csv
+frequency,frequency,22,24,True,outputs/03_features/T05_feature_inventory_and_counts.csv
+mfcc,mfcc,39,46,True,outputs/03_features/T05_feature_inventory_and_counts.csv
+chroma,chroma,24,85,True,outputs/03_features/T05_feature_inventory_and_counts.csv
+dwt,wavelet,24,109,True,outputs/03_features/T05_feature_inventory_and_counts.csv
+envelope,envelope,5,133,True,outputs/03_features/T05_feature_inventory_and_counts.csv

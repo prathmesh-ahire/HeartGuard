@@ -1,0 +1,5 @@
+dataset_source,dataset_name,n,min,p25,median,p75,max,mean,sd,original_fs,converted_fs,conversion
+D1,PhysioNet 2016,3240,5.3055,12.8992,20.8285,30.581,121.9985,22.4618,12.3864,2000,2000,none
+D2,PASCAL set_a,124,0.9364,7.9356,8.8841,9.0,9.0,8.0141,1.6416,44100,2000,decimation
+D3,PASCAL set_b,461,0.7632,2.9743,5.0895,9.3148,27.867,6.479,4.4754,4000,2000,decimation
+D4,CirCor 2022,3163,5.152,19.056,21.456,29.392,64.512,22.8703,7.2829,4000,2000,decimation

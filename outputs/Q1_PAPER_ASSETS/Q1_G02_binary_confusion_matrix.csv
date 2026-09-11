@@ -1,0 +1,5 @@
+run,model_id,true_index,true_class,pred_index,pred_class,count_all_folds,row_share_all_folds,n_folds_all,source_file
+EXP-A2,M1,0,normal,0,normal,10670,0.8287378640776699,25,outputs/13_figures_diagrams/G14_binary_confusion_matrix.csv
+EXP-A2,M1,0,normal,1,abnormal,2205,0.1712621359223301,25,outputs/13_figures_diagrams/G14_binary_confusion_matrix.csv
+EXP-A2,M1,1,abnormal,0,normal,449,0.1350375939849624,25,outputs/13_figures_diagrams/G14_binary_confusion_matrix.csv
+EXP-A2,M1,1,abnormal,1,abnormal,2876,0.8649624060150376,25,outputs/13_figures_diagrams/G14_binary_confusion_matrix.csv

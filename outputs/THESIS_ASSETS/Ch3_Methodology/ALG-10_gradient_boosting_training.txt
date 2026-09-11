@@ -1,0 +1,42 @@
+Algorithm ALG-10: Gradient Boosting training
+PV-MEPCG / PulseVision  |  T98.5  |  objective O3
+
+Purpose: M5: gradient-boosted trees, given class weights through per-row sample weights because the estimator has no class_weight of its own.
+Input:   training rows X, y
+Output:  class probabilities from an additive model of shallow trees
+
+Parameters (read from the repository when this file was generated)
+  implementation       classic                                               configs/models.yaml models.M5.implementation
+  n_estimators         200                                                   configs/models.yaml models.M5.defaults.n_estimators
+  learning_rate        0.1                                                   configs/models.yaml models.M5.defaults.learning_rate
+  max_depth            3                                                     configs/models.yaml models.M5.defaults.max_depth
+  subsample            1                                                     configs/models.yaml models.M5.defaults.subsample
+  min_samples_leaf     1                                                     configs/models.yaml models.M5.defaults.min_samples_leaf
+  class_weight         balanced                                              configs/models.yaml models.M5.defaults.class_weight
+  weight_rule          targets.size / (classes.size * counts.astype(float))  src/models/weighting.py balanced_sample_weight
+  learning_rate_space  log-uniform [0.001, 0.5]                              configs/models.yaml models.M5.search_space
+  max_depth_space      integer [2, 8]                                        configs/models.yaml models.M5.search_space
+  calibrated           true                                                  whether M5 is listed in configs/models.yaml models.M6.calibrate_members
+
+Algorithm
+  1  GB <- GradientBoostingClassifier(n_estimators 200, learning_rate 0.1, max_depth 3, subsample 1, min_samples_leaf 1) (classic implementation)
+  2  M5 <- ClassWeightedClassifier(GB, class_weight balanced)
+  3  fit(X, y):
+  4      w_i <- targets.size / (classes.size * counts.astype(float)), evaluated at y_i's class (balanced weighting)
+  5      if sample weights are supplied: w <- w x supplied
+  6      F_0 <- log-odds of the weighted class prior
+  7      for each boosting stage m: fit a regression tree of depth <= 3 to the weighted negative gradient on a 1 fraction of rows; F_m <- F_(m-1) + 0.1 x tree
+  8  predict_proba <- sigmoid(F) for two classes, softmax over per-class F otherwise
+  9  calibrated inside the ensemble: true
+
+Notes
+  Searched space: learning_rate log-uniform [0.001, 0.5], max_depth integer [2, 8]. Without the wrapper M5 would be the only ensemble member with no imbalance handling at all.
+
+Implemented by
+  src/models/estimators.py:299  src.models.estimators:make_m5
+  src/models/weighting.py:135  src.models.weighting:ClassWeightedClassifier.fit
+  src/models/weighting.py:69  src.models.weighting:balanced_sample_weight
+  src/models/weighting.py:169  src.models.weighting:ClassWeightedClassifier.predict_proba
+  src/models/estimators.py:540  src.models.estimators:make_ensemble
+
+Regenerate: python scripts/39_export_algorithms.py --ids ALG-10

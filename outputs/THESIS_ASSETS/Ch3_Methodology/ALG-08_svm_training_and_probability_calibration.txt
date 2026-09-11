@@ -1,0 +1,42 @@
+Algorithm ALG-08: SVM training and probability calibration
+PV-MEPCG / PulseVision  |  T98.4  |  objective O3
+
+Purpose: M3: an RBF support vector machine whose scores are turned into probabilities by an explicit, visible calibration fitted inside the training fold.
+Input:   training rows X, y (optionally their subject groups)
+Output:  calibrated class probabilities whose argmax is the prediction
+
+Parameters (read from the repository when this file was generated)
+  kernel              rbf                       configs/models.yaml models.M3.defaults.kernel
+  C                   1                         configs/models.yaml models.M3.defaults.C
+  gamma               scale                     configs/models.yaml models.M3.defaults.gamma
+  class_weight        balanced                  configs/models.yaml models.M3.defaults.class_weight
+  C_space             log-uniform [0.01, 1000]  configs/models.yaml models.M3.search_space.C
+  gamma_space         log-uniform [0.0001, 10]  configs/models.yaml models.M3.search_space.gamma
+  class_weight_space  {balanced, none}          configs/models.yaml models.M3.search_space.class_weight
+  method              sigmoid                   configs/models.yaml calibration.method
+  cv                  3                         configs/models.yaml calibration.cv
+  ensemble            true                      configs/models.yaml calibration.ensemble
+  isotonic_min        1000                      src/models/calibration.py ISOTONIC_MIN_SAMPLES
+
+Algorithm
+  1  svc <- SVC(kernel rbf, C 1, gamma scale, class_weight balanced); probability is never enabled
+  2  M3 <- CalibratedSVM(svc, method sigmoid, cv 3, ensemble true)
+  3  fit(X, y):
+  4      refuse an inner estimator with probability enabled; forward class_weight to the inner SVC
+  5      if method is isotonic and |y| < 1000: warn that it overfits
+  6      split the training rows into 3 calibration folds, subject-grouped when a grouped split is supplied
+  7      for each calibration fold: fit svc on its training part; fit the sigmoid p = 1 / (1 + exp(A f(x) + B)) to svc's decision values on its held part
+  8      keep every (svc, sigmoid) pair; predict_proba <- their mean probability
+  9  predict <- argmax of predict_proba, so the two can never disagree
+
+Notes
+  Searched space: C log-uniform [0.01, 1000], gamma log-uniform [0.0001, 10], class_weight {balanced, none}.
+
+Implemented by
+  src/models/estimators.py:202  src.models.estimators:make_m3
+  src/models/calibration.py:188  src.models.calibration:CalibratedSVM.fit
+  src/models/calibration.py:99  src.models.calibration:grouped_calibration_cv
+  src/models/calibration.py:248  src.models.calibration:CalibratedSVM.predict_proba
+  src/models/calibration.py:236  src.models.calibration:CalibratedSVM.predict
+
+Regenerate: python scripts/39_export_algorithms.py --ids ALG-08

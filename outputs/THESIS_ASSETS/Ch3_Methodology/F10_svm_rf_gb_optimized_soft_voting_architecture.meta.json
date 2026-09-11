@@ -1,0 +1,51 @@
+{
+  "diagram_id": "F10",
+  "diagram_number": 10,
+  "title": "SVM RF GB optimized soft voting architecture",
+  "caption": "The heterogeneous ensemble: three tuned base learners, per-class probability averaging, and the searched weight vector.",
+  "task": "T95.6",
+  "objective": "O3",
+  "framework": "PV-MEPCG / PulseVision",
+  "toolchain": "matplotlib (src/reporting/diagrams)",
+  "dpi": 300,
+  "formats": [
+    "png",
+    "svg"
+  ],
+  "palette": "Okabe-Ito (colourblind-safe); shape carries meaning, colour repeats it",
+  "source_module": "src/reporting/diagrams/architecture_figures.py",
+  "source_function": "build_f10",
+  "source_sha256": "9661edbb772ace441f26596a10bac05719479b6168c087d422ecd3a101197c00",
+  "legibility": {
+    "clipped": [],
+    "figure_inches": [
+      9.0,
+      6.0
+    ],
+    "print_scale": 0.6667,
+    "min_effective_pt": 7.48,
+    "threshold_pt": 7.0,
+    "roles": {
+      "annotation": 7.48,
+      "legend": 7.48,
+      "node_label": 8.5,
+      "node_sublabel": 7.48,
+      "subtitle": 7.48,
+      "title": 11.05
+    },
+    "strings": 20,
+    "overflowing_nodes": [],
+    "overlapping_nodes": [],
+    "nodes_off_canvas": [],
+    "text_over_nodes": [],
+    "violations": []
+  },
+  "generated_utc": "2026-09-11T07:50:05.625681+00:00",
+  "command": "python scripts/05_render_diagrams.py --only F10",
+  "sources": [],
+  "written": {
+    "png": "outputs/13_figures_diagrams/F10_svm_rf_gb_optimized_soft_voting_architecture.png",
+    "svg": "outputs/13_figures_diagrams/F10_svm_rf_gb_optimized_soft_voting_architecture.svg"
+  },
+  "notes": []
+}

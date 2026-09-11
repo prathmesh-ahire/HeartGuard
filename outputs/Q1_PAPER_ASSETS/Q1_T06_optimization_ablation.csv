@@ -1,0 +1,6 @@
+stage_order,stage,comparison,source_run,model_id,sensitivity,specificity,balanced_accuracy,balanced_accuracy_incremental,roc_auc,source_file
+1,default_single,"Best individual model, default parameters",EXP-A1,M1,0.8479933187885698,0.8378530531876638,0.8429231859881168,,0.9221754145146952,outputs/09_ablation/T19_search_and_optimization_ablation.csv
+2,default_ensemble,"Equal-weight ensemble, default parameters",EXP-A1,M6,0.8790705821614024,0.8384425376679471,0.8587565599146746,0.0158333739265579,0.9395334531543368,outputs/09_ablation/T19_search_and_optimization_ablation.csv
+3,tuned_single,"Best individual model, tuned parameters",EXP-A2,M1,0.8648233891627352,0.8287854063424053,0.8468043977525701,-0.0119521621621044,0.9212095305753734,outputs/09_ablation/T19_search_and_optimization_ablation.csv
+4,tuned_ensemble_equal,"Equal-weight ensemble, tuned members",EXP-A2,M6,0.8615469513693752,0.8501793885246874,0.8558631699470313,0.009058772194461,0.938400689122729,outputs/09_ablation/T19_search_and_optimization_ablation.csv
+5,tuned_ensemble_optimized,"Optimized-weight ensemble, tuned members",EXP-A2,M7,0.8615380387134037,0.849638093652173,0.8555880661827883,-0.0002751037642429,0.9383495147018668,outputs/09_ablation/T19_search_and_optimization_ablation.csv

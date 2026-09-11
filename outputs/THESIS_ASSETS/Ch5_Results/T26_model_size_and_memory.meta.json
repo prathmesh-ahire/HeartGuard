@@ -1,0 +1,120 @@
+{
+  "table_id": "T26",
+  "title": "Model Size and Memory",
+  "caption": "Serialized size and peak memory for every model, each fitted once on the training rows of binary fold r0f0 under configs/models.yaml defaults. One declared configuration for all of them, so the sizes are comparable with each other; deliberately not a searched configuration, whose cost is an accident of one fold's search.",
+  "exp_id": "n/a (controlled bench, not an experiment)",
+  "objective": "O5 (complexity and deployability)",
+  "dataset": "D1 PhysioNet 2016, fold r0f0 training rows",
+  "framework": "PV-MEPCG / PulseVision",
+  "generated_utc": "2026-09-10T17:09:58.082138+00:00",
+  "git": {
+    "available": true,
+    "reason": null,
+    "commit": "f38eb9f8b1562ea033abd0dcf3c4e8ca191acb04",
+    "commit_short": "f38eb9f8",
+    "branch": "main",
+    "dirty": true,
+    "dirty_files": [
+      "outputs/00_evidence_index/evidence_index.csv",
+      "outputs/00_evidence_index/run_manifest.json",
+      "outputs/11_complexity/T24_complexity_analysis.docx",
+      "outputs/11_complexity/T24_complexity_analysis.md",
+      "outputs/11_complexity/T24_complexity_analysis.meta.json",
+      "outputs/11_complexity/T24_complexity_analysis.tex",
+      "outputs/11_complexity/T25_training_and_inference_time.docx",
+      "outputs/11_complexity/T25_training_and_inference_time.md",
+      "outputs/11_complexity/T25_training_and_inference_time.meta.json",
+      "outputs/11_complexity/T25_training_and_inference_time.tex",
+      "outputs/11_complexity/T26_model_size_and_memory.docx",
+      "outputs/11_complexity/T26_model_size_and_memory.md",
+      "outputs/11_complexity/T26_model_size_and_memory.tex",
+      "src/reporting/statistics_report.py",
+      "frontend/out/",
+      "outputs/09_robustness_analysis/EXP-E1/sweep.log",
+      "outputs/09_robustness_analysis/EXP-E2_trunc.log"
+    ]
+  },
+  "command": "python scripts/31_complexity_analysis.py",
+  "rounding_rules": {
+    "metric": 3,
+    "p_value": 3,
+    "percent": 1,
+    "count": 0,
+    "integer": 0,
+    "mean_count": 1,
+    "seconds": 2,
+    "text": null,
+    "preformatted": null
+  },
+  "column_kinds": {
+    "model_id": "text",
+    "task": "text",
+    "fold_label": "text",
+    "configuration": "text",
+    "n_train": "count",
+    "n_features": "count",
+    "model_bytes": "count",
+    "model_mb": "metric",
+    "fit_seconds": "seconds",
+    "baseline_rss_mb": "metric",
+    "peak_rss_mb": "metric",
+    "peak_rss_delta_mb": "metric",
+    "tracemalloc_peak_mb": "metric",
+    "n_samples": "count",
+    "memory_measurement_reliable": "text"
+  },
+  "column_places": {
+    "baseline_rss_mb": 1,
+    "peak_rss_mb": 1,
+    "peak_rss_delta_mb": 1,
+    "tracemalloc_peak_mb": 1
+  },
+  "n_rows": 8,
+  "sources": [
+    {
+      "path": "outputs/11_complexity/training_time_summary.csv",
+      "exists": true,
+      "bytes": 14920,
+      "sha256": "393dd29e164cd3b837fb2f12e66fb38ff9b86cfe3a20093bb5c43fa73855ac4c",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:09:56.649170+00:00"
+    },
+    {
+      "path": "outputs/11_complexity/inference_stage_summary.csv",
+      "exists": true,
+      "bytes": 875,
+      "sha256": "71ee76446f183f836f0f9ba95980d4d9012c08353eebf297f4a5b916593f3d36",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:09:56.664636+00:00"
+    },
+    {
+      "path": "outputs/11_complexity/model_footprint.csv",
+      "exists": true,
+      "bytes": 2139,
+      "sha256": "064bfd31a8c02c7d19fa839a29f6694c3105e1b66f51221ce8d69f2b5f028cb7",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T11:30:13.463884+00:00"
+    },
+    {
+      "path": "outputs/11_complexity/complexity_overview.csv",
+      "exists": true,
+      "bytes": 3693,
+      "sha256": "3d95c2cb05786754970050fc194e1a134ae7b133be30e93afb8eec07ad20b7f2",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:09:56.746965+00:00"
+    }
+  ],
+  "written": {
+    "csv": "D:/Projects/HeartGuard/outputs/11_complexity/T26_model_size_and_memory.csv",
+    "md": "D:/Projects/HeartGuard/outputs/11_complexity/T26_model_size_and_memory.md",
+    "docx": "D:/Projects/HeartGuard/outputs/11_complexity/T26_model_size_and_memory.docx",
+    "latex": "D:/Projects/HeartGuard/outputs/11_complexity/T26_model_size_and_memory.tex"
+  },
+  "notes": [
+    "TWO MEMORY NUMBERS, AND THEY MEASURE DIFFERENT THINGS. tracemalloc counts allocations made through CPython's allocator, which on this stack includes numpy's array buffers but NOT memory taken inside native library code that calls malloc directly -- a BLAS workspace or XGBoost's own allocator. The resident-set peak sees all of it but is process-wide, so it is a peak DURING the fit rather than a peak CAUSED by it. Where the two disagree, the gap is native allocation and page-touching behaviour.",
+    "'Reliable' is false where the resident-set sampler collected fewer than five samples -- a fit shorter than about 100 ms has been glanced at, not measured, and its memory column must not be quoted.",
+    "On-disk size is the joblib serialization of the WHOLE pipeline (imputer, scaler, estimator), which is what a deployment loads, not the bare estimator.",
+    "Measured on CPU only -- this machine has no CUDA GPU, and no number here may be compared against a GPU-trained model. M9 (1D-CNN) is out of scope for that reason and is not fitted anywhere in this project.",
+    "PV-MEPCG / PulseVision is an academic screening and decision-support prototype, not a diagnostic tool."
+  ]
+}

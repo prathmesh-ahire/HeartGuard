@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="648pt" height="432pt" viewBox="0 0 648 432" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-09-11T13:20:04.093287</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 432 
+L 648 432 
+L 648 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 173.808 80.16 
+L 506.16 80.16 
+Q 510.48 80.16 510.48 84.48 
+L 510.48 267.84 
+Q 510.48 272.16 506.16 272.16 
+L 173.808 272.16 
+Q 169.488 272.16 169.488 267.84 
+L 169.488 84.48 
+Q 169.488 80.16 173.808 80.16 
+z
+" clip-path="url(#pcbacf1dc0f)" style="fill: #f7f7f7; stroke-dasharray: 3.2,2.4; stroke-dashoffset: 0; stroke: #555555; stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_1">
+    <text style="font-style: italic; font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; text-anchor: start; fill: #555555" x="174.528" y="95.315009" transform="rotate(-0 174.528 95.315009)">inner loop: the search never leaves this box</text>
+   </g>
+   <g id="patch_3">
+    <path d="M 146.603843 172.976179 
+Q 168.155674 152.737431 188.810997 133.34057 
+" clip-path="url(#pcbacf1dc0f)" style="fill: none; stroke: #000000; stroke-width: 1.1; stroke-linecap: round"/>
+    <path d="M 182.801338 135.136157 
+L 188.810997 133.34057 
+L 186.641671 139.225649 
+z
+" clip-path="url(#pcbacf1dc0f)" style="stroke: #000000; stroke-width: 1.1; stroke-linecap: round"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 330.823898 131.559558 
+Q 339.984491 132.091154 347.917312 132.551501 
+" clip-path="url(#pcbacf1dc0f)" style="fill: none; stroke: #000000; stroke-width: 1.1; stroke-linecap: round"/>
+    <path d="M 342.479237 129.426206 
+L 347.917312 132.551501 
+L 342.154232 135.026784 
+z
+" clip-path="url(#pcbacf1dc0f)" style="stroke: #000000; stroke-width: 1.1; stroke-linecap: round"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 418.4881 162.702299 
+Q 382.607961 174.949513 347.891723 186.799445 
+" clip-path="url(#pcbacf1dc0f)" style="fill: none; stroke: #000000; stroke-width: 1.1; stroke-linecap: round"/>
+    <path d="M 354.107069 187.641824 
+L 347.891723 186.799445 
+L 352.294834 182.332596 
+z
+" clip-path="url(#pcbacf1dc0f)" style="stroke: #000000; stroke-width: 1.1; stroke-linecap: round"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 250.390802 216.055301 
+Q 271.222782 191.525439 260.944254 162.210938 
+" clip-path="url(#pcbacf1dc0f)" style="fill: none; stroke-dasharray: 1,2; stroke-dashoffset: 0; stroke: #0072b2; stroke-linecap: round"/>
+    <path d="M 260.153486 168.433061 
+L 260.944254 162.210938 
+L 265.447491 166.576826 
+z
+" clip-path="url(#pcbacf1dc0f)" style="fill: #0072b2; stroke-dasharray: 1,2; stroke-dashoffset: 0; stroke: #0072b2; stroke-linecap: round"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 442.35207 216.214328 
+Q 486.502936 178.316413 529.720608 141.219527 
+" clip-path="url(#pcbacf1dc0f)" style="fill: none; stroke: #000000; stroke-width: 1.1; stroke-linecap: round"/>
+    <path d="M 523.636788 142.745064 
+L 529.720608 141.219527 
+L 527.290746 147.001905 
+z
+" clip-path="url(#pcbacf1dc0f)" style="stroke: #000000; stroke-width: 1.1; stroke-linecap: round"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 146.910259 257.640918 
+Q 197.460025 237.691115 248.009792 217.741312 
+" clip-path="url(#pcbacf1dc0f)" style="fill: none; stroke-dasharray: 5.2,2.6; stroke-dashoffset: 0; stroke: #d55e00; stroke-width: 1.3; stroke-linecap: round"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 26.28 137.76 
+L 145.512 137.76 
+L 136.872 210.243 
+L 17.64 210.243 
+z
+" clip-path="url(#pcbacf1dc0f)" style="fill: #cce8f8; stroke: #0072b2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_10">
+    <path d="M 195.84 103.2 
+L 324.288 103.2 
+Q 329.328 103.2 329.328 108.24 
+L 329.328 154.7055 
+Q 329.328 159.7455 324.288 159.7455 
+L 195.84 159.7455 
+Q 190.8 159.7455 190.8 154.7055 
+L 190.8 108.24 
+Q 190.8 103.2 195.84 103.2 
+z
+" clip-path="url(#pcbacf1dc0f)" style="fill: #ffffff; stroke: #000000; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 355.68 103.2 
+L 484.128 103.2 
+Q 489.168 103.2 489.168 108.24 
+L 489.168 157.179 
+Q 489.168 162.219 484.128 162.219 
+L 355.68 162.219 
+Q 350.64 162.219 350.64 157.179 
+L 350.64 108.24 
+Q 350.64 103.2 355.68 103.2 
+z
+" clip-path="url(#pcbacf1dc0f)" style="fill: #ffffff; stroke: #000000; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_12">
+    <path d="M 254.448 187.68 
+L 436.176 187.68 
+Q 441.216 187.68 441.216 192.72 
+L 441.216 241.659 
+Q 441.216 246.699 436.176 246.699 
+L 254.448 246.699 
+Q 249.408 246.699 249.408 241.659 
+L 249.408 192.72 
+Q 249.408 187.68 254.448 187.68 
+z
+" clip-path="url(#pcbacf1dc0f)" style="fill: #ffffff; stroke: #000000; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_13">
+    <path d="M 546.192 103.2 
+L 618.624 103.2 
+Q 633.024 103.2 633.024 117.6 
+L 633.024 161.283 
+Q 633.024 175.683 618.624 175.683 
+L 546.192 175.683 
+Q 531.792 175.683 531.792 161.283 
+L 531.792 117.6 
+Q 531.792 103.2 546.192 103.2 
+z
+" clip-path="url(#pcbacf1dc0f)" style="fill: #f8f3aa; stroke: #555555; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_14">
+    <path d="M 22.68 229.92 
+L 140.472 229.92 
+Q 145.512 229.92 145.512 234.96 
+L 145.512 281.4255 
+Q 145.512 286.4655 140.472 286.4655 
+L 22.68 286.4655 
+Q 17.64 286.4655 17.64 281.4255 
+L 17.64 234.96 
+Q 17.64 229.92 22.68 229.92 
+z
+" clip-path="url(#pcbacf1dc0f)" style="fill: #ffffff; stroke: #000000; stroke-linejoin: miter"/>
+   </g>
+   <g id="line2d_1">
+    <path d="M 197.46 237.691125 
+" clip-path="url(#pcbacf1dc0f)" style="fill: none; stroke: #d55e00; stroke-width: 1.2; stroke-linecap: round"/>
+    <defs>
+     <path id="m03ff7b45e7" d="M -5.1 5.1 
+L 5.1 -5.1 
+M -5.1 -5.1 
+L 5.1 5.1 
+" style="stroke: #d55e00; stroke-width: 1.6"/>
+    </defs>
+    <g clip-path="url(#pcbacf1dc0f)">
+     <use xlink:href="#m03ff7b45e7" x="197.46" y="237.691125" style="fill: #d55e00; stroke: #d55e00; stroke-width: 1.6"/>
+    </g>
+   </g>
+   <g id="text_2">
+    <text style="font-style: italic; font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; text-anchor: start; fill: #0072b2" x="180.144" y="176.753466" transform="rotate(-0 180.144 176.753466)">iterate</text>
+   </g>
+   <g id="text_3">
+    <text style="font-style: italic; font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; text-anchor: start; fill: #d55e00" x="17.64" y="301.094752" transform="rotate(-0 17.64 301.094752)">never scored during the search</text>
+   </g>
+   <g id="text_4">
+    <text style="font-style: italic; font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; fill: #555555" transform="translate(52.049114 339.511252)">A feature is therefore selected in some number of folds rather than globally. A feature kept in 3</text>
+    <text style="font-style: italic; font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; fill: #555555" transform="translate(61.98232 354.177019)">of 25 folds and one kept in 25 are both selected, and are not the same claim, so the count is</text>
+    <text style="font-style: italic; font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; fill: #555555" transform="translate(259.202747 368.683252)">reported on every row.</text>
+   </g>
+   <g id="text_5">
+    <text style="font-size: 12.75px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif" transform="translate(35.054437 153.72375)">Outer training</text>
+    <text style="font-size: 12.75px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif" transform="translate(69.258305 171.099609)">fold</text>
+   </g>
+   <g id="text_6">
+    <text style="font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; fill: #555555" transform="translate(49.036247 188.743252)">grouped on</text>
+    <text style="font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; fill: #555555" transform="translate(52.846664 202.130991)">subject_id</text>
+   </g>
+   <g id="text_7">
+    <text style="font-size: 12.75px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; text-anchor: middle" x="260.064" y="120.602109" transform="rotate(-0 260.064 120.602109)">Candidate subset</text>
+   </g>
+   <g id="text_8">
+    <text style="font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; fill: #555555" transform="translate(201.38077 138.325519)">a point in the search</text>
+    <text style="font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; fill: #555555" transform="translate(243.787111 150.518503)">space</text>
+   </g>
+   <g id="text_9">
+    <text style="font-size: 12.75px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif" transform="translate(363.481266 119.366953)">Inner split fit and</text>
+    <text style="font-size: 12.75px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif" transform="translate(402.404625 135.095273)">score</text>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; text-anchor: middle; fill: #555555" x="419.904" y="154.183252" transform="rotate(-0 419.904 154.183252)">training rows only</text>
+   </g>
+   <g id="text_11">
+    <text style="font-size: 12.75px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif" transform="translate(262.892215 203.846953)">Search proposes the next</text>
+    <text style="font-size: 12.75px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif" transform="translate(328.686199 219.631055)">point</text>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; text-anchor: middle; fill: #555555" x="345.312" y="238.663252" transform="rotate(-0 345.312 238.663252)">budgeted, seeded, logged</text>
+   </g>
+   <g id="text_13">
+    <text style="font-size: 12.75px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif" transform="translate(535.345559 120.602109)">Chosen subset</text>
+    <text style="font-size: 12.75px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif" transform="translate(544.815422 136.539609)">for this fold</text>
+   </g>
+   <g id="text_14">
+    <text style="font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; fill: #555555" transform="translate(542.805783 155.349956)">20 features in</text>
+    <text style="font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; fill: #555555" transform="translate(534.928116 167.727019)">the reported run</text>
+   </g>
+   <g id="text_15">
+    <text style="font-size: 12.75px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; text-anchor: middle" x="81.576" y="247.322109" transform="rotate(-0 81.576 247.322109)">Outer test fold</text>
+   </g>
+   <g id="text_16">
+    <text style="font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; fill: #555555" transform="translate(27.213347 265.447861)">scored once, at the</text>
+    <text style="font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; fill: #555555" transform="translate(71.051114 279.596456)">end</text>
+   </g>
+  </g>
+  <g id="text_17">
+   <text style="font-weight: 700; font-size: 16.575px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; text-anchor: start" x="4.32" y="19.483863" transform="rotate(-0 4.32 19.483863)">F09  Search-based feature selection workflow</text>
+  </g>
+  <g id="text_18">
+   <text style="font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; fill: #555555" transform="translate(4.32 36.501475)">Selection is decided per fold, from the training rows only. The outer fold is never scored while</text>
+   <text style="font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; fill: #555555" transform="translate(4.32 49.968543)">the search runs.</text>
+  </g>
+  <g id="text_19">
+   <text style="font-size: 6px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; fill: #555555" transform="translate(4.32 417.835312)">F09  |  Search-based feature selection workflow  |  drawn by src/reporting/diagrams/architecture_figures.py:build_f09</text>
+   <text style="font-size: 6px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; fill: #555555" transform="translate(4.32 425.935313)">PV-MEPCG / PulseVision  |  regenerate: python scripts/05_render_diagrams.py --only F09</text>
+  </g>
+  <g id="legend_1">
+   <g id="patch_15">
+    <path d="M 83.534362 385.263694 
+L 103.730362 385.263694 
+L 103.730362 377.409694 
+L 83.534362 377.409694 
+z
+" style="fill: #cce8f8; stroke: #0072b2; stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_20">
+    <text style="font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; text-anchor: start" x="112.706362" y="385.263694" transform="rotate(-0 112.706362 385.263694)">dataset / file read</text>
+   </g>
+   <g id="patch_16">
+    <path d="M 83.534362 402.09457 
+L 103.730362 402.09457 
+L 103.730362 394.24057 
+L 83.534362 394.24057 
+z
+" style="fill: #ffffff; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_21">
+    <text style="font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; text-anchor: start" x="112.706362" y="402.09457" transform="rotate(-0 112.706362 402.09457)">processing step</text>
+   </g>
+   <g id="patch_17">
+    <path d="M 228.459947 385.263694 
+L 248.655947 385.263694 
+L 248.655947 377.409694 
+L 228.459947 377.409694 
+z
+" style="fill: #f8f3aa; stroke: #555555; stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_22">
+    <text style="font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; text-anchor: start" x="257.631947" y="385.263694" transform="rotate(-0 257.631947 385.263694)">persisted store</text>
+   </g>
+   <g id="line2d_2">
+    <path d="M 228.459947 398.16757 
+L 238.557947 398.16757 
+L 248.655947 398.16757 
+" style="fill: none; stroke: #000000; stroke-width: 1.1; stroke-linecap: round"/>
+   </g>
+   <g id="text_23">
+    <text style="font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; text-anchor: start" x="257.631947" y="402.09457" transform="rotate(-0 257.631947 402.09457)">data or control flow</text>
+   </g>
+   <g id="line2d_3">
+    <path d="M 385.548713 381.336694 
+L 395.646713 381.336694 
+L 405.744713 381.336694 
+" style="fill: none; stroke-dasharray: 1,2; stroke-dashoffset: 0; stroke: #0072b2"/>
+   </g>
+   <g id="text_24">
+    <text style="font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; text-anchor: start" x="414.720713" y="385.263694" transform="rotate(-0 414.720713 385.263694)">iteration / feedback</text>
+   </g>
+   <g id="line2d_4">
+    <path d="M 385.548713 398.16757 
+L 395.646713 398.16757 
+L 405.744713 398.16757 
+" style="fill: none; stroke-dasharray: 5.2,2.6; stroke-dashoffset: 0; stroke: #d55e00; stroke-width: 1.3"/>
+   </g>
+   <g id="text_25">
+    <text style="font-size: 11.22px; font-family: 'DejaVu Serif', 'Liberation Serif', 'Times New Roman', serif; text-anchor: start" x="414.720713" y="402.09457" transform="rotate(-0 414.720713 402.09457)">never crosses (fold safety)</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pcbacf1dc0f">
+   <rect x="4.32" y="53.28" width="639.36" height="322.56"/>
+  </clipPath>
+ </defs>
+</svg>

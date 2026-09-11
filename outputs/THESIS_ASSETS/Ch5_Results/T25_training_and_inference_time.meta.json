@@ -1,0 +1,112 @@
+{
+  "table_id": "T25",
+  "title": "Training and Inference Time",
+  "caption": "Training time per fold, from every stored run's own instrumentation, and end-to-end inference time per recording decomposed by pipeline stage. Training rows are distributions, not points: min, max and the max/min ratio travel with the mean. Inference rows are the warm repeats of a controlled bench over a duration-stratified sample of real PhysioNet recordings.",
+  "exp_id": "EXP-A1, EXP-A2, EXP-B1, EXP-B2, EXP-C1, EXP-C2",
+  "objective": "O5 (complexity and deployability)",
+  "dataset": "D1 PhysioNet 2016, D2/D3 PASCAL, D4 CirCor 2022",
+  "framework": "PV-MEPCG / PulseVision",
+  "generated_utc": "2026-09-10T17:09:57.736723+00:00",
+  "git": {
+    "available": true,
+    "reason": null,
+    "commit": "f38eb9f8b1562ea033abd0dcf3c4e8ca191acb04",
+    "commit_short": "f38eb9f8",
+    "branch": "main",
+    "dirty": true,
+    "dirty_files": [
+      "outputs/00_evidence_index/evidence_index.csv",
+      "outputs/00_evidence_index/run_manifest.json",
+      "outputs/11_complexity/T24_complexity_analysis.docx",
+      "outputs/11_complexity/T24_complexity_analysis.md",
+      "outputs/11_complexity/T24_complexity_analysis.meta.json",
+      "outputs/11_complexity/T24_complexity_analysis.tex",
+      "outputs/11_complexity/T25_training_and_inference_time.docx",
+      "outputs/11_complexity/T25_training_and_inference_time.md",
+      "outputs/11_complexity/T25_training_and_inference_time.tex",
+      "src/reporting/statistics_report.py",
+      "frontend/out/",
+      "outputs/09_robustness_analysis/EXP-E1/sweep.log",
+      "outputs/09_robustness_analysis/EXP-E2_trunc.log"
+    ]
+  },
+  "command": "python scripts/31_complexity_analysis.py",
+  "rounding_rules": {
+    "metric": 3,
+    "p_value": 3,
+    "percent": 1,
+    "count": 0,
+    "integer": 0,
+    "mean_count": 1,
+    "seconds": 2,
+    "text": null,
+    "preformatted": null
+  },
+  "column_kinds": {
+    "measurement": "text",
+    "run": "text",
+    "task": "text",
+    "arm": "text",
+    "model_id": "text",
+    "unit": "text",
+    "n_folds": "count",
+    "mean_seconds": "seconds",
+    "sd_seconds": "seconds",
+    "median_seconds": "seconds",
+    "min_seconds": "seconds",
+    "max_seconds": "seconds",
+    "spread_max_over_min": "metric"
+  },
+  "column_places": {
+    "spread_max_over_min": 1
+  },
+  "n_rows": 61,
+  "sources": [
+    {
+      "path": "outputs/11_complexity/training_time_summary.csv",
+      "exists": true,
+      "bytes": 14920,
+      "sha256": "393dd29e164cd3b837fb2f12e66fb38ff9b86cfe3a20093bb5c43fa73855ac4c",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:09:56.649170+00:00"
+    },
+    {
+      "path": "outputs/11_complexity/inference_stage_summary.csv",
+      "exists": true,
+      "bytes": 875,
+      "sha256": "71ee76446f183f836f0f9ba95980d4d9012c08353eebf297f4a5b916593f3d36",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:09:56.664636+00:00"
+    },
+    {
+      "path": "outputs/11_complexity/model_footprint.csv",
+      "exists": true,
+      "bytes": 2139,
+      "sha256": "064bfd31a8c02c7d19fa839a29f6694c3105e1b66f51221ce8d69f2b5f028cb7",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T11:30:13.463884+00:00"
+    },
+    {
+      "path": "outputs/11_complexity/complexity_overview.csv",
+      "exists": true,
+      "bytes": 3693,
+      "sha256": "3d95c2cb05786754970050fc194e1a134ae7b133be30e93afb8eec07ad20b7f2",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:09:56.746965+00:00"
+    }
+  ],
+  "written": {
+    "csv": "D:/Projects/HeartGuard/outputs/11_complexity/T25_training_and_inference_time.csv",
+    "md": "D:/Projects/HeartGuard/outputs/11_complexity/T25_training_and_inference_time.md",
+    "docx": "D:/Projects/HeartGuard/outputs/11_complexity/T25_training_and_inference_time.docx",
+    "latex": "D:/Projects/HeartGuard/outputs/11_complexity/T25_training_and_inference_time.tex"
+  },
+  "notes": [
+    "A SINGLE ENSEMBLE FIT TIME IS MEANINGLESS. M6 and M7 fit each member four times, and a nested fold whose member search picked a large gradient-boosting configuration costs an order of magnitude more than one that picked a small one. Read the min/max, and never quote an ensemble's mean fit time without the spread beside it.",
+    "TRAINING TIMES WERE NOT MEASURED ON AN IDLE MACHINE. They are what the project's own runs recorded, over months, sometimes with other jobs running -- one measured episode of three concurrent jobs cost M8 a factor of 14. They are honest records of what the runs cost and they are NOT a like-for-like model comparison; T26's controlled bench is. A large max/min on a 'config defaults' arm is more likely contention than a model property.",
+    "The instrumented inference stages sum to slightly less than 'total': assembling the feature vector between extraction and prediction is not separately timed, and the remainder is reported as the 'unattributed' stage rather than absorbed into a neighbour.",
+    "The first scoring of a process pays for librosa's numba JIT and the bundle's first load. That cost is real exactly once per process, so the reported rows are the warm repeats; the cold first repeat is kept in inference_timing.csv.",
+    "Measured on CPU only -- this machine has no CUDA GPU, and no number here may be compared against a GPU-trained model. M9 (1D-CNN) is out of scope for that reason and is not fitted anywhere in this project.",
+    "PV-MEPCG / PulseVision is an academic screening and decision-support prototype, not a diagnostic tool."
+  ]
+}

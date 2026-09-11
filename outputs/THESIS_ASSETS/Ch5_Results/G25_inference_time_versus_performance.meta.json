@@ -1,0 +1,59 @@
+{
+  "figure_id": "G25",
+  "figure_number": 25,
+  "title": "Inference Time Versus Performance",
+  "caption": "Left: each model's predict time for a single prepared feature vector against its balanced accuracy on EXP-A2, both from the controlled bench and the stored run. Right: the same numbers against what an end-to-end inference on a real recording costs. Feature extraction is the same work for every model, so the spread on the left is invisible to anyone waiting for a result -- a model choice buys accuracy here, not latency. The left axis is logarithmic because the models span two orders of magnitude; the right one is deliberately linear, because a log axis is exactly the transform that would hide how small the model's share is.",
+  "exp_id": "EXP-A2",
+  "objective": "O5 (complexity and deployability)",
+  "dataset": "D1 PhysioNet 2016",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-09-10T17:10:00.575059+00:00",
+  "command": "python scripts/31_complexity_analysis.py",
+  "plotted_rows": 8,
+  "plotted_csv": "G25_inference_time_versus_performance.csv",
+  "plotted_csv_sha256": "3d95c2cb05786754970050fc194e1a134ae7b133be30e93afb8eec07ad20b7f2",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "outputs/11_complexity/training_time_summary.csv",
+      "exists": true,
+      "bytes": 14920,
+      "sha256": "393dd29e164cd3b837fb2f12e66fb38ff9b86cfe3a20093bb5c43fa73855ac4c",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:09:56.649170+00:00"
+    },
+    {
+      "path": "outputs/11_complexity/inference_stage_summary.csv",
+      "exists": true,
+      "bytes": 875,
+      "sha256": "71ee76446f183f836f0f9ba95980d4d9012c08353eebf297f4a5b916593f3d36",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:09:56.664636+00:00"
+    },
+    {
+      "path": "outputs/11_complexity/model_footprint.csv",
+      "exists": true,
+      "bytes": 2139,
+      "sha256": "064bfd31a8c02c7d19fa839a29f6694c3105e1b66f51221ce8d69f2b5f028cb7",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T11:30:13.463884+00:00"
+    },
+    {
+      "path": "outputs/11_complexity/complexity_overview.csv",
+      "exists": true,
+      "bytes": 3693,
+      "sha256": "3d95c2cb05786754970050fc194e1a134ae7b133be30e93afb8eec07ad20b7f2",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:09:56.746965+00:00"
+    }
+  ],
+  "written": {
+    "csv": "outputs/13_figures_diagrams/G25_inference_time_versus_performance.csv",
+    "png": "outputs/13_figures_diagrams/G25_inference_time_versus_performance.png",
+    "svg": "outputs/13_figures_diagrams/G25_inference_time_versus_performance.svg"
+  },
+  "notes": []
+}

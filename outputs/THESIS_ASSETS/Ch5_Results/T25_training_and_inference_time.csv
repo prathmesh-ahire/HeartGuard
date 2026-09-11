@@ -1,0 +1,62 @@
+measurement,run,task,arm,model_id,unit,n_folds,mean_seconds,sd_seconds,median_seconds,min_seconds,max_seconds,spread_max_over_min
+training (stored run instrumentation),EXP-A1,binary,config defaults,M1,one fold fit,25,0.20654403999999998,0.06955313427006722,0.191811,0.177716,0.534553,3.0079058722906207
+training (stored run instrumentation),EXP-A1,binary,config defaults,M3,one fold fit,25,0.98941844,0.09947247370674965,0.93797,0.871679,1.230668,1.4118362378811466
+training (stored run instrumentation),EXP-A1,binary,config defaults,M4,one fold fit,25,4.8231024,0.19312181068046136,4.793562,4.502188,5.303754,1.1780392111568863
+training (stored run instrumentation),EXP-A1,binary,config defaults,M5,one fold fit,25,32.340450880000006,3.4979407053434466,33.151117,25.760254,37.885092,1.4706800639465745
+training (stored run instrumentation),EXP-A1,binary,config defaults,M6,one fold fit,25,214.03504032,20.221587767321434,204.341677,192.514591,268.684532,1.3956580153449252
+training (stored run instrumentation),EXP-A1,binary,config defaults,M8,one fold fit,25,8.07047244,1.6060731278429303,7.559965,6.970063,13.864699,1.9891784335378317
+training (stored run instrumentation),EXP-A2,binary,nested search,M1,one fold fit,25,2.96848376,6.391973126918995,0.241999,0.089022,28.490326,320.0369122239446
+training (stored run instrumentation),EXP-A2,binary,nested search,M3,one fold fit,25,1.39509164,0.324857671301074,1.486269,0.822121,1.876774,2.2828440095800984
+training (stored run instrumentation),EXP-A2,binary,nested search,M4,one fold fit,25,12.99612192,8.50873438682553,15.356955,1.092234,25.3375,23.197867856155366
+training (stored run instrumentation),EXP-A2,binary,nested search,M5,one fold fit,25,99.18041424,89.82467373110994,59.160199,17.413512,276.517428,15.879474973227685
+training (stored run instrumentation),EXP-A2,binary,nested search,M6,one fold fit,25,545.13670376,380.12115250448346,360.204055,164.215498,1545.163012,9.409361666948147
+training (stored run instrumentation),EXP-A2,binary,nested search,M7,one fold fit,25,534.5805253999999,401.522879194318,341.061456,145.155364,1517.773905,10.456202672606713
+training (stored run instrumentation),EXP-A2,binary,nested search,M8,one fold fit,25,12.936738200000002,12.995047947920858,6.745825,1.109604,46.892374,42.260458686161904
+training (stored run instrumentation),EXP-A2-so04_subset,binary,nested search (on the SO-04 20-feature subset rather than all 138),M6,one fold fit,25,85.9866328,59.77983398494534,59.818621,23.281225,251.682357,10.810528956272705
+training (stored run instrumentation),EXP-A2-so04_subset,binary,nested search (on the SO-04 20-feature subset rather than all 138),M7,one fold fit,25,88.61364892000002,50.35387149311175,69.001503,33.137508,180.64956,5.4515131312831375
+training (stored run instrumentation),EXP-B1,pascal_a,nested search,M1,one fold fit,10,0.6722266,0.6716839691434259,0.5649679999999999,0.019146,1.461724,76.3461819701243
+training (stored run instrumentation),EXP-B1,pascal_a,nested search,M3,one fold fit,10,0.08327169999999998,0.014031671762678726,0.079442,0.068206,0.109646,1.6075711814209892
+training (stored run instrumentation),EXP-B1,pascal_a,nested search,M4,one fold fit,10,1.1608495,1.1005013667508552,0.679828,0.329553,3.148593,9.554132415726757
+training (stored run instrumentation),EXP-B1,pascal_a,nested search,M5,one fold fit,10,3.5897791999999997,3.3011355462044945,1.6267515000000001,1.24358,8.567786,6.889613856768363
+training (stored run instrumentation),EXP-B1,pascal_a,nested search,M6,one fold fit,10,8.819013700000001,5.7038494266091915,6.7581765,3.792279,18.015552,4.750587179898947
+training (stored run instrumentation),EXP-B1,pascal_a,nested search,M7,one fold fit,10,31.926286700000002,18.661288689492505,24.1794535,12.734699,60.676022,4.764621605897399
+training (stored run instrumentation),EXP-B1-defaults,pascal_a,config defaults (the defaults arm shipped beside EXP-B1),M1,one fold fit,10,0.0447728,0.006967384856123087,0.0449075,0.033214,0.054092,1.6285903534654063
+training (stored run instrumentation),EXP-B1-defaults,pascal_a,config defaults (the defaults arm shipped beside EXP-B1),M3,one fold fit,10,0.08407039999999999,0.024462776399165234,0.07828650000000001,0.062371,0.140598,2.254220711548636
+training (stored run instrumentation),EXP-B1-defaults,pascal_a,config defaults (the defaults arm shipped beside EXP-B1),M4,one fold fit,10,1.5934952,0.13319004945799146,1.533535,1.470641,1.89132,1.2860514564737415
+training (stored run instrumentation),EXP-B1-defaults,pascal_a,config defaults (the defaults arm shipped beside EXP-B1),M5,one fold fit,10,2.0696423,0.1269106145416704,2.093736,1.887853,2.257122,1.1956026237212325
+training (stored run instrumentation),EXP-B1-defaults,pascal_a,config defaults (the defaults arm shipped beside EXP-B1),M6,one fold fit,10,6.3295138,0.7897965454506201,6.163918000000001,5.51232,8.357113,1.5160790737838152
+training (stored run instrumentation),EXP-B1-defaults,pascal_a,config defaults (the defaults arm shipped beside EXP-B1),M7,one fold fit,10,23.389822000000002,2.0870174970346778,22.710865,21.898007,28.824676,1.3163150418209293
+training (stored run instrumentation),EXP-B2,pascal_b,nested search,M1,one fold fit,5,2.9210964,1.685347231255417,3.135908,0.123515,4.618408,37.391474719669674
+training (stored run instrumentation),EXP-B2,pascal_b,nested search,M3,one fold fit,5,0.1328566,0.007879197757386219,0.132075,0.123988,0.143017,1.1534745297932059
+training (stored run instrumentation),EXP-B2,pascal_b,nested search,M4,one fold fit,5,2.3932058,2.3074093653256895,0.79513,0.735535,5.684578,7.728494225291794
+training (stored run instrumentation),EXP-B2,pascal_b,nested search,M5,one fold fit,5,24.6890014,26.6851414026812,10.511186,4.552154,67.118415,14.744319941724292
+training (stored run instrumentation),EXP-B2,pascal_b,nested search,M6,one fold fit,5,43.8752092,43.35932229643816,20.487581,9.605077,104.833972,10.914433273153355
+training (stored run instrumentation),EXP-B2,pascal_b,nested search,M7,one fold fit,5,129.2969974,119.18319889344616,66.536719,33.129903,292.911396,8.841299535347268
+training (stored run instrumentation),EXP-B2-defaults,pascal_b,config defaults (the defaults arm shipped beside EXP-B2),M1,one fold fit,5,0.0836036,0.012499924911774467,0.080079,0.07208,0.104403,1.4484322974472807
+training (stored run instrumentation),EXP-B2-defaults,pascal_b,config defaults (the defaults arm shipped beside EXP-B2),M3,one fold fit,5,0.1677616,0.07788678700074872,0.138376,0.118851,0.306264,2.576873564378928
+training (stored run instrumentation),EXP-B2-defaults,pascal_b,config defaults (the defaults arm shipped beside EXP-B2),M4,one fold fit,5,1.9406653999999999,0.09716592917684676,1.922504,1.813414,2.053666,1.132486018085225
+training (stored run instrumentation),EXP-B2-defaults,pascal_b,config defaults (the defaults arm shipped beside EXP-B2),M5,one fold fit,5,11.714222799999998,0.5318043932812136,11.452678,11.314008,12.612298,1.1147506701427117
+training (stored run instrumentation),EXP-B2-defaults,pascal_b,config defaults (the defaults arm shipped beside EXP-B2),M6,one fold fit,5,27.1409714,2.103976761544504,26.695789,24.853834,29.586743,1.1904297341005818
+training (stored run instrumentation),EXP-B2-defaults,pascal_b,config defaults (the defaults arm shipped beside EXP-B2),M7,one fold fit,5,83.11371240000001,2.4947022067359663,82.821784,79.352278,85.770231,1.080879253397111
+training (stored run instrumentation),EXP-C1-three_class,circor_murmur,nested search,M3,one fold fit,5,3.3885889999999996,0.5557214732872036,3.173691,2.869717,4.036538,1.4065979328275227
+training (stored run instrumentation),EXP-C1-three_class,circor_murmur,nested search,M4,one fold fit,5,15.3658028,17.503670510795992,8.903377,2.876081,46.182048,16.057283504880427
+training (stored run instrumentation),EXP-C1-three_class,circor_murmur,nested search,M5,one fold fit,5,232.84103220000003,240.90334782230283,57.38855,56.640756,505.38182,8.922582530501534
+training (stored run instrumentation),EXP-C1-three_class,circor_murmur,nested search,M6,one fold fit,5,502.16703479999995,486.31644739459455,179.814404,127.604885,1111.577726,8.711090692178438
+training (stored run instrumentation),EXP-C1-three_class,circor_murmur,nested search,M7,one fold fit,5,1658.1653118000002,1666.4336557832105,575.191184,351.768491,3772.190017,10.723501716360378
+training (stored run instrumentation),EXP-C1-two_class,circor_murmur,nested search,M3,one fold fit,5,2.2122796,0.4815847604444101,1.954305,1.826844,2.908228,1.5919410743336595
+training (stored run instrumentation),EXP-C1-two_class,circor_murmur,nested search,M4,one fold fit,5,10.336020200000002,8.932661817292127,7.824847,2.037073,25.091942,12.317644973940551
+training (stored run instrumentation),EXP-C1-two_class,circor_murmur,nested search,M5,one fold fit,5,68.9338168,64.73617513361827,28.695513,17.195391,142.39497,8.28099634372955
+training (stored run instrumentation),EXP-C1-two_class,circor_murmur,nested search,M6,one fold fit,5,404.3479066,340.3566911950499,189.44002,108.752345,777.263182,7.147093536235931
+training (stored run instrumentation),EXP-C1-two_class,circor_murmur,nested search,M7,one fold fit,5,4030.885984400001,8303.522639191984,174.170974,129.337928,18876.091346,145.9439751191932
+training (stored run instrumentation),EXP-C2,circor_outcome,nested search,M3,one fold fit,5,2.713279,0.23354756149765293,2.700352,2.446999,3.079824,1.2586126925266419
+training (stored run instrumentation),EXP-C2,circor_outcome,nested search,M4,one fold fit,5,12.4642094,18.034182700705188,6.024122,0.740599,44.217193,59.704635031913355
+training (stored run instrumentation),EXP-C2,circor_outcome,nested search,M5,one fold fit,5,77.6641272,78.3315936116046,22.042832,20.482244,179.102853,8.744298378634685
+training (stored run instrumentation),EXP-C2,circor_outcome,nested search,M6,one fold fit,5,440.6200828,378.0034533066442,209.001803,121.844416,917.484503,7.529967585876074
+training (stored run instrumentation),EXP-C2,circor_outcome,nested search,M7,one fold fit,5,1007.9505406000001,1295.6133890786423,209.761549,112.775196,3064.797019,27.176162203256116
+"inference (controlled bench, per recording)",inference bench,binary,"deployed bundle, warm",validate,"one recording, one stage",80,0.0007244875000000001,0.0001426637184102283,0.0006705000000000001,0.000636,0.001293,2.0330188679245285
+"inference (controlled bench, per recording)",inference bench,binary,"deployed bundle, warm",load_model,"one recording, one stage",80,4e-07,4.929888180106566e-07,0.0,0.0,1e-06,
+"inference (controlled bench, per recording)",inference bench,binary,"deployed bundle, warm",preprocess,"one recording, one stage",80,0.024645925000000003,0.012796596327302196,0.022434000000000003,0.009499,0.061801,6.506053268765133
+"inference (controlled bench, per recording)",inference bench,binary,"deployed bundle, warm",extract,"one recording, one stage",80,2.2609379625000003,0.5659297126227129,2.2018225,1.404319,3.644767,2.595398196563601
+"inference (controlled bench, per recording)",inference bench,binary,"deployed bundle, warm",predict,"one recording, one stage",80,0.056459075000000004,0.0018131302101230232,0.05623,0.054009,0.064454,1.193393693643652
+"inference (controlled bench, per recording)",inference bench,binary,"deployed bundle, warm",unattributed,"one recording, one stage",80,0.0002675749999999612,6.79487474386417e-05,0.00024099999999985,0.0002189999999999,0.0005990000000002,2.73515981735376
+"inference (controlled bench, per recording)",inference bench,binary,"deployed bundle, warm",total,"one recording, one stage",80,2.343035425,0.5672447455168719,2.2980615,1.472367,3.722066,2.527947176213539

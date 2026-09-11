@@ -1,0 +1,56 @@
+Algorithm ALG-13: Binary evaluation workflow
+PV-MEPCG / PulseVision  |  T99.2  |  objective O1
+
+Purpose: Every binary model is scored on the same stored, subject-grouped fold map, and reported with sensitivity, specificity, balanced accuracy and AUC -- never accuracy alone.
+Input:   the D1 feature matrix, the stored repeated_5x5_grouped fold map, the experiment's model list
+Output:  per_fold_metrics.csv, aggregate_metrics.csv, predictions.parquet, confusion_matrices.json, and the selected final model
+
+Parameters (read from the repository when this file was generated)
+  cv                repeated_5x5_grouped                                                                                    configs/experiments.yaml experiments.EXP-A2.cv
+  repeats           5                                                                                                       configs/experiments.yaml cv_schemes.repeated_5x5_grouped
+  splits            5                                                                                                       configs/experiments.yaml cv_schemes.repeated_5x5_grouped
+  group_key         subject_id                                                                                              configs/experiments.yaml cv_schemes.repeated_5x5_grouped
+  scoring           balanced_accuracy                                                                                       configs/experiments.yaml defaults.scoring.binary
+  report_metrics    accuracy, sensitivity, specificity, precision, f1, balanced_accuracy, roc_auc, pr_auc, mcc, brier, ece  configs/experiments.yaml defaults.report_metrics_binary
+  selection_rule    sensitivity, balanced_accuracy                                                                          configs/experiments.yaml defaults.selection_rule
+  positive_label    1                                                                                                       metrics.binary_metrics(positive_label=...) default
+  specificity_rule  tn / (tn + fp)                                                                                          src/evaluation/metrics.py binary_metrics
+  balanced_rule     np.nanmean([sensitivity, specificity])                                                                  src/evaluation/metrics.py binary_metrics
+  ece_bins          10                                                                                                      src/evaluation/metrics.py ECE_BINS
+  sd_rule           np.std(finite, ddof=1)                                                                                  src/evaluation/experiment.py ExperimentResult.aggregate_frame
+  n_bootstrap       2000                                                                                                    src/evaluation/metrics.py DEFAULT_BOOTSTRAP
+  alpha             0.05                                                                                                    metrics.bootstrap_ci(alpha=...) default
+
+Algorithm
+   1  folds <- the stored repeated_5x5_grouped map (5 x 5, grouped on subject_id), loaded and validated against config, never re-derived
+   2  for each model and each fold (resuming any unit already checkpointed):
+   3      assert subject groups disjoint on the map and again on the arrays fed to the estimator; assert train and test rows disjoint
+   4      plan the model: config defaults, or the fold's own nested search (ALG-07) when the experiment is tuned
+   5      P <- the fold-safe pipeline of ALG-05; fit on the training rows; predict and predict_proba the test rows
+   6      (TN, FP, FN, TP) <- confusion over (negative, positive = 1)
+   7      sensitivity <- TP / (TP + FN); specificity <- tn / (tn + fp); balanced accuracy <- np.nanmean([sensitivity, specificity]); precision, F1, MCC
+   8      ROC-AUC and PR-AUC from the positive-class probability; NaN, never a substitute, when the fold holds one class
+   9      Brier score, and ECE over 10 equal-width confidence bins
+  10  aggregate per model: mean and sample SD, np.std(finite, ddof=1), NaN folds excluded and counted
+  11  write the output contract with the run manifest (seed, fold map, hyperparameters, package versions)
+  12  rank models lexicographically by sensitivity, balanced_accuracy; record what accuracy alone would have chosen
+  13  confidence intervals: percentile bootstrap over records, 2000 resamples, alpha 0.05, seeded; unscorable draws excluded and counted
+
+Notes
+  Reported for every binary run: accuracy, sensitivity, specificity, precision, f1, balanced_accuracy, roc_auc, pr_auc, mcc, brier, ece. Search objective: balanced_accuracy.
+
+Implemented by
+  src/evaluation/cv.py:249  src.evaluation.cv:load_folds
+  src/evaluation/experiment.py:959  src.evaluation.experiment:run_experiment
+  src/evaluation/cv.py:344  src.evaluation.cv:assert_group_disjoint
+  src/evaluation/tuned.py:461  src.evaluation.tuned:NestedSearchPlanner.plan
+  src/evaluation/experiment.py:684  src.evaluation.experiment:_run_unit
+  src/evaluation/metrics.py:92  src.evaluation.metrics:confusion
+  src/evaluation/metrics.py:164  src.evaluation.metrics:binary_metrics
+  src/evaluation/experiment.py:657  src.evaluation.experiment:_score
+  src/evaluation/experiment.py:827  src.evaluation.experiment:ExperimentResult.aggregate_frame
+  src/evaluation/experiment.py:1104  src.evaluation.experiment:write_outputs
+  src/evaluation/tuned.py:550  src.evaluation.tuned:select_final_model
+  src/evaluation/metrics.py:412  src.evaluation.metrics:bootstrap_ci
+
+Regenerate: python scripts/39_export_algorithms.py --ids ALG-13

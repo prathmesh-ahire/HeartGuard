@@ -1,0 +1,53 @@
+Algorithm ALG-12: Optimized-weight soft voting
+PV-MEPCG / PulseVision  |  T99.1  |  objective O3, O5
+
+Purpose: M7, the proposed ensemble: the same members and decision rule as M6, with the weights chosen by an exhaustive simplex search on out-of-fold probabilities under a one-standard-error rule that shrinks toward equal weights.
+Input:   training rows X, y and the training fold's own subject groups
+Output:  the chosen weights w*, the in-fold threshold t*, and the selection record
+
+Parameters (read from the repository when this file was generated)
+  members           M3, M4, M5                                                                                                                        configs/models.yaml models.M7.members
+  weights           optimized                                                                                                                         configs/models.yaml models.M7.defaults.weights
+  inner_cv          3                                                                                                                                 configs/models.yaml models.M7.defaults.inner_cv
+  objective         balanced_accuracy                                                                                                                 configs/models.yaml models.M7.weight_search.objective
+  objective_form    0.5 x sensitivity + 0.5 x specificity                                                                                             soft_voting.OBJECTIVE_COEFFICIENTS
+  resolution        0.05                                                                                                                              configs/models.yaml models.M7.weight_search.resolution
+  selection_rule    one_standard_error                                                                                                                configs/models.yaml models.M7.weight_search.selection_rule
+  n_se              1                                                                                                                                 configs/models.yaml models.M7.weight_search.n_standard_errors
+  n_candidates      232                                                                                                                               soft_voting.weight_candidates(len(members), resolution)
+  centre_rule       np.vstack([centre[None, :], lattice])                                                                                             src/ensemble/soft_voting.py weight_candidates
+  se_rule           (a**2) * sensitivity * (1.0 - sensitivity) / n_positive + (b**2) * specificity * (1.0 - specificity) / n_negative, square-rooted  src/ensemble/soft_voting.py objective_standard_error
+  within_rule       scores >= best - margin - 1e-12                                                                                                   src/ensemble/soft_voting.py _pick_among_ties
+  pick_rule         np.linalg.norm(grid[within] - uniform, axis=1)                                                                                    src/ensemble/soft_voting.py _pick_among_ties
+  multiclass_score  f1_score(targets, predicted, average="macro", zero_division=0) + balanced_accuracy_score(targets, predicted)                      src/ensemble/soft_voting.py SoftVotingEnsemble._optimize_weights_multiclass
+
+Algorithm
+   1  members, inner splits and out-of-fold probabilities oof exactly as in ALG-11 (M3, M4, M5, weights optimized, inner_cv 3)
+   2  grid <- every non-negative weight vector on the simplex at resolution 0.05, from an integer lattice
+   3  if the exact equal-weight vector is not on the lattice: add it, np.vstack([centre[None, :], lattice]); |grid| = 232
+   4  if the task is binary:
+   5      for each candidate w: t(w) <- select_threshold(fuse(oof, w)); score(w) <- balanced_accuracy = 0.5 x sensitivity + 0.5 x specificity at t(w) -- weights and threshold chosen jointly
+   6      b <- argmax score; SE <- exact binomial standard error of b's objective, (a**2) * sensitivity * (1.0 - sensitivity) / n_positive + (b**2) * specificity * (1.0 - specificity) / n_negative, square-rooted
+   7      margin <- 1 x SE (one_standard_error)
+   8      within <- candidates with scores >= best - margin - 1e-12; w* <- the one closest to equal weights in L2, np.linalg.norm(grid[within] - uniform, axis=1)
+   9  else (multiclass): score(w) <- f1_score(targets, predicted, average="macro", zero_division=0) + balanced_accuracy_score(targets, predicted) on the fused argmax; w* <- exact ties only (margin 0), broken toward equal weights
+  10  record the candidate count, how many fell within the margin, the best and chosen scores, and the argmax weights beside w*
+  11  t* <- select_threshold on fuse(oof, w*), as in ALG-11; refit every member on the whole training fold
+  12  predict as ALG-11 with w* in place of equal weights
+
+Notes
+  A grid, not a gradient optimiser: balanced_accuracy is a step function of the weights, so it has zero gradient almost everywhere. The grid needs no seed.
+  The one-standard-error rule is a selection rule fixed before any result; it is never tuned to a score. When no candidate beats the noise, M7 returns equal weights and equals M6.
+
+Implemented by
+  src/ensemble/soft_voting.py:689  src.ensemble.soft_voting:SoftVotingEnsemble._out_of_fold_probabilities
+  src/ensemble/soft_voting.py:117  src.ensemble.soft_voting:simplex_grid
+  src/ensemble/soft_voting.py:149  src.ensemble.soft_voting:weight_candidates
+  src/ensemble/soft_voting.py:723  src.ensemble.soft_voting:SoftVotingEnsemble._optimize_weights
+  src/ensemble/soft_voting.py:239  src.ensemble.soft_voting:objective_standard_error
+  src/ensemble/soft_voting.py:405  src.ensemble.soft_voting:_pick_among_ties
+  src/ensemble/soft_voting.py:801  src.ensemble.soft_voting:SoftVotingEnsemble._optimize_weights_multiclass
+  src/ensemble/soft_voting.py:537  src.ensemble.soft_voting:SoftVotingEnsemble.fit
+  src/ensemble/soft_voting.py:844  src.ensemble.soft_voting:SoftVotingEnsemble.predict
+
+Regenerate: python scripts/39_export_algorithms.py --ids ALG-12

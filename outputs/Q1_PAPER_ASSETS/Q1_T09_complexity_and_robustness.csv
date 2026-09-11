@@ -1,0 +1,23 @@
+analysis,model_id,condition,n_features,fit_seconds,single_predict_seconds,model_mb,balanced_accuracy,sensitivity,source_file
+complexity (fold r0f0 fit),M1,configs/models.yaml defaults,138.0,0.4877674000017578,0.0014054666656496,0.007153,0.8468043977525703,0.864823389162735,outputs/11_complexity/T24_complexity_analysis.csv
+complexity (fold r0f0 fit),M2,configs/models.yaml defaults,138.0,0.0927884999982779,0.0062446666658312,2.889406,,,outputs/11_complexity/T24_complexity_analysis.csv
+complexity (fold r0f0 fit),M3,configs/models.yaml defaults,138.0,1.1148688000030234,0.0076712999992499,2.214025,0.7997979696844384,0.6671634033396946,outputs/11_complexity/T24_complexity_analysis.csv
+complexity (fold r0f0 fit),M4,configs/models.yaml defaults,138.0,14.503228699999454,0.1771607333333425,12.471058,0.8523598911722675,0.8193179675801402,outputs/11_complexity/T24_complexity_analysis.csv
+complexity (fold r0f0 fit),M5,configs/models.yaml defaults,138.0,28.772615900001256,0.001407533333501,0.273177,0.8471607213499192,0.8130747740507671,outputs/11_complexity/T24_complexity_analysis.csv
+complexity (fold r0f0 fit),M6,configs/models.yaml defaults,138.0,228.4642775000029,0.1829141000004407,15.561636,0.8558631699470313,0.8615469513693752,outputs/11_complexity/T24_complexity_analysis.csv
+complexity (fold r0f0 fit),M7,configs/models.yaml defaults,138.0,257.22887510000146,0.1692589666684701,15.561896,0.8555880661827884,0.8615380387134037,outputs/11_complexity/T24_complexity_analysis.csv
+complexity (fold r0f0 fit),M8,configs/models.yaml defaults,138.0,6.626751000003424,0.0038353666653468,0.672657,0.8482519737790062,0.8218651609921876,outputs/11_complexity/T24_complexity_analysis.csv
+noise (EXP-E1),M1,clean,,,,,0.8856496708990033,0.9014142249072634,outputs/09_robustness_analysis/T20_noise_robustness.csv
+noise (EXP-E1),M1,noisy,,,,,0.5997674603997605,0.595446355643357,outputs/09_robustness_analysis/T20_noise_robustness.csv
+noise (EXP-E1),M1,clean (no noise added),,,,,0.7837746424429841,0.6730769230769231,outputs/09_robustness_analysis/T20_noise_robustness.csv
+noise (EXP-E1),M1,20 dB SNR,,,,,0.7821318129107073,0.6346153846153846,outputs/09_robustness_analysis/T20_noise_robustness.csv
+noise (EXP-E1),M1,15 dB SNR,,,,,0.6839002705836876,0.4230769230769231,outputs/09_robustness_analysis/T20_noise_robustness.csv
+noise (EXP-E1),M1,10 dB SNR,,,,,0.5739756474681098,0.173076923076923,outputs/09_robustness_analysis/T20_noise_robustness.csv
+noise (EXP-E1),M1,5 dB SNR,,,,,0.5455643602628527,0.0961538461538461,outputs/09_robustness_analysis/T20_noise_robustness.csv
+noise (EXP-E1),M1,0 dB SNR,,,,,0.5,0.0,outputs/09_robustness_analysis/T20_noise_robustness.csv
+duration (EXP-E2),M1,long,,,,,0.8970306652289404,0.9439656554447272,outputs/09_robustness_analysis/T21_duration_robustness.csv
+duration (EXP-E2),M1,medium,,,,,0.7590246915031443,0.7086617251566022,outputs/09_robustness_analysis/T21_duration_robustness.csv
+duration (EXP-E2),M1,full (untruncated),,,,,0.7837746424429841,0.6730769230769231,outputs/09_robustness_analysis/T21_duration_robustness.csv
+duration (EXP-E2),M1,10 s clip,,,,,0.7700038654812524,0.6153846153846154,outputs/09_robustness_analysis/T21_duration_robustness.csv
+duration (EXP-E2),M1,5 s clip,,,,,0.6960282180131426,0.4423076923076923,outputs/09_robustness_analysis/T21_duration_robustness.csv
+duration (EXP-E2),M1,3 s clip,,,,,0.6855431001159644,0.4615384615384615,outputs/09_robustness_analysis/T21_duration_robustness.csv

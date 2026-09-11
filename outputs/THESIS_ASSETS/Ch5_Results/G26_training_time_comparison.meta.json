@@ -1,0 +1,59 @@
+{
+  "figure_id": "G26",
+  "figure_number": 26,
+  "title": "Training Time Comparison",
+  "caption": "Mean seconds to fit one fold, per model and per run, on a log scale. Whiskers span the observed minimum and maximum across that run's folds rather than a standard deviation, because the quantity is not symmetric: an ensemble fold whose member search picked a large gradient-boosting configuration costs an order of magnitude more than one that picked a small one. These are the times the project's own runs recorded on a machine that was sometimes running other jobs; T26's controlled bench is the like-for-like comparison. The colourblind-safe palette holds eight colours and there are ten runs, so the last two are hatched rather than given a ninth colour.",
+  "exp_id": "EXP-A1, EXP-A2, EXP-B1, EXP-B2, EXP-C1, EXP-C2",
+  "objective": "O5 (complexity and deployability)",
+  "dataset": "D1 PhysioNet 2016, D2/D3 PASCAL, D4 CirCor 2022",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-09-10T17:10:02.931802+00:00",
+  "command": "python scripts/31_complexity_analysis.py",
+  "plotted_rows": 54,
+  "plotted_csv": "G26_training_time_comparison.csv",
+  "plotted_csv_sha256": "393dd29e164cd3b837fb2f12e66fb38ff9b86cfe3a20093bb5c43fa73855ac4c",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "outputs/11_complexity/training_time_summary.csv",
+      "exists": true,
+      "bytes": 14920,
+      "sha256": "393dd29e164cd3b837fb2f12e66fb38ff9b86cfe3a20093bb5c43fa73855ac4c",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:09:56.649170+00:00"
+    },
+    {
+      "path": "outputs/11_complexity/inference_stage_summary.csv",
+      "exists": true,
+      "bytes": 875,
+      "sha256": "71ee76446f183f836f0f9ba95980d4d9012c08353eebf297f4a5b916593f3d36",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:09:56.664636+00:00"
+    },
+    {
+      "path": "outputs/11_complexity/model_footprint.csv",
+      "exists": true,
+      "bytes": 2139,
+      "sha256": "064bfd31a8c02c7d19fa839a29f6694c3105e1b66f51221ce8d69f2b5f028cb7",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T11:30:13.463884+00:00"
+    },
+    {
+      "path": "outputs/11_complexity/complexity_overview.csv",
+      "exists": true,
+      "bytes": 3693,
+      "sha256": "3d95c2cb05786754970050fc194e1a134ae7b133be30e93afb8eec07ad20b7f2",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:09:56.746965+00:00"
+    }
+  ],
+  "written": {
+    "csv": "outputs/13_figures_diagrams/G26_training_time_comparison.csv",
+    "png": "outputs/13_figures_diagrams/G26_training_time_comparison.png",
+    "svg": "outputs/13_figures_diagrams/G26_training_time_comparison.svg"
+  },
+  "notes": []
+}

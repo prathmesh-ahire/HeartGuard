@@ -1,0 +1,115 @@
+{
+  "table_id": "T21",
+  "title": "Duration Robustness",
+  "caption": "Two kinds of evidence about recording length, labelled by the Analysis column. observational_bands partitions each experiment's stored out-of-fold predictions by the T18.3 bands (short under 5 s, medium 5-20 s, long over 20 s), loaded from the same assignment T18 used. interventional_truncation clips the same PhysioNet recordings to 10, 5 and 3 seconds and re-extracts them, scored by a model refitted without their subjects. Only the second half can attribute anything to duration.",
+  "exp_id": "EXP-E2",
+  "objective": "O4 (robustness)",
+  "dataset": "D1 PhysioNet 2016, D2/D3 PASCAL, D4 CirCor 2022",
+  "framework": "PV-MEPCG / PulseVision",
+  "generated_utc": "2026-09-10T17:03:32.147852+00:00",
+  "git": {
+    "available": true,
+    "reason": null,
+    "commit": "a1795907d97284f998e2656f863c9911f1953293",
+    "commit_short": "a1795907",
+    "branch": "main",
+    "dirty": true,
+    "dirty_files": [
+      "outputs/00_evidence_index/evidence_index.csv",
+      "outputs/00_evidence_index/run_manifest.json",
+      "outputs/09_robustness_analysis/T20_noise_robustness.docx",
+      "outputs/09_robustness_analysis/T20_noise_robustness.md",
+      "outputs/09_robustness_analysis/T20_noise_robustness.meta.json",
+      "outputs/09_robustness_analysis/T20_noise_robustness.tex",
+      "outputs/09_robustness_analysis/T21_duration_robustness.docx",
+      "outputs/09_robustness_analysis/T21_duration_robustness.md",
+      "outputs/09_robustness_analysis/T21_duration_robustness.tex",
+      "outputs/13_figures_diagrams/G30_noise_level_robustness.meta.json",
+      "outputs/13_figures_diagrams/G30_noise_level_robustness.svg",
+      "outputs/13_figures_diagrams/figure_registry.csv",
+      "src/reporting/statistics_report.py",
+      "frontend/out/",
+      "outputs/09_robustness_analysis/EXP-E1/sweep.log",
+      "outputs/09_robustness_analysis/EXP-E2_trunc.log"
+    ]
+  },
+  "command": "python scripts/24_duration_robustness.py",
+  "rounding_rules": {
+    "metric": 3,
+    "p_value": 3,
+    "percent": 1,
+    "count": 0,
+    "integer": 0,
+    "mean_count": 1,
+    "seconds": 2,
+    "text": null,
+    "preformatted": null
+  },
+  "column_kinds": {
+    "analysis": "text",
+    "run": "text",
+    "task": "text",
+    "model_id": "text",
+    "group": "text",
+    "n_records_corpus": "count",
+    "reported": "text",
+    "n_folds": "count",
+    "n_units_mean": "metric",
+    "median_duration_sec": "seconds",
+    "min_duration_sec": "seconds",
+    "sensitivity_mean": "metric",
+    "sensitivity_sd": "metric",
+    "specificity_mean": "metric",
+    "specificity_sd": "metric",
+    "balanced_accuracy_mean": "metric",
+    "balanced_accuracy_sd": "metric",
+    "roc_auc_mean": "metric",
+    "roc_auc_sd": "metric",
+    "macro_f1_mean": "metric",
+    "macro_f1_sd": "metric",
+    "accuracy_mean": "metric",
+    "accuracy_sd": "metric"
+  },
+  "column_places": {
+    "n_units_mean": 1
+  },
+  "n_rows": 68,
+  "sources": [
+    {
+      "path": "outputs/09_robustness_analysis/EXP-E2/per_band_summary.csv",
+      "exists": true,
+      "bytes": 14800,
+      "sha256": "629bd066f2ec2a9c25846ef605159bded2cab95bd32b7e3035b88426d3899470",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:03:26.475022+00:00"
+    },
+    {
+      "path": "outputs/09_robustness_analysis/EXP-E2/truncation_metrics.csv",
+      "exists": true,
+      "bytes": 1529,
+      "sha256": "e592a42c361e2a90d60e8e430b56a32fb6665d3c7a0a0cb7de0918642ac89a53",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:03:31.157827+00:00"
+    },
+    {
+      "path": "outputs/09_robustness_analysis/EXP-E2/short_record_diagnostics.csv",
+      "exists": true,
+      "bytes": 2379,
+      "sha256": "833103868519becac1cd8ea2aee3c322f8f6c36c4b4646b8c29996f04c8f4ff1",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:03:27.240529+00:00"
+    }
+  ],
+  "written": {
+    "csv": "outputs/09_robustness_analysis/T21_duration_robustness.csv",
+    "md": "outputs/09_robustness_analysis/T21_duration_robustness.md",
+    "docx": "outputs/09_robustness_analysis/T21_duration_robustness.docx",
+    "latex": "outputs/09_robustness_analysis/T21_duration_robustness.tex"
+  },
+  "notes": [
+    "DURATION IS CONFOUNDED WITH CORPUS. Every recording under 5 s is PASCAL; PhysioNet has none and CirCor has none. A short-band deficit compared across corpora is therefore a PASCAL result wearing a duration label, which is why the truncation study exists.",
+    "The shortest recording in the corpus is 0.763 s (D3_set_b_normal__296_1311682952647_A1). The extractor returns NO NaNs at any duration -- measured over all 7,536 records -- so nothing breaks. What does happen is subtler: env_peak_rate counts heart SOUNDS at roughly 2.4/s on this corpus, so a window that short can physically contain only about 2.0 of them, and a rate estimated from one or two events carries an enormous relative error while looking perfectly finite. Treat every frame-count-dependent feature on a sub-2-second record as an estimate with no usable precision, not as a measurement.",
+    "Clips are taken from a randomly placed window, not from the start. The opening seconds of a recording carry the transducer being settled, so always clipping the head would confound length with position. The window start is drawn from the seeded generator.",
+    "PV-MEPCG / PulseVision is an academic screening prototype, not a diagnostic tool."
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "figure_id": "G34",
+  "figure_number": 34,
+  "title": "Calibration Curve",
+  "caption": "Reliability diagrams for every run that holds out-of-fold probabilities, one panel per run and one line per model. The x-axis is the confidence of the predicted class, the y-axis the accuracy of those predictions, binned in equal-width bins inside each fold and averaged over the folds that had records in the bin. A curve below the dashed diagonal is over-confident. The dotted vertical marks 1/n_classes, the confidence of a uniform probability vector: no point can lie to its left, so a 4-class panel starting at 0.25 is at the bottom of its possible range rather than badly calibrated. This is NOT the positive-class reliability curve the dashboard shows -- that one is defined only for the binary task.",
+  "exp_id": "EXP-A1, EXP-A2, EXP-B1, EXP-B2, EXP-C1, EXP-C2, EXP-D1",
+  "objective": "O3 (model comparison), O4 (reliability)",
+  "dataset": "D1 PhysioNet 2016, D2/D3 PASCAL, D4 CirCor 2022",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-09-10T17:06:09.983135+00:00",
+  "command": "python scripts/30_calibration_analysis.py",
+  "plotted_rows": 229,
+  "plotted_csv": "G34_calibration_curve.csv",
+  "plotted_csv_sha256": "c78a6438492546ffe980c7aeb7c820ed0e1f1d94cee604eba70e8855066dcbd4",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "outputs/10_robustness/calibration/calibration_summary.csv",
+      "exists": true,
+      "bytes": 9736,
+      "sha256": "e08ba45d3f17f56148140b7b7e5327f67c885505c7a29f76ef89e0e8063d1aed",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:06:00.623587+00:00"
+    },
+    {
+      "path": "outputs/10_robustness/calibration/calibration_per_fold.csv",
+      "exists": true,
+      "bytes": 256106,
+      "sha256": "1e2e0044ebf103a001f747053b9f8073e9a7ed34611cd2cab05e0ff216817253",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:06:00.611983+00:00"
+    },
+    {
+      "path": "outputs/10_robustness/calibration/reliability_points.csv",
+      "exists": true,
+      "bytes": 31051,
+      "sha256": "c78a6438492546ffe980c7aeb7c820ed0e1f1d94cee604eba70e8855066dcbd4",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:06:00.629625+00:00"
+    },
+    {
+      "path": "outputs/10_robustness/calibration/confidence_histogram.csv",
+      "exists": true,
+      "bytes": 68800,
+      "sha256": "a39f7f75e2747940fddf7d6548adc8b720058209c7e6c5549b721b5f63903d1b",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T17:06:00.638169+00:00"
+    },
+    {
+      "path": "outputs/10_robustness/calibration/svm_calibration_method_comparison.csv",
+      "exists": true,
+      "bytes": 15293,
+      "sha256": "63734550f924ff6306fda53ae93e9f96fe15b8cafa730c305911eda9d726779c",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T05:16:53.415485+00:00"
+    }
+  ],
+  "written": {
+    "csv": "outputs/13_figures_diagrams/G34_calibration_curve.csv",
+    "png": "outputs/13_figures_diagrams/G34_calibration_curve.png",
+    "svg": "outputs/13_figures_diagrams/G34_calibration_curve.svg"
+  },
+  "notes": []
+}

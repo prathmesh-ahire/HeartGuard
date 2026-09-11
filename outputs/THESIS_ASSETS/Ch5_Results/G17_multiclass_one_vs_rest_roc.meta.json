@@ -1,0 +1,60 @@
+{
+  "figure_id": "G17",
+  "figure_number": 17,
+  "title": "Multiclass One Vs Rest ROC",
+  "caption": "One-vs-rest ROC curves per class for the best model by macro-F1 on each PASCAL track, computed per fold from out-of-fold probabilities and averaged on a common grid with a one-SD band. Only folds that hold every class are used, the same fold set on which the experiment's macro OvR AUC is defined; the title shows how many that is. The class AUCs are means of per-fold AUCs, and their mean equals the experiment's macro OvR AUC. PASCAL A is the smallest track in the project (T02 gives its class counts), so its curves are noisy by construction, and its `artifact` class is a recording-quality label, not a cardiac one.",
+  "exp_id": "EXP-B1, EXP-B2",
+  "objective": "O6 (multiclass event classification)",
+  "dataset": "D2 PASCAL A, D3 PASCAL B",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-09-11T05:47:24.304353+00:00",
+  "command": "python scripts/38_result_graphs.py --figures G11 G12 G13 G14 G15 G16 G17",
+  "plotted_rows": 707,
+  "plotted_csv": "G17_multiclass_one_vs_rest_roc.csv",
+  "plotted_csv_sha256": "38e91d0314121ec3a903fa59a764f0fd4cf08f0d586d7565ac39f200d63e3245",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "outputs/07_multiclass_results/EXP-B1/predictions.parquet",
+      "exists": true,
+      "bytes": 150790,
+      "sha256": "b4247d82c4d97d95a00ef6ad9d9d9f7d4bb9a4648917ee79ed8257f5303735db",
+      "digest_method": "sha256/raw",
+      "modified_utc": "2026-08-30T05:59:41.171518+00:00"
+    },
+    {
+      "path": "outputs/07_multiclass_results/T11_pascal_a_multiclass_results.csv",
+      "exists": true,
+      "bytes": 1496,
+      "sha256": "0afc452db88f9bdd09bea347f59d48d7d4db7ca8f78b42f7b04df7339d030277",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T16:53:56.060966+00:00"
+    },
+    {
+      "path": "outputs/07_multiclass_results/EXP-B2/predictions.parquet",
+      "exists": true,
+      "bytes": 92569,
+      "sha256": "ab10b2701fb48237da4668f523f3dfd4c3d3dc40e1a3a3ba7e6de7af02d6fb51",
+      "digest_method": "sha256/raw",
+      "modified_utc": "2026-08-30T06:46:04.314696+00:00"
+    },
+    {
+      "path": "outputs/07_multiclass_results/T12_pascal_b_multiclass_results.csv",
+      "exists": true,
+      "bytes": 1341,
+      "sha256": "8616a9321853b79c18f409076b472e58570f78aac9787a7763914126e5624df7",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T16:53:56.424812+00:00"
+    }
+  ],
+  "written": {
+    "csv": "outputs/13_figures_diagrams/G17_multiclass_one_vs_rest_roc.csv",
+    "png": "outputs/13_figures_diagrams/G17_multiclass_one_vs_rest_roc.png"
+  },
+  "notes": [
+    "PV-MEPCG / PulseVision is an academic screening prototype, not a diagnostic tool."
+  ]
+}
