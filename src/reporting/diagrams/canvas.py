@@ -536,7 +536,14 @@ class DiagramCanvas:
         # a diamond is half its width at the vertical midline, and a
         # parallelogram loses a skew's worth at the top and bottom. Wrapping to
         # the full width hangs the label out over the slanted edges.
-        inches *= {"diamond": 0.62, "parallelogram": 0.84, "folded": 0.92}.get(shape, 1.0)
+        #
+        # A diamond also narrows toward its top and bottom corners: a text block
+        # of relative width w and relative height t fits only when w + t <= 1.
+        # Wrapping to 0.55 of the width therefore needs the block to stay under
+        # 0.45 of the height, which ``needed`` below accounts for. Wrapping to
+        # 0.62 and sizing like a rectangle (the Phase 95 rule) let a three-line
+        # sublabel hang out over both sloped edges in F11, F13 and F17.
+        inches *= {"diamond": 0.55, "parallelogram": 0.84, "folded": 0.92}.get(shape, 1.0)
         # 0.56 em per character for DejaVu Serif at these sizes; 72 pt per inch.
         # Measured up from 0.52 after an F02 label ran to both borders of its
         # box: the estimate has to be pessimistic, because being wrong the other
@@ -557,6 +564,8 @@ class DiagramCanvas:
             + sub_lines * self.sub_pt * 1.20 / 72.0
             + 0.07
         )
+        if shape == "diamond":
+            needed /= 0.45
         return wrapped, wrapped_sub, needed
 
     def fit_height(
@@ -780,8 +789,85 @@ class DiagramCanvas:
             "roles": {role: round(value, 3) for role, value in sorted(roles.items())},
             "strings": len(self._texts),
             "overflowing_nodes": sorted(self._overflowing),
+            "overlapping_nodes": self._overlapping(),
+            "nodes_off_canvas": self._off_canvas(),
+            "text_over_nodes": self._text_over_nodes(),
             "violations": sorted(role for role, value in roles.items() if value < MIN_EFFECTIVE_PT),
         }
+
+    def _overlapping(self) -> list[str]:
+        """``"a/b"`` for every pair of boxes whose rectangles intersect.
+
+        Added in Phase 96 after a box whose sublabel grew taller than its row
+        was drawn straight over the box below it in F16, and every other check
+        passed: both boxes fitted their own text, neither ran off the page. A
+        measured height is only safe if the next row is placed from it, and
+        this is what says when it was not. Borderless notes are exempt.
+        """
+        boxes = [n for n in self.nodes.values() if n.style.shape != "plain"]
+        slack = 1e-6
+        pairs: list[str] = []
+        for index, first in enumerate(boxes):
+            for second in boxes[index + 1 :]:
+                if (
+                    first.col < second.col + second.width - slack
+                    and second.col < first.col + first.width - slack
+                    and first.row < second.row + second.height - slack
+                    and second.row < first.row + first.height - slack
+                ):
+                    pairs.append(first.key + "/" + second.key)
+        return sorted(pairs)
+
+    def _off_canvas(self) -> list[str]:
+        """Keys of boxes that extend past the drawing area.
+
+        The axes are not clipped, so a box that runs off the bottom of the grid
+        is still drawn -- straight through the legend. Found in Phase 96 when a
+        diamond resized to fit its own text grew past the last row of F09.
+        """
+        slack = 1e-6
+        return sorted(
+            node.key
+            for node in self.nodes.values()
+            if node.col < -slack
+            or node.row < -slack
+            or node.col + node.width > self.columns + slack
+            or node.row + node.height > self.rows + slack
+        )
+
+    def _text_over_nodes(self) -> list[str]:
+        """``"annotation~key"`` for every free annotation drawn across a box.
+
+        An annotation is wrapped to its room and checked against the page, but
+        nothing stopped a footnote anchored at the foot of the axes from running
+        up into the last row of boxes (F13, Phase 96). Measured on the drawn
+        artists, in display coordinates, so it sees the wrap that was drawn.
+        """
+        from matplotlib.transforms import Bbox
+
+        self.figure.canvas.draw()
+        get_renderer = getattr(self.figure.canvas, "get_renderer", None)
+        if get_renderer is None:  # pragma: no cover - not reachable on Agg
+            return []
+        renderer = get_renderer()
+        boxes = {
+            node.key: Bbox(
+                self.axes.transData.transform(
+                    [(node.col, node.row + node.height), (node.col + node.width, node.row)]
+                )
+            )
+            for node in self.nodes.values()
+            if node.style.shape != "plain"
+        }
+        hits: list[str] = []
+        for index, (name, artist) in enumerate(self._measured):
+            if name != "annotation":
+                continue
+            extent = artist.get_window_extent(renderer)
+            for key, box in boxes.items():
+                if extent.overlaps(box):
+                    hits.append("annotation" + str(index) + "~" + key)
+        return sorted(hits)
 
     def _clipped(self) -> list[str]:
         """Names of page furniture that does not fit inside the figure."""

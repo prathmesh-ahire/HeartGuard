@@ -1,0 +1,46 @@
+Algorithm ALG-07: Hyperparameter optimization
+PV-MEPCG / PulseVision  |  T98.4  |  objective O5
+
+Purpose: Nested Bayesian search: each outer fold's hyperparameters are chosen on inner splits of its own training rows, and the outer test rows are never scored.
+Input:   X, y, groups, one model's declared search space, the outer fold map
+Output:  per outer fold: the chosen point, the trial log, and one outer score
+
+Parameters (read from the repository when this file was generated)
+  trials                12                                            src/evaluation/tuned.py DEFAULT_TRIALS
+  model_trials          M5 5                                          src/evaluation/tuned.py DEFAULT_MODEL_TRIALS
+  inner_splits          3                                             src/optimization/base.py DEFAULT_INNER_SPLITS
+  acquisition           EI                                            src/optimization/bayesian.py ACQUISITION
+  n_initial_rule        max(3, min(10, self.budget.max_trials // 4))  src/optimization/bayesian.py BayesianSearch.__init__
+  binary_objective      balanced_accuracy                             configs/experiments.yaml defaults.scoring
+  multiclass_objective  macro_f1                                      configs/experiments.yaml defaults.scoring
+  seed                  42                                            configs/experiments.yaml defaults.seed
+
+Algorithm
+   1  for each outer fold o:
+   2      splits <- 3 grouped, stratified inner splits of o's training rows
+   3      budget <- 12 trials per model (exceptions: M5 5); a wall-clock ceiling, if set, is checked between trials
+   4      surrogate <- Gaussian process, acquisition EI, initial random points max(3, min(10, self.budget.max_trials // 4)), seed 42
+   5      while the budget allows another trial:
+   6          theta <- decode(ask()); repair it into the legal space; a violated constraint is logged as an invalid trial
+   7          for each inner split (T, V): fit a fresh pipeline of model(theta) on T, predict V, record T and V in the row ledger
+   8          score <- mean over inner splits of the objective (balanced_accuracy for binary, macro_f1 for multiclass); a fit that raises is a failed trial
+   9          tell(theta, -score); a failed trial is told the worst attainable value
+  10      theta* <- the best trial; ties to the earlier trial
+  11      assert the ledger holds no row of o's test fold
+  12      fit model(theta*) on all of o's training rows; score o's test rows once
+
+Notes
+  For the ensembles M6 and M7 the members are what is searched: they declare no hyperparameters of their own.
+
+Implemented by
+  src/evaluation/tuned.py:461  src.evaluation.tuned:NestedSearchPlanner.plan
+  src/optimization/base.py:256  src.optimization.base:inner_folds
+  src/evaluation/tuned.py:326  src.evaluation.tuned:NestedSearchPlanner.budget_for
+  src/optimization/bayesian.py:238  src.optimization.bayesian:BayesianSearch.__init__
+  src/optimization/base.py:699  src.optimization.base:BaseSearch.run
+  src/optimization/base.py:555  src.optimization.base:score_params
+  src/optimization/bayesian.py:274  src.optimization.bayesian:BayesianSearch._observe
+  src/optimization/base.py:452  src.optimization.base:SearchResult.best
+  src/optimization/base.py:355  src.optimization.base:RowLedger.assert_disjoint_from
+
+Regenerate: python scripts/39_export_algorithms.py --ids ALG-07

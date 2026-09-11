@@ -11,11 +11,12 @@ kind and every arrow kind the language declares:
 * the registry, the meta and the source digest are written;
 * the checks that keep a diagram legible actually fail when they should.
 
-The full twenty-diagram form of the gate -- ``--expect 20`` returning zero --
-is run at the end of Phase 96, when there are twenty builders to run it over.
-Until then :func:`test_a_partial_run_is_an_error_not_a_shorter_table` pins the
-behaviour that matters: a run that renders fewer than it was told to expect
-fails loudly instead of reporting success.
+The full twenty-diagram form of the gate -- ``--expect 20`` returning zero from
+a clean subprocess into an empty directory -- lives in
+``tests/test_pipeline_figures.py`` since Phase 96 built F11-F20.
+:func:`test_a_partial_run_is_an_error_not_a_shorter_table` still pins the other
+half: a run that renders fewer than it was told to expect fails loudly instead
+of reporting success.
 """
 
 from __future__ import annotations

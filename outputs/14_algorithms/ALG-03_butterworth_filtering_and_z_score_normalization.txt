@@ -1,0 +1,46 @@
+Algorithm ALG-03: Butterworth filtering and z-score normalization
+PV-MEPCG / PulseVision  |  T98.2  |  objective O4
+
+Purpose: A zero-phase band-pass keeps the heart-sound band; a z-score removes loudness differences between stethoscopes, gains and chest walls.
+Input:   signal y at 2000 Hz from ALG-02
+Output:  filtered, normalized float32 signal z, with what was applied
+
+Parameters (read from the repository when this file was generated)
+  target_fs        2000    configs/signal.yaml resample.target_fs
+  low_hz           20      configs/signal.yaml filter.low_hz
+  high_hz          400     configs/signal.yaml filter.high_hz
+  order            4       configs/signal.yaml filter.order
+  zero_phase       true    configs/signal.yaml filter.zero_phase
+  effective_order  16      effective_order = 2 * int(order) * (2 if zero_phase else 1)
+  padlen           27      filters.default_padlen(design_bandpass(...))
+  min_padlen       12      configs/signal.yaml filter.min_padlen
+  norm_method      zscore  configs/signal.yaml normalization.method
+  remove_dc        true    configs/signal.yaml normalization.remove_dc
+  epsilon          1e-10   configs/signal.yaml normalization.zero_variance_epsilon
+
+Algorithm
+   1  sos <- Butterworth band-pass, prototype order 4, 20-400 Hz at 2000 Hz, as second-order sections (designed once, cached)
+   2  if the filter is disabled: x_f <- y
+   3  else:
+   4      padlen <- 27 samples, sosfiltfilt's own default for this design
+   5      if |y| <= padlen: padlen <- |y| - 1
+   6          if padlen < 12: x_f <- y, flag too_short
+   7      x_f <- sosfiltfilt(sos, y, padlen): forward then backward, zero phase, effective order 16
+   8  if normalization is disabled or method is none: return x_f
+   9  if remove_dc (true): x_f <- x_f - mean(x_f)
+  10  sigma <- std(x_f) in float64
+  11  if sigma <= 1e-10: return the input unchanged, flag zero_variance
+  12  z <- (x_f - mean(x_f)) / sigma as float32 (method zscore)
+
+Notes
+  The quoted order is the prototype's: the band-pass transform doubles it and the forward-backward pass doubles it again, to 16. The two passes square the magnitude response, so each cutoff is attenuated twice as many dB as a single pass would attenuate it.
+
+Implemented by
+  src/preprocessing/filters.py:133  src.preprocessing.filters:design_bandpass
+  src/preprocessing/filters.py:167  src.preprocessing.filters:bandpass_filter
+  src/preprocessing/filters.py:148  src.preprocessing.filters:default_padlen
+  src/preprocessing/normalize.py:183  src.preprocessing.normalize:normalize
+  src/preprocessing/normalize.py:127  src.preprocessing.normalize:remove_dc
+  src/preprocessing/normalize.py:145  src.preprocessing.normalize:zscore_normalize
+
+Regenerate: python scripts/39_export_algorithms.py --ids ALG-03

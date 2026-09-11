@@ -4,7 +4,7 @@
   "title": "SVM RF GB optimized soft voting architecture",
   "caption": "The heterogeneous ensemble: three tuned base learners, per-class probability averaging, and the searched weight vector.",
   "task": "T95.6",
-  "objective": "O4",
+  "objective": "O3",
   "framework": "PV-MEPCG / PulseVision",
   "toolchain": "matplotlib (src/reporting/diagrams)",
   "dpi": 300,
@@ -15,7 +15,7 @@
   "palette": "Okabe-Ito (colourblind-safe); shape carries meaning, colour repeats it",
   "source_module": "src/reporting/diagrams/architecture_figures.py",
   "source_function": "build_f10",
-  "source_sha256": "936a3e70a4fb9b928405ed5d7403eb99d00a3eec01d1fe372771d3c639782454",
+  "source_sha256": "9661edbb772ace441f26596a10bac05719479b6168c087d422ecd3a101197c00",
   "legibility": {
     "clipped": [],
     "figure_inches": [
@@ -35,14 +35,17 @@
     },
     "strings": 20,
     "overflowing_nodes": [],
+    "overlapping_nodes": [],
+    "nodes_off_canvas": [],
+    "text_over_nodes": [],
     "violations": []
   },
-  "generated_utc": "2026-09-09T12:16:27.660842+00:00",
+  "generated_utc": "2026-09-11T07:50:05.625681+00:00",
   "command": "python scripts/05_render_diagrams.py --only F10",
   "sources": [],
   "written": {
-    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/F10_svm_rf_gb_optimized_soft_voting_architecture.png",
-    "svg": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/F10_svm_rf_gb_optimized_soft_voting_architecture.svg"
+    "png": "outputs/13_figures_diagrams/F10_svm_rf_gb_optimized_soft_voting_architecture.png",
+    "svg": "outputs/13_figures_diagrams/F10_svm_rf_gb_optimized_soft_voting_architecture.svg"
   },
   "notes": []
 }

@@ -1,0 +1,34 @@
+Algorithm ALG-05: Fold-safe scaling and preprocessing
+PV-MEPCG / PulseVision  |  T98.3  |  objective O1
+
+Purpose: Everything that learns from data -- imputation, scaling, selection, class weighting -- is fitted on the training fold only, as steps of one pipeline.
+Input:   feature matrix X, labels y, the stored fold map (DA-07)
+Output:  per-fold out-of-fold predictions from a pipeline that never saw its test rows
+
+Parameters (read from the repository when this file was generated)
+  imputer       median      configs/models.yaml pipeline.imputer.strategy
+  scaler        standard    configs/models.yaml pipeline.scaler.kind
+  selector      false       configs/models.yaml pipeline.selector.enabled
+  class_weight  balanced    configs/models.yaml pipeline.class_weight.strategy
+  repeats       5           configs/experiments.yaml cv_schemes.repeated_5x5_grouped
+  splits        5           configs/experiments.yaml cv_schemes.repeated_5x5_grouped
+  group_key     subject_id  configs/experiments.yaml cv_schemes.repeated_5x5_grouped
+
+Algorithm
+  1  for each (repeat, fold) of the stored map (5 x 5, grouped on subject_id), loaded never re-derived:
+  2      assert no subject appears in both train and test
+  3      P <- Pipeline[imputer (median), scaler (standard), selector if enabled (false), clone(estimator)]
+  4      if the estimator accepts class_weight: set it to balanced; otherwise leave imbalance to the estimator (ALG-10's wrapper)
+  5      if resampling is enabled: refuse -- it must happen inside the fold
+  6      fit P on X[train], y[train]: the medians, means, variances and selector scores are learned from training rows only
+  7      predict X[test] through P: the test rows are transformed, never fitted
+  8  expose the learned statistics for the fold-safety tests
+
+Implemented by
+  src/data_loader/splits.py:256  src.data_loader.splits:iter_folds
+  src/data_loader/splits.py:285  src.data_loader.splits:assert_no_leakage
+  src/models/pipeline.py:262  src.models.pipeline:build_pipeline
+  src/models/pipeline.py:229  src.models.pipeline:class_weight_for
+  src/models/pipeline.py:324  src.models.pipeline:fitted_steps
+
+Regenerate: python scripts/39_export_algorithms.py --ids ALG-05

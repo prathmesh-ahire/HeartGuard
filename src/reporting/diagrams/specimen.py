@@ -42,28 +42,37 @@ def build_specimen() -> DiagramCanvas:
     """Draw one box of every kind, then one arrow of every kind between them."""
     canvas = DiagramCanvas(
         columns=12.0,
-        rows=6.6,
-        size=(9.0, 5.8),
+        rows=7.8,
+        size=(9.0, 6.8),
         title="PV-MEPCG diagram language",
         subtitle="Shape carries the meaning; colour repeats it. Every arrow style is a "
         "different relationship.",
         legend_rows=4,
     )
 
-    # Row 1: one box per node kind, in the order they are declared.
+    # Row 1: one box per node kind, in the order they are declared, at the height
+    # the tallest needs. It was a fixed 1.7 rows until Phase 96 sized diamonds for
+    # their narrowing corners -- after which the fixed height was too short for
+    # the decision diamond's own label, and the renderer said so.
     drawable = [kind for kind, style in NODE_STYLES.items() if style.shape != "plain"]
     span = 12.0 / len(drawable)
+    top = 0.35
+    height = max(
+        canvas.fit_height(NODE_STYLES[kind].meaning, width=span - 0.3, sublabel=kind, kind=kind)
+        for kind in drawable
+    )
     for index, kind in enumerate(drawable):
         canvas.node(
             kind,
             NODE_STYLES[kind].meaning,
             kind=kind,
             col=index * span + 0.15,
-            row=0.35,
+            row=top,
             width=span - 0.3,
-            height=1.7,
+            height=height,
             sublabel=kind,
         )
+    arrows = top + height + canvas.y_units(0.3)
 
     # Row 2: one arrow per edge kind, each between its own pair of anchors, so
     # the dash patterns can be compared side by side at printed size.
@@ -75,7 +84,7 @@ def build_specimen() -> DiagramCanvas:
             "A",
             kind="process",
             col=left,
-            row=2.6,
+            row=arrows,
             width=width / 2.0,
             height=0.8,
         )
@@ -84,7 +93,7 @@ def build_specimen() -> DiagramCanvas:
             "B",
             kind="process",
             col=left + width / 2.0 + 0.9,
-            row=2.6,
+            row=arrows,
             width=width / 2.0,
             height=0.8,
         )
@@ -92,19 +101,21 @@ def build_specimen() -> DiagramCanvas:
         canvas.text(
             "\n".join(textwrap.wrap(style.meaning, width=16)),
             col=left + width / 2.0 + 0.45,
-            row=3.65,
+            row=arrows + 1.05,
             ha="center",
             va="top",
         )
 
     # A lane, a feedback loop back across it, and a free annotation: the three
     # remaining primitives a real diagram uses.
-    canvas.lane("a stage boundary (dashed container)", col=0.15, row=4.7, width=11.7, height=1.55)
-    canvas.node("loop_a", "search trial", kind="process", col=0.6, row=5.15, width=2.4, height=0.75)
-    canvas.node("loop_b", "inner score", kind="process", col=4.0, row=5.15, width=2.4, height=0.75)
-    canvas.node("loop_c", "chosen point", kind="store", col=7.4, row=5.15, width=2.4, height=0.75)
+    lane = arrows + 2.1
+    canvas.lane("a stage boundary (dashed container)", col=0.15, row=lane, width=11.7, height=1.55)
+    loop = lane + 0.45
+    canvas.node("loop_a", "search trial", kind="process", col=0.6, row=loop, width=2.4, height=0.75)
+    canvas.node("loop_b", "inner score", kind="process", col=4.0, row=loop, width=2.4, height=0.75)
+    canvas.node("loop_c", "chosen point", kind="store", col=7.4, row=loop, width=2.4, height=0.75)
     canvas.edge("loop_a", "loop_b", kind="flow")
     canvas.edge("loop_b", "loop_c", kind="flow")
     canvas.edge("loop_b", "loop_a", kind="feedback", rad=0.45)
-    canvas.text("annotation text", col=10.1, row=5.52, ha="left")
+    canvas.text("annotation text", col=10.1, row=loop + 0.37, ha="left")
     return canvas

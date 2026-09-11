@@ -40,6 +40,9 @@ BUILDER_MODULES: tuple[str, ...] = (
     "src.reporting.diagrams.pipeline_figures",
 )
 
+#: ``objective`` names the blueprint objectives (1-6, ``objectives.OBJECTIVES``)
+#: a diagram supports. Until Phase 96 F11-F20 cited O7-O9, which do not exist:
+#: the blueprint has six objectives. Pinned by tests/test_pipeline_figures.py.
 CATALOGUE: tuple[DiagramSpec, ...] = (
     DiagramSpec(
         "F01",
@@ -64,7 +67,7 @@ CATALOGUE: tuple[DiagramSpec, ...] = (
         "PhysioNet 2016, PASCAL A and B, and CirCor 2022 as separate tracks with "
         "five label spaces that are never merged.",
         task="T95.3",
-        objective="O2",
+        objective="O6",
     ),
     DiagramSpec(
         "F04",
@@ -72,7 +75,7 @@ CATALOGUE: tuple[DiagramSpec, ...] = (
         "How four corpora at three native sampling rates become one master "
         "metadata table without losing provenance or subject identity.",
         task="T95.3",
-        objective="O2",
+        objective="O6",
     ),
     DiagramSpec(
         "F05",
@@ -80,7 +83,7 @@ CATALOGUE: tuple[DiagramSpec, ...] = (
         "Grouped cross-validation: a subject appears in exactly one side of a "
         "split, and the outer test fold fits nothing.",
         task="T95.4",
-        objective="O2",
+        objective="O1",
     ),
     DiagramSpec(
         "F06",
@@ -88,7 +91,7 @@ CATALOGUE: tuple[DiagramSpec, ...] = (
         "Resampling, band-pass filtering, normalization and quality flagging, in "
         "the order the pipeline applies them.",
         task="T95.4",
-        objective="O3",
+        objective="O4",
     ),
     DiagramSpec(
         "F07",
@@ -96,7 +99,7 @@ CATALOGUE: tuple[DiagramSpec, ...] = (
         "The five feature families and the per-family counts that sum to the 138 "
         "engineered features.",
         task="T95.5",
-        objective="O3",
+        objective="O4",
     ),
     DiagramSpec(
         "F08",
@@ -104,7 +107,7 @@ CATALOGUE: tuple[DiagramSpec, ...] = (
         "How the family blocks are concatenated into one matrix, and where the "
         "fold-safe scaler and imputer sit relative to that join.",
         task="T95.5",
-        objective="O3",
+        objective="O4",
     ),
     DiagramSpec(
         "F09",
@@ -112,7 +115,7 @@ CATALOGUE: tuple[DiagramSpec, ...] = (
         "Selection driven by search inside the training fold only, with the outer "
         "test fold never scored during the search.",
         task="T95.6",
-        objective="O4",
+        objective="O5",
     ),
     DiagramSpec(
         "F10",
@@ -120,7 +123,7 @@ CATALOGUE: tuple[DiagramSpec, ...] = (
         "The heterogeneous ensemble: three tuned base learners, per-class "
         "probability averaging, and the searched weight vector.",
         task="T95.6",
-        objective="O4",
+        objective="O3",
     ),
     DiagramSpec(
         "F11",
@@ -128,7 +131,7 @@ CATALOGUE: tuple[DiagramSpec, ...] = (
         "The normal versus abnormal task end to end, from PhysioNet recordings to "
         "the reported sensitivity and balanced accuracy.",
         task="T96.1",
-        objective="O5",
+        objective="O1",
     ),
     DiagramSpec(
         "F12",
@@ -144,7 +147,7 @@ CATALOGUE: tuple[DiagramSpec, ...] = (
         "Several auscultation locations per patient collapsed to one patient-level "
         "indication under the max, mean and any-present rules.",
         task="T96.2",
-        objective="O5",
+        objective="O6",
     ),
     DiagramSpec(
         "F14",
@@ -152,7 +155,7 @@ CATALOGUE: tuple[DiagramSpec, ...] = (
         "EXP-D1: trained on adult PhysioNet, tested on paediatric CirCor, with the "
         "population mismatch recorded before the metric.",
         task="T96.3",
-        objective="O7",
+        objective="O1",
     ),
     DiagramSpec(
         "F15",
@@ -160,7 +163,7 @@ CATALOGUE: tuple[DiagramSpec, ...] = (
         "Quality-flag partitions, synthetic AWGN levels and the duration bands the "
         "robustness experiments report over.",
         task="T96.3",
-        objective="O7",
+        objective="O4",
     ),
     DiagramSpec(
         "F16",
@@ -168,7 +171,7 @@ CATALOGUE: tuple[DiagramSpec, ...] = (
         "The build-time codegen boundary from outputs/ to frontend/lib/generated/, "
         "and the single live /predict endpoint that crosses the wire at runtime.",
         task="T96.4",
-        objective="O8",
+        objective="O1",
     ),
     DiagramSpec(
         "F17",
@@ -176,7 +179,7 @@ CATALOGUE: tuple[DiagramSpec, ...] = (
         "One uploaded recording through preprocessing, extraction, the deployed "
         "bundle and the generated screening report.",
         task="T96.4",
-        objective="O8",
+        objective="O1",
     ),
     DiagramSpec(
         "F18",
@@ -184,7 +187,7 @@ CATALOGUE: tuple[DiagramSpec, ...] = (
         "Each research objective mapped to the modules that implement it and the "
         "artifacts that evidence it.",
         task="T96.5",
-        objective="O9",
+        objective="O1-O6",
     ),
     DiagramSpec(
         "F19",
@@ -192,7 +195,7 @@ CATALOGUE: tuple[DiagramSpec, ...] = (
         "What this framework adds over the baseline it is compared against, "
         "component by component.",
         task="T96.6",
-        objective="O9",
+        objective="O3, O5",
     ),
     DiagramSpec(
         "F20",
@@ -200,7 +203,7 @@ CATALOGUE: tuple[DiagramSpec, ...] = (
         "The contributions of PV-MEPCG / PulseVision, each tied to the experiment "
         "that supports it.",
         task="T96.6",
-        objective="O9",
+        objective="O1-O6",
     ),
 )
 

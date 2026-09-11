@@ -37,6 +37,7 @@ from typing import Any
 from src.reporting.diagrams.canvas import DiagramCanvas
 from src.reporting.graphs import PRINT_PROFILE
 from src.reporting.plot_style import DPI, styled
+from src.reporting.tables import portable_path
 from src.utils.io import ensure_dir, save_json
 from src.utils.logging_setup import get_logger
 
@@ -272,6 +273,21 @@ def write_diagram(
                 + ", ".join(report["overflowing_nodes"])
                 + " -- give them more height or shorter text"
             )
+        if report["overlapping_nodes"]:
+            plt.close(figure)
+            raise ValueError(
+                spec.diagram_id
+                + ": these boxes are drawn on top of each other: "
+                + ", ".join(report["overlapping_nodes"])
+                + " -- place each row from the measured height of the one above"
+            )
+        if report["nodes_off_canvas"] or report["text_over_nodes"]:
+            plt.close(figure)
+            raise ValueError(
+                spec.diagram_id
+                + ": drawn outside the grid or over a box: "
+                + ", ".join(report["nodes_off_canvas"] + report["text_over_nodes"])
+            )
 
         for fmt in formats:
             path = target_dir / (slug + "." + fmt)
@@ -318,7 +334,10 @@ def write_diagram(
             "generated_utc": datetime.now(UTC).isoformat(),
             "command": "python scripts/05_render_diagrams.py --only " + spec.diagram_id,
             "sources": list(spec.sources),
-            "written": {key: str(value).replace("\\", "/") for key, value in written.items()},
+            # Repo-relative, like the G-series since Phase 94: an absolute D:/ path
+            # resolves on one machine only, and all twenty F metas carried one
+            # until Phase 96 (tables.portable_path).
+            "written": {key: portable_path(value) for key, value in written.items()},
             "notes": list(spec.notes),
         },
         target_dir / (slug + ".meta.json"),

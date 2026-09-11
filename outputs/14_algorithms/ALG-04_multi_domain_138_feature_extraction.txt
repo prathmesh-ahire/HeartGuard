@@ -1,0 +1,35 @@
+Algorithm ALG-04: Multi-domain 138-feature extraction
+PV-MEPCG / PulseVision  |  T98.2  |  objective O4
+
+Purpose: One preprocessed signal becomes one fixed-order vector of 138 values from six feature families, the same columns for every corpus.
+Input:   signal z from ALG-03 and its rate
+Output:  vector of 138 values in registry order, flags, failed families, timings
+
+Parameters (read from the repository when this file was generated)
+  total         138                                                            src/feature_extraction/registry.py EXPECTED_TOTAL
+  families      time 24, frequency 22, mfcc 39, chroma 24, dwt 24, envelope 5  src/feature_extraction/registry.py FAMILY_ORDER, EXPECTED_FAMILY_COUNTS
+  fingerprint   9aa6c14561d3f32c...                                            registry.registry_fingerprint()
+  frame_length  512                                                            configs/signal.yaml framing.frame_length
+  hop_length    256                                                            configs/signal.yaml framing.hop_length
+  window        hann                                                           configs/signal.yaml framing.window
+
+Algorithm
+  1  limit BLAS to one thread for the whole extraction
+  2  for each family f in registry order (time 24, frequency 22, mfcc 39, chroma 24, dwt 24, envelope 5):
+  3      if f was not requested: its columns <- NaN, flag f_not_run
+  4      r <- extractor_f(z, fs); frame-based families use 512-sample frames, hop 256, hann window
+  5      assert |r| = the family's registered count
+  6      append r; keep its flags and seconds; a failed family keeps NaN in its own columns and its error message
+  7  assert the vector has 138 values whose names equal the registry order exactly (fingerprint 9aa6c14561d3f32c...)
+  8  return the vector, flags, failed families and per-family seconds
+
+Notes
+  Thread count is pinned because a threaded BLAS changes the last bit of the chroma features between runs, and the fixed-seed rule requires identical numbers.
+
+Implemented by
+  src/feature_extraction/extractor.py:142  src.feature_extraction.extractor:extract_all
+  src/feature_extraction/extractor.py:183  src.feature_extraction.extractor:_extract_all_inner
+  src/feature_extraction/registry.py:570  src.feature_extraction.registry:get_extractor
+  src/feature_extraction/extractor.py:118  src.feature_extraction.extractor:_validate
+
+Regenerate: python scripts/39_export_algorithms.py --ids ALG-04

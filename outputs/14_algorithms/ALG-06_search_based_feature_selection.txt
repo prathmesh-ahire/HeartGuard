@@ -1,0 +1,48 @@
+Algorithm ALG-06: Search based feature selection
+PV-MEPCG / PulseVision  |  T98.3  |  objective O5
+
+Purpose: SO-04: rank features inside inner training folds, cut every ranking at every k, and choose the cheapest configuration statistically indistinguishable from the best.
+Input:   X, y, subject groups, outer folds of repeat(s) 0
+Output:  the chosen (ranker, k), per-fold subsets, the consensus subset FE-12, and the all-features-versus-subset comparison
+
+Parameters (read from the repository when this file was generated)
+  rankers       mutual_info, anova_f, rf_importance, gb_importance  configs/models.yaml optimization.feature_selection.rankers
+  k_grid        10, 20, 30, 40, 50, 60, 70, 80, 100, 120, 138       configs/models.yaml optimization.feature_selection.k_grid
+  model         M4                                                  configs/models.yaml optimization.feature_selection.evaluation_model
+  inner_splits  3                                                   configs/models.yaml optimization.feature_selection.inner_splits
+  repeats       0                                                   configs/models.yaml optimization.feature_selection.repeats
+  n_se          1                                                   configs/models.yaml optimization.feature_selection.n_standard_errors
+  alpha         0.7                                                 multi_objective.load_weights()
+  beta          0.2                                                 multi_objective.load_weights()
+  gamma         0.1                                                 multi_objective.load_weights()
+  n_total       138                                                 multi_objective.load_weights()
+
+Algorithm
+   1  for each outer fold o:
+   2      inner <- 3 grouped, stratified splits of o's training rows
+   3      for each inner split (T, V) and each ranker r in mutual_info, anova_f, rf_importance, gb_importance:
+   4          rank <- r fitted on median-imputed X[T], y[T]; ties broken by column position
+   5          for each k in 10, 20, 30, 40, 50, 60, 70, 80, 100, 120, 138: S <- top k; fit M4 on X[T, S] in the fold-safe pipeline; score V
+   6              J <- alpha (1 - macroF1) + beta k / N + gamma t(S), alpha = 0.7, beta = 0.2, gamma = 0.1, N = 138; t(S) is the extraction time of the families S still needs, normalised by all features
+   7  for each (r, k): mean J, mean macro-F1 and its standard error over all inner evaluations
+   8  guard <- best mean macro-F1 - 1 x its standard error
+   9  (r*, k*) <- lowest mean J among configurations with mean macro-F1 >= guard; ties to the smaller k, then the ranker name
+  10  for each outer fold: re-rank with r* on that fold's training rows; keep the top k*
+  11  FE-12 <- the k* features chosen in the most folds; ties by column position
+  12  score all features and the per-fold subsets on the same outer test folds
+
+Notes
+  The guard is a selection rule fixed before the result; it is never tuned to a score.
+
+Implemented by
+  src/feature_selection/sweep.py:220  src.feature_selection.sweep:sweep_feature_counts
+  src/optimization/base.py:256  src.optimization.base:inner_folds
+  src/feature_selection/ranking.py:137  src.feature_selection.ranking:rank_features
+  src/feature_selection/sweep.py:130  src.feature_selection.sweep:score_subset
+  src/optimization/multi_objective.py:290  src.optimization.multi_objective:score_j
+  src/feature_selection/sweep.py:410  src.feature_selection.sweep:choose_configuration
+  src/feature_selection/sweep.py:487  src.feature_selection.sweep:select_per_fold
+  src/feature_selection/sweep.py:512  src.feature_selection.sweep:consensus_subset
+  src/feature_selection/sweep.py:542  src.feature_selection.sweep:compare_all_versus_selected
+
+Regenerate: python scripts/39_export_algorithms.py --ids ALG-06

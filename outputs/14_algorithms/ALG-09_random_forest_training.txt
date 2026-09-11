@@ -1,0 +1,37 @@
+Algorithm ALG-09: Random Forest training
+PV-MEPCG / PulseVision  |  T98.5  |  objective O3
+
+Purpose: M4: a class-weighted random forest, the ensemble's bagged member and the source of one of the feature rankings.
+Input:   training rows X, y
+Output:  class probabilities and impurity-based feature importances
+
+Parameters (read from the repository when this file was generated)
+  n_estimators        500                     configs/models.yaml models.M4.defaults.n_estimators
+  max_depth           none                    configs/models.yaml models.M4.defaults.max_depth
+  min_samples_leaf    1                       configs/models.yaml models.M4.defaults.min_samples_leaf
+  max_features        sqrt                    configs/models.yaml models.M4.defaults.max_features
+  class_weight        balanced                configs/models.yaml models.M4.defaults.class_weight
+  seed                42                      configs/models.yaml models.M4.defaults.random_state
+  n_estimators_space  integer [100, 1000]     configs/models.yaml models.M4.search_space
+  max_depth_space     {none, 5, 10, 20, 30}   configs/models.yaml models.M4.search_space
+  max_features_space  {sqrt, log2, 0.3, 0.5}  configs/models.yaml models.M4.search_space
+  calibrated          false                   whether M4 is listed in configs/models.yaml models.M6.calibrate_members
+
+Algorithm
+  1  RF <- RandomForestClassifier(n_estimators 500, max_depth none, min_samples_leaf 1, max_features sqrt, random_state 42)
+  2  class_weight <- balanced, set inside the fold pipeline from the training labels
+  3  for each tree t: draw a bootstrap sample of the training rows; grow the tree, choosing each split among sqrt random candidate features by weighted Gini impurity, until min_samples_leaf or max_depth stops it
+  4  predict_proba <- mean over trees of each leaf's class-weighted class fractions
+  5  feature_importances_ <- mean impurity decrease per feature; read by the rf_importance ranker of ALG-06
+  6  calibrated inside the ensemble: false
+
+Notes
+  Searched space: n_estimators integer [100, 1000], max_depth {none, 5, 10, 20, 30}, max_features {sqrt, log2, 0.3, 0.5}. Each tree is seeded from random_state, so the thread count does not change the forest.
+
+Implemented by
+  src/models/estimators.py:268  src.models.estimators:make_m4
+  src/models/pipeline.py:229  src.models.pipeline:class_weight_for
+  src/feature_selection/ranking.py:104  src.feature_selection.ranking:_tree_importance
+  src/models/estimators.py:540  src.models.estimators:make_ensemble
+
+Regenerate: python scripts/39_export_algorithms.py --ids ALG-09

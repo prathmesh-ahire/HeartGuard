@@ -1,0 +1,51 @@
+{
+  "diagram_id": "F19",
+  "diagram_number": 19,
+  "title": "Novelty contribution diagram",
+  "caption": "What this framework adds over the baseline it is compared against, component by component.",
+  "task": "T96.6",
+  "objective": "O3, O5",
+  "framework": "PV-MEPCG / PulseVision",
+  "toolchain": "matplotlib (src/reporting/diagrams)",
+  "dpi": 300,
+  "formats": [
+    "png",
+    "svg"
+  ],
+  "palette": "Okabe-Ito (colourblind-safe); shape carries meaning, colour repeats it",
+  "source_module": "src/reporting/diagrams/pipeline_figures.py",
+  "source_function": "build_f19",
+  "source_sha256": "41e7a85f242917171c475ad347e10e230d76e1db7f0e56901e6f7ee64a7dec5f",
+  "legibility": {
+    "clipped": [],
+    "figure_inches": [
+      9.0,
+      8.0
+    ],
+    "print_scale": 0.6667,
+    "min_effective_pt": 7.48,
+    "threshold_pt": 7.0,
+    "roles": {
+      "annotation": 7.48,
+      "legend": 7.48,
+      "node_label": 8.5,
+      "node_sublabel": 7.48,
+      "subtitle": 7.48,
+      "title": 11.05
+    },
+    "strings": 25,
+    "overflowing_nodes": [],
+    "overlapping_nodes": [],
+    "nodes_off_canvas": [],
+    "text_over_nodes": [],
+    "violations": []
+  },
+  "generated_utc": "2026-09-11T07:50:25.050388+00:00",
+  "command": "python scripts/05_render_diagrams.py --only F19",
+  "sources": [],
+  "written": {
+    "png": "outputs/13_figures_diagrams/F19_novelty_contribution_diagram.png",
+    "svg": "outputs/13_figures_diagrams/F19_novelty_contribution_diagram.svg"
+  },
+  "notes": []
+}

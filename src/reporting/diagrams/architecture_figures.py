@@ -466,12 +466,14 @@ def build_f04() -> DiagramCanvas:
         sublabel=master_sub,
     )
     canvas.edge("labels", "master", kind="flow", source_side="bottom", target_side="right")
+    # Anchored to the foot of the axes, not to a fixed row: at row 6.6 it sat
+    # across the metadata box, whose height is measured (Phase 96 check).
     canvas.text(
         "Every downstream stage reads this table, never the corpora directly.",
         col=6.0,
-        row=6.6,
+        row=canvas.rows - canvas.y_units(0.04),
         ha="center",
-        va="center",
+        va="bottom",
     )
     return canvas
 
@@ -853,8 +855,8 @@ def build_f09() -> DiagramCanvas:
 
     canvas = DiagramCanvas(
         columns=12.0,
-        rows=7.4,
-        size="wide",
+        rows=8.4,
+        size=(9.0, 6.0),
         title="F09  Search-based feature selection workflow",
         subtitle=(
             "Selection is decided per fold, from the training rows only. The outer fold is "
@@ -897,7 +899,10 @@ def build_f09() -> DiagramCanvas:
     canvas.node(
         "propose",
         "Search proposes the next point",
-        kind="decision",
+        # A step, not a branch: drawn as a diamond it has to be sized for the
+        # shape's narrowing corners, which at this label length ran it off
+        # the grid once the canvas measured diamonds correctly (Phase 96).
+        kind="process",
         col=4.6,
         row=3.5,
         width=3.6,
@@ -916,7 +921,16 @@ def build_f09() -> DiagramCanvas:
         target_side="bottom",
         rad=0.30,
     )
-    canvas.text("iterate", col=3.6, row=2.75, ha="left", va="center", color="#0072B2")
+    candidate = canvas.nodes["candidate"]
+    canvas.text(
+        "iterate",
+        col=3.3,
+        row=candidate.row + candidate.height + canvas.y_units(0.18),
+        ha="left",
+        va="center",
+        width=1.2,
+        color="#0072B2",
+    )
 
     canvas.node(
         "chosen",
@@ -933,7 +947,7 @@ def build_f09() -> DiagramCanvas:
     )
     canvas.edge("propose", "chosen", kind="flow")
 
-    canvas.node(
+    test = canvas.node(
         "test",
         "Outer test fold",
         kind="process",
@@ -946,7 +960,7 @@ def build_f09() -> DiagramCanvas:
     canvas.text(
         "never scored during the search",
         col=0.25,
-        row=5.9,
+        row=test.row + test.height + canvas.y_units(0.06),
         ha="left",
         va="top",
         width=4.5,

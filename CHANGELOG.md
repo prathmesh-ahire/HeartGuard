@@ -20,6 +20,38 @@ gate has actually passed.
 
 ---
 
+## Phase 98 — Algorithms ALG-01 to ALG-10
+**Gate:** T98.7 — ALG-01 to ALG-10 exist as TXT and DOCX with identical steps; every step cites a function that resolves to a line in the repository; every parameter equals its live config value; no template types a number; five algorithms re-implemented from their printed pseudocode agree with the pipeline (ALG-03, 05, 06, 08, 10) — PASS (`tests/test_algorithms.py`, 52 tests)
+**Added:** `src/reporting/algorithms.py`, `scripts/39_export_algorithms.py`, `tests/test_algorithms.py`, `outputs/14_algorithms/` (20 files and `algorithm_index.csv`)
+**Changed:** `outputs/00_evidence_index/`
+**Notes:** Parameters are read from the configs and constants at export and quoted formulas are checked against the code. Full reasoning in `Docs/note.md`.
+
+---
+
+## Phase 97 — Diagram Production Pipeline
+**Gate:** T97.7 — `scripts/05_render_diagrams.py --expect 20` regenerates all twenty diagrams from version-controlled source in a clean subprocess into an empty directory, registry numbered 1-20 — PASS (`tests/test_pipeline_figures.py`, `tests/test_diagram_pipeline.py`)
+**Added:** canvas refusals for overlapping boxes, boxes off the grid and notes drawn over boxes
+**Changed:** `src/reporting/diagrams/{canvas,render,catalogue,specimen}.py` (diamonds sized for their corners; meta paths repo-relative; objective codes corrected to the blueprint's six)
+**Notes:** The pipeline shipped in 2026-09-09; its 20-diagram gate could only run once Phase 96 existed. Full reasoning in `Docs/note.md`.
+
+---
+
+## Phase 96 — Figures F11-F20 (Pipeline and Contribution Diagrams)
+**Gate:** T96.7 — F11-F20 render as SVG and 300 dpi PNG above 7 pt at thesis width with nothing clipped or overlapping, in the shared visual language; every count, parameter, route and verdict drawn equals its source — PASS (`tests/test_pipeline_figures.py`), plus a colour and greyscale inspection of all twenty
+**Added:** `src/reporting/diagrams/pipeline_figures.py`, `tests/test_pipeline_figures.py`, `outputs/13_figures_diagrams/F11-F20.{png,svg,meta.json}`
+**Changed:** `outputs/13_figures_diagrams/diagram_registry.csv`
+**Notes:** F16 draws the three POST routes under `/predict` read from the application. Full reasoning in `Docs/note.md`.
+
+---
+
+## Phase 95 — Figures F01-F10 (Architecture Diagrams)
+**Gate:** T95.7 — F01-F10 render as SVG and 300 dpi PNG and are legible at thesis width in greyscale — PASS (`tests/test_architecture_figures.py`, plus a greyscale inspection at 6 inches)
+**Added:** none this session (drawn 2026-09-09)
+**Changed:** `src/reporting/diagrams/architecture_figures.py` (F04 and F09 layouts, found by the new overlap check), all ten metas
+**Notes:** Closed on the user's instruction. Full reasoning in `Docs/note.md`.
+
+---
+
 ## Phase 94 — Graphs G29-G35 (Robustness and Reliability)
 **Gate:** T94.7 — G29-G35 exist with PNG, plotted CSV and meta; G30, G31 and G32 plot exactly T20, T21 and T22 (frame equality at 1e-9); every G-figure holds its own index as its figure number and no registry row or meta records a machine path — PASS (`tests/test_result_graphs.py`)
 **Added:** `graphs.normalize_registry`

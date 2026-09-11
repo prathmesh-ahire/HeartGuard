@@ -1,0 +1,33 @@
+Algorithm ALG-02: Signal harmonization and resampling
+PV-MEPCG / PulseVision  |  T98.1  |  objective O4
+
+Purpose: Every recording, whatever its native rate and channel count, becomes a mono float signal at one common rate, and its quality is measured before filtering.
+Input:   one WAV file
+Output:  mono signal at 2000 Hz, its native rate, quality measurements
+
+Parameters (read from the repository when this file was generated)
+  target_fs     2000                                                                                configs/signal.yaml resample.target_fs
+  method        soxr_hq                                                                             configs/signal.yaml resample.method
+  mono          mean                                                                                configs/signal.yaml resample.mono
+  native_rates  d1_physionet 2000 Hz, d2_pascal_a 44100 Hz, d3_pascal_b 4000 Hz, d4_circor 4000 Hz  configs/signal.yaml resample.native_fs
+  ratio_rule    Fraction(int(fs_out), int(fs_in))                                                   src/preprocessing/io.py resample_ratio
+
+Algorithm
+  1  (x, fs_native) <- decode WAV as float32 scaled to [-1, 1)
+  2  if x has more than one channel: x <- channel mean; else unchanged
+  3  if fs_native = 2000 or x is empty: y <- x
+  4  else: y <- band-limited resample of x from fs_native to 2000 Hz with soxr_hq; exact rational ratio Fraction(int(fs_out), int(fs_in))
+  5  quality <- clipping, silence, SNR proxy and drift ratio measured on y, before the band-pass removes the out-of-band term they need
+  6  return y, fs_native, quality and the list of steps applied
+
+Notes
+  Native rates in this corpus: d1_physionet 2000 Hz, d2_pascal_a 44100 Hz, d3_pascal_b 4000 Hz, d4_circor 4000 Hz.
+
+Implemented by
+  src/preprocessing/io.py:123  src.preprocessing.io:load_wav
+  src/preprocessing/io.py:148  src.preprocessing.io:to_mono
+  src/preprocessing/io.py:181  src.preprocessing.io:resample_to
+  src/preprocessing/quality.py:239  src.preprocessing.quality:measure_signal
+  src/preprocessing/pipeline.py:236  src.preprocessing.pipeline:preprocess
+
+Regenerate: python scripts/39_export_algorithms.py --ids ALG-02
