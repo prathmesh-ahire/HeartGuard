@@ -335,8 +335,14 @@ def test_the_heart_animation_is_labelled_as_decoration(scaffolded: None) -> None
 def test_the_bundle_budget_runs_after_every_build(scaffolded: None) -> None:
     package = json.loads((FRONTEND / "package.json").read_text(encoding="utf-8"))
     scripts = package["scripts"]
-    assert scripts["postbuild"] == "npm run check-bundle"
+    # Phase 119 (T119.3) appended the displayed-value audit to `postbuild`. The
+    # property protected here is unchanged -- the budget runs after EVERY build,
+    # first -- and is asserted on the chain rather than on a literal.
+    steps = [step.strip() for step in scripts["postbuild"].split("&&")]
+    assert steps[0] == "npm run check-bundle"
+    assert steps[1:] == ["npm run audit-display"]
     assert "20_check_bundle_budget.py" in scripts["check-bundle"]
+    assert "45_audit_displayed_values.py" in scripts["audit-display"]
     assert (PROJECT_ROOT / "scripts" / "20_check_bundle_budget.py").is_file()
 
 
