@@ -1,6 +1,6 @@
 {
   "figure_id": "G27",
-  "figure_number": 19,
+  "figure_number": 27,
   "title": "Model Size Comparison",
   "caption": "Left: the joblib size of the whole fitted pipeline -- imputer, scaler and estimator, which is what a deployment loads -- on a log scale, spanning three orders of magnitude. Right: peak process resident set above the pre-fit baseline, sampled every 20 ms. Every model was fitted once on the training rows of binary fold r0f0 under configs/models.yaml defaults, on an otherwise idle machine, so the bars are comparable with each other. Hatched bars collected fewer than five samples: the fit finished too quickly to measure.",
   "exp_id": "n/a (controlled bench, not an experiment)",
@@ -51,9 +51,9 @@
     }
   ],
   "written": {
-    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G27_model_size_comparison.csv",
-    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G27_model_size_comparison.png",
-    "svg": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G27_model_size_comparison.svg"
+    "csv": "outputs/13_figures_diagrams/G27_model_size_comparison.csv",
+    "png": "outputs/13_figures_diagrams/G27_model_size_comparison.png",
+    "svg": "outputs/13_figures_diagrams/G27_model_size_comparison.svg"
   },
   "notes": []
 }

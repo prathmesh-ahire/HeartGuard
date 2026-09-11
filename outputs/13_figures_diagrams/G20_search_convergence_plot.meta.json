@@ -1,0 +1,60 @@
+{
+  "figure_id": "G20",
+  "figure_number": 20,
+  "title": "Search Convergence Plot",
+  "caption": "Running best of all four searches on outer fold r0f0. TWO PANELS, NOT ONE AXIS: the hyperparameter searches (randomized, Bayesian) maximise balanced accuracy; the feature-mask searches (genetic, PSO) minimise J, a cost. The two ranges overlap numerically, so a shared axis would read as the mask searches converging below the others. Every curve is best-so-far: PSO keeps no elite, so its per-iteration best is not monotone and only the running best is comparable. Single-fold search traces, not cross-validated results.",
+  "exp_id": "SO-01, SO-02, SO-03a, SO-03b",
+  "objective": "O3 (search-based optimization)",
+  "dataset": "D1 PhysioNet 2016",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-09-11T05:48:29.532854+00:00",
+  "command": "python scripts/10_search_reports.py",
+  "plotted_rows": 320,
+  "plotted_csv": "G20_search_convergence_plot.csv",
+  "plotted_csv_sha256": "e2bf2431c3ba98b3312f4582448a11eb46eaa3bbaa17cc2c916eb644a429254a",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "outputs/05_search_optimization/SO-01/convergence.csv",
+      "exists": true,
+      "bytes": 9158,
+      "sha256": "199186f8135a54d43bfabc20b5c15a024f29106737a04c9d5670cf2f6978dee4",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-28T06:36:07.383829+00:00"
+    },
+    {
+      "path": "outputs/05_search_optimization/SO-02/convergence.csv",
+      "exists": true,
+      "bytes": 4921,
+      "sha256": "3dedbea0982bfe76a1efbce93930eaf220498a584d86b243e2eea7fef22e6d6b",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-28T07:23:27.297883+00:00"
+    },
+    {
+      "path": "outputs/05_search_optimization/SO-03a/convergence.csv",
+      "exists": true,
+      "bytes": 4556,
+      "sha256": "72888bb265b0708df9c5720657f8b67942d98e96aa9bc8e5ad8d685cfb1a9cf3",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-28T09:29:24.295126+00:00"
+    },
+    {
+      "path": "outputs/05_search_optimization/SO-03b/convergence.csv",
+      "exists": true,
+      "bytes": 4568,
+      "sha256": "2e91bcd9f4eda458616c9af62532cf59e27c37eb0305c3e26a8733919182a1ee",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-28T10:17:08.750360+00:00"
+    }
+  ],
+  "written": {
+    "csv": "outputs/13_figures_diagrams/G20_search_convergence_plot.csv",
+    "png": "outputs/13_figures_diagrams/G20_search_convergence_plot.png"
+  },
+  "notes": [
+    "PV-MEPCG / PulseVision is an academic screening prototype, not a diagnostic tool."
+  ]
+}

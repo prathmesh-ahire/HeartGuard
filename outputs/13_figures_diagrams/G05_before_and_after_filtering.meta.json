@@ -43,8 +43,8 @@
     }
   ],
   "written": {
-    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G05_before_and_after_filtering.csv",
-    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G05_before_and_after_filtering.png"
+    "csv": "outputs/13_figures_diagrams/G05_before_and_after_filtering.csv",
+    "png": "outputs/13_figures_diagrams/G05_before_and_after_filtering.png"
   },
   "notes": [
     "Raw here is resampled to the 2 kHz working rate but otherwise untouched: no filter, no normalization."

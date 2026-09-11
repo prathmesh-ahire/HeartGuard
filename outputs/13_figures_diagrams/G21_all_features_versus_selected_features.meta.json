@@ -1,0 +1,36 @@
+{
+  "figure_id": "G21",
+  "figure_number": 21,
+  "title": "All Features Versus Selected Features",
+  "caption": "Every SO-04 configuration scored on the held-out outer folds: all 138 features against each selected subset, mean with the standard error across folds. Every arm was selected inside its own fold's training rows and scored once on that fold's test rows. The x-axis starts at 0.6 to separate arms that differ by a few points; the bars are therefore not proportional to the score. Sorted by balanced accuracy.",
+  "exp_id": "SO-04",
+  "objective": "O3 (search-based feature selection)",
+  "dataset": "D1 PhysioNet 2016",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-09-11T05:48:30.180571+00:00",
+  "command": "python scripts/10_search_reports.py",
+  "plotted_rows": 7,
+  "plotted_csv": "G21_all_features_versus_selected_features.csv",
+  "plotted_csv_sha256": "efecfa5ae9c50684d14c046a8aea9d60f118998d67daf215ade37eb8951ac010",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "outputs/05_search_optimization/SO-04/all_features_vs_selected.csv",
+      "exists": true,
+      "bytes": 13414,
+      "sha256": "69fc634cbdd4299b5dbdca595809c7754e8715e9a42c0203ae3481bbe7d48eb3",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-28T09:10:11.247447+00:00"
+    }
+  ],
+  "written": {
+    "csv": "outputs/13_figures_diagrams/G21_all_features_versus_selected_features.csv",
+    "png": "outputs/13_figures_diagrams/G21_all_features_versus_selected_features.png"
+  },
+  "notes": [
+    "PV-MEPCG / PulseVision is an academic screening prototype, not a diagnostic tool."
+  ]
+}

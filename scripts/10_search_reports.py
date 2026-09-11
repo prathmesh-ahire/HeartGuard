@@ -120,16 +120,19 @@ def main(argv: list[str] | None = None) -> int:
     log.info("T07: %d parameter rows over %d models", len(t07), t07["model_id"].nunique())
 
     # --- T62.2 / T62.3 / T62.4: the figures ---------------------------------
-    figures = sr.figures_dir()
-    written: dict[str, Path] = {}
-    for figure_id, builder in (
-        ("G20", sr.plot_convergence),
-        ("G21", sr.plot_all_versus_selected),
-        ("G22", sr.plot_feature_count_curve),
-    ):
-        target = figures / sr.FIGURES[figure_id]
-        written[figure_id] = builder(target, section)
-        log.info("%s -> %s", figure_id, written[figure_id].name)
+    #
+    # Built by src/reporting/result_graphs.py through the graph engine since
+    # Phase 93, so each PNG has its plotted CSV, meta and registry number. The
+    # engine registers each figure in the evidence index itself.
+    from src.reporting.graphs import write_graphs
+    from src.reporting.result_graphs import build_result_graphs
+
+    graphs = build_result_graphs(("G20", "G21", "G22"), command=command)
+    written: dict[str, Path] = {
+        figure_id: paths["png"] for figure_id, paths in write_graphs(graphs).items()
+    }
+    for figure_id, path in written.items():
+        log.info("%s -> %s", figure_id, path.name)
 
     # --- T62.5: every SO artifact in the evidence index ---------------------
     #
@@ -144,19 +147,7 @@ def main(argv: list[str] | None = None) -> int:
             metric_or_asset=label, dataset="D1", command=command,
         )
         registered += 1
-    for figure_id, path in written.items():
-        register_evidence(
-            figure_id, path,
-            metric_or_asset={
-                "G20": "G20 search convergence, hyperparameter and mask searches on separate axes",
-                "G21": "G21 all 138 features versus the selected subsets on held-out folds",
-                "G22": "G22 performance versus feature count, per ranker, on inner folds",
-            }[figure_id],
-            dataset="D1",
-            source_data="outputs/05_search_optimization/",
-            command=command,
-        )
-        registered += 1
+    registered += len(written)
     register_evidence(
         "T07", t07_path,
         metric_or_asset="T07 search space, distribution and final selected value per model",

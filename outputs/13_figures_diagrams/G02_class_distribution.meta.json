@@ -27,8 +27,8 @@
     }
   ],
   "written": {
-    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G02_class_distribution.csv",
-    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G02_class_distribution.png"
+    "csv": "outputs/13_figures_diagrams/G02_class_distribution.csv",
+    "png": "outputs/13_figures_diagrams/G02_class_distribution.png"
   },
   "notes": []
 }

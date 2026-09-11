@@ -1,20 +1,20 @@
 {
-  "figure_id": "G24",
-  "figure_number": 2,
-  "title": "Baseline versus Optimized",
-  "caption": "The five optimization stages over the identical DA-07 repeated 5x5 subject-grouped fold map, with the fold SD as the error bar. The dashed line is the untuned single-model baseline. Read the two panels together: the stage that maximises sensitivity is not the stage that maximises balanced accuracy, and neither is the last one.",
+  "figure_id": "G23",
+  "figure_number": 23,
+  "title": "Ensemble Weight Comparison",
+  "caption": "Mean ensemble weight per member under each weight-optimization method, with the fold-to-fold SD as the error bar, over the 25 outer folds. The dashed line is equal weighting. Three of the four methods land on equal weights or within a few percent of them; only the log-loss objective moves substantially, and it scores lower than the methods that do not.",
   "exp_id": "EXP-F2",
-  "objective": "O3 (optimization), O5 (ablation evidence)",
+  "objective": "O3 (optimization)",
   "dataset": "D1 PhysioNet 2016 (3,240 records, 857 subjects)",
   "framework": "PV-MEPCG / PulseVision",
   "profile": "screen",
   "dpi": 300,
   "palette": "Okabe-Ito (colourblind-safe), fixed order",
-  "generated_utc": "2026-09-10T04:36:31.348515+00:00",
+  "generated_utc": "2026-09-11T05:48:23.854923+00:00",
   "command": "python scripts/27_optimization_ablation.py",
-  "plotted_rows": 5,
-  "plotted_csv": "G24_baseline_versus_optimized.csv",
-  "plotted_csv_sha256": "f3d5ae21b1ded919fba836b14bdce28fbdc31c46686a38dc777614f5d25ea267",
+  "plotted_rows": 12,
+  "plotted_csv": "G23_ensemble_weight_comparison.csv",
+  "plotted_csv_sha256": "1d5114b7286579b8a59630b2d0b68104a0cd1ddc9694c729270c13546f650f9c",
   "plotted_csv_digest_method": "sha256/lf",
   "sources": [
     {
@@ -51,12 +51,12 @@
     }
   ],
   "written": {
-    "csv": "outputs/09_ablation/G24_baseline_versus_optimized.csv",
-    "png": "outputs/09_ablation/G24_baseline_versus_optimized.png"
+    "csv": "outputs/13_figures_diagrams/G23_ensemble_weight_comparison.csv",
+    "png": "outputs/13_figures_diagrams/G23_ensemble_weight_comparison.png"
   },
   "notes": [
-    "Error bars are the SD across 25 folds, not a confidence interval on the mean, and they overlap between every pair of stages. No stage in this figure is distinguishable from its neighbour on this evidence; Phase 81's paired tests are where that question is settled.",
-    "The stages are the optimization pipeline's order, not a ranking.",
+    "A weight search that returns equal weights is a result, not a failure: it says the three members are close enough in quality that the data does not support preferring one.",
+    "Weights are fitted inside each training fold. A weight vector is never chosen using the outer test fold it is then scored on.",
     "PV-MEPCG / PulseVision is an academic screening prototype, not a diagnostic tool."
   ]
 }

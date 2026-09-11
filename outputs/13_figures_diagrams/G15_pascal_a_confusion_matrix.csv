@@ -1,0 +1,17 @@
+task,run,model_id,true_index,true_class,pred_index,pred_class,count_repeat0,count_all_folds,row_share_all_folds,n_folds_repeat0,n_folds_all
+pascal_a,EXP-B1,M4,0,normal,0,normal,3,38,0.24516129032258063,2,10
+pascal_a,EXP-B1,M4,0,normal,1,murmur,9,39,0.25161290322580643,2,10
+pascal_a,EXP-B1,M4,0,normal,2,extrahls,17,67,0.432258064516129,2,10
+pascal_a,EXP-B1,M4,0,normal,3,artifact,2,11,0.07096774193548387,2,10
+pascal_a,EXP-B1,M4,1,murmur,0,normal,0,20,0.11764705882352941,2,10
+pascal_a,EXP-B1,M4,1,murmur,1,murmur,28,132,0.7764705882352941,2,10
+pascal_a,EXP-B1,M4,1,murmur,2,extrahls,6,18,0.10588235294117647,2,10
+pascal_a,EXP-B1,M4,1,murmur,3,artifact,0,0,0.0,2,10
+pascal_a,EXP-B1,M4,2,extrahls,0,normal,2,30,0.3157894736842105,2,10
+pascal_a,EXP-B1,M4,2,extrahls,1,murmur,0,0,0.0,2,10
+pascal_a,EXP-B1,M4,2,extrahls,2,extrahls,17,65,0.6842105263157895,2,10
+pascal_a,EXP-B1,M4,2,extrahls,3,artifact,0,0,0.0,2,10
+pascal_a,EXP-B1,M4,3,artifact,0,normal,0,7,0.035,2,10
+pascal_a,EXP-B1,M4,3,artifact,1,murmur,1,2,0.01,2,10
+pascal_a,EXP-B1,M4,3,artifact,2,extrahls,2,2,0.01,2,10
+pascal_a,EXP-B1,M4,3,artifact,3,artifact,37,189,0.945,2,10

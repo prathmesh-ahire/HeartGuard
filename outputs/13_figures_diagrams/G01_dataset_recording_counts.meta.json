@@ -27,8 +27,8 @@
     }
   ],
   "written": {
-    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G01_dataset_recording_counts.csv",
-    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G01_dataset_recording_counts.png"
+    "csv": "outputs/13_figures_diagrams/G01_dataset_recording_counts.csv",
+    "png": "outputs/13_figures_diagrams/G01_dataset_recording_counts.png"
   },
   "notes": []
 }

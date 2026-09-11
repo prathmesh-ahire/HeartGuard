@@ -1,0 +1,44 @@
+{
+  "figure_id": "G15",
+  "figure_number": 15,
+  "title": "PASCAL A Confusion Matrix",
+  "caption": "PASCAL A (set_a) confusion matrices on EXP-B1 for M4, the best model by macro-F1. Left: counts over the folds of repeat 0, in which each of the 124 labelled records is predicted once. Right: row-normalized over every fold; the diagonal is per-class recall. Classes are in the fixed order normal, murmur, extrahls, artifact. `artifact` is a recording-quality label, not a cardiac class, so this is not a four-class cardiac classifier.",
+  "exp_id": "EXP-B1",
+  "objective": "O6 (multiclass event classification)",
+  "dataset": "D2 PASCAL A",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-09-11T05:47:22.004714+00:00",
+  "command": "python scripts/38_result_graphs.py --figures G11 G12 G13 G14 G15 G16 G17",
+  "plotted_rows": 16,
+  "plotted_csv": "G15_pascal_a_confusion_matrix.csv",
+  "plotted_csv_sha256": "1ed775b0997af6c5e1221128e47567f000bcdf33cc9e4f2636279d5d17591e4c",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "outputs/07_multiclass_results/EXP-B1/confusion_matrices.json",
+      "exists": true,
+      "bytes": 24690,
+      "sha256": "b9b79ad4cad386958f5fa2b2446e28083446c6c5c3ba85dbe0f2f2cf0721ca16",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-30T05:59:41.189263+00:00"
+    },
+    {
+      "path": "outputs/07_multiclass_results/T11_pascal_a_multiclass_results.csv",
+      "exists": true,
+      "bytes": 1496,
+      "sha256": "0afc452db88f9bdd09bea347f59d48d7d4db7ca8f78b42f7b04df7339d030277",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T16:53:56.060966+00:00"
+    }
+  ],
+  "written": {
+    "csv": "outputs/13_figures_diagrams/G15_pascal_a_confusion_matrix.csv",
+    "png": "outputs/13_figures_diagrams/G15_pascal_a_confusion_matrix.png"
+  },
+  "notes": [
+    "PV-MEPCG / PulseVision is an academic screening prototype, not a diagnostic tool."
+  ]
+}

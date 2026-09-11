@@ -20,6 +20,30 @@ gate has actually passed.
 
 ---
 
+## Phase 94 — Graphs G29-G35 (Robustness and Reliability)
+**Gate:** T94.7 — G29-G35 exist with PNG, plotted CSV and meta; G30, G31 and G32 plot exactly T20, T21 and T22 (frame equality at 1e-9); every G-figure holds its own index as its figure number and no registry row or meta records a machine path — PASS (`tests/test_result_graphs.py`)
+**Added:** `graphs.normalize_registry`
+**Changed:** `src/reporting/graphs.py` (registry and meta provenance recorded repo-relative), `outputs/13_figures_diagrams/figure_registry.csv` and every G meta (portable paths; G-series renumbered once into index order)
+**Notes:** G29-G35 were drawn in Phases 71-80 by their own analyses and were held to the gate, not redrawn. Full reasoning in `Docs/note.md`.
+
+---
+
+## Phase 93 — Graphs G20-G28 (Optimization and Complexity)
+**Gate:** T93.7 — G20-G28 exist; G22's curve equals SO-04's feature-count curve and re-derives at 1e-9 (mean, SD, count) from the raw T57.4 sweep; G20 keeps the maximised and minimised searches on separate axes with monotone running bests; G21 and G28 re-derive from their source files — PASS (`tests/test_result_graphs.py`)
+**Added:** G20-G22 and G28 through the graph engine (`src/reporting/result_graphs.py`, `scripts/38_result_graphs.py`)
+**Changed:** `src/reporting/search_report.py` (Phase 62 plotters retired), `scripts/10_search_reports.py`, `scripts/27_optimization_ablation.py` (G23/G24 written to the figures directory), `tests/test_search_reports.py`, `tests/test_ablation_experiments.py`; removed `search_convergence_plot.png`, `all_features_vs_selected_features.png`, `f1_accuracy_vs_feature_count.png` and `outputs/09_ablation/` G23/G24 plus its second figure registry
+**Notes:** G22 now plots accuracy (T93.3) beside macro-F1 and balanced accuracy. Full reasoning in `Docs/note.md`.
+
+---
+
+## Phase 92 — Graphs G11-G19 (Model Performance)
+**Gate:** T92.7 — G11-G19 exist; every G12 legend AUC equals T08's ROC-AUC for its run and model; G14-G16 use the fixed label-map class order with repeat-0 row totals equal to DA-02's class counts; G17's per-class OvR AUCs reproduce each experiment's macro OvR AUC at 1e-9; G11 re-derives from the per-fold files — PASS (`tests/test_result_graphs.py`, 49 tests)
+**Added:** `src/reporting/result_graphs.py`, `scripts/38_result_graphs.py`, `tests/test_result_graphs.py`, G11-G17 under `outputs/13_figures_diagrams/`
+**Changed:** T29/T30 regenerated (objectives 1 and 6 now "evidence produced")
+**Notes:** G18/G19 were drawn in Phase 81 and held to the gate. Full reasoning in `Docs/note.md`.
+
+---
+
 ## Phase 89 — Tables T24-T30 (Complexity, Stats, Conclusion)
 **Gate:** T89.7 — T24-T30 pass the table audit; T29 quotes all six locked objectives verbatim and names an existing file for every one, with "partial" status computed from the filesystem; T30's findings re-derive from the files each row names and keep to screening language — PASS (`tests/test_closing_tables.py`)
 **Added:** `src/reporting/conclusion_tables.py`, `tests/test_closing_tables.py`, **T29** `outputs/00_evidence_index/T29_objective_to_evidence_mapping.*`, **T30** `outputs/00_evidence_index/T30_final_conclusion_matrix.*`

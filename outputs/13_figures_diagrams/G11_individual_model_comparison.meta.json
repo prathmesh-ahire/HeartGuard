@@ -1,0 +1,36 @@
+{
+  "figure_id": "G11",
+  "figure_number": 11,
+  "title": "Individual Model Comparison",
+  "caption": "Every binary model on the two PhysioNet runs, as the mean over the 25 outer folds of the repeated 5x5 subject-grouped map, with one SD across folds as the whisker. Models are in T08's rank order -- sensitivity, then balanced accuracy -- not by accuracy, which on this majority-normal corpus ranks the models almost in reverse. Whiskers overlap for most pairs; T28 holds the paired tests. All PhysioNet figures are within the PhysioNet 2016 corpus: leave-one-sub-collection-out (EXP-F3) takes AUC to chance, so none of them is a claim of generalization.",
+  "exp_id": "EXP-A1, EXP-A2",
+  "objective": "O3 (heterogeneous ensemble), O1 (binary screening)",
+  "dataset": "D1 PhysioNet 2016",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-09-11T05:47:17.848924+00:00",
+  "command": "python scripts/38_result_graphs.py --figures G11 G12 G13 G14 G15 G16 G17",
+  "plotted_rows": 52,
+  "plotted_csv": "G11_individual_model_comparison.csv",
+  "plotted_csv_sha256": "a510fbe9aa558a05c03d769afb0d3c140ab1ef658b4752d748f2934181c060a0",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "outputs/06_binary_results/T08_physionet_individual_model_comparison.csv",
+      "exists": true,
+      "bytes": 3363,
+      "sha256": "51ec5eac0ec50ff45699227c599c8f971d930b7cd404b85ccee646bdbe153ad1",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T16:53:54.612187+00:00"
+    }
+  ],
+  "written": {
+    "csv": "outputs/13_figures_diagrams/G11_individual_model_comparison.csv",
+    "png": "outputs/13_figures_diagrams/G11_individual_model_comparison.png"
+  },
+  "notes": [
+    "PV-MEPCG / PulseVision is an academic screening prototype, not a diagnostic tool."
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "figure_id": "G34",
-  "figure_number": 16,
+  "figure_number": 34,
   "title": "Calibration Curve",
   "caption": "Reliability diagrams for every run that holds out-of-fold probabilities, one panel per run and one line per model. The x-axis is the confidence of the predicted class, the y-axis the accuracy of those predictions, binned in equal-width bins inside each fold and averaged over the folds that had records in the bin. A curve below the dashed diagonal is over-confident. The dotted vertical marks 1/n_classes, the confidence of a uniform probability vector: no point can lie to its left, so a 4-class panel starting at 0.25 is at the bottom of its possible range rather than badly calibrated. This is NOT the positive-class reliability curve the dashboard shows -- that one is defined only for the binary task.",
   "exp_id": "EXP-A1, EXP-A2, EXP-B1, EXP-B2, EXP-C1, EXP-C2, EXP-D1",
@@ -59,9 +59,9 @@
     }
   ],
   "written": {
-    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G34_calibration_curve.csv",
-    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G34_calibration_curve.png",
-    "svg": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G34_calibration_curve.svg"
+    "csv": "outputs/13_figures_diagrams/G34_calibration_curve.csv",
+    "png": "outputs/13_figures_diagrams/G34_calibration_curve.png",
+    "svg": "outputs/13_figures_diagrams/G34_calibration_curve.svg"
   },
   "notes": []
 }

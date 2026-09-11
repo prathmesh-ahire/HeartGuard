@@ -35,8 +35,8 @@
     }
   ],
   "written": {
-    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G06_normal_versus_abnormal_spectrogram.csv",
-    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G06_normal_versus_abnormal_spectrogram.png"
+    "csv": "outputs/13_figures_diagrams/G06_normal_versus_abnormal_spectrogram.csv",
+    "png": "outputs/13_figures_diagrams/G06_normal_versus_abnormal_spectrogram.png"
   },
   "notes": []
 }

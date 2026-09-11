@@ -1,0 +1,71 @@
+panel,task,label,regime,model_id,metric,value,chance,source_table
+within_corpus,binary,"D1 PhysioNet
+binary",within-corpus CV,M1,balanced_accuracy,0.8468043977525701,0.5,T08_physionet_individual_model_comparison.csv
+within_corpus,binary,"D1 PhysioNet
+binary",within-corpus CV,M6,balanced_accuracy,0.8558631699470313,0.5,T08_physionet_individual_model_comparison.csv
+within_corpus,binary,"D1 PhysioNet
+binary",within-corpus CV,M7,balanced_accuracy,0.8555880661827883,0.5,T08_physionet_individual_model_comparison.csv
+within_corpus,binary,"D1 PhysioNet
+binary",within-corpus CV,M8,balanced_accuracy,0.8482519737790061,0.5,T08_physionet_individual_model_comparison.csv
+within_corpus,binary,"D1 PhysioNet
+binary",within-corpus CV,M4,balanced_accuracy,0.8523598911722676,0.5,T08_physionet_individual_model_comparison.csv
+within_corpus,binary,"D1 PhysioNet
+binary",within-corpus CV,M5,balanced_accuracy,0.8471607213499192,0.5,T08_physionet_individual_model_comparison.csv
+within_corpus,binary,"D1 PhysioNet
+binary",within-corpus CV,M3,balanced_accuracy,0.7997979696844384,0.5,T08_physionet_individual_model_comparison.csv
+within_corpus,pascal_a,"D2 PASCAL A
+4-class",within-corpus CV,M4,balanced_accuracy,0.6639440359477125,0.25,T11_pascal_a_multiclass_results.csv
+within_corpus,pascal_a,"D2 PASCAL A
+4-class",within-corpus CV,M1,balanced_accuracy,0.6282720588235294,0.25,T11_pascal_a_multiclass_results.csv
+within_corpus,pascal_a,"D2 PASCAL A
+4-class",within-corpus CV,M5,balanced_accuracy,0.6259926470588235,0.25,T11_pascal_a_multiclass_results.csv
+within_corpus,pascal_a,"D2 PASCAL A
+4-class",within-corpus CV,M7,balanced_accuracy,0.6197426470588236,0.25,T11_pascal_a_multiclass_results.csv
+within_corpus,pascal_a,"D2 PASCAL A
+4-class",within-corpus CV,M6,balanced_accuracy,0.6116891339869281,0.25,T11_pascal_a_multiclass_results.csv
+within_corpus,pascal_a,"D2 PASCAL A
+4-class",within-corpus CV,M3,balanced_accuracy,0.5973386437908496,0.25,T11_pascal_a_multiclass_results.csv
+within_corpus,pascal_b,"D3 PASCAL B
+3-class",within-corpus CV,M1,balanced_accuracy,0.4887889863547757,0.3333333333333333,T12_pascal_b_multiclass_results.csv
+within_corpus,pascal_b,"D3 PASCAL B
+3-class",within-corpus CV,M5,balanced_accuracy,0.4283503898635477,0.3333333333333333,T12_pascal_b_multiclass_results.csv
+within_corpus,pascal_b,"D3 PASCAL B
+3-class",within-corpus CV,M4,balanced_accuracy,0.4291910331384015,0.3333333333333333,T12_pascal_b_multiclass_results.csv
+within_corpus,pascal_b,"D3 PASCAL B
+3-class",within-corpus CV,M6,balanced_accuracy,0.4224780701754386,0.3333333333333333,T12_pascal_b_multiclass_results.csv
+within_corpus,pascal_b,"D3 PASCAL B
+3-class",within-corpus CV,M7,balanced_accuracy,0.4202302631578947,0.3333333333333333,T12_pascal_b_multiclass_results.csv
+within_corpus,pascal_b,"D3 PASCAL B
+3-class",within-corpus CV,M3,balanced_accuracy,0.4007675438596491,0.3333333333333333,T12_pascal_b_multiclass_results.csv
+within_corpus,circor_murmur,"D4 CirCor
+murmur 3-class",within-corpus CV,M3,balanced_accuracy,0.4165377939720351,0.3333333333333333,T13_circor_murmur_classification_results.csv
+within_corpus,circor_murmur,"D4 CirCor
+murmur 3-class",within-corpus CV,M4,balanced_accuracy,0.5471122132238819,0.3333333333333333,T13_circor_murmur_classification_results.csv
+within_corpus,circor_murmur,"D4 CirCor
+murmur 3-class",within-corpus CV,M5,balanced_accuracy,0.5454591693542291,0.3333333333333333,T13_circor_murmur_classification_results.csv
+within_corpus,circor_murmur,"D4 CirCor
+murmur 3-class",within-corpus CV,M6,balanced_accuracy,0.4182155139817198,0.3333333333333333,T13_circor_murmur_classification_results.csv
+within_corpus,circor_murmur,"D4 CirCor
+murmur 3-class",within-corpus CV,M7,balanced_accuracy,0.4615926756793295,0.3333333333333333,T13_circor_murmur_classification_results.csv
+within_corpus,circor_outcome,"D4 CirCor
+outcome",within-corpus CV,M3,balanced_accuracy,0.6017347276702193,0.5,T14_circor_clinical_outcome_results.csv
+within_corpus,circor_outcome,"D4 CirCor
+outcome",within-corpus CV,M4,balanced_accuracy,0.6004589454851734,0.5,T14_circor_clinical_outcome_results.csv
+within_corpus,circor_outcome,"D4 CirCor
+outcome",within-corpus CV,M5,balanced_accuracy,0.5954936836066176,0.5,T14_circor_clinical_outcome_results.csv
+within_corpus,circor_outcome,"D4 CirCor
+outcome",within-corpus CV,M6,balanced_accuracy,0.596570869091878,0.5,T14_circor_clinical_outcome_results.csv
+within_corpus,circor_outcome,"D4 CirCor
+outcome",within-corpus CV,M7,balanced_accuracy,0.596570869091878,0.5,T14_circor_clinical_outcome_results.csv
+beyond_corpus,binary,D1 PhysioNet binary,"pooled 5x5 CV, tuned (EXP-A2)",M1,sensitivity,0.8648233891627352,0.5,T08_physionet_individual_model_comparison.csv
+beyond_corpus,binary,D1 PhysioNet binary,"pooled 5x5 CV, tuned (EXP-A2)",M1,specificity,0.8287854063424053,0.5,T08_physionet_individual_model_comparison.csv
+beyond_corpus,binary,D1 PhysioNet binary,"pooled 5x5 CV, tuned (EXP-A2)",M1,balanced_accuracy,0.8468043977525701,0.5,T08_physionet_individual_model_comparison.csv
+beyond_corpus,binary,D1 PhysioNet binary,"pooled 5x5 CV, defaults (EXP-A1)",M1,sensitivity,0.8479933187885698,0.5,T-S5_leave_one_source_out_generalization.csv
+beyond_corpus,binary,D1 PhysioNet binary,"pooled 5x5 CV, defaults (EXP-A1)",M1,specificity,0.8378530531876638,0.5,T-S5_leave_one_source_out_generalization.csv
+beyond_corpus,binary,D1 PhysioNet binary,"pooled 5x5 CV, defaults (EXP-A1)",M1,balanced_accuracy,0.8429231859881168,0.5,T-S5_leave_one_source_out_generalization.csv
+beyond_corpus,binary,D1 PhysioNet binary,unseen sub-collection (EXP-F3),M1,sensitivity,0.7188775285258489,0.5,T-S5_leave_one_source_out_generalization.csv
+beyond_corpus,binary,D1 PhysioNet binary,unseen sub-collection (EXP-F3),M1,specificity,0.3191237838564205,0.5,T-S5_leave_one_source_out_generalization.csv
+beyond_corpus,binary,D1 PhysioNet binary,unseen sub-collection (EXP-F3),M1,balanced_accuracy,0.5190006561911348,0.5,T-S5_leave_one_source_out_generalization.csv
+beyond_corpus,binary,D1 PhysioNet binary,"unseen corpus, CirCor (EXP-D1)",M1,sensitivity,0.3781841933376877,0.5,T16_cross_dataset_generalization.csv
+beyond_corpus,binary,D1 PhysioNet binary,"unseen corpus, CirCor (EXP-D1)",M1,specificity,0.6734068627450981,0.5,T16_cross_dataset_generalization.csv
+beyond_corpus,binary,D1 PhysioNet binary,"unseen corpus, CirCor (EXP-D1)",M1,balanced_accuracy,0.525795528041393,0.5,T16_cross_dataset_generalization.csv

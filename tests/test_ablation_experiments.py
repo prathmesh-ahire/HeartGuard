@@ -230,13 +230,17 @@ def test_t75_7_t19_g23_and_g24_exist() -> None:
     if not t19.is_file():
         pytest.skip("T19 has not been generated")
 
+    # G23/G24 moved to the figures directory in Phase 93, beside every other
+    # G-figure and in the one figure registry. The assertions are unchanged.
+    from src.reporting.graphs import figures_dir
+
     for name in (
         "G23_ensemble_weight_comparison.png",
         "G23_ensemble_weight_comparison.csv",
         "G24_baseline_versus_optimized.png",
         "G24_baseline_versus_optimized.csv",
     ):
-        path = section / name
+        path = figures_dir() / name
         assert path.is_file(), name + " is missing"
         assert path.stat().st_size > 0, name + " is empty"
 

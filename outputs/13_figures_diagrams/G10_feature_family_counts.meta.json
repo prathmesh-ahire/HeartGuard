@@ -27,8 +27,8 @@
     }
   ],
   "written": {
-    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G10_feature_family_counts.csv",
-    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G10_feature_family_counts.png"
+    "csv": "outputs/13_figures_diagrams/G10_feature_family_counts.csv",
+    "png": "outputs/13_figures_diagrams/G10_feature_family_counts.png"
   },
   "notes": []
 }

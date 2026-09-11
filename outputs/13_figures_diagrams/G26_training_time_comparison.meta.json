@@ -1,6 +1,6 @@
 {
   "figure_id": "G26",
-  "figure_number": 18,
+  "figure_number": 26,
   "title": "Training Time Comparison",
   "caption": "Mean seconds to fit one fold, per model and per run, on a log scale. Whiskers span the observed minimum and maximum across that run's folds rather than a standard deviation, because the quantity is not symmetric: an ensemble fold whose member search picked a large gradient-boosting configuration costs an order of magnitude more than one that picked a small one. These are the times the project's own runs recorded on a machine that was sometimes running other jobs; T26's controlled bench is the like-for-like comparison. The colourblind-safe palette holds eight colours and there are ten runs, so the last two are hatched rather than given a ninth colour.",
   "exp_id": "EXP-A1, EXP-A2, EXP-B1, EXP-B2, EXP-C1, EXP-C2",
@@ -51,9 +51,9 @@
     }
   ],
   "written": {
-    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G26_training_time_comparison.csv",
-    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G26_training_time_comparison.png",
-    "svg": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G26_training_time_comparison.svg"
+    "csv": "outputs/13_figures_diagrams/G26_training_time_comparison.csv",
+    "png": "outputs/13_figures_diagrams/G26_training_time_comparison.png",
+    "svg": "outputs/13_figures_diagrams/G26_training_time_comparison.svg"
   },
   "notes": []
 }

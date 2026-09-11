@@ -27,8 +27,8 @@
     }
   ],
   "written": {
-    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G04_recording_duration_histogram.csv",
-    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G04_recording_duration_histogram.png"
+    "csv": "outputs/13_figures_diagrams/G04_recording_duration_histogram.csv",
+    "png": "outputs/13_figures_diagrams/G04_recording_duration_histogram.png"
   },
   "notes": []
 }

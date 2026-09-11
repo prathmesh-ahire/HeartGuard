@@ -1,0 +1,44 @@
+{
+  "figure_id": "G16",
+  "figure_number": 16,
+  "title": "PASCAL B Confusion Matrix",
+  "caption": "PASCAL B (set_b) confusion matrices on EXP-B2 for M1, the best model by macro-F1, and M6, the best by accuracy -- shown together because they are not the same model. Left: counts over the folds of repeat 0, in which each of the 461 labelled records is predicted once. Right: row-normalized over every fold; the diagonal is per-class recall. Classes are in the fixed order normal, murmur, extrastole. A model can lead on accuracy here while never predicting the smallest class; the right-hand panels show whether it does.",
+  "exp_id": "EXP-B2",
+  "objective": "O6 (multiclass event classification)",
+  "dataset": "D3 PASCAL B",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-09-11T05:47:23.273529+00:00",
+  "command": "python scripts/38_result_graphs.py --figures G11 G12 G13 G14 G15 G16 G17",
+  "plotted_rows": 18,
+  "plotted_csv": "G16_pascal_b_confusion_matrix.csv",
+  "plotted_csv_sha256": "097533692c7e7473ec684da3ff3fbbb8b67c98e0253603718f4b6bd05807a1f7",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "outputs/07_multiclass_results/EXP-B2/confusion_matrices.json",
+      "exists": true,
+      "bytes": 9122,
+      "sha256": "4e33fccfe08763ce07bed673f038be7fd95a378f98591befb587d70232f516e6",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-30T06:46:04.330317+00:00"
+    },
+    {
+      "path": "outputs/07_multiclass_results/T12_pascal_b_multiclass_results.csv",
+      "exists": true,
+      "bytes": 1341,
+      "sha256": "8616a9321853b79c18f409076b472e58570f78aac9787a7763914126e5624df7",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T16:53:56.424812+00:00"
+    }
+  ],
+  "written": {
+    "csv": "outputs/13_figures_diagrams/G16_pascal_b_confusion_matrix.csv",
+    "png": "outputs/13_figures_diagrams/G16_pascal_b_confusion_matrix.png"
+  },
+  "notes": [
+    "PV-MEPCG / PulseVision is an academic screening prototype, not a diagnostic tool."
+  ]
+}

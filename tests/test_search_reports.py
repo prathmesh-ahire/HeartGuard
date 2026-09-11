@@ -188,8 +188,9 @@ def test_g20_draws_the_two_search_families_on_separate_axes() -> None:
     assert accuracy.iloc[-1] >= accuracy.iloc[0]
     assert cost.iloc[-1] <= cost.iloc[0]
 
-    source = Path("src/reporting/search_report.py").read_text(encoding="utf-8")
-    assert "nrows=2" in source, "G20 must not be drawn on a single shared axis"
+    # Drawn by result_graphs.py through the graph engine since Phase 93.
+    source = Path("src/reporting/result_graphs.py").read_text(encoding="utf-8")
+    assert 'subplots("tall", nrows=2' in source, "G20 must not be drawn on a single shared axis"
 
 
 # ---------------------------------------------------------------------------

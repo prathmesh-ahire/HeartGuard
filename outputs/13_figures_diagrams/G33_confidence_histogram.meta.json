@@ -1,6 +1,6 @@
 {
   "figure_id": "G33",
-  "figure_number": 15,
+  "figure_number": 33,
   "title": "Confidence Histogram",
   "caption": "Left: every out-of-fold prediction of the deployed model on the EXP-A2 run, binned by the confidence of its predicted class and stacked into the ones it got right and the ones it got wrong. Errors at high confidence are the failure mode no scalar metric shows. Right: the same distribution as a share, for every model of that run. Counts are pooled over the 25 folds of the repeated 5x5 map, so each record contributes once per repeat -- the shape is comparable, the absolute height is five times the corpus.",
   "exp_id": "EXP-A2",
@@ -59,9 +59,9 @@
     }
   ],
   "written": {
-    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G33_confidence_histogram.csv",
-    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G33_confidence_histogram.png",
-    "svg": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G33_confidence_histogram.svg"
+    "csv": "outputs/13_figures_diagrams/G33_confidence_histogram.csv",
+    "png": "outputs/13_figures_diagrams/G33_confidence_histogram.png",
+    "svg": "outputs/13_figures_diagrams/G33_confidence_histogram.svg"
   },
   "notes": []
 }

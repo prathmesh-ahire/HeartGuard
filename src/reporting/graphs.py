@@ -84,6 +84,7 @@ __all__ = [
     "figure_number_for",
     "write_graph",
     "write_graphs",
+    "normalize_registry",
     "source_fingerprint",
     "content_digest",
 ]
@@ -183,6 +184,13 @@ class Graph:
     frame: Any
     draw: Callable[[Any], Any]
     csv_kwargs: dict[str, Any] = field(default_factory=dict)
+
+
+def _portable(path: str | Path) -> str:
+    """A path as provenance records it: repo-relative and posix. See ``tables.py``."""
+    from src.reporting.tables import portable_path
+
+    return portable_path(path)
 
 
 def source_fingerprint(path: str | Path) -> dict[str, Any]:
@@ -304,7 +312,9 @@ def _register_figure(spec: GraphSpec, png_name: str, csv_name: str, target: Path
             "caption": spec.caption,
             "filename": png_name,
             "source_csv": csv_name,
-            "upstream_sources": "; ".join(spec.sources),
+            # Repo-relative, like a table's sources (tables.portable_path). Six
+            # G-series rows recorded D:/Projects/... here until Phase 94.
+            "upstream_sources": "; ".join(_portable(source) for source in spec.sources),
             "first_registered_utc": first_seen,
             "last_written_utc": now,
         }
@@ -464,7 +474,7 @@ def write_graph(
             "plotted_csv_sha256": content_digest(written["csv"])[0],
             "plotted_csv_digest_method": content_digest(written["csv"])[1],
             "sources": [source_fingerprint(s) for s in graph.spec.sources],
-            "written": {k: str(v).replace("\\", "/") for k, v in written.items()},
+            "written": {k: _portable(v) for k, v in written.items()},
             "notes": list(graph.spec.notes),
         },
         target_dir / (slug + ".meta.json"),
@@ -502,6 +512,73 @@ def write_graphs(
     """
     ordered = sorted(graphs, key=lambda graph: graph.spec.figure_id)
     return {graph.spec.figure_id: write_graph(graph, out_dir, **kwargs) for graph in ordered}
+
+
+def normalize_registry(
+    out_dir: str | Path | None = None, *, renumber_prefix: str | None = None
+) -> list[dict[str, str]]:
+    """Registry maintenance: portable provenance, and optionally series-order numbers.
+
+    **Provenance.** Figures written before Phase 94 recorded absolute
+    ``D:/Projects/...`` paths in the registry's ``upstream_sources`` and in each
+    meta's ``written`` and ``sources`` -- paths that resolve on one machine
+    only. This rewrites them repo-relative without re-running the analyses that
+    drew the figures (G18/G19 would mean re-running SHAP). No plotted CSV, PNG
+    or digest changes.
+
+    **Renumbering breaks T90.3's "a number is never reassigned", deliberately
+    and once.** The G-series was registered in the order Phases 70-91 happened
+    to run, so G32 held figure 11 and G18 figure 21. Stable, and nonsense to
+    read. With ``renumber_prefix="G"`` every ``G<nn>`` row takes number ``nn``.
+    That is only legitimate before any number has been cited in a deliverable
+    -- true on 2026-09-11, when no thesis or paper text exists -- and it
+    refuses to run if a non-series row would collide with a series number.
+    """
+    import json
+    import re
+
+    target = registry_path(out_dir)
+    rows = read_registry(target)
+    if not rows:
+        return rows
+    directory = target.parent
+
+    if renumber_prefix is not None:
+        pattern = re.compile(re.escape(renumber_prefix) + r"0*(\d+)")
+        series = {
+            row["figure_id"]: int(match.group(1))
+            for row in rows
+            if (match := pattern.fullmatch(row["figure_id"])) is not None
+        }
+        others = {
+            int(row["figure_number"]) for row in rows if row["figure_id"] not in series
+        }
+        clash = sorted(set(series.values()) & others)
+        if clash:
+            raise ValueError("renumbering would collide with figure number(s) " + str(clash))
+        for row in rows:
+            if row["figure_id"] in series:
+                row["figure_number"] = str(series[row["figure_id"]])
+
+    for row in rows:
+        row["upstream_sources"] = "; ".join(
+            _portable(part.strip())
+            for part in row.get("upstream_sources", "").split(";")
+            if part.strip()
+        )
+        meta_path = directory / (Path(row["filename"]).stem + ".meta.json")
+        if not meta_path.is_file():
+            continue
+        meta = json.loads(meta_path.read_text(encoding="utf-8"))
+        meta["figure_number"] = int(row["figure_number"])
+        meta["written"] = {k: _portable(v) for k, v in (meta.get("written") or {}).items()}
+        for source in meta.get("sources") or []:
+            if "path" in source:
+                source["path"] = _portable(source["path"])
+        save_json(meta, meta_path)
+
+    _write_registry(rows, target)
+    return read_registry(target)
 
 
 def profile_rc(profile: str) -> dict[str, Any]:

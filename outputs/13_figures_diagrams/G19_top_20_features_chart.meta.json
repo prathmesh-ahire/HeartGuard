@@ -1,6 +1,6 @@
 {
   "figure_id": "G19",
-  "figure_number": 22,
+  "figure_number": 19,
   "title": "Top 20 Features Chart",
   "caption": "The 20 highest-ranked features for M1 under permutation importance on held-out rows, ranked by the mean over the five folds of a complete partition of the corpus. The whisker spans the observed minimum and maximum across those folds rather than a standard deviation, because the quantity is not symmetric. A bar drawn in amber has a range that reaches zero or below: at least one fold found the feature useless or actively misleading, so its rank is not something to build a claim on. The number in brackets is the rank.",
   "exp_id": "n/a (fitted for this analysis, config defaults)",
@@ -18,7 +18,7 @@
   "plotted_csv_digest_method": "sha256/lf",
   "sources": [
     {
-      "path": "D:/Projects/HeartGuard/outputs/04_models/explainability/importance_per_fold.csv",
+      "path": "outputs/04_models/explainability/importance_per_fold.csv",
       "exists": true,
       "bytes": 648266,
       "sha256": "fa7ed6939cb01848a8548d4ea8ebbee23203a74bd04a147988c525cd1a7bd91d",
@@ -26,7 +26,7 @@
       "modified_utc": "2026-09-10T14:49:02.675530+00:00"
     },
     {
-      "path": "D:/Projects/HeartGuard/outputs/04_models/explainability/importance_summary.csv",
+      "path": "outputs/04_models/explainability/importance_summary.csv",
       "exists": true,
       "bytes": 176808,
       "sha256": "347faa100df1a55b58c32c82aa73451594d70f5535cfa7467f5f2fd17b279d3b",
@@ -34,7 +34,7 @@
       "modified_utc": "2026-09-10T14:49:03.315406+00:00"
     },
     {
-      "path": "D:/Projects/HeartGuard/outputs/04_models/explainability/feature_family_importance.csv",
+      "path": "outputs/04_models/explainability/feature_family_importance.csv",
       "exists": true,
       "bytes": 5841,
       "sha256": "da95e026aeeba4a674b481b45d02d7ec6ebb921c9c5e003773d89807810c0834",
@@ -42,7 +42,7 @@
       "modified_utc": "2026-09-10T14:49:03.327501+00:00"
     },
     {
-      "path": "D:/Projects/HeartGuard/outputs/04_models/explainability/shap_importance.csv",
+      "path": "outputs/04_models/explainability/shap_importance.csv",
       "exists": true,
       "bytes": 35773,
       "sha256": "ea323755bbef114e186b6c38a312c97c9e86a458376ddb11a2c6c6ed12924446",
@@ -51,9 +51,9 @@
     }
   ],
   "written": {
-    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G19_top_20_features_chart.csv",
-    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G19_top_20_features_chart.png",
-    "svg": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G19_top_20_features_chart.svg"
+    "csv": "outputs/13_figures_diagrams/G19_top_20_features_chart.csv",
+    "png": "outputs/13_figures_diagrams/G19_top_20_features_chart.png",
+    "svg": "outputs/13_figures_diagrams/G19_top_20_features_chart.svg"
   },
   "notes": []
 }

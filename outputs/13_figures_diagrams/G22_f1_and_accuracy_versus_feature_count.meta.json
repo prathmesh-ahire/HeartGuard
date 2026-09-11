@@ -1,0 +1,44 @@
+{
+  "figure_id": "G22",
+  "figure_number": 22,
+  "title": "F1 And Accuracy Versus Feature Count",
+  "caption": "Macro-F1, accuracy and balanced accuracy against the number of features kept, one curve per ranker, from the T57.4 sweep: mean over the inner validation folds with the standard error, so no point on these curves saw a test row. The dashed line is the mean at the largest k. Accuracy is shown because T93.3 asks for it and balanced accuracy beside it because accuracy alone flatters a model that under-calls the minority class. The red dotted line is the shipped subset, gb_importance at k = 20, chosen by J under a min j within 1.0 se of best macro f1 performance guard.",
+  "exp_id": "SO-04",
+  "objective": "O3 (search-based feature selection)",
+  "dataset": "D1 PhysioNet 2016",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-09-11T05:48:31.131191+00:00",
+  "command": "python scripts/10_search_reports.py",
+  "plotted_rows": 44,
+  "plotted_csv": "G22_f1_and_accuracy_versus_feature_count.csv",
+  "plotted_csv_sha256": "08ca1d54cadcf0221e7de9fb0a4fdf9db84e846674acc5eeb36867ae53726f74",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "outputs/05_search_optimization/SO-04/feature_count_curve.csv",
+      "exists": true,
+      "bytes": 14869,
+      "sha256": "e5e8f5274f93e872342f07dbc842b7dfc82bfb6222c607f7e93550e92929e064",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-28T09:05:57.847537+00:00"
+    },
+    {
+      "path": "outputs/05_search_optimization/SO-04/so04_settings.json",
+      "exists": true,
+      "bytes": 2701,
+      "sha256": "ca7789222db7c0c73a0de6d335598a3c314d6d921f50c9e980e59b69ffcb1b8e",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-28T09:10:11.247447+00:00"
+    }
+  ],
+  "written": {
+    "csv": "outputs/13_figures_diagrams/G22_f1_and_accuracy_versus_feature_count.csv",
+    "png": "outputs/13_figures_diagrams/G22_f1_and_accuracy_versus_feature_count.png"
+  },
+  "notes": [
+    "PV-MEPCG / PulseVision is an academic screening prototype, not a diagnostic tool."
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "figure_id": "G32",
-  "figure_number": 11,
+  "figure_number": 32,
   "title": "Location Performance",
   "caption": "Balanced accuracy at each auscultation position for every CirCor model, in both murmur label spaces and for clinical outcome. Bars are the mean over the five patient-grouped folds with SD whiskers. The hatched position (Phc, 4 recordings corpus-wide) is shown for completeness and is not a result.",
   "exp_id": "EXP-C3",
@@ -43,9 +43,9 @@
     }
   ],
   "written": {
-    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G32_location_performance.csv",
-    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G32_location_performance.png",
-    "svg": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G32_location_performance.svg"
+    "csv": "outputs/13_figures_diagrams/G32_location_performance.csv",
+    "png": "outputs/13_figures_diagrams/G32_location_performance.png",
+    "svg": "outputs/13_figures_diagrams/G32_location_performance.svg"
   },
   "notes": [
     "Balanced accuracy is used rather than accuracy because murmur is 20.5% positive at recording level and accuracy rewards a model for rarely predicting Present."

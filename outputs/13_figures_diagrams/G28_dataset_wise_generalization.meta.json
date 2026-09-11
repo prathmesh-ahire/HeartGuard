@@ -1,0 +1,84 @@
+{
+  "figure_id": "G28",
+  "figure_number": 28,
+  "title": "Dataset Wise Generalization",
+  "caption": "Left: balanced accuracy of every model on each of the five label spaces under that corpus's own subject-grouped cross-validation, each against its own chance level -- the tasks share an axis but not a target, and are never merged. Right: the binary model M1 moving progressively further from its training data: pooled cross-validation (tuned and default hyperparameters), a PhysioNet sub-collection never seen in training (EXP-F3), and a different corpus (CirCor, EXP-D1, recording level). The collapse to near chance on an unseen sub-collection is a dataset limitation -- acquisition setup and label are entangled in PhysioNet -- and the CirCor drop also carries an adult-to-paediatric population shift. Neither is evidence that the method generalizes, and the pooled numbers are within-corpus only.",
+  "exp_id": "EXP-A1, EXP-A2, EXP-B1, EXP-B2, EXP-C1, EXP-C2, EXP-D1, EXP-F3",
+  "objective": "O1 (screening), O6 (multiclass), external validation",
+  "dataset": "D1, D2, D3, D4",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-09-11T05:49:13.994980+00:00",
+  "command": "python scripts/38_result_graphs.py --figures G28",
+  "plotted_rows": 41,
+  "plotted_csv": "G28_dataset_wise_generalization.csv",
+  "plotted_csv_sha256": "316e1a9c4ac415900a07f69afcab4e20ae2af652528a2418da49b60c0555f871",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "outputs/06_binary_results/T08_physionet_individual_model_comparison.csv",
+      "exists": true,
+      "bytes": 3363,
+      "sha256": "51ec5eac0ec50ff45699227c599c8f971d930b7cd404b85ccee646bdbe153ad1",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T16:53:54.612187+00:00"
+    },
+    {
+      "path": "outputs/07_multiclass_results/T11_pascal_a_multiclass_results.csv",
+      "exists": true,
+      "bytes": 1496,
+      "sha256": "0afc452db88f9bdd09bea347f59d48d7d4db7ca8f78b42f7b04df7339d030277",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T16:53:56.060966+00:00"
+    },
+    {
+      "path": "outputs/07_multiclass_results/T12_pascal_b_multiclass_results.csv",
+      "exists": true,
+      "bytes": 1341,
+      "sha256": "8616a9321853b79c18f409076b472e58570f78aac9787a7763914126e5624df7",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T16:53:56.424812+00:00"
+    },
+    {
+      "path": "outputs/08_circor_external_validation/T13_circor_murmur_classification_results.csv",
+      "exists": true,
+      "bytes": 6549,
+      "sha256": "75f84ed3ca311833bd0ac164fa1de9e9ea1c3f92e03687fd6200c493fbc05c24",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T16:53:56.697745+00:00"
+    },
+    {
+      "path": "outputs/08_circor_external_validation/T14_circor_clinical_outcome_results.csv",
+      "exists": true,
+      "bytes": 3842,
+      "sha256": "d8194a7db8c21b7818fa50a6748ca6acdcaf139aa802ac08c84f85e28dccef93",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T16:53:57.269288+00:00"
+    },
+    {
+      "path": "outputs/09_ablation/T-S5_leave_one_source_out_generalization.csv",
+      "exists": true,
+      "bytes": 2746,
+      "sha256": "53b2a99066170c65b338ea9aa6319c51295dc2d6654eead502ed14f466aa3268",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T08:00:13.829567+00:00"
+    },
+    {
+      "path": "outputs/08_circor_external_validation/T16_cross_dataset_generalization.csv",
+      "exists": true,
+      "bytes": 2854,
+      "sha256": "eba0ffd8a3da97bfb25c04317bb82bdb987b4b1a74812b2e55a9bf211d6effad",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-31T08:07:28.353569+00:00"
+    }
+  ],
+  "written": {
+    "csv": "outputs/13_figures_diagrams/G28_dataset_wise_generalization.csv",
+    "png": "outputs/13_figures_diagrams/G28_dataset_wise_generalization.png"
+  },
+  "notes": [
+    "PV-MEPCG / PulseVision is an academic screening prototype, not a diagnostic tool."
+  ]
+}

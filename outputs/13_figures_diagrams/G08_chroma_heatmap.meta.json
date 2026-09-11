@@ -35,8 +35,8 @@
     }
   ],
   "written": {
-    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G08_chroma_heatmap.csv",
-    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G08_chroma_heatmap.png"
+    "csv": "outputs/13_figures_diagrams/G08_chroma_heatmap.csv",
+    "png": "outputs/13_figures_diagrams/G08_chroma_heatmap.png"
   },
   "notes": []
 }

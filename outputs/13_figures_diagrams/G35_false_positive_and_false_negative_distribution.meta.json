@@ -1,6 +1,6 @@
 {
   "figure_id": "G35",
-  "figure_number": 20,
+  "figure_number": 35,
   "title": "False Positive And False Negative Distribution",
   "caption": "Failures of the final binary model on EXP-A2 M1 (in-domain), by duration band, PP-08 noise flag, PhysioNet sub-collection, predicted confidence and diagnosis, plus the worst confused class pairs from every stored multiclass confusion matrix. The two bars in each pair have DIFFERENT denominators: the false-negative rate is over that group's abnormal records and the false-positive rate over its normal ones, so they do not sum to the error rate. A bar is hatched when its own denominator holds fewer than 30 records -- PhysioNet training-c posts a false-positive rate of 1.000 over seven normal recordings -- and hatched bars are shown for completeness rather than as results.",
   "exp_id": "EXP-A2, EXP-D1",
@@ -51,9 +51,9 @@
     }
   ],
   "written": {
-    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G35_false_positive_and_false_negative_distribution.csv",
-    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G35_false_positive_and_false_negative_distribution.png",
-    "svg": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G35_false_positive_and_false_negative_distribution.svg"
+    "csv": "outputs/13_figures_diagrams/G35_false_positive_and_false_negative_distribution.csv",
+    "png": "outputs/13_figures_diagrams/G35_false_positive_and_false_negative_distribution.png",
+    "svg": "outputs/13_figures_diagrams/G35_false_positive_and_false_negative_distribution.svg"
   },
   "notes": []
 }

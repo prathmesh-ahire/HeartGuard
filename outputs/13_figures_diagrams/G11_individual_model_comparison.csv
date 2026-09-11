@@ -1,0 +1,53 @@
+run,tuning,rank,model_id,model_name,n_folds,metric,mean,sd
+EXP-A1,defaults,1,M6,Soft Voting (equal weights),25,sensitivity,0.8790705821614024,0.0612418295322171
+EXP-A1,defaults,1,M6,Soft Voting (equal weights),25,specificity,0.8384425376679471,0.0479185127577081
+EXP-A1,defaults,1,M6,Soft Voting (equal weights),25,balanced_accuracy,0.8587565599146746,0.0254585449429106
+EXP-A1,defaults,1,M6,Soft Voting (equal weights),25,roc_auc,0.9395334531543368,0.0219540850563451
+EXP-A1,defaults,2,M1,Logistic Regression,25,sensitivity,0.8479933187885698,0.0396517517395228
+EXP-A1,defaults,2,M1,Logistic Regression,25,specificity,0.8378530531876638,0.0364378648419694
+EXP-A1,defaults,2,M1,Logistic Regression,25,balanced_accuracy,0.8429231859881168,0.0262694823331333
+EXP-A1,defaults,2,M1,Logistic Regression,25,roc_auc,0.9221754145146952,0.0192196267158023
+EXP-A1,defaults,3,M5,Gradient Boosting,25,sensitivity,0.7979991249318708,0.055040451011314
+EXP-A1,defaults,3,M5,Gradient Boosting,25,specificity,0.9016218568785286,0.0362552793330509
+EXP-A1,defaults,3,M5,Gradient Boosting,25,balanced_accuracy,0.8498104909051996,0.0301476645672008
+EXP-A1,defaults,3,M5,Gradient Boosting,25,roc_auc,0.9357444658070612,0.0218697771608859
+EXP-A1,defaults,4,M8,XGBoost / LightGBM,25,sensitivity,0.7556270092682991,0.0626458769631817
+EXP-A1,defaults,4,M8,XGBoost / LightGBM,25,specificity,0.9328235751465186,0.0282338878530665
+EXP-A1,defaults,4,M8,XGBoost / LightGBM,25,balanced_accuracy,0.8442252922074089,0.0310856274316886
+EXP-A1,defaults,4,M8,XGBoost / LightGBM,25,roc_auc,0.9410446008725418,0.0179668080784246
+EXP-A1,defaults,5,M4,Random Forest,25,sensitivity,0.7475470301606779,0.0632634860334923
+EXP-A1,defaults,5,M4,Random Forest,25,specificity,0.9366196855524064,0.0293219365957006
+EXP-A1,defaults,5,M4,Random Forest,25,balanced_accuracy,0.8420833578565423,0.0329459335298362
+EXP-A1,defaults,5,M4,Random Forest,25,roc_auc,0.9418026774787452,0.0202358454844307
+EXP-A1,defaults,6,M3,SVM (RBF kernel),25,sensitivity,0.6698449028753386,0.0688073711074386
+EXP-A1,defaults,6,M3,SVM (RBF kernel),25,specificity,0.9303228738736918,0.0270519467757371
+EXP-A1,defaults,6,M3,SVM (RBF kernel),25,balanced_accuracy,0.8000838883745152,0.0364616510688086
+EXP-A1,defaults,6,M3,SVM (RBF kernel),25,roc_auc,0.924078273935299,0.0235862736288842
+EXP-A2,nested search,1,M1,Logistic Regression,25,sensitivity,0.8648233891627352,0.0446049465330146
+EXP-A2,nested search,1,M1,Logistic Regression,25,specificity,0.8287854063424053,0.0458041351212861
+EXP-A2,nested search,1,M1,Logistic Regression,25,balanced_accuracy,0.8468043977525701,0.0260884893092399
+EXP-A2,nested search,1,M1,Logistic Regression,25,roc_auc,0.9212095305753734,0.0209081411734654
+EXP-A2,nested search,2,M6,Soft Voting (equal weights),25,sensitivity,0.8615469513693752,0.0669761076003219
+EXP-A2,nested search,2,M6,Soft Voting (equal weights),25,specificity,0.8501793885246874,0.053052109708163
+EXP-A2,nested search,2,M6,Soft Voting (equal weights),25,balanced_accuracy,0.8558631699470313,0.0251013763457511
+EXP-A2,nested search,2,M6,Soft Voting (equal weights),25,roc_auc,0.938400689122729,0.0221658815991365
+EXP-A2,nested search,3,M7,Soft Voting (optimized weights),25,sensitivity,0.8615380387134037,0.0669594919868288
+EXP-A2,nested search,3,M7,Soft Voting (optimized weights),25,specificity,0.849638093652173,0.0533866731917882
+EXP-A2,nested search,3,M7,Soft Voting (optimized weights),25,balanced_accuracy,0.8555880661827883,0.0253210492991001
+EXP-A2,nested search,3,M7,Soft Voting (optimized weights),25,roc_auc,0.9383495147018668,0.0222325839504693
+EXP-A2,nested search,4,M8,XGBoost / LightGBM,25,sensitivity,0.8218651609921878,0.0703008077853119
+EXP-A2,nested search,4,M8,XGBoost / LightGBM,25,specificity,0.8746387865658246,0.0502621776390698
+EXP-A2,nested search,4,M8,XGBoost / LightGBM,25,balanced_accuracy,0.8482519737790061,0.0285062912022255
+EXP-A2,nested search,4,M8,XGBoost / LightGBM,25,roc_auc,0.9374168268419864,0.0205138275415528
+EXP-A2,nested search,5,M4,Random Forest,25,sensitivity,0.8193179675801403,0.0611685262889688
+EXP-A2,nested search,5,M4,Random Forest,25,specificity,0.885401814764395,0.0410687727961731
+EXP-A2,nested search,5,M4,Random Forest,25,balanced_accuracy,0.8523598911722676,0.030644760670925
+EXP-A2,nested search,5,M4,Random Forest,25,roc_auc,0.9383918924875704,0.0215929449611287
+EXP-A2,nested search,6,M5,Gradient Boosting,25,sensitivity,0.8130747740507671,0.0668650496386394
+EXP-A2,nested search,6,M5,Gradient Boosting,25,specificity,0.8812466686490713,0.0538113242053126
+EXP-A2,nested search,6,M5,Gradient Boosting,25,balanced_accuracy,0.8471607213499192,0.032553771867791
+EXP-A2,nested search,6,M5,Gradient Boosting,25,roc_auc,0.9363207791154012,0.0222903672428554
+EXP-A2,nested search,7,M3,SVM (RBF kernel),25,sensitivity,0.6671634033396946,0.074009718581281
+EXP-A2,nested search,7,M3,SVM (RBF kernel),25,specificity,0.9324325360291824,0.0255430020303953
+EXP-A2,nested search,7,M3,SVM (RBF kernel),25,balanced_accuracy,0.7997979696844384,0.0391269746070198
+EXP-A2,nested search,7,M3,SVM (RBF kernel),25,roc_auc,0.9220133878251724,0.0220666349971855

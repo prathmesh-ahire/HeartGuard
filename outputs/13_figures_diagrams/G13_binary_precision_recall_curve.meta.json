@@ -1,0 +1,68 @@
+{
+  "figure_id": "G13",
+  "figure_number": 13,
+  "title": "Binary Precision Recall Curve",
+  "caption": "Cross-validated precision-recall curves, built the same way as G12: per fold, interpolated on recall (precision is not monotone in the threshold, so the other direction is meaningless), averaged over 25 folds. The legend's AP is the mean per-fold average precision from each run's aggregate metrics. The dotted line is the abnormal prevalence, the precision of a model that ranks at random; it is the right baseline here, not 0.5. All PhysioNet figures are within the PhysioNet 2016 corpus: leave-one-sub-collection-out (EXP-F3) takes AUC to chance, so none of them is a claim of generalization.",
+  "exp_id": "EXP-A1, EXP-A2",
+  "objective": "O1 (binary screening)",
+  "dataset": "D1 PhysioNet 2016",
+  "framework": "PV-MEPCG / PulseVision",
+  "profile": "screen",
+  "dpi": 300,
+  "palette": "Okabe-Ito (colourblind-safe), fixed order",
+  "generated_utc": "2026-09-11T05:47:20.039272+00:00",
+  "command": "python scripts/38_result_graphs.py --figures G11 G12 G13 G14 G15 G16 G17",
+  "plotted_rows": 1313,
+  "plotted_csv": "G13_binary_precision_recall_curve.csv",
+  "plotted_csv_sha256": "e2c8fc061b45610a5e965e40c521b2635ea1f8c3d37dce3a3196d97b45bca444",
+  "plotted_csv_digest_method": "sha256/lf",
+  "sources": [
+    {
+      "path": "outputs/06_binary_results/T08_physionet_individual_model_comparison.csv",
+      "exists": true,
+      "bytes": 3363,
+      "sha256": "51ec5eac0ec50ff45699227c599c8f971d930b7cd404b85ccee646bdbe153ad1",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-10T16:53:54.612187+00:00"
+    },
+    {
+      "path": "outputs/06_binary_results/EXP-A1/roc_pr_curve_points.csv",
+      "exists": true,
+      "bytes": 37140,
+      "sha256": "d942fbc2cc5c3e378ebac4667c5e1461c4732929b67b9a667307d031ab14fbcf",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-11T05:12:16.977706+00:00"
+    },
+    {
+      "path": "outputs/06_binary_results/EXP-A1/aggregate_metrics.csv",
+      "exists": true,
+      "bytes": 5921,
+      "sha256": "9deb64ef289f4456e7079a37867e309257b92a489373bb2df20299c6f444d255",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-30T07:09:39.972457+00:00"
+    },
+    {
+      "path": "outputs/06_binary_results/EXP-A2/roc_pr_curve_points.csv",
+      "exists": true,
+      "bytes": 43249,
+      "sha256": "7d788947145f34b969702ab17f99ddb0ee4e74fccc8ed7ea2af57ee5d1f35d95",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-09-11T05:12:17.838726+00:00"
+    },
+    {
+      "path": "outputs/06_binary_results/EXP-A2/aggregate_metrics.csv",
+      "exists": true,
+      "bytes": 7452,
+      "sha256": "becef3140a093b177650e7bfbe50322a6287a36caf6e7f3a13d3eb8405493173",
+      "digest_method": "sha256/lf",
+      "modified_utc": "2026-08-30T16:49:48.119485+00:00"
+    }
+  ],
+  "written": {
+    "csv": "outputs/13_figures_diagrams/G13_binary_precision_recall_curve.csv",
+    "png": "outputs/13_figures_diagrams/G13_binary_precision_recall_curve.png"
+  },
+  "notes": [
+    "PV-MEPCG / PulseVision is an academic screening prototype, not a diagnostic tool."
+  ]
+}

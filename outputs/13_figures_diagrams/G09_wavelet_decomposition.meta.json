@@ -35,8 +35,8 @@
     }
   ],
   "written": {
-    "csv": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G09_wavelet_decomposition.csv",
-    "png": "D:/Projects/HeartGuard/outputs/13_figures_diagrams/G09_wavelet_decomposition.png"
+    "csv": "outputs/13_figures_diagrams/G09_wavelet_decomposition.csv",
+    "png": "outputs/13_figures_diagrams/G09_wavelet_decomposition.png"
   },
   "notes": []
 }

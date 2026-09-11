@@ -233,9 +233,12 @@ def main(argv: list[str] | None = None) -> int:
         written = write_table(table, section)
         log.info("T19 -> %s", written["csv"].name)
 
+        # G23/G24 go to the figures directory with every other G-figure, not
+        # beside the ablation CSVs: a second figure_registry.csv in 09_ablation
+        # numbered them 1 and 2 in a series of their own (fixed Phase 93).
         weights = oa.ensemble_weight_frame()
         for graph in (build_g23(weights, COMMAND), build_g24(stages, per_fold, COMMAND)):
-            paths = write_graph(graph, section)
+            paths = write_graph(graph, args.out_dir)
             log.info("%s -> %s", graph.spec.figure_id, paths["png"].name)
 
         for row in stages.to_dict("records"):
