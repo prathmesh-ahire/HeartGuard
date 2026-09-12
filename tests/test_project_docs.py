@@ -1,0 +1,242 @@
+"""Phase 123: the generated documentation cannot drift from what it documents.
+
+`ARCHITECTURE.md` and `CONFIGURATION.md` are read out of the repository, so the
+only way they go wrong is by not being regenerated. The load-bearing test here
+is therefore the staleness check -- it is the same check
+`scripts/48_project_docs.py --check` makes, run on every push.
+
+The rest guard the two failure modes generation itself has: a configuration key
+that is silently dropped (the reference then claims completeness it does not
+have), and this machine's absolute paths leaking into a committed file.
+"""
+
+from __future__ import annotations
+
+import re
+from pathlib import Path
+from typing import Any
+
+import pytest
+import yaml
+
+from src.reporting import project_docs
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
+ROOT_DOCS = {
+    "README.md": "the front door",
+    "ARCHITECTURE.md": "T123.2 -- structure and module roles",
+    "CONFIGURATION.md": "T123.3 -- every option and its default",
+    "CITATION.md": "T123.6 -- dataset credits and licences",
+    "HANDOVER.md": "T126.6 -- what was produced and what was not",
+}
+
+
+def _dotted_leaves(node: Any, prefix: str = "") -> set[str]:
+    """Every dotted path in a parsed YAML tree, sections included.
+
+    Keys nested inside a list item have no dotted path, so they are not counted
+    -- which is exactly what :func:`project_docs.config_options` also cannot
+    emit. The two agreeing is the point of the test below.
+    """
+    found: set[str] = set()
+    if isinstance(node, dict):
+        for key, value in node.items():
+            dotted = f"{prefix}.{key}" if prefix else str(key)
+            found.add(dotted)
+            found |= _dotted_leaves(value, dotted)
+    return found
+
+
+class TestGenerated:
+    def test_both_documents_exist(self) -> None:
+        for name in ("ARCHITECTURE.md", "CONFIGURATION.md"):
+            assert (PROJECT_ROOT / name).is_file(), f"{name} was never generated"
+
+    def test_documents_are_not_stale(self) -> None:
+        """The check `scripts/48_project_docs.py --check` makes.
+
+        A failure here means the repository changed and the documents were not
+        regenerated -- run `python scripts/48_project_docs.py`.
+        """
+        assert (PROJECT_ROOT / "ARCHITECTURE.md").read_text(
+            encoding="utf-8"
+        ) == project_docs.architecture_markdown(), "ARCHITECTURE.md is stale"
+        assert (PROJECT_ROOT / "CONFIGURATION.md").read_text(
+            encoding="utf-8"
+        ) == project_docs.configuration_markdown(), "CONFIGURATION.md is stale"
+
+    @pytest.mark.parametrize("name", ["ARCHITECTURE.md", "CONFIGURATION.md", "CITATION.md"])
+    def test_no_machine_path_reaches_a_committed_document(self, name: str) -> None:
+        """A drive letter in a committed file is wrong on every other machine.
+
+        `configs/paths.yaml` used to hold a literal `D:/Projects/HeartGuard`,
+        which broke every path on Linux while looking fine on Windows. The
+        configuration reference reads the RAW yaml for exactly this reason.
+        """
+        text = (PROJECT_ROOT / name).read_text(encoding="utf-8")
+        assert not re.search(r"\b[A-Za-z]:[\\/]", text), f"{name} contains an absolute path"
+
+
+class TestConfigurationReference:
+    def test_every_addressable_key_is_documented(self) -> None:
+        options = project_docs.config_options()
+        documented = {(option.file, option.key) for option in options}
+
+        for path in sorted((PROJECT_ROOT / "configs").glob("*.yaml")):
+            data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+            for dotted in _dotted_leaves(data):
+                assert (path.name, dotted) in documented, f"{path.name}: {dotted} is undocumented"
+
+    def test_no_key_is_documented_twice(self) -> None:
+        options = project_docs.config_options()
+        seen = [(option.file, option.key) for option in options]
+        duplicates = {item for item in seen if seen.count(item) > 1}
+        assert not duplicates, f"duplicate rows: {sorted(duplicates)[:5]}"
+
+    def test_the_seed_is_in_the_reference_and_is_42(self) -> None:
+        options = {option.key: option for option in project_docs.config_options()}
+        assert options["defaults.seed"].default == "`42`"
+
+    def test_every_file_gets_a_section(self) -> None:
+        text = (PROJECT_ROOT / "CONFIGURATION.md").read_text(encoding="utf-8")
+        for path in sorted((PROJECT_ROOT / "configs").glob("*.yaml")):
+            assert f"## `configs/{path.name}`" in text
+
+
+class TestArchitecture:
+    def test_every_package_on_disk_is_listed(self) -> None:
+        text = (PROJECT_ROOT / "ARCHITECTURE.md").read_text(encoding="utf-8")
+        for package in (PROJECT_ROOT / "src").iterdir():
+            if package.is_dir() and (package / "__init__.py").is_file():
+                assert f"### `src/{package.name}/`" in text, f"src/{package.name} is not documented"
+
+    def test_package_order_covers_what_is_on_disk(self) -> None:
+        """A new package must be placed in the pipeline order deliberately.
+
+        `module_inventory` appends an unknown package at the end so the document
+        is never wrong, but "at the end" is rarely where it belongs.
+        """
+        on_disk = {
+            package.name
+            for package in (PROJECT_ROOT / "src").iterdir()
+            if package.is_dir() and (package / "__init__.py").is_file()
+        }
+        assert on_disk - set(project_docs.PACKAGE_ORDER) == set()
+
+    def test_every_script_is_listed(self) -> None:
+        text = (PROJECT_ROOT / "ARCHITECTURE.md").read_text(encoding="utf-8")
+        for script in (PROJECT_ROOT / "scripts").glob("*.py"):
+            assert f"]({'scripts/' + script.name})" in text, f"{script.name} is not documented"
+
+    def test_every_module_carries_a_summary(self) -> None:
+        """A module with no docstring produces an empty cell, which is a gap."""
+        empty = [
+            module.path
+            for package in project_docs.module_inventory()
+            for module in package.modules
+            if not module.summary
+        ]
+        assert not empty, f"modules with no docstring summary: {empty}"
+
+    def test_the_codegen_boundary_names_only_paths_that_exist(self) -> None:
+        for name in project_docs.BOUNDARY_PATHS:
+            assert (PROJECT_ROOT / name).exists(), f"the boundary table claims {name} exists"
+
+    def test_every_outputs_directory_has_a_description(self) -> None:
+        outputs = PROJECT_ROOT / "outputs"
+        if not outputs.is_dir():  # pragma: no cover - outputs is present in a real checkout
+            pytest.skip("outputs/ is absent")
+        undescribed = [
+            item.name
+            for item in outputs.iterdir()
+            if item.is_dir() and not project_docs.OUTPUT_MAP.get(item.name)
+        ]
+        assert not undescribed, f"outputs/ directories with no description: {undescribed}"
+
+
+class TestReadme:
+    """T123.1, T123.4, T123.5: the sections the tasks name are actually there."""
+
+    @pytest.fixture(scope="class")
+    def readme(self) -> str:
+        return (PROJECT_ROOT / "README.md").read_text(encoding="utf-8")
+
+    @pytest.mark.parametrize(
+        "heading",
+        [
+            "## ⚠️ Scope boundary — read this first",
+            "### Dataset placement",
+            "### Where the results land",
+            "## Troubleshooting",
+            "## Limitations",
+        ],
+    )
+    def test_required_section_present(self, readme: str, heading: str) -> None:
+        assert heading in readme
+
+    @pytest.mark.parametrize(
+        "quirk",
+        [
+            "doubled",  # CirCor archive/training_data/training_data/
+            "per-patient",  # Outcome lives only in the txt files
+            "set_b CSV filenames do not match",
+            "100% duplicate",  # Heartbeat_Sound/
+        ],
+    )
+    def test_troubleshooting_covers_the_four_dataset_traps(self, readme: str, quirk: str) -> None:
+        section = readme.split("## Troubleshooting", 1)[1].split("## Limitations", 1)[0]
+        assert quirk in section, f"the troubleshooting section does not cover: {quirk}"
+
+    @pytest.mark.parametrize(
+        "limitation",
+        [
+            "No clinical validation",
+            "does not transfer",
+            "no held-out PhysioNet test set",
+            "public subset only",
+            "Subject IDs are partial",
+            "PASCAL samples are small",
+            "adult-to-paediatric",
+            "recording-quality label",
+            "underpowered",
+        ],
+    )
+    def test_limitations_cover_what_t123_5_names(self, readme: str, limitation: str) -> None:
+        section = readme.split("## Limitations", 1)[1]
+        assert limitation in section, f"the limitations section does not state: {limitation}"
+
+    def test_the_scope_boundary_uses_screening_language(self, readme: str) -> None:
+        boundary = readme.split("## ⚠️ Scope boundary", 1)[1].split("##", 1)[0]
+        assert "not a diagnostic tool" in boundary
+        assert "screening" in boundary
+
+    def test_every_root_document_the_readme_links_exists(self, readme: str) -> None:
+        for name in ROOT_DOCS:
+            assert (PROJECT_ROOT / name).is_file(), f"{name} is missing"
+
+
+class TestCitation:
+    @pytest.fixture(scope="class")
+    def citation(self) -> str:
+        return (PROJECT_ROOT / "CITATION.md").read_text(encoding="utf-8")
+
+    @pytest.mark.parametrize(
+        "source",
+        ["PhysioNet/CinC Challenge 2016", "PASCAL Classifying Heart Sounds", "CirCor DigiScope"],
+    )
+    def test_all_three_dataset_families_are_credited(self, citation: str, source: str) -> None:
+        assert source in citation
+
+    def test_the_odc_by_licence_is_named_with_its_uri(self, citation: str) -> None:
+        assert "Open Data Commons Attribution License v1.0 (ODC-By 1.0)" in citation
+        assert "https://opendatacommons.org/licenses/by/1-0/" in citation
+
+    def test_it_says_which_licences_could_not_be_verified_locally(self, citation: str) -> None:
+        """The honest part: two of the three copies carry no licence file.
+
+        That is why only the CirCor sample is redistributed here, and a citation
+        page that implied otherwise would be asserting a licence nobody read.
+        """
+        assert "carry no" in citation or "carries no" in citation
+        assert "canonical source" in citation.lower()

@@ -578,6 +578,36 @@ STAGES: tuple[Stage, ...] = (
         smoke_argv=_py("scripts/42_evidence_index.py"),
         frontend=True,
     ),
+    # --- Part XI: documentation, QA, compliance, delivery (Phases 123-126) ---
+    # These run last because each of them reads what everything above produced.
+    Stage(
+        "project_docs",
+        "ARCHITECTURE.md and CONFIGURATION.md, generated from the repository",
+        _py("scripts/48_project_docs.py"),
+        produces=("ARCHITECTURE.md", "CONFIGURATION.md"),
+        smoke_argv=_py("scripts/48_project_docs.py"),
+    ),
+    Stage(
+        "final_qa",
+        "The six-area QA sweep (Phase 124)",
+        _py("scripts/49_final_qa_sweep.py"),
+        produces=("outputs/00_evidence_index/final_qa_report.md",),
+        smoke_argv=_py("scripts/49_final_qa_sweep.py", "--area", "feature"),
+    ),
+    Stage(
+        "compliance_review",
+        "The claims review: language, disclaimer, perfection, objectives, counts, provenance",
+        _py("scripts/50_compliance_review.py"),
+        produces=("outputs/00_evidence_index/compliance_review.md",),
+        smoke_argv=_py("scripts/50_compliance_review.py", "--check", "language"),
+    ),
+    Stage(
+        "delivery",
+        "The completion checklist, HANDOVER.md, and the delivery archive",
+        _py("scripts/51_package_delivery.py"),
+        produces=("HANDOVER.md", "dist/PV-MEPCG_PulseVision_delivery.zip"),
+        smoke_argv=_py("scripts/51_package_delivery.py", "--handover"),
+    ),
 )
 
 

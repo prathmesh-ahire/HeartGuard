@@ -221,7 +221,7 @@ ENTRIES (newest last)
     120-122 entry in Docs/note.md.
 
 === BEGIN GENERATED COMPLETENESS AUDIT (Phase 102; rewritten by python scripts/42_evidence_index.py -- do not edit inside this block) ===
-Generated 2026-09-12T12:39:50.202354+00:00. Every mandatory item of the
+Generated 2026-09-12T14:45:45.443574+00:00. Every mandatory item of the
 extraction spec and the developer blueprint that is not present on disk, with its
 technical reason. 340 items checked; 335 present; 5 listed below. The full table is the 'mandatory_items' sheet
 of outputs/00_evidence_index/evidence_index.xlsx.
@@ -232,7 +232,7 @@ of outputs/00_evidence_index/evidence_index.xlsx.
 
 [2026-09-12] SPEC-ZIP -- final delivery ZIP (extraction spec (KP_KHARAT_22366.docx), section 20 final delivery)
   Status: not produced
-  Reason: The delivery ZIP is packaged in Phase 126 (T126.3), after every other deliverable.
+  Reason: The delivery ZIP is built by `python scripts/51_package_delivery.py` into `dist/PV-MEPCG_PulseVision_delivery.zip` (125.5 MB, 2,228 files) and verified by reopening it -- CRCs, required entries, no excluded path, and a real frontend/out/index.html (T126.3/T126.4/T126.7). It is deliberately NOT given a path here: `dist/` is gitignored, and an item whose status depended on a local build product would make this committed report say one thing on the machine that built it and another on a fresh clone. The archive's own evidence row is DELIVERY-ZIP, written when it is built.
 
 [2026-09-12] BP-MODEL-M9 -- 1D-CNN (optional) (developer blueprint (PDF), section 7 algorithm plan)
   Status: not produced

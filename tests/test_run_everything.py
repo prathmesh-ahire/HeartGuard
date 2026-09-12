@@ -78,18 +78,30 @@ def test_every_script_the_evidence_index_names_is_a_stage() -> None:
     assert missing == [], "not in the one-command reproduction: " + ", ".join(missing)
 
 
-def test_the_frontend_chain_is_the_last_four_stages_and_is_skippable() -> None:
-    """T122.2: export, npm ci, npm run build, guard rail, then the screenshots."""
-    frontend = [stage for stage in run_all.STAGES if stage.frontend]
-    assert [stage.stage_id for stage in frontend] == [
-        "npm_ci",
-        "frontend_build",
-        "screenshots",
-        "evidence_index_final",
-    ]
-    assert list(run_all.STAGES[-4:]) == frontend
+def test_the_frontend_chain_is_four_contiguous_stages_and_is_skippable() -> None:
+    """T122.2: export, npm ci, npm run build, guard rail, then the screenshots.
+
+    This asserted the chain was the **last four** stages, which it was until
+    Phase 126 added documentation, QA, compliance and delivery after it. Those
+    four are deliberately NOT marked `frontend`: `--skip-frontend` means "do not
+    build the dashboard", not "skip the QA sweep", and a sweep that vanished
+    with the build would be missing exactly when a fresh machine most needs it.
+    The invariant that still matters -- the chain is these four stages, in this
+    order, contiguously, and removable -- is asserted instead. Changed
+    deliberately; see the Phases 123-126 entry in Docs/note.md.
+    """
+    ids = [stage.stage_id for stage in run_all.STAGES]
+    frontend = [stage.stage_id for stage in run_all.STAGES if stage.frontend]
+    assert frontend == ["npm_ci", "frontend_build", "screenshots", "evidence_index_final"]
+
+    first = ids.index("npm_ci")
+    assert ids[first : first + 4] == frontend, "the frontend chain is not contiguous"
+
     without = run_all.select(skip_frontend=True)
     assert all(not stage.frontend for stage in without)
+    assert {"final_qa", "compliance_review", "delivery", "project_docs"} <= {
+        stage.stage_id for stage in without
+    }, "--skip-frontend must not skip the Part XI stages"
 
 
 def test_the_build_stage_is_npm_run_build_so_the_guard_rail_cannot_be_skipped() -> None:

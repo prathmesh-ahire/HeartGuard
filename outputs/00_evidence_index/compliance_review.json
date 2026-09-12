@@ -1,0 +1,47 @@
+{
+  "generated_utc": "2026-09-12T14:10:16+00:00",
+  "ok": true,
+  "scanned": {
+    "language_files": 401,
+    "language_lines": 108411,
+    "disclaimer_surfaces": 8,
+    "built_pages": 15,
+    "metric_tables": 20,
+    "objectives": 6,
+    "counted_sources": 4,
+    "rendered_tables": 37
+  },
+  "checks": {
+    "language": {
+      "description": "T125.1 -- screening wording only, no diagnostic language",
+      "findings": 0,
+      "note": "401 files, 108411 lines, 7 rules; each rule carries its own allowances, matched over a three-line window so a denial split by a line wrap still counts; code files additionally allow the corpus's own diagnosis field and track names"
+    },
+    "disclaimer": {
+      "description": "T125.2 -- the disclaimer reaches every surface",
+      "findings": 0,
+      "note": "8 of 8 declared surfaces carry it (literally or by reference to the canonical constant), 15 of 15 built dashboard pages, and 2 canonical constants verified word for word"
+    },
+    "perfection": {
+      "description": "T125.3 -- no unexplained near-perfect metric",
+      "findings": 0,
+      "note": "20 result tables scanned at threshold 0.98; 0 unexplained, 1 explained in src/reporting/compliance.py"
+    },
+    "objectives": {
+      "description": "T125.4 -- the six locked objectives, verbatim",
+      "findings": 0,
+      "note": "6 of 6 objectives exported, compared character for character"
+    },
+    "counts": {
+      "description": "T125.5 -- every documented count matches audited reality",
+      "findings": 0,
+      "note": "7 published counts and 3 required discrepancy notes checked against the audit"
+    },
+    "generated": {
+      "description": "T125.6 -- no result was hand-entered",
+      "findings": 0,
+      "note": "35 of 37 published tables re-derived cell by cell from their own CSV (8626 numeric cells); every sidecar checked for a command and live sources; 2 narrative document(s) checked for a stated source instead"
+    }
+  },
+  "findings": []
+}

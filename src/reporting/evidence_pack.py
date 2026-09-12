@@ -104,7 +104,16 @@ ONE_COMMAND = (
     "reproduction command in this index, and tests/test_run_everything.py asserts "
     "that every script named in this column appears in that runner's stage list."
 )
-FINAL_ZIP = "The delivery ZIP is packaged in Phase 126 (T126.3), after every other deliverable."
+FINAL_ZIP = (
+    "The delivery ZIP is built by `python scripts/51_package_delivery.py` into "
+    "`dist/PV-MEPCG_PulseVision_delivery.zip` (125.5 MB, 2,228 files) and verified by "
+    "reopening it -- CRCs, required entries, no excluded path, and a real "
+    "frontend/out/index.html (T126.3/T126.4/T126.7). It is deliberately NOT given a "
+    "path here: `dist/` is gitignored, and an item whose status depended on a local "
+    "build product would make this committed report say one thing on the machine that "
+    "built it and another on a fresh clone. The archive's own evidence row is "
+    "DELIVERY-ZIP, written when it is built."
+)
 M9_REASON = (
     "M9 (1D-CNN) is out of scope, decided 2026-08-27 by the user: this machine has no GPU "
     "and the same 25-fold map is required for comparability (T52.4). See the M9 entry "

@@ -283,3 +283,8 @@ SS-11,Dashboard,,,,Dashboard screenshot 11: Robustness analytics,outputs/15_dash
 SS-12,Dashboard,,,,Dashboard screenshot 12: Feature importance/explainability,outputs/15_dashboard_screenshots/SS-12_explainability.png,frontend/lib/generated (build-time codegen from outputs/),python scripts/47_dashboard_screenshots.py,2026-09-12T12:39:41.923851+00:00,ok
 SS-13,Dashboard,,,,Dashboard screenshot 13: Exported report preview,outputs/15_dashboard_screenshots/SS-13_reports.png,frontend/lib/generated (build-time codegen from outputs/),python scripts/47_dashboard_screenshots.py,2026-09-12T12:39:41.946596+00:00,ok
 SS-INDEX,Dashboard,,,,Dashboard screenshot index with captions,outputs/15_dashboard_screenshots/screenshot_index.csv,outputs/15_dashboard_screenshots/capture_plan.json,python scripts/47_dashboard_screenshots.py,2026-09-12T12:39:41.975706+00:00,ok
+DOC-ARCH,,,,,project structure and the role of each module (T123.2),ARCHITECTURE.md,,python scripts/48_project_docs.py,2026-09-12T14:09:04.738520+00:00,ok
+DOC-CONFIG,,,,,every configuration option and its default (T123.3),CONFIGURATION.md,configs,python scripts/48_project_docs.py,2026-09-12T14:09:04.820501+00:00,ok
+QA-SWEEP,,,,,final QA sweep across six areas (Phase 124),outputs/00_evidence_index/final_qa_report.md,,python scripts/49_final_qa_sweep.py,2026-09-12T14:09:12.050185+00:00,ok
+QA-COMPLIANCE,,,,,compliance and claims review (Phase 125),outputs/00_evidence_index/compliance_review.md,,python scripts/50_compliance_review.py,2026-09-12T14:10:21.244861+00:00,ok
+DOC-HANDOVER,,,,,"handover summary: produced, not produced, next steps (T126.6)",HANDOVER.md,,python scripts/51_package_delivery.py,2026-09-12T14:45:43.498855+00:00,ok

@@ -98,3 +98,9 @@ junit.xml
 # README.txt inside and the 2026-08-28 entry in Docs/note.md -- but never
 # committed: no number in them matches configs/experiments.yaml as it stands.
 outputs/05_search_optimization/_superseded_*/
+
+# The delivery archive (Phase 126). ~200 MB of code, outputs, model binaries and
+# the built dashboard, rebuilt in one command by scripts/51_package_delivery.py.
+# A build product, never a source of truth -- everything inside it is either
+# committed here or regenerable from what is.
+/dist/

@@ -54,11 +54,25 @@ built = pytest.mark.skipif(
 
 
 def test_t121_1_one_command_resolves_every_stage_with_no_manual_step() -> None:
-    """Every stage names a real command, and the chain ends at the screenshots."""
+    """Every stage names a real command, and the screenshots are inside the chain.
+
+    This asserted `STAGES[-2].stage_id == "screenshots"`, which held while the
+    screenshots were the end of the pipeline. Phases 123-126 add documentation,
+    QA, compliance and delivery after them -- all four of which read what the
+    screenshots produce, so they *must* come later. The claim worth keeping is
+    the one T121.1 actually makes: the screenshots are a stage of the one
+    command (not a separate manual step), and the frontend chain closes with
+    the evidence index straight after them. Changed deliberately; see the
+    Phases 123-126 entry in Docs/note.md.
+    """
     payload = run_all.run_stages(list(run_all.STAGES), dry_run=True)
     assert payload["n_stages"] == len(run_all.STAGES) >= 60
     assert all(entry["status"] == "dry-run" for entry in payload["stages"])
-    assert run_all.STAGES[-2].stage_id == "screenshots"
+
+    ids = [stage.stage_id for stage in run_all.STAGES]
+    shot = ids.index("screenshots")
+    assert ids[shot + 1] == "evidence_index_final"
+    assert ids[shot + 2 :] == ["project_docs", "final_qa", "compliance_review", "delivery"]
     # No stage may need a human between two commands: every one of them is argv.
     for stage in run_all.STAGES:
         assert stage.argv, stage.stage_id
