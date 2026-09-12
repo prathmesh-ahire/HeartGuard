@@ -96,6 +96,57 @@ export function ResultCard({
   const reference = sample?.reference ?? null;
   const trueLabel = sample?.labels?.[result.task] ?? null;
 
+  // T121.5. Deliberately an early return rather than a banner above the usual
+  // card: there is no class, no probability and no margin to show, and a
+  // layout that left the empty shapes in place would read as a result of zero.
+  if (result.scorable === false) {
+    return (
+      <section
+        className={cn(
+          'rounded-lg border-2 border-amber-400 p-5 dark:border-amber-600',
+          'bg-amber-50 dark:bg-amber-950/40',
+          className,
+        )}
+        aria-label="Prediction result"
+      >
+        <p className={cn(TYPE_SCALE.caption, 'text-amber-900 dark:text-amber-100')}>
+          Screening indication
+        </p>
+        <p className={cn(TYPE_SCALE.h2, 'mt-0.5 text-amber-900 dark:text-amber-100')}>
+          Not scored
+        </p>
+        <p
+          role="alert"
+          className={cn(TYPE_SCALE.body, 'mt-4 max-w-prose text-amber-900 dark:text-amber-100')}
+        >
+          {result.not_scorable_reason ??
+            'This recording could not be scored, so no screening indication was produced.'}
+        </p>
+        <dl className={cn(TYPE_SCALE.caption, 'mt-4 grid gap-x-6 gap-y-1 sm:grid-cols-2')}>
+          <div className="flex justify-between gap-3">
+            <dt className={SURFACE.muted}>Features requested</dt>
+            <dd className="tabular-nums">{result.display.n_features}</dd>
+          </div>
+          <div className="flex justify-between gap-3">
+            <dt className={SURFACE.muted}>Features not computable</dt>
+            <dd className="tabular-nums">{result.display.n_missing_features}</dd>
+          </div>
+          <div className="flex justify-between gap-3">
+            <dt className={SURFACE.muted}>Duration</dt>
+            <dd className="tabular-nums">{result.display.duration_seconds ?? 'n/a'}</dd>
+          </div>
+          <div className="flex justify-between gap-3">
+            <dt className={SURFACE.muted}>Task</dt>
+            <dd>{result.task}</dd>
+          </div>
+        </dl>
+        <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mt-4 max-w-prose')}>
+          {result.disclaimer}
+        </p>
+      </section>
+    );
+  }
+
   return (
     <section
       className={cn('rounded-lg border border-slate-200 p-5 dark:border-slate-800', className)}

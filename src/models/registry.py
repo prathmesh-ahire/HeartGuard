@@ -49,6 +49,7 @@ __all__ = [
     "available",
     "registry_frame",
     "model_dir",
+    "pin_single_threaded",
     "save_model",
     "load_model",
     "saved_models",
@@ -330,6 +331,7 @@ def load_model(
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
 
     model = joblib.load(path)
+    pin_single_threaded(model)
 
     if feature_names is not None:
         stored = tuple(manifest.get("feature_names") or ())
@@ -343,6 +345,54 @@ def load_model(
             raise RegistryError(_misalignment_message(task, model_id, stored, supplied))
 
     return model, manifest
+
+
+def pin_single_threaded(model: Any) -> int:
+    """Set ``n_jobs = 1`` on every component of a loaded model. Returns the count.
+
+    A parallel estimator is not bit-reproducible at inference. scikit-learn's
+    ``RandomForestClassifier.predict_proba`` accumulates its per-tree
+    probabilities across a joblib thread pool, so the summation ORDER depends on
+    how the pool happened to schedule -- and two calls on the same 64 rows
+    differ in the last bit. Measured here: 1.1e-16 on the deployed murmur model
+    and 1.7e-16 on PASCAL A.
+
+    That is far below anything a metric would show and far above zero, which is
+    what research rule 5 asks for: "two runs of the same command must produce
+    identical numbers". `T53.4`'s gate compares with `np.array_equal`, and it
+    failed the moment a Random Forest became a DEPLOYED model in Phase 120 --
+    the Phase 51 smoke models had been passing it by luck of scheduling.
+
+    Pinned at LOAD rather than at save, for two reasons: it repairs artifacts
+    that are already on disk without re-fitting anything, and it leaves the
+    inference timings recorded in each manifest as they were actually measured.
+    `n_jobs` affects only how the fitted trees are summed, never what they are,
+    so nothing about any prediction changes except its reproducibility.
+
+    This is the same class of fix as the BLAS pin in
+    `src.inference.predictor._predict_proba`, and for the same reason.
+    """
+    pinned = 0
+    seen: set[int] = set()
+
+    def walk(node: Any) -> None:
+        nonlocal pinned
+        if node is None or id(node) in seen:
+            return
+        seen.add(id(node))
+        if hasattr(node, "n_jobs") and getattr(node, "n_jobs", None) not in (None, 1):
+            node.n_jobs = 1
+            pinned += 1
+        for attribute in ("steps", "estimators", "estimators_", "members", "members_"):
+            value = getattr(node, attribute, None)
+            if isinstance(value, (list, tuple)):
+                for item in value:
+                    walk(item[1] if isinstance(item, tuple) and len(item) == 2 else item)
+        for attribute in ("base_estimator", "estimator", "estimator_", "final_estimator_"):
+            walk(getattr(node, attribute, None))
+
+    walk(model)
+    return pinned
 
 
 def _misalignment_message(

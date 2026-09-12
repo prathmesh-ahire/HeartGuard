@@ -49,6 +49,7 @@ from src.utils.logging_setup import get_logger
 
 __all__ = [
     "AGGREGATION_RULES",
+    "POSITIVE_LABEL",
     "AggregationError",
     "patient_frame",
     "aggregate_predictions",
@@ -58,6 +59,20 @@ __all__ = [
 log = get_logger("evaluation.aggregation")
 
 AGGREGATION_RULES: tuple[str, ...] = ("max", "mean", "any_present")
+
+#: The class index a patient-level collapse is ABOUT, in every label space here.
+#: Index 1 is `abnormal`, `Present` and `Abnormal` -- the clinically positive
+#: class -- and it is what `scripts/18_circor_tables.py` passed for all three
+#: CirCor runs, so T13, T14 and T15 are all computed on it.
+#:
+#: Named because the dashboard got it wrong by not naming it. The API collapsed
+#: on `classes[-1]`, which for the three-class murmur space is **Unknown** --
+#: the annotator's own third category -- so the patient-level murmur indication
+#: on the page was a collapse over the probability of "the annotator could not
+#: tell", presented in the same shape as T15. It agreed with T15 for outcome
+#: (two classes, so `classes[-1]` IS index 1) and disagreed for murmur, which is
+#: why it survived until the murmur model was deployed in Phase 120.
+POSITIVE_LABEL: int = 1
 
 
 class AggregationError(RuntimeError):
@@ -107,7 +122,7 @@ def patient_frame(predictions: Any) -> Any:
 
 
 def aggregate_predictions(
-    predictions: Any, *, rule: str, positive_label: int = 1, threshold: float = 0.5
+    predictions: Any, *, rule: str, positive_label: int = POSITIVE_LABEL, threshold: float = 0.5
 ) -> Any:
     """Collapse recording predictions to one row per (model, fold, patient).
 
@@ -183,7 +198,7 @@ def evaluate_aggregations(
     predictions: Any,
     *,
     labels: Any,
-    positive_label: int = 1,
+    positive_label: int = POSITIVE_LABEL,
     class_names: Any = None,
     threshold: float = 0.5,
 ) -> Any:

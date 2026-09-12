@@ -503,10 +503,12 @@ def prediction_payload() -> dict[str, Any]:
             "threshold": 0.5,
             "threshold_display": format_value(0.5, "metric"),
             "note": (
-                "The deployed binary bundle carries no in-fold threshold, and every "
-                "stored prediction in outputs/06_binary_results/ is the plain "
-                "argmax. Inference therefore decides at 0.5, which is what "
-                "reproduces the experiments."
+                "On a TWO-class task the deployed bundle carries no in-fold "
+                "threshold, and every stored prediction in the experiment that "
+                "backs it is the plain argmax, so inference decides at 0.5 -- "
+                "which is what reproduces those results. A multiclass task has no "
+                "single operating point at all: the highest probability wins. Each "
+                "result below states which rule it used."
             ),
         },
     }

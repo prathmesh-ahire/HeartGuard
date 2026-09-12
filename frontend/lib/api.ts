@@ -86,6 +86,15 @@ export interface PredictResult {
   source: string;
   disclaimer: string;
   warnings: string[];
+  /**
+   * False when the recording carried too little to screen (T121.5): every
+   * probability is then `null` and `predicted_class` is empty. A page renders
+   * `not_scorable_reason` and NO class — a silent recording used to come back
+   * as `abnormal` at confidence 1.000, which is the one output shape this
+   * dashboard must never show.
+   */
+  scorable?: boolean;
+  not_scorable_reason?: string | null;
   display: PredictDisplay;
   /**
    * What drove THIS recording's decision (T117.2), formatted by the API. Absent

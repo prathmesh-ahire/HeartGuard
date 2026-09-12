@@ -261,12 +261,16 @@ def render_sample_report(
     )
 
     document.add_heading("Screening result", level=2)
+    # T121.5: a recording the model was not allowed to score has no class, no
+    # confidence and no margin. Printing "n/a" in those rows -- rather than
+    # omitting the section -- keeps the report the same shape while making it
+    # impossible to read a blank as a normal result.
     _key_values(
         document,
         [
-            ("Predicted class", result.predicted_class),
-            ("Confidence", format(result.confidence, ".4f")),
-            ("Margin over the runner-up", format(result.margin, ".4f")),
+            ("Predicted class", result.predicted_class or "NOT SCORED"),
+            ("Confidence", _number(result.confidence)),
+            ("Margin over the runner-up", _number(result.margin)),
             (
                 "Low confidence",
                 "YES — the top two classes are within "
@@ -283,6 +287,12 @@ def render_sample_report(
         ],
     )
     document.add_paragraph(result.operating_point_note)
+    if not getattr(result, "scorable", True):
+        document.add_paragraph(
+            result.not_scorable_reason
+            or "This recording could not be scored, so no screening indication "
+            "was produced for it."
+        )
 
     document.add_heading("Class probabilities", level=3)
     table = document.add_table(rows=1, cols=2)
@@ -293,7 +303,7 @@ def render_sample_report(
     for name, value in result.probabilities.items():
         cells = table.add_row().cells
         cells[0].text = name
-        cells[1].text = format(value, ".4f")
+        cells[1].text = _number(value)
 
     if signal is not None and fs is not None:
         document.add_heading("Signal", level=2)
@@ -408,6 +418,11 @@ def _key_values(document: Any, rows: list[tuple[str, str]]) -> None:
         cells = table.add_row().cells
         cells[0].text = label
         cells[1].text = value
+
+
+def _number(value: Any) -> str:
+    """A probability, a confidence or a margin -- or `n/a` when there is none."""
+    return "n/a" if value is None else format(float(value), ".4f")
 
 
 def _seconds(value: Any) -> str:

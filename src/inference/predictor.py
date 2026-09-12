@@ -121,6 +121,36 @@ MAX_DURATION_SECONDS = 150.0
 #: not belong to.
 ALLOWED_SUFFIXES = frozenset({".wav"})
 
+#: Above this fraction of the 138 features being uncomputable, no probability is
+#: emitted (T121.5).
+#:
+#: The imputer will happily fill any number of missing columns with a training
+#: median, and the model will happily return a probability for the result -- a
+#: fully silent 8 s recording came back **abnormal at confidence 1.000** with 24
+#: of 138 features missing, which is the most dangerous possible output shape:
+#: maximum confidence, zero information. An imputed column is a *plausible*
+#: value, not a measured one, so past some fraction the vector describes the
+#: training distribution rather than the recording.
+#:
+#: 0.10 is where it is set because the corpus itself says so: across all 7,536
+#: recordings the extractor produced a complete 138-vector for every one of
+#: them, so ANY missing column here is already outside what the models were
+#: fitted on. Ten percent is a tolerance for a genuinely awkward edge case (a
+#: 0.76 s record that cannot support a 5-level DWT), not a licence.
+MAX_MISSING_FEATURE_FRACTION = 0.10
+
+#: Extractor flags that mean "there was no signal", regardless of the count. A
+#: zero-variance recording produces defined-but-meaningless values for most of
+#: the registry, so the missing-count alone does not catch it.
+NOT_SCORABLE_FLAGS = frozenset(
+    {
+        "time:shape_stats_undefined",
+        "time:autocorr_zero_energy",
+        "frequency:psd_zero_power",
+        "envelope:envelope_shape_undefined",
+    }
+)
+
 
 class AudioValidationError(ValueError):
     """The upload cannot be scored, with a reason a caller can act on."""
@@ -236,11 +266,15 @@ class PredictionResult:
     """Everything T106.3 asks for, and the provenance to check it against."""
 
     task: str
+    #: Empty when the recording was not scored (see `scorable`).
     predicted_class: str
+    #: -1 when the recording was not scored.
     predicted_index: int
-    probabilities: dict[str, float]
-    confidence: float
-    margin: float
+    #: Every value is None when the recording was not scored. A page renders
+    #: `display.probabilities`, which says `n/a` for each of them.
+    probabilities: dict[str, float | None]
+    confidence: float | None
+    margin: float | None
     low_confidence: bool
     low_confidence_margin: float
     operating_threshold: float | None
@@ -254,6 +288,14 @@ class PredictionResult:
     source: str
     disclaimer: str = DISCLAIMER
     warnings: list[str] = field(default_factory=list)
+    #: False when the recording carries too little to screen (T121.5). A false
+    #: here is not an error: the file opened, preprocessed and reached the
+    #: extractor. What it means is that the extractor could not compute enough
+    #: of the 138 features for a probability to mean anything, so none is
+    #: emitted. Silence is the canonical case.
+    scorable: bool = True
+    #: Why, in one sentence a page can render. None when `scorable`.
+    not_scorable_reason: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         """A JSON-ready mapping. Non-finite values are the API's problem (T108.3)."""
@@ -277,6 +319,8 @@ class PredictionResult:
             "source": self.source,
             "disclaimer": self.disclaimer,
             "warnings": list(self.warnings),
+            "scorable": self.scorable,
+            "not_scorable_reason": self.not_scorable_reason,
         }
 
 
@@ -562,6 +606,32 @@ def predict_recording(
             + ("…" if len(missing) > 8 else "")
         )
 
+    not_scorable = _not_scorable_reason(
+        missing, loaded.feature_names, tuple(extracted.flags), prepared.quality or {}
+    )
+    if not_scorable is not None:
+        timings["total"] = time.perf_counter() - started
+        warnings.append(not_scorable)
+        refused = _unscorable_result(
+            loaded,
+            reason=not_scorable,
+            timings=timings,
+            missing=missing,
+            flags=tuple(extracted.flags),
+            quality=prepared.quality or {},
+            info=info,
+            warnings=warnings,
+        )
+        if not with_detail:
+            return refused
+        return refused, RecordingDetail(
+            signal=prepared.signal,
+            fs=int(prepared.fs),
+            vector=vector,
+            feature_names=loaded.feature_names,
+            bundle=loaded,
+        )
+
     mark = time.perf_counter()
     proba = _predict_proba(loaded, vector)
     timings["predict"] = time.perf_counter() - mark
@@ -593,12 +663,7 @@ def predict_recording(
         low_confidence=bool(margin < LOW_CONFIDENCE_MARGIN),
         low_confidence_margin=LOW_CONFIDENCE_MARGIN,
         operating_threshold=0.5 if len(classes) == 2 else None,
-        operating_point_note=(
-            "Plain argmax at 0.5. The deployed bundle carries no in-fold selected "
-            "threshold, and every stored prediction in outputs/06_binary_results/ "
-            "was produced the same way, so this reproduces the experiments rather "
-            "than applying an operating point they never used."
-        ),
+        operating_point_note=_operating_point_note(loaded.task, len(classes)),
         timings_seconds={key: round(value, 6) for key, value in timings.items()},
         n_features=len(loaded.feature_names),
         n_missing_features=len(missing),
@@ -636,6 +701,139 @@ def predict_recording(
         vector=vector,
         feature_names=loaded.feature_names,
         bundle=loaded,
+    )
+
+
+#: Where each two-class task's stored predictions live, for the note below.
+_STORED_PREDICTIONS: dict[str, str] = {
+    "binary": "outputs/06_binary_results/",
+    "outcome": "outputs/08_circor_external_validation/",
+}
+
+
+def _operating_point_note(task: str, n_classes: int) -> str:
+    """How this task decided, naming ITS OWN experiments.
+
+    One constant used to serve all five tasks, and it was the binary one: a
+    PASCAL A four-class result carried "plain argmax at 0.5 ... every stored
+    prediction in outputs/06_binary_results/ was produced the same way", which
+    is a provenance claim about a directory that has nothing to do with PASCAL A
+    and a threshold that does not exist on a four-class task. It went unnoticed
+    until Phase 120 deployed the other four models and photographed the result.
+    """
+    if n_classes != 2:
+        return (
+            "Argmax over " + str(n_classes) + " classes. A multiclass task has no "
+            "single operating point to move, so there is no threshold here to "
+            "report or to tune -- the highest probability wins, which is exactly "
+            "how this task's cross-validated results were scored."
+        )
+    stored = _STORED_PREDICTIONS.get(task)
+    return (
+        "Plain argmax at 0.5. The deployed bundle carries no in-fold selected "
+        "threshold"
+        + (
+            ", and every stored prediction in " + stored + " was produced the same way"
+            if stored
+            else ""
+        )
+        + ", so this reproduces the experiments rather than applying an operating "
+        "point they never used."
+    )
+
+
+def _not_scorable_reason(
+    missing: list[str],
+    feature_names: tuple[str, ...],
+    flags: tuple[str, ...],
+    quality: dict[str, Any],
+) -> str | None:
+    """Whether this recording carries enough to screen at all (T121.5).
+
+    Returns the sentence a page should render, or None when the recording is
+    scorable. Deliberately stated as a positive refusal rather than a warning:
+    the failure this guards against is a maximally confident indication for a
+    recording that contained nothing, and a warning beside a confident answer is
+    read as a caveat on a result rather than as the absence of one.
+    """
+    dead = sorted(set(flags) & NOT_SCORABLE_FLAGS)
+    if dead:
+        return (
+            "This recording carries no measurable signal -- the extractor "
+            "reported " + ", ".join(dead) + " -- so no screening indication was "
+            "produced for it. Nothing here is a negative result: the recording "
+            "was not scored."
+        )
+    if bool(quality.get("is_silent")) or float(quality.get("std") or 1.0) == 0.0:
+        return (
+            "This recording is silent (zero variance end to end), so no "
+            "screening indication was produced for it. The recording was not "
+            "scored; this is not a normal result."
+        )
+    limit = MAX_MISSING_FEATURE_FRACTION * len(feature_names)
+    if len(missing) > limit:
+        return (
+            str(len(missing))
+            + " of "
+            + str(len(feature_names))
+            + " features could not be computed for this recording, above the "
+            + format(MAX_MISSING_FEATURE_FRACTION * 100, ".0f")
+            + "% the deployed models tolerate. Filling that many columns from "
+            "the training median would describe the training set rather than "
+            "this recording, so no screening indication was produced."
+        )
+    return None
+
+
+def _unscorable_result(
+    loaded: ModelBundle,
+    *,
+    reason: str,
+    timings: dict[str, float],
+    missing: list[str],
+    flags: tuple[str, ...],
+    quality: dict[str, Any],
+    info: dict[str, Any],
+    warnings: list[str],
+) -> PredictionResult:
+    """The same envelope, with every probability null instead of a number."""
+    return PredictionResult(
+        task=loaded.task,
+        predicted_class="",
+        predicted_index=-1,
+        probabilities=dict.fromkeys(loaded.classes),
+        confidence=None,
+        margin=None,
+        low_confidence=True,
+        low_confidence_margin=LOW_CONFIDENCE_MARGIN,
+        operating_threshold=None,
+        operating_point_note="No operating point was applied: the recording was not scored.",
+        timings_seconds={key: round(value, 6) for key, value in timings.items()},
+        n_features=len(loaded.feature_names),
+        n_missing_features=len(missing),
+        feature_flags=flags,
+        quality={
+            **{key: _finite(value) for key, value in quality.items()},
+            "original_sample_rate_hz": info["sample_rate_hz"],
+            "channels": info["channels"],
+            "duration_seconds": info["duration_seconds"],
+        },
+        model={
+            "task": loaded.task,
+            "model_id": loaded.model_id,
+            "estimator_class": loaded.manifest.get("estimator_class"),
+            "n_features": len(loaded.feature_names),
+            "saved_at": loaded.manifest.get("saved_at"),
+            "n_records_fitted": loaded.manifest.get("n_records_fitted"),
+            "selection_rule": loaded.manifest.get("selection_rule"),
+            "note": loaded.manifest.get("note"),
+            "package_versions": loaded.manifest.get("package_versions", {}),
+            "path": str(loaded.path),
+        },
+        source=info["name"],
+        warnings=warnings,
+        scorable=False,
+        not_scorable_reason=reason,
     )
 
 

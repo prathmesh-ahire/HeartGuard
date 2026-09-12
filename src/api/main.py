@@ -68,7 +68,7 @@ from fastapi.responses import JSONResponse, Response
 from fastapi.routing import APIRoute
 from pydantic import BaseModel, Field
 
-from src.evaluation.aggregation import AGGREGATION_RULES
+from src.evaluation.aggregation import AGGREGATION_RULES, POSITIVE_LABEL
 from src.inference.predictor import (
     DISCLAIMER,
     TASKS,
@@ -328,6 +328,11 @@ class PredictResponse(BaseModel):
     source: str
     disclaimer: str
     warnings: list[str] = Field(default_factory=list)
+    #: False when the recording carried too little to screen (T121.5). Every
+    #: probability is then `null` and `predicted_class` is empty: the page must
+    #: render `not_scorable_reason`, never a class.
+    scorable: bool = True
+    not_scorable_reason: str | None = None
     #: Every number above, already rounded, as the string a page renders.
     #:
     #: A live probability cannot come through build-time codegen -- the file did
@@ -821,12 +826,24 @@ def _register_routes(application: FastAPI) -> None:
         return PatientResponse(
             task=task,
             classes=classes,
-            positive_class=classes[-1],
+            positive_class=_positive_class(classes),
             n_recordings=len(results),
             recordings=results,
             rules=_patient_rules(results, classes),
             locations=locations,
         )
+
+
+def _positive_class(classes: list[str]) -> str:
+    """The class a patient-level collapse is about.
+
+    `aggregation.POSITIVE_LABEL`, not `classes[-1]`: for CirCor murmur the last
+    declared class is `Unknown`, so the page was collapsing over the probability
+    that the annotator could not tell, and presenting it as the patient-level
+    murmur indication next to T15 -- which is computed on `Present`.
+    """
+    index = min(POSITIVE_LABEL, len(classes) - 1)
+    return classes[index]
 
 
 def _patient_rules(results: list[PredictResponse], classes: list[str]) -> list[PatientRule]:
@@ -841,7 +858,7 @@ def _patient_rules(results: list[PredictResponse], classes: list[str]) -> list[P
     meaningless at inference time, where there is no label. The equivalence is
     pinned by a test that runs both over the same scores.
     """
-    positive = classes[-1]
+    positive = _positive_class(classes)
     scores = [
         value
         for value in ((r.probabilities or {}).get(positive) for r in results)
@@ -947,7 +964,16 @@ def _response_for(result: Any, *, source: str | None, detail: Any = None) -> Pre
     if source:
         payload["source"] = source
     payload["display"] = _display_block(payload)
-    payload["explanation"] = _explanation_block(detail) if detail is not None else None
+    if not payload.get("scorable", True):
+        # A decomposition of a vector the model was not allowed to score would
+        # be an explanation of a decision that was never made.
+        payload["explanation"] = {
+            "available": False,
+            "reason": payload.get("not_scorable_reason"),
+            "rows": [],
+        }
+    else:
+        payload["explanation"] = _explanation_block(detail) if detail is not None else None
     return PredictResponse.model_validate(to_jsonable(payload))
 
 
