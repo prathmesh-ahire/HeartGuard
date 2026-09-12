@@ -1,0 +1,350 @@
+{
+  "min_bytes": 20000,
+  "disclaimer": "Screening and research use only.",
+  "shots": [
+    {
+      "number": 1,
+      "title": "Home and project overview",
+      "route": "/",
+      "caption": "The PV-MEPCG / PulseVision dashboard home page: the framework in one line, the six locked research objectives, the pipeline from recording to screening indication, and the scope-and-safety notice that appears on every route.",
+      "steps": [],
+      "must_contain": [
+        "PV-MEPCG"
+      ],
+      "must_not_contain": [
+        "Route scaffolded; content not built yet.",
+        "No model is deployed for this task yet",
+        "This chart could not be drawn.",
+        "Nothing scored yet"
+      ],
+      "slug": "",
+      "full_page": true,
+      "height": 1400,
+      "shot_id": "SS-01",
+      "filename": "SS-01_home.png"
+    },
+    {
+      "number": 2,
+      "title": "Dataset inventory and class distribution",
+      "route": "/dataset/",
+      "caption": "The four public PCG corpora as audited against the files on disk (T01): per-dataset inventory, class balance and the duration profile. Every count is read from outputs/01_dataset_audit/, never from the source documents, which disagree with the files in two places.",
+      "steps": [],
+      "must_contain": [],
+      "must_not_contain": [
+        "Route scaffolded; content not built yet.",
+        "No model is deployed for this task yet",
+        "This chart could not be drawn.",
+        "Nothing scored yet"
+      ],
+      "slug": "",
+      "full_page": true,
+      "height": 1400,
+      "shot_id": "SS-02",
+      "filename": "SS-02_dataset.png"
+    },
+    {
+      "number": 3,
+      "title": "Signal upload and waveform",
+      "route": "/predict/binary/",
+      "caption": "Choosing a recording on the binary screening page. A built-in dataset sample has been selected and its waveform drawn from audio served by the local inference service; no corpus audio is committed to the repository. The model has not been run yet -- this is the upload and preview step alone.",
+      "steps": [
+        {
+          "action": "sample",
+          "sample_id": "binary-abnormal"
+        }
+      ],
+      "must_contain": [
+        "1. Choose a recording",
+        "D1_training-b_b0033"
+      ],
+      "must_not_contain": [
+        "Route scaffolded; content not built yet.",
+        "No model is deployed for this task yet",
+        "This chart could not be drawn."
+      ],
+      "slug": "",
+      "full_page": true,
+      "height": 1400,
+      "shot_id": "SS-03",
+      "filename": "SS-03_predict_binary.png"
+    },
+    {
+      "number": 4,
+      "title": "Preprocessing before/after",
+      "route": "/preprocessing/",
+      "caption": "The preprocessing chain (T02): resampling, band-pass filtering, normalization and signal-quality assessment, with the same recording before and after each stage and the spectral effect of the filter.",
+      "steps": [],
+      "must_contain": [],
+      "must_not_contain": [
+        "Route scaffolded; content not built yet.",
+        "No model is deployed for this task yet",
+        "This chart could not be drawn.",
+        "Nothing scored yet"
+      ],
+      "slug": "",
+      "full_page": true,
+      "height": 1400,
+      "shot_id": "SS-04",
+      "filename": "SS-04_preprocessing.png"
+    },
+    {
+      "number": 5,
+      "title": "Feature extraction summary",
+      "route": "/features/",
+      "caption": "The locked 138-feature registry across six families (T03), the fold-safe subset selected inside the training folds, and the family each selected feature belongs to. The column order is a literal in the registry and is fingerprinted, not derived.",
+      "steps": [],
+      "must_contain": [],
+      "must_not_contain": [
+        "Route scaffolded; content not built yet.",
+        "No model is deployed for this task yet",
+        "This chart could not be drawn.",
+        "Nothing scored yet"
+      ],
+      "slug": "",
+      "full_page": true,
+      "height": 1400,
+      "shot_id": "SS-05",
+      "filename": "SS-05_features.png"
+    },
+    {
+      "number": 6,
+      "title": "Model comparison dashboard",
+      "route": "/models/",
+      "caption": "The declared models and their fold-wise comparison (T04, T08). Sensitivity, specificity, F1, balanced accuracy and AUC are reported together; accuracy alone never decides anything here.",
+      "steps": [],
+      "must_contain": [],
+      "must_not_contain": [
+        "Route scaffolded; content not built yet.",
+        "No model is deployed for this task yet",
+        "This chart could not be drawn.",
+        "Nothing scored yet"
+      ],
+      "slug": "",
+      "full_page": true,
+      "height": 1400,
+      "shot_id": "SS-06",
+      "filename": "SS-06_models.png"
+    },
+    {
+      "number": 7,
+      "title": "Search optimization dashboard",
+      "route": "/optimization/",
+      "caption": "The search space, the methods compared at equal budget, the selected parameters and what the search actually bought (T05-T07). Every search shown ran inside a training fold.",
+      "steps": [],
+      "must_contain": [],
+      "must_not_contain": [
+        "Route scaffolded; content not built yet.",
+        "No model is deployed for this task yet",
+        "This chart could not be drawn.",
+        "Nothing scored yet"
+      ],
+      "slug": "",
+      "full_page": true,
+      "height": 1400,
+      "shot_id": "SS-07",
+      "filename": "SS-07_optimization.png"
+    },
+    {
+      "number": 8,
+      "title": "Binary prediction output",
+      "route": "/predict/binary/",
+      "caption": "A live binary screening indication for one PhysioNet 2016 recording, produced by POST /predict against the deployed model. The panel shows the class probabilities, the confidence margin, the operating threshold and the corpus label, and states that the recording's stored out-of-fold probability is five numbers rather than one.",
+      "steps": [
+        {
+          "action": "sample",
+          "sample_id": "binary-abnormal"
+        },
+        {
+          "action": "click",
+          "name": "2. Run the screening model"
+        },
+        {
+          "action": "await_result"
+        }
+      ],
+      "must_contain": [
+        "3. Result"
+      ],
+      "must_not_contain": [
+        "Route scaffolded; content not built yet.",
+        "No model is deployed for this task yet",
+        "This chart could not be drawn.",
+        "Nothing scored yet"
+      ],
+      "slug": "",
+      "full_page": true,
+      "height": 1400,
+      "shot_id": "SS-08",
+      "filename": "SS-08_predict_binary.png"
+    },
+    {
+      "number": 9,
+      "title": "Multiclass prediction output",
+      "route": "/predict/multiclass/",
+      "caption": "A live PASCAL A four-class acoustic-event output with the full probability distribution. PASCAL A and PASCAL B are offered as two separate label spaces on this page and are never merged; `artifact` is a recording-quality label, not a cardiac class.",
+      "steps": [
+        {
+          "action": "sample",
+          "sample_id": "pascal-a-murmur"
+        },
+        {
+          "action": "click",
+          "name": "2. Run the screening model"
+        },
+        {
+          "action": "await_result"
+        }
+      ],
+      "must_contain": [
+        "3. Result",
+        "PASCAL A"
+      ],
+      "must_not_contain": [
+        "Route scaffolded; content not built yet.",
+        "No model is deployed for this task yet",
+        "This chart could not be drawn.",
+        "Nothing scored yet"
+      ],
+      "slug": "",
+      "full_page": true,
+      "height": 1400,
+      "shot_id": "SS-09",
+      "filename": "SS-09_predict_multiclass.png"
+    },
+    {
+      "number": 10,
+      "title": "CirCor murmur/outcome output",
+      "route": "/predict/murmur/",
+      "caption": "The CirCor page with both of its label spaces exercised: a live clinical-outcome indication for one recording above, and below it the same subject collapsed from all four auscultation locations to a patient-level murmur indication under every declared aggregation rule. Murmur and outcome are separate tasks with separate models.",
+      "steps": [
+        {
+          "action": "click",
+          "name": "Clinical outcome"
+        },
+        {
+          "action": "sample",
+          "sample_id": "circor-murmur-present"
+        },
+        {
+          "action": "click",
+          "name": "2. Run the screening model"
+        },
+        {
+          "action": "await_result"
+        },
+        {
+          "action": "click",
+          "name": "Score this subject at every location"
+        },
+        {
+          "action": "await_patient"
+        }
+      ],
+      "must_contain": [
+        "Recording level and patient level"
+      ],
+      "must_not_contain": [
+        "Route scaffolded; content not built yet.",
+        "No model is deployed for this task yet",
+        "This chart could not be drawn.",
+        "Nothing scored yet"
+      ],
+      "slug": "",
+      "full_page": true,
+      "height": 1800,
+      "shot_id": "SS-10",
+      "filename": "SS-10_predict_murmur.png"
+    },
+    {
+      "number": 11,
+      "title": "Robustness analytics",
+      "route": "/robustness/",
+      "caption": "How the results move under added noise, shortened recordings, a different corpus and a different auscultation location (T19-T22, T-S5). The leave-one-sub-collection-out result is shown beside the pooled one rather than in place of it.",
+      "steps": [],
+      "must_contain": [],
+      "must_not_contain": [
+        "Route scaffolded; content not built yet.",
+        "No model is deployed for this task yet",
+        "This chart could not be drawn.",
+        "Nothing scored yet"
+      ],
+      "slug": "",
+      "full_page": true,
+      "height": 1800,
+      "shot_id": "SS-11",
+      "filename": "SS-11_robustness.png"
+    },
+    {
+      "number": 12,
+      "title": "Feature importance/explainability",
+      "route": "/predict/binary/",
+      "caption": "Global feature importance and family-level contribution (T23), and the per-sample explanation of the prediction made in this browser tab: the contribution of each feature to that recording's own decision, computed by the API over the exact vector it scored.",
+      "steps": [
+        {
+          "action": "sample",
+          "sample_id": "binary-abnormal"
+        },
+        {
+          "action": "click",
+          "name": "2. Run the screening model"
+        },
+        {
+          "action": "await_result"
+        },
+        {
+          "action": "goto",
+          "route": "/explainability/"
+        }
+      ],
+      "must_contain": [
+        "Explainability"
+      ],
+      "must_not_contain": [
+        "Route scaffolded; content not built yet.",
+        "No model is deployed for this task yet",
+        "This chart could not be drawn.",
+        "Nothing scored yet",
+        "No prediction has been made in this browser tab yet"
+      ],
+      "slug": "explainability",
+      "full_page": true,
+      "height": 1800,
+      "shot_id": "SS-12",
+      "filename": "SS-12_explainability.png"
+    },
+    {
+      "number": 13,
+      "title": "Exported report preview",
+      "route": "/reports/",
+      "caption": "The report export panel after a recording report has really been generated and saved by the running service, with the objective-coverage table (T29) rendered below it -- the same content the downloadable DOCX carries. A DOCX cannot be previewed inside the browser, so what is shown is the export in its completed state plus the rendered content of the document it produced.",
+      "steps": [
+        {
+          "action": "select",
+          "label": "Built-in sample",
+          "value": "binary-abnormal"
+        },
+        {
+          "action": "click",
+          "name": "Generate recording report"
+        },
+        {
+          "action": "await_saved"
+        }
+      ],
+      "must_contain": [
+        "Objective coverage"
+      ],
+      "must_not_contain": [
+        "Route scaffolded; content not built yet.",
+        "No model is deployed for this task yet",
+        "This chart could not be drawn.",
+        "Nothing scored yet"
+      ],
+      "slug": "",
+      "full_page": true,
+      "height": 1800,
+      "shot_id": "SS-13",
+      "filename": "SS-13_reports.png"
+    }
+  ]
+}

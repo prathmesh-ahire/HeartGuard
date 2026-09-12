@@ -227,6 +227,10 @@ export function PredictionPanel({
                       <li key={entry.sample_id}>
                         <button
                           type="button"
+                          // The visible label is the record uid; the sample id
+                          // is what the Phase 120 capture plan names, so it is
+                          // addressable without matching on display text.
+                          data-sample-id={entry.sample_id}
                           disabled={!reachable || busy}
                           aria-pressed={active}
                           onClick={() => {

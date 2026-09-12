@@ -92,10 +92,14 @@ export function EChart({ option, ariaLabel, className, height = 320, caption }: 
 
   return (
     <figure className={cn('m-0', className)}>
+      {/* `data-chart-status` is what the Phase 120 screenshot run waits on: a
+          capture that waited on a timer instead would sooner or later catch a
+          canvas before its first paint and save an empty chart. */}
       <div
         ref={container}
         role="img"
         aria-label={ariaLabel}
+        data-chart-status={status}
         style={{ height: height + 'px', width: '100%' }}
         className={cn(status === 'failed' ? 'hidden' : '')}
       />

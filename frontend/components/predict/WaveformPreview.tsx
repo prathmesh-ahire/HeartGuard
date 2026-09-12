@@ -25,11 +25,29 @@ import { SURFACE, TYPE_SCALE, seriesColor } from '@/lib/tokens';
  * raw waveform under a prediction invites the reading that the model consumed
  * exactly this.
  *
+ * ## Web Audio is the FALLBACK here, not the decoder
+ *
+ * `AudioContext.decodeAudioData` refuses any file whose sample rate is below
+ * 3 kHz -- that is the `BaseAudioContext` sample-rate floor, not a property of
+ * the file -- and **PhysioNet 2016 is recorded at 2 kHz**. So every built-in
+ * sample on the binary prediction page, and every PhysioNet recording anybody
+ * uploads, came back as "Unable to decode audio data" with no waveform at all.
+ * Found by the Phase 120 screenshot run (SS-03/SS-08), which is the first thing
+ * in the project to look at what that panel actually rendered for a corpus
+ * recording; the Phase 118 upload test generates its own 2 kHz tone and asserts
+ * the PREDICTION, never the preview.
+ *
+ * Uncompressed PCM WAV is therefore parsed here, from the RIFF header, which is
+ * both what every recording in all four corpora is and what the upload control
+ * accepts. Web Audio is kept for anything else a browser might hand this
+ * component. Reading 44 bytes of header is not "the client computing": no
+ * number produced here is reported, compared or rounded.
+ *
  * ## Decoding can fail, and that is a rendered error
  *
- * `decodeAudioData` rejects on a truncated or non-audio file. That surfaces as
- * `ErrorState`, never as a blank canvas: an empty box is indistinguishable from
- * silence, and silence is a legitimate recording.
+ * A truncated or non-audio file rejects. That surfaces as `ErrorState`, never as
+ * a blank canvas: an empty box is indistinguishable from silence, and silence is
+ * a legitimate recording.
  */
 
 const HEIGHT = 96;
@@ -42,7 +60,104 @@ interface Decoded {
   channels: number;
 }
 
+/** Peak envelope of one channel, low and high per bucket. */
+function envelope(samples: Float32Array): Float32Array {
+  const step = Math.max(1, Math.floor(samples.length / BUCKETS));
+  const peaks = new Float32Array(BUCKETS * 2);
+  for (let bucket = 0; bucket < BUCKETS; bucket += 1) {
+    let low = 0;
+    let high = 0;
+    const start = bucket * step;
+    const stop = Math.min(samples.length, start + step);
+    for (let index = start; index < stop; index += 1) {
+      const value = samples[index] ?? 0;
+      if (value < low) low = value;
+      if (value > high) high = value;
+    }
+    peaks[bucket * 2] = low;
+    peaks[bucket * 2 + 1] = high;
+  }
+  return peaks;
+}
+
+/**
+ * The first channel of an uncompressed RIFF/WAVE file, or null if it is not one.
+ *
+ * Chunks are walked rather than assumed at offset 36: PASCAL's set_a files
+ * carry a `LIST` chunk before `data`, so a parser that trusted the canonical
+ * 44-byte layout would read metadata as audio.
+ */
+function decodePcmWav(data: ArrayBuffer): Decoded | null {
+  const view = new DataView(data);
+  const text = (offset: number): string =>
+    String.fromCharCode(
+      view.getUint8(offset),
+      view.getUint8(offset + 1),
+      view.getUint8(offset + 2),
+      view.getUint8(offset + 3),
+    );
+  if (data.byteLength < 44 || text(0) !== 'RIFF' || text(8) !== 'WAVE') return null;
+
+  let format = 0;
+  let channels = 0;
+  let sampleRate = 0;
+  let bits = 0;
+  let dataStart = -1;
+  let dataLength = 0;
+
+  let offset = 12;
+  while (offset + 8 <= data.byteLength) {
+    const id = text(offset);
+    const size = view.getUint32(offset + 4, true);
+    const body = offset + 8;
+    if (id === 'fmt ' && body + 16 <= data.byteLength) {
+      format = view.getUint16(body, true);
+      channels = view.getUint16(body + 2, true);
+      sampleRate = view.getUint32(body + 4, true);
+      bits = view.getUint16(body + 14, true);
+    } else if (id === 'data') {
+      dataStart = body;
+      dataLength = Math.min(size, data.byteLength - body);
+    }
+    offset = body + size + (size % 2); // chunks are word-aligned
+  }
+
+  const PCM = 1;
+  const FLOAT = 3;
+  if (dataStart < 0 || channels < 1 || sampleRate < 1) return null;
+  if (!(format === PCM && (bits === 8 || bits === 16 || bits === 24 || bits === 32))) {
+    if (!(format === FLOAT && bits === 32)) return null;
+  }
+
+  const bytesPerSample = bits / 8;
+  const frames = Math.floor(dataLength / (bytesPerSample * channels));
+  const samples = new Float32Array(frames);
+  for (let frame = 0; frame < frames; frame += 1) {
+    const at = dataStart + frame * bytesPerSample * channels; // channel 0 only
+    if (format === FLOAT) samples[frame] = view.getFloat32(at, true);
+    else if (bits === 8) samples[frame] = (view.getUint8(at) - 128) / 128;
+    else if (bits === 16) samples[frame] = view.getInt16(at, true) / 32768;
+    else if (bits === 24) {
+      const raw =
+        view.getUint8(at) | (view.getUint8(at + 1) << 8) | (view.getInt8(at + 2) << 16);
+      samples[frame] = raw / 8388608;
+    } else samples[frame] = view.getInt32(at, true) / 2147483648;
+  }
+
+  return {
+    peaks: envelope(samples),
+    duration: frames / sampleRate,
+    sampleRate,
+    channels,
+  };
+}
+
 async function decode(data: ArrayBuffer): Promise<Decoded> {
+  const pcm = decodePcmWav(data);
+  if (pcm !== null) {
+    if (pcm.duration <= 0) throw new Error('That WAV file contains no audio frames.');
+    return pcm;
+  }
   const Context =
     window.AudioContext ??
     (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
@@ -50,24 +165,8 @@ async function decode(data: ArrayBuffer): Promise<Decoded> {
   const context = new Context();
   try {
     const buffer = await context.decodeAudioData(data);
-    const channel = buffer.getChannelData(0);
-    const step = Math.max(1, Math.floor(channel.length / BUCKETS));
-    const peaks = new Float32Array(BUCKETS * 2);
-    for (let bucket = 0; bucket < BUCKETS; bucket += 1) {
-      let low = 0;
-      let high = 0;
-      const start = bucket * step;
-      const stop = Math.min(channel.length, start + step);
-      for (let index = start; index < stop; index += 1) {
-        const value = channel[index] ?? 0;
-        if (value < low) low = value;
-        if (value > high) high = value;
-      }
-      peaks[bucket * 2] = low;
-      peaks[bucket * 2 + 1] = high;
-    }
     return {
-      peaks,
+      peaks: envelope(buffer.getChannelData(0)),
       duration: buffer.duration,
       sampleRate: buffer.sampleRate,
       channels: buffer.numberOfChannels,

@@ -1,0 +1,164 @@
+{
+  "deployments": [
+    {
+      "task": "pascal_b",
+      "selected_model_id": "M1",
+      "selection": {
+        "selected_model_id": "M1",
+        "rule": [
+          "macro_f1",
+          "balanced_accuracy"
+        ],
+        "ranking": [
+          {
+            "model_id": "M1",
+            "macro_f1": 0.4704075427892693,
+            "balanced_accuracy": 0.4887889863547758
+          },
+          {
+            "model_id": "M5",
+            "macro_f1": 0.4328309700984857,
+            "balanced_accuracy": 0.4283503898635478
+          },
+          {
+            "model_id": "M4",
+            "macro_f1": 0.4204742448052114,
+            "balanced_accuracy": 0.4291910331384015
+          },
+          {
+            "model_id": "M6",
+            "macro_f1": 0.4199312329924757,
+            "balanced_accuracy": 0.4224780701754386
+          },
+          {
+            "model_id": "M7",
+            "macro_f1": 0.4187190323855204,
+            "balanced_accuracy": 0.4202302631578947
+          },
+          {
+            "model_id": "M3",
+            "macro_f1": 0.3896085375923143,
+            "balanced_accuracy": 0.4007675438596491
+          }
+        ],
+        "accuracy_would_have_chosen": "M6",
+        "ranking_source": "outputs/07_multiclass_results/EXP-B2/aggregate_metrics.csv",
+        "n_models_ranked": 6
+      },
+      "hyperparameters": {
+        "C": 60.153087183964686,
+        "l1_ratio": 0.0,
+        "solver": "saga",
+        "max_iter": 2000
+      },
+      "n_records_fitted": 461,
+      "fit_seconds": 4.064,
+      "path": "D:\\Projects\\HeartGuard\\models_saved\\pascal_b\\final\\model.joblib",
+      "size_mb": 0.008957862854003906
+    },
+    {
+      "task": "murmur",
+      "selected_model_id": "M4",
+      "selection": {
+        "selected_model_id": "M4",
+        "rule": [
+          "macro_f1",
+          "balanced_accuracy"
+        ],
+        "ranking": [
+          {
+            "model_id": "M4",
+            "macro_f1": 0.5338709573937482,
+            "balanced_accuracy": 0.5471122132238819
+          },
+          {
+            "model_id": "M5",
+            "macro_f1": 0.5223226566508189,
+            "balanced_accuracy": 0.5454591693542291
+          },
+          {
+            "model_id": "M7",
+            "macro_f1": 0.4714534513687934,
+            "balanced_accuracy": 0.4615926756793295
+          },
+          {
+            "model_id": "M6",
+            "macro_f1": 0.4268733845834679,
+            "balanced_accuracy": 0.4182155139817198
+          },
+          {
+            "model_id": "M3",
+            "macro_f1": 0.4248288419357172,
+            "balanced_accuracy": 0.4165377939720351
+          }
+        ],
+        "accuracy_would_have_chosen": "M6",
+        "ranking_source": "outputs/08_circor_external_validation/EXP-C1-three_class/aggregate_metrics.csv",
+        "n_models_ranked": 5
+      },
+      "hyperparameters": {
+        "n_estimators": 993,
+        "max_depth": null,
+        "min_samples_leaf": 6,
+        "max_features": 0.3,
+        "class_weight": "balanced_subsample"
+      },
+      "n_records_fitted": 3163,
+      "fit_seconds": 32.477,
+      "path": "D:\\Projects\\HeartGuard\\models_saved\\murmur\\final\\model.joblib",
+      "size_mb": 25.675683975219727
+    },
+    {
+      "task": "outcome",
+      "selected_model_id": "M5",
+      "selection": {
+        "selected_model_id": "M5",
+        "rule": [
+          "sensitivity",
+          "balanced_accuracy"
+        ],
+        "ranking": [
+          {
+            "model_id": "M5",
+            "sensitivity": 0.4912350173511315,
+            "balanced_accuracy": 0.5954936836066176
+          },
+          {
+            "model_id": "M4",
+            "sensitivity": 0.4834003959890145,
+            "balanced_accuracy": 0.6004589454851734
+          },
+          {
+            "model_id": "M6",
+            "sensitivity": 0.4572587341125375,
+            "balanced_accuracy": 0.596570869091878
+          },
+          {
+            "model_id": "M7",
+            "sensitivity": 0.4572587341125375,
+            "balanced_accuracy": 0.596570869091878
+          },
+          {
+            "model_id": "M3",
+            "sensitivity": 0.4455174469353431,
+            "balanced_accuracy": 0.6017347276702193
+          }
+        ],
+        "accuracy_would_have_chosen": "M3",
+        "ranking_source": "outputs/08_circor_external_validation/EXP-C2/aggregate_metrics.csv",
+        "n_models_ranked": 5
+      },
+      "hyperparameters": {
+        "n_estimators": 170,
+        "learning_rate": 0.0173579720185871,
+        "max_depth": 4,
+        "subsample": 0.6571467271687763,
+        "min_samples_leaf": 13
+      },
+      "n_records_fitted": 3163,
+      "fit_seconds": 26.41,
+      "path": "D:\\Projects\\HeartGuard\\models_saved\\outcome\\final\\model.joblib",
+      "size_mb": 0.35631656646728516
+    }
+  ]
+}

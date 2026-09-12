@@ -1,18 +1,38 @@
 'use client';
 
-import { LazyMotion, m, useReducedMotion as useFramerReducedMotion } from 'framer-motion';
+import { LazyMotion, m } from 'framer-motion';
 import type { ReactNode } from 'react';
+
+import { useReducedMotion } from '@/lib/capability';
 
 const loadFeatures = () => import('./features').then((mod) => mod.default);
 
 /**
  * Card reveals and page transitions (T112.5).
  *
- * Framer Motion's own `useReducedMotion` is used here rather than the project's
- * hook in `lib/capability.ts`. They answer the same question, but Framer's
- * value is what its `MotionConfig` and layout animations consult internally, so
- * using it keeps one source of truth inside the animation library instead of
- * two that can disagree for a frame after the OS setting changes.
+ * The reduced-motion read is the project's own hook in `lib/capability.ts`, NOT
+ * Framer Motion's. Framer's reads `matchMedia` synchronously during the first
+ * render, so under `prefers-reduced-motion: reduce` the client's first render
+ * emits a plain `<div>` where the static export emitted this motion wrapper --
+ * which is a hydration mismatch, and React threw #418/#423 on EVERY page for
+ * every visitor with that setting on. The project's hook reads in an effect, so
+ * the first client render matches the server and the switch happens after
+ * mount. Found by the Phase 120 screenshot run, which is the first thing in the
+ * project to open the site with reduced motion forced on; the Phase 118 smoke
+ * test runs with the default setting and never saw it.
+ *
+ * For the same reason the tree is the SAME shape either way: reduced motion
+ * turns the animation off through `initial`/`transition`, it does not swap the
+ * wrapper for a plain `<div>`. Swapping it meant `LazyMotion` mounted, started
+ * its async feature import, and unmounted one tick later on every reveal on the
+ * page -- which showed up once as a hard client-side exception on the home page
+ * during a capture run and passed on the retry. A gate that fails one run in
+ * five is worse than no gate.
+ *
+ * Under reduced motion the reveal is driven by `animate` rather than
+ * `whileInView`: content must not wait on an IntersectionObserver for someone
+ * who asked for less motion, and `duration: 0` makes it a state change rather
+ * than an animation.
  *
  * Everything animated goes through `LazyMotion` and the `m` component rather
  * than `motion`. `motion.div` drags the whole DOM feature set into the chunk
@@ -38,21 +58,24 @@ export function Reveal({
   delay?: number;
   className?: string;
 }) {
-  const reduced = useFramerReducedMotion();
-
-  if (reduced === true) {
-    return <div className={className}>{children}</div>;
-  }
+  const reduced = useReducedMotion();
 
   return (
     <LazyMotion features={loadFeatures} strict>
       <m.div
         className={className}
+        // `initial` is the SAME on the server, on the first client render and
+        // under reduced motion. It is what the static HTML carries, so making
+        // it conditional is a hydration mismatch -- and making it `false` while
+        // `whileInView` was also dropped left every section stuck at the opacity
+        // the server wrote, which is a blank page. Reduced motion changes the
+        // DURATION and the trigger, never the start or the end state.
         initial={{ opacity: 0, y: 12 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        animate={reduced ? { opacity: 1, y: 0 } : undefined}
+        whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
         // metric-guard: allow -- viewport geometry, not a measurement
       viewport={{ once: true, margin: '0px 0px -10% 0px' }}
-        transition={{ duration: 0.35, delay, ease: [0.16, 1, 0.3, 1] }}
+        transition={reduced ? { duration: 0 } : { duration: 0.35, delay, ease: [0.16, 1, 0.3, 1] }}
       >
         {children}
       </m.div>
@@ -96,18 +119,14 @@ export function RevealList({
  * the document, and animating position after that reads as a stutter.
  */
 export function PageTransition({ children }: { children: ReactNode }) {
-  const reduced = useFramerReducedMotion();
-
-  if (reduced === true) {
-    return <>{children}</>;
-  }
+  const reduced = useReducedMotion();
 
   return (
     <LazyMotion features={loadFeatures} strict>
       <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.22, ease: 'easeOut' }}
+        transition={reduced ? { duration: 0 } : { duration: 0.22, ease: 'easeOut' }}
       >
         {children}
       </m.div>
