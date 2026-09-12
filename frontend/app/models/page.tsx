@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 
 import { ModelComparison } from '@/app/models/ModelComparison';
 import { ResultsTable } from '@/components/table/ResultsTable';
+import { GlassCard } from '@/components/ui/GlassCard';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { experiments } from '@/lib/generated/experiments';
 import { table } from '@/lib/generated/tables';
@@ -31,20 +33,24 @@ export default function Page() {
   const unavailable = declared.filter((item) => !item.available);
 
   return (
-    <div className="space-y-14">
-      <section>
-        <h1 className="text-3xl font-semibold tracking-tight">Model Comparison</h1>
-        <p className="mt-3 max-w-3xl text-slate-600 dark:text-slate-400">
-          {experiments.n_available} of {experiments.n_declared} declared experiments have
-          produced results. Each is a separate run with its own fold map, its own
-          configuration snapshot and its own run manifest; nothing below is pooled
-          across them.
-        </p>
-        <div className="mt-4 max-w-3xl space-y-2 text-sm text-slate-600 dark:text-slate-400">
-          <p>{experiments.selection_note}</p>
-          <p>{experiments.label_space_note}</p>
-        </div>
-      </section>
+    <div className="space-y-6">
+      <PageHeader
+        title="Model Comparison"
+        lede={
+          <>
+            {experiments.n_available} of {experiments.n_declared} declared experiments have
+            produced results. Each is a separate run with its own fold map, its own
+            configuration snapshot and its own run manifest; nothing below is pooled
+            across them.
+          </>
+        }
+        note={
+          <span className="space-y-1">
+            <span className="block">{experiments.selection_note}</span>
+            <span className="block">{experiments.label_space_note}</span>
+          </span>
+        }
+      />
 
       {/* ----------------------------------------------------------------- */}
       <section>
@@ -53,7 +59,7 @@ export default function Page() {
           title="Results, fold spread, curves and confusion"
           level={2}
         />
-        <div className="mt-6">
+        <div className="mt-4">
           <ModelComparison />
         </div>
       </section>
@@ -66,7 +72,9 @@ export default function Page() {
           description="The registry of estimators, their search dimensions and whether each is an ensemble."
           level={2}
         />
-        <ResultsTable className="mt-5" table={table('T06')} />
+        <GlassCard className="mt-4" bodyClassName="p-3">
+          <ResultsTable table={table('T06')} />
+        </GlassCard>
       </section>
 
       {/* ----------------------------------------------------------------- */}
@@ -78,14 +86,17 @@ export default function Page() {
             description="Listed rather than dropped: a page showing four results where five were declared says nothing about the fifth, and a reader counts what they see."
             level={2}
           />
-          <ul className="mt-5 space-y-2 text-sm">
+          <ul className="mt-4 grid gap-2 sm:grid-cols-2">
             {unavailable.map((item) => (
               <li
                 key={item.exp_id}
-                className="rounded border border-dashed border-slate-300 p-3 dark:border-slate-700"
+                className="rounded-lg border border-dashed border-line bg-panel p-3 text-body-sm"
               >
-                <span className="font-medium">{item.exp_id}</span> — {item.title}
-                <p className="mt-1 text-slate-600 dark:text-slate-400">{item.reason}</p>
+                <span className="font-mono text-label-md uppercase text-accent-strong">
+                  {item.exp_id}
+                </span>{' '}
+                — {item.title}
+                <p className="mt-1 text-ink-3">{item.reason}</p>
               </li>
             ))}
           </ul>
@@ -93,11 +104,8 @@ export default function Page() {
       ) : null}
 
       {/* ----------------------------------------------------------------- */}
-      <section className="rounded-lg border border-slate-200 p-5 text-sm text-slate-600 dark:border-slate-800 dark:text-slate-400">
-        <h2 className="text-sm font-semibold uppercase tracking-widest text-slate-500">
-          Provenance
-        </h2>
-        <ul className="mt-3 space-y-1">
+      <GlassCard as="section" eyebrow="Provenance" bodyClassName="text-body-sm text-ink-2">
+        <ul className="space-y-1">
           {declared
             .filter((item) => item.available)
             .map((item) => (
@@ -109,7 +117,7 @@ export default function Page() {
               </li>
             ))}
         </ul>
-      </section>
+      </GlassCard>
     </div>
   );
 }

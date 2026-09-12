@@ -3,15 +3,77 @@
 @tailwind utilities;
 
 /*
- * Phase 110 establishes the light/dark ground and nothing else. The full token
- * set lands in Phase 111 (T111.1).
+ * The colour ground for both modes.
+ *
+ * Light is the authored theme: a warm blush page, white panels, crimson
+ * arterial accent. Dark is the same system with the luminance inverted rather
+ * than a second unrelated palette -- the accent shifts to rose-400 because
+ * #e11d48 on a near-black ground falls under 4.5:1 and stops being readable
+ * as body-adjacent text.
+ *
+ * Values are space-separated RGB channels, not hex, so Tailwind can apply an
+ * alpha to them (`bg-accent/10`).
  */
 :root {
   color-scheme: light;
+
+  --surface: 250 246 247;
+  --panel: 255 255 255;
+  --sunken: 255 245 246;
+  --raised: 255 255 255;
+
+  --line: 254 205 211;
+  --line-strong: 253 164 175;
+
+  --ink: 15 23 42;
+  --ink-2: 71 85 105;
+  --ink-3: 100 116 139;
+
+  --accent: 225 29 72;
+  --accent-strong: 190 18 60;
+  --accent-deep: 159 18 57;
+  --accent-soft: 255 228 230;
+  --accent-line: 253 164 175;
+  --on-accent: 255 255 255;
+
+  /* Failure is NOT the brand crimson. With a rose accent on every control,
+   * an error styled in rose reads as chrome; it is pushed to a deeper, duller
+   * red and carries a heavier border and an icon so hue is never the only
+   * signal. */
+  --danger: 185 28 28;
+  --danger-soft: 254 226 226;
+  --danger-line: 248 113 113;
+
+  --grid: 244 63 94;
 }
 
 .dark {
   color-scheme: dark;
+
+  --surface: 18 11 13;
+  --panel: 28 17 20;
+  --sunken: 22 13 16;
+  --raised: 36 22 26;
+
+  --line: 63 32 39;
+  --line-strong: 136 19 55;
+
+  --ink: 248 250 252;
+  --ink-2: 203 213 225;
+  --ink-3: 148 163 184;
+
+  --accent: 251 113 133;
+  --accent-strong: 253 164 175;
+  --accent-deep: 254 205 211;
+  --accent-soft: 76 5 25;
+  --accent-line: 136 19 55;
+  --on-accent: 26 4 11;
+
+  --danger: 252 165 165;
+  --danger-soft: 69 10 10;
+  --danger-line: 153 27 27;
+
+  --grid: 251 113 133;
 }
 
 html {
@@ -19,10 +81,75 @@ html {
 }
 
 body {
-  @apply bg-white text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
+  @apply bg-surface font-sans text-body-md text-ink antialiased;
 }
 
 /* A reader tabbing through the evidence links must always see where they are. */
 :focus-visible {
-  @apply outline-2 outline-offset-2 outline-sky-600 dark:outline-sky-400;
+  @apply outline-2 outline-offset-2 outline-accent;
+}
+
+::selection {
+  background-color: rgb(var(--accent-soft));
+  color: rgb(var(--accent-deep));
+}
+
+@layer components {
+  /*
+   * The instrument label: uppercase monospace micro-type. Used for axis
+   * legends, card eyebrows, units and table headers, where a word has to read
+   * as an instrument marking rather than as prose.
+   */
+  .label-micro {
+    @apply font-mono text-label-sm uppercase text-ink-3;
+  }
+
+  /*
+   * The calibration grid behind a hero or a waveform bed. One class rather
+   * than a Tailwind background-image plus a background-size utility, because
+   * those two generate the same `bg-telemetry` name and collide.
+   */
+  .telemetry-grid {
+    background-size: 24px 24px;
+    background-image:
+      linear-gradient(to right, rgb(var(--grid) / 0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(var(--grid) / 0.08) 1px, transparent 1px);
+  }
+
+  /*
+   * Numeric readouts are tabular so a column of digits does not shift width
+   * between renders, and slashed-zero so an O cannot be read as a 0.
+   */
+  .stat {
+    font-variant-numeric: tabular-nums slashed-zero;
+  }
+}
+
+/* Crisp clinical scrollbars rather than the platform default slab. */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(var(--sunken));
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--line));
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--accent-line));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

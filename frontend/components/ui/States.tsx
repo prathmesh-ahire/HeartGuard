@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 
 import { cn } from '@/lib/cn';
+import { Icon } from '@/components/ui/Icon';
 import { SURFACE, TYPE_SCALE } from '@/lib/tokens';
 
 /**
@@ -35,7 +36,7 @@ export function LoadingState({
         {Array.from({ length: rows }).map((_, index) => (
           <div
             key={index}
-            className="h-3 animate-pulse rounded bg-slate-200 dark:bg-slate-800"
+            className="h-3 animate-pulse rounded bg-sunken"
             style={{ width: `${100 - index * 12}%` }}
           />
         ))}
@@ -59,7 +60,7 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        'rounded-lg border border-dashed border-slate-300 p-6 text-center dark:border-slate-700',
+        'rounded-lg border border-dashed border-line p-6 text-center',
         className,
       )}
     >
@@ -89,35 +90,32 @@ export function ErrorState({
     <div
       role="alert"
       className={cn(
-        'rounded-lg border-2 border-rose-400 bg-rose-50 p-5',
-        'dark:border-rose-700 dark:bg-rose-950/40',
+        'flex gap-3 rounded-lg border-2 border-danger-line bg-danger-soft p-4',
         className,
       )}
     >
-      <p className={cn(TYPE_SCALE.h3, 'text-rose-800 dark:text-rose-200')}>{title}</p>
-      {detail ? (
-        <div
-          className={cn(
-            TYPE_SCALE.body,
-            'mt-2 break-words text-rose-800/90 dark:text-rose-200/90',
-          )}
-        >
-          {detail}
-        </div>
-      ) : null}
-      <p className={cn(TYPE_SCALE.caption, 'mt-3 text-rose-700 dark:text-rose-300')}>
-        No result is shown above, because there is no result — this is a failure, not a
-        value of zero.
-      </p>
-      {onRetry ? (
-        <button
-          type="button"
-          onClick={onRetry}
-          className="mt-4 rounded border border-rose-500 px-3 py-1.5 text-sm font-medium text-rose-800 hover:bg-rose-100 dark:border-rose-600 dark:text-rose-200 dark:hover:bg-rose-900/40"
-        >
-          Try again
-        </button>
-      ) : null}
+      {/* An icon as well as a colour: with a crimson accent on every control,
+          hue alone cannot be what tells a failure from ordinary chrome. */}
+      <Icon name="limitations" className="mt-0.5 h-4 w-4 shrink-0 text-danger" strokeWidth={1.8} />
+      <div className="min-w-0">
+        <p className={cn(TYPE_SCALE.h3, 'text-danger')}>{title}</p>
+        {detail ? (
+          <div className={cn(TYPE_SCALE.body, 'mt-1.5 break-words text-danger/90')}>{detail}</div>
+        ) : null}
+        <p className={cn(TYPE_SCALE.caption, 'mt-2 text-danger/80')}>
+          No result is shown above, because there is no result — this is a failure, not a
+          value of zero.
+        </p>
+        {onRetry ? (
+          <button
+            type="button"
+            onClick={onRetry}
+            className="mt-3 rounded border border-danger-line px-3 py-1.5 font-mono text-label-md uppercase text-danger hover:bg-danger-line/20"
+          >
+            Try again
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 }

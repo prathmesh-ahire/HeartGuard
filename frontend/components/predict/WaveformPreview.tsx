@@ -276,7 +276,7 @@ export function WaveformPreview({
   }
 
   return (
-    <figure className={cn('rounded-lg border border-slate-200 p-4 dark:border-slate-800', className)}>
+    <figure className={cn('rounded-lg border border-line p-4', className)}>
       <figcaption className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mb-2')}>
         {label} — the raw file as the browser decoded it. This is not the signal the model
         scored: preprocessing resamples, band-pass filters and normalizes it first.

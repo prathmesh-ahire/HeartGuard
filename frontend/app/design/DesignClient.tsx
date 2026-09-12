@@ -19,6 +19,7 @@ import { Hero3D } from '@/components/three/Hero3D';
 import { Badge } from '@/components/ui/Badge';
 import { FileUpload } from '@/components/ui/FileUpload';
 import { GlassCard } from '@/components/ui/GlassCard';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { StatTile } from '@/components/ui/StatTile';
 import { Tabs } from '@/components/ui/Tabs';
@@ -68,22 +69,14 @@ export function DesignClient({ tables }: { tables: SampledTables }) {
 
   return (
     <TooltipProvider>
-      <div className="space-y-12">
-        <SectionHeader
-          level={1}
-          eyebrow="Design system reference"
+      <div className="space-y-6">
+        <PageHeader
           title="Components, in every state"
-          description={
-            <>
-              Every component the dashboard is built from, rendered in each of its states
-              for visual QA. Nothing on this page is a result. Every value shown is read
-              from the generated payloads rather than typed in, so this page is also a
-              live check that those payloads are usable.
-            </>
-          }
+          lede="Every component the dashboard is built from, rendered in each of its states for visual QA."
+          note="Nothing on this page is a result. Every value shown is read from the generated payloads rather than typed in, so this page is also a live check that those payloads are usable."
         />
 
-        <section className="space-y-4">
+        <section className="space-y-3">
           <SectionHeader
             level={2}
             title="Palette"
@@ -133,7 +126,7 @@ export function DesignClient({ tables }: { tables: SampledTables }) {
               </thead>
               <tbody>
                 {PALETTE_CONTRAST.series.map((entry) => (
-                  <tr key={entry.colour} className="border-t border-slate-200 dark:border-slate-800">
+                  <tr key={entry.colour} className="border-t border-line">
                     <td className="py-1 pr-4 tabular-nums">{entry.index}</td>
                     <td className="py-1 pr-4 font-mono">{entry.colour}</td>
                     <td className="py-1 pr-4 tabular-nums">{entry.on_light_display}</td>
@@ -158,7 +151,7 @@ export function DesignClient({ tables }: { tables: SampledTables }) {
           </div>
         </section>
 
-        <section className="space-y-4">
+        <section className="space-y-3">
           <SectionHeader level={2} title="Type scale" />
           <GlassCard className="space-y-3">
             <p className={TYPE_SCALE.display}>Display</p>
@@ -172,7 +165,7 @@ export function DesignClient({ tables }: { tables: SampledTables }) {
           </GlassCard>
         </section>
 
-        <section className="space-y-4">
+        <section className="space-y-3">
           <SectionHeader
             level={2}
             title="Surfaces"
@@ -200,7 +193,7 @@ export function DesignClient({ tables }: { tables: SampledTables }) {
           </div>
         </section>
 
-        <section className="space-y-4">
+        <section className="space-y-3">
           <SectionHeader
             level={2}
             title="Stat tiles"
@@ -243,7 +236,7 @@ export function DesignClient({ tables }: { tables: SampledTables }) {
           </div>
         </section>
 
-        <section className="space-y-4">
+        <section className="space-y-3">
           <SectionHeader level={2} title="Badges" />
           <div className="flex flex-wrap gap-2">
             <Badge tone="neutral">neutral</Badge>
@@ -258,7 +251,7 @@ export function DesignClient({ tables }: { tables: SampledTables }) {
           </p>
         </section>
 
-        <section className="space-y-4">
+        <section className="space-y-3">
           <SectionHeader level={2} title="Tabs and tooltips" />
           <GlassCard>
             <Tabs
@@ -290,7 +283,7 @@ export function DesignClient({ tables }: { tables: SampledTables }) {
                     <Tooltip content="Tooltip content is text, or a pre-formatted display string. Never a number computed here.">
                       <button
                         type="button"
-                        className="rounded border border-slate-300 px-3 py-1.5 text-sm dark:border-slate-700"
+                        className="rounded border border-line px-3 py-1.5 text-sm"
                       >
                         Hover or focus me
                       </button>
@@ -302,7 +295,7 @@ export function DesignClient({ tables }: { tables: SampledTables }) {
           </GlassCard>
         </section>
 
-        <section className="space-y-4">
+        <section className="space-y-3">
           <SectionHeader
             level={2}
             title="Loading, empty and error"
@@ -327,7 +320,7 @@ export function DesignClient({ tables }: { tables: SampledTables }) {
           </div>
         </section>
 
-        <section className="space-y-4">
+        <section className="space-y-3">
           <SectionHeader
             level={2}
             title="Recording upload"
@@ -359,8 +352,8 @@ export function DesignClient({ tables }: { tables: SampledTables }) {
                     className={cn(
                       'rounded border px-3 py-1.5 text-sm',
                       phase === state
-                        ? 'border-sky-600 font-medium text-sky-700 dark:border-sky-400 dark:text-sky-300'
-                        : 'border-slate-300 dark:border-slate-700',
+                        ? 'border-accent font-medium text-accent-strong'
+                        : 'border-line',
                     )}
                   >
                     {state}
@@ -383,7 +376,7 @@ export function DesignClient({ tables }: { tables: SampledTables }) {
             and that the fallback is a designed panel rather than a broken
             box. All three are visible here.
         ------------------------------------------------------------------- */}
-        <section className="space-y-4">
+        <section className="space-y-3">
           <SectionHeader
             level={2}
             title="3D layer"
@@ -396,10 +389,10 @@ export function DesignClient({ tables }: { tables: SampledTables }) {
               'data behind it.'
             }
           />
-          <Hero3D className="rounded-lg border border-slate-200 dark:border-slate-800" />
+          <Hero3D className="rounded-lg border border-line" />
         </section>
 
-        <section className="space-y-4">
+        <section className="space-y-3">
           <SectionHeader
             level={2}
             title="Ensemble vote"
@@ -413,7 +406,7 @@ export function DesignClient({ tables }: { tables: SampledTables }) {
           <EnsembleVote />
         </section>
 
-        <section className="space-y-4">
+        <section className="space-y-3">
           <SectionHeader
             level={2}
             title="Pipeline walkthrough"
@@ -427,7 +420,7 @@ export function DesignClient({ tables }: { tables: SampledTables }) {
           <PipelineWalkthrough />
         </section>
 
-        <section className="space-y-4">
+        <section className="space-y-3">
           <SectionHeader
             level={2}
             title="Reveal"
@@ -455,7 +448,7 @@ export function DesignClient({ tables }: { tables: SampledTables }) {
             experiments are still being written. An empty axis would be
             indistinguishable from a real result of zero.
         ------------------------------------------------------------------- */}
-        <section className="space-y-4">
+        <section className="space-y-3">
           <SectionHeader
             level={2}
             title="Charts"
@@ -517,7 +510,7 @@ export function DesignClient({ tables }: { tables: SampledTables }) {
           </div>
         </section>
 
-        <section className="space-y-4">
+        <section className="space-y-3">
           <SectionHeader
             level={2}
             title="Results table"
@@ -532,7 +525,7 @@ export function DesignClient({ tables }: { tables: SampledTables }) {
         </section>
 
 
-        <section className="space-y-4">
+        <section className="space-y-3">
           <SectionHeader
             level={2}
             title="Recording viewer"

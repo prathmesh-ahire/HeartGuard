@@ -19,7 +19,7 @@ import { objectives } from '@/lib/generated';
 export function Objectives({ className }: { className?: string }) {
   return (
     <div className={className}>
-      <p className="max-w-3xl text-sm text-slate-600 dark:text-slate-400">
+      <p className="max-w-3xl text-sm text-ink-2">
         {objectives.locked_notice}
       </p>
 
@@ -27,10 +27,10 @@ export function Objectives({ className }: { className?: string }) {
         {objectives.objectives.map((objective) => (
           <li
             key={objective.number}
-            className="rounded-lg border border-slate-200 bg-white/60 p-5 dark:border-slate-800 dark:bg-slate-900/40"
+            className="rounded-lg border border-line bg-panel/60 p-5"
           >
             <div className="flex items-baseline justify-between gap-3">
-              <h3 className="text-xs font-semibold uppercase tracking-widest text-sky-700 dark:text-sky-400">
+              <h3 className="text-xs font-semibold uppercase tracking-widest text-accent-strong">
                 {objective.label}
               </h3>
               <span
@@ -44,17 +44,17 @@ export function Objectives({ className }: { className?: string }) {
               </span>
             </div>
 
-            <p className="mt-1 text-sm font-medium text-slate-800 dark:text-slate-200">
+            <p className="mt-1 text-sm font-medium text-ink">
               {objective.handle}
             </p>
 
             {/* The locked wording. Quoted exactly; nothing added inside it. */}
-            <blockquote className="mt-3 border-l-2 border-slate-300 pl-4 text-slate-700 dark:border-slate-700 dark:text-slate-300">
+            <blockquote className="mt-3 border-l-2 border-line pl-4 text-ink-2">
               {objective.wording}
             </blockquote>
 
             {objective.caveat ? (
-              <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">{objective.caveat}</p>
+              <p className="mt-3 text-sm text-ink-2">{objective.caveat}</p>
             ) : null}
 
             {objective.pending_reason ? (
@@ -63,7 +63,7 @@ export function Objectives({ className }: { className?: string }) {
               </p>
             ) : null}
 
-            <dl className="mt-4 space-y-1 text-xs text-slate-500 dark:text-slate-500">
+            <dl className="mt-4 space-y-1 text-xs text-ink-3">
               <div className="flex gap-2">
                 <dt className="shrink-0">Implemented in</dt>
                 <dd className="font-mono">{objective.modules.join(', ')}</dd>
@@ -85,7 +85,7 @@ export function Objectives({ className }: { className?: string }) {
         ))}
       </ol>
 
-      <div className="mt-6 rounded border border-slate-200 p-4 text-xs text-slate-500 dark:border-slate-800 dark:text-slate-500">
+      <div className="mt-6 rounded border border-line p-4 text-xs text-ink-3">
         <p>
           Quoted from {objectives.source}, section 1, page {objectives.source_page}. Source
           sha256 <span className="font-mono">{objectives.source_sha256.slice(0, 16)}</span>.

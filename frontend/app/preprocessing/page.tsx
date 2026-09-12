@@ -3,6 +3,8 @@ import type { Metadata } from 'next';
 import { SignalExplorer } from '@/app/preprocessing/SignalExplorer';
 import { FigureDownload } from '@/components/charts/FigureDownload';
 import { ResultsTable } from '@/components/table/ResultsTable';
+import { GlassCard } from '@/components/ui/GlassCard';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { figure } from '@/lib/generated/figures';
 import { table } from '@/lib/generated/tables';
@@ -28,18 +30,18 @@ export const metadata: Metadata = {
  */
 export default function Page() {
   return (
-    <div className="space-y-14">
-      <section>
-        <h1 className="text-3xl font-semibold tracking-tight">Signal Preprocessing</h1>
-        <p className="mt-3 max-w-3xl text-slate-600 dark:text-slate-400">
-          Every recording passes through the same six steps before a feature is
-          computed: load, collapse to mono, resample to the working rate, measure
-          quality, band-pass filter, normalize. The corpora arrive at 2 kHz, 4 kHz and
-          44.1 kHz, so resampling is not a formality — it is what makes a feature
-          computed on a PASCAL A recording comparable to the same feature on a
-          PhysioNet one.
-        </p>
-      </section>
+    <div className="space-y-6">
+      <PageHeader
+        title="Signal Preprocessing"
+        lede={
+          <>
+            Every recording passes through the same six steps before a feature is
+            computed: load, collapse to mono, resample to the working rate, measure
+            quality, band-pass filter, normalize.
+          </>
+        }
+        note="The corpora arrive at 2 kHz, 4 kHz and 44.1 kHz, so resampling is not a formality — it is what makes a feature computed on a PASCAL A recording comparable to the same feature on a PhysioNet one."
+      />
 
       {/* ----------------------------------------------------------------- */}
       <section>
@@ -49,7 +51,7 @@ export default function Page() {
           description="Pick a recording, then switch the filter and normalization stages on and off. The four combinations were all computed by the pipeline's own functions and exported; nothing is filtered in your browser."
           level={2}
         />
-        <div className="mt-6">
+        <div className="mt-4">
           <SignalExplorer />
         </div>
       </section>
@@ -57,11 +59,12 @@ export default function Page() {
       {/* ----------------------------------------------------------------- */}
       <section>
         <SectionHeader eyebrow="T04" title="Preprocessing configuration" level={2} />
-        <ResultsTable
-          className="mt-5"
-          table={table('T04')}
-          caption="The settings every record was processed with, read from the pipeline configuration rather than restated. Two runs of the same command produce identical numbers only because these are fixed."
-        />
+        <GlassCard className="mt-4" bodyClassName="p-3">
+          <ResultsTable
+            table={table('T04')}
+            caption="The settings every record was processed with, read from the pipeline configuration rather than restated. Two runs of the same command produce identical numbers only because these are fixed."
+          />
+        </GlassCard>
       </section>
 
       {/* ----------------------------------------------------------------- */}
@@ -72,9 +75,9 @@ export default function Page() {
           description="The interactive view above is strided to a display budget. This figure is the same comparison at full sample resolution, rendered at 300 dpi."
           level={2}
         />
-        <div className="mt-5">
+        <GlassCard className="mt-4" eyebrow="G05" title="Filtered against raw, full resolution">
           <FigureDownload figureId="G05" />
-        </div>
+        </GlassCard>
       </section>
 
       {/* ----------------------------------------------------------------- */}
@@ -85,11 +88,15 @@ export default function Page() {
           description="Two panels on one shared colour scale, so the two are directly comparable. Served as the canonical figure: the underlying grid is 514 frequency bins across 47 time frames and does not belong in a page bundle."
           level={2}
         />
-        <div className="mt-5 grid gap-6 lg:grid-cols-2">
-          <FigureDownload figureId="G06" />
-          <FigureDownload figureId="G09" />
+        <div className="mt-4 grid gap-3 lg:grid-cols-2">
+          <GlassCard eyebrow="G06" title="Spectrogram, shared colour scale">
+            <FigureDownload figureId="G06" />
+          </GlassCard>
+          <GlassCard eyebrow="G09" title="Wavelet decomposition">
+            <FigureDownload figureId="G09" />
+          </GlassCard>
         </div>
-        <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
+        <p className="mt-3 text-sm text-ink-2">
           G09 is the wavelet decomposition of the same signal. Its sub-bands span three
           orders of magnitude, so each is drawn on its own y-axis — a shared axis would
           render the detail bands as flat lines and imply they carry nothing.
@@ -97,11 +104,8 @@ export default function Page() {
       </section>
 
       {/* ----------------------------------------------------------------- */}
-      <section className="rounded-lg border border-slate-200 p-5 text-sm text-slate-600 dark:border-slate-800 dark:text-slate-400">
-        <h2 className="text-sm font-semibold uppercase tracking-widest text-slate-500">
-          Provenance
-        </h2>
-        <p className="mt-2">
+      <GlassCard as="section" eyebrow="Provenance" bodyClassName="text-body-sm text-ink-2">
+        <p>
           Figures on this page were generated by{' '}
           <span className="font-mono">scripts/19_data_graphs.py</span> and are registered
           in the figure registry with the sha256 of the CSV each was plotted from. The
@@ -115,7 +119,7 @@ export default function Page() {
           numeric content is in{' '}
           <span className="font-mono">outputs/13_figures_diagrams/</span>.
         </p>
-      </section>
+      </GlassCard>
     </div>
   );
 }

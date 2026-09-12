@@ -175,7 +175,7 @@ export function RecordingViewer({ className }: { className?: string }) {
           className={cn(
             TYPE_SCALE.body,
             'rounded border px-3 py-1.5 disabled:opacity-50',
-            'border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800',
+            'border-line hover:bg-sunken',
           )}
         >
           {playing ? 'Pause' : 'Play'}
@@ -211,7 +211,7 @@ export function RecordingViewer({ className }: { className?: string }) {
             <li key={entry.key} className={cn(TYPE_SCALE.caption, 'flex items-center gap-2')}>
               <span
                 aria-hidden="true"
-                className="inline-block h-3 w-3 rounded-sm border border-slate-400/60"
+                className="inline-block h-3 w-3 rounded-sm border border-line-strong/60"
                 style={{
                   backgroundColor:
                     PHASE_COLOR[entry.key] === undefined

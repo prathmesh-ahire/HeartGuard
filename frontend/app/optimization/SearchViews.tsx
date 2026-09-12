@@ -71,24 +71,26 @@ export function ConvergencePanel({ run }: { run: Run }) {
   }, [convergence, dark]);
 
   return (
-    <article className="rounded-lg border border-slate-200 p-5 dark:border-slate-800">
-      <header className="flex flex-wrap items-baseline justify-between gap-2">
-        <h3 className="font-medium">
-          <span className="font-mono text-sky-700 dark:text-sky-400">{run.run_id}</span>{' '}
+    <article className="overflow-hidden rounded-xl border border-line bg-panel shadow-panel">
+      <header className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-4 py-2.5">
+        <h3 className="flex flex-wrap items-baseline gap-2 text-headline-sm text-ink">
+          <span className="rounded border border-accent-line bg-accent-soft px-1.5 py-0.5 font-mono text-label-md uppercase text-accent-deep">
+            {run.run_id}
+          </span>
           {run.title}
         </h3>
         {!run.available ? (
-          <span className="rounded-full bg-amber-50 px-2 py-0.5 text-xs text-amber-800 dark:bg-amber-950/50 dark:text-amber-300">
+          <span className="rounded border border-amber-300 bg-amber-50 px-1.5 py-0.5 font-mono text-label-sm uppercase text-amber-900 dark:border-amber-900 dark:bg-amber-950/50 dark:text-amber-200">
             not run
           </span>
         ) : null}
       </header>
-      <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">{run.description}</p>
+      <p className="px-4 pt-3 text-body-md text-ink-2">{run.description}</p>
 
       {convergence?.available ? (
         <>
           <EChart
-            className="mt-4"
+            className="telemetry-grid mt-3 p-3"
             option={option}
             ariaLabel={'Convergence for ' + run.run_id}
             height={260}
@@ -105,7 +107,7 @@ export function ConvergencePanel({ run }: { run: Run }) {
         </>
       ) : (
         <EmptyState
-          className="mt-4"
+          className="m-4"
           title="No convergence trace for this run"
           description={
             convergence?.reason ??
@@ -143,9 +145,9 @@ export function FrameTable({
 
   return (
     <div className={className}>
-      <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-800">
-        <table className="min-w-full text-left text-sm">
-          <thead className="bg-slate-50 text-xs uppercase tracking-widest text-slate-500 dark:bg-slate-900/60">
+      <div className="overflow-x-auto rounded-lg border border-line bg-panel">
+        <table className="min-w-full border-collapse text-left text-body-sm">
+          <thead className="border-b-2 border-line bg-sunken font-mono text-label-sm uppercase text-ink-3">
             <tr>
               {frame.columns.map((column) => (
                 <th key={column.name} scope="col" className="whitespace-nowrap px-3 py-2">
@@ -156,13 +158,13 @@ export function FrameTable({
           </thead>
           <tbody>
             {Array.from({ length: shown }, (_unused, row) => (
-              <tr key={row} className="border-t border-slate-100 dark:border-slate-800">
+              <tr key={row} className="border-t border-line hover:bg-accent-soft/40">
                 {frame.columns.map((column) => (
                   <td
                     key={column.name}
                     className={cn(
                       'whitespace-nowrap px-3 py-1.5',
-                      column.values === null ? '' : 'tabular-nums',
+                      column.values === null ? '' : 'stat',
                     )}
                   >
                     {column.display[row]}
@@ -173,13 +175,13 @@ export function FrameTable({
           </tbody>
         </table>
       </div>
-      <p className="mt-2 text-xs text-slate-500 dark:text-slate-500">
+      <p className="mt-2 font-mono text-body-sm text-ink-3">
         {shown} of {frame.n_rows} rows from {frame.source}.{' '}
         {frame.n_rows > maxRows ? (
           <button
             type="button"
             onClick={() => setExpanded((current) => !current)}
-            className="underline"
+            className="text-accent-strong underline decoration-dotted underline-offset-2 hover:decoration-solid"
           >
             {expanded ? 'Show fewer' : 'Show all rows'}
           </button>

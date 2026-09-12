@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { cn } from '@/lib/cn';
+import { GlassCard } from '@/components/ui/GlassCard';
 import { Badge } from '@/components/ui/Badge';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/States';
 import { FileUpload, type UploadPhase } from '@/components/ui/FileUpload';
@@ -174,10 +175,10 @@ export function PredictionPanel({
                 }}
                 aria-pressed={entry.task === task}
                 className={cn(
-                  'rounded border px-3 py-1.5 text-sm font-medium',
+                  'rounded-lg border px-3 py-1.5 font-mono text-label-md uppercase transition-all',
                   entry.task === task
-                    ? 'border-sky-600 bg-sky-600 text-white dark:border-sky-500 dark:bg-sky-500'
-                    : 'border-slate-300 hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800',
+                    ? 'border-accent-strong bg-accent text-on-accent shadow-accent'
+                    : 'border-line bg-panel text-ink-2 hover:border-accent-line hover:text-accent-strong',
                 )}
               >
                 {entry.label}
@@ -189,7 +190,7 @@ export function PredictionPanel({
 
       {spec !== undefined ? (
         <p className={cn(TYPE_SCALE.body, SURFACE.muted, 'mb-6 max-w-prose')}>
-          <span className="font-medium text-slate-900 dark:text-slate-100">{spec.title}.</span>{' '}
+          <span className="font-medium text-ink">{spec.title}.</span>{' '}
           {spec.description} Classes: {spec.classes.join(', ')}.
         </p>
       ) : null}
@@ -209,9 +210,8 @@ export function PredictionPanel({
           }
         />
       ) : (
-        <div className="grid gap-6 lg:grid-cols-2">
-          <div>
-            <h3 className={cn(TYPE_SCALE.h3, 'mb-3')}>1. Choose a recording</h3>
+        <div className="grid items-start gap-3 lg:grid-cols-2">
+          <GlassCard eyebrow="Step 1 · intake" title="Choose a recording">
 
             {pageSamples.length > 0 ? (
               <div className="mb-5">
@@ -239,15 +239,17 @@ export function PredictionPanel({
                             reset();
                           }}
                           className={cn(
-                            'w-full rounded border px-3 py-2 text-left text-sm',
+                            'w-full rounded-lg border px-3 py-2 text-left text-body-sm transition-colors',
                             active
-                              ? 'border-sky-600 bg-sky-50 dark:border-sky-500 dark:bg-sky-950/40'
-                              : 'border-slate-300 hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800',
+                              ? 'border-accent bg-accent-soft shadow-panel'
+                              : 'border-line bg-sunken hover:border-accent-line',
                             !reachable && 'cursor-not-allowed opacity-55',
                           )}
                         >
                           <span className="flex flex-wrap items-baseline justify-between gap-2">
-                            <span className="font-mono">{entry.record_uid}</span>
+                            <span className="font-mono text-label-lg text-ink">
+                              {entry.record_uid}
+                            </span>
                             <span className={cn(TYPE_SCALE.caption, SURFACE.muted)}>
                               {entry.dataset_name} · {entry.duration_display}
                             </span>
@@ -290,11 +292,16 @@ export function PredictionPanel({
               onClick={() => void run()}
               disabled={busy || (file === null && chosenSample === null)}
               className={cn(
-                'mt-4 w-full rounded px-4 py-2 text-sm font-semibold text-white',
-                'bg-sky-700 hover:bg-sky-800 disabled:opacity-50 dark:bg-sky-600 dark:hover:bg-sky-500',
+                'mt-4 flex w-full items-center justify-center gap-2 rounded-lg border',
+                'border-accent-strong bg-accent px-4 py-2.5 font-mono text-label-lg uppercase',
+                'text-on-accent shadow-accent transition-all hover:bg-accent-strong',
+                'active:scale-[0.99] disabled:opacity-50 disabled:shadow-none',
               )}
             >
-              {busy ? 'Scoring…' : '2. Run the screening model'}
+              {busy ? (
+                <span className="h-2 w-2 rounded-full bg-current animate-pulse-subtle" />
+              ) : null}
+              {busy ? 'Scoring…' : 'Step 2 · run the screening model'}
             </button>
 
             {probeFailed !== null ? (
@@ -308,12 +315,11 @@ export function PredictionPanel({
                 {probeFailed}
               </p>
             ) : null}
-          </div>
+          </GlassCard>
 
-          <div>
-            <h3 className={cn(TYPE_SCALE.h3, 'mb-3')}>3. Result</h3>
+          <GlassCard eyebrow="Step 3 · result" title="Screening indication">
             <WaveformPreview
-              className="mb-4"
+              className="telemetry-grid mb-3 rounded-lg border border-line p-2"
               source={
                 file ?? (chosenSample !== null ? sampleAudioUrl(chosenSample) : null)
               }
@@ -340,12 +346,15 @@ export function PredictionPanel({
                 description="Pick a recording on the left and run the model. Nothing is shown here until a real prediction comes back."
               />
             ) : null}
-          </div>
+          </GlassCard>
         </div>
       )}
 
-      <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mt-8')}>
-        <Badge tone="neutral">Operating point</Badge> {prediction.operating_point.note}
+      <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mt-4 flex flex-wrap items-center gap-2')}>
+        <Badge tone="neutral" dot>
+          Operating point
+        </Badge>
+        {prediction.operating_point.note}
       </p>
     </div>
   );

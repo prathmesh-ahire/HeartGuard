@@ -50,7 +50,7 @@ export function EvidenceFilter({ total }: { total: number }) {
         value={query}
         onChange={(event) => setQuery(event.target.value)}
         placeholder="table id, figure id, file name…"
-        className="w-72 rounded border border-slate-300 bg-white px-2 py-1 dark:border-slate-700 dark:bg-slate-900"
+        className="w-72 rounded border border-line bg-panel px-2 py-1"
       />
       <span className={SURFACE.subtle}>
         {shown} of {total} entries

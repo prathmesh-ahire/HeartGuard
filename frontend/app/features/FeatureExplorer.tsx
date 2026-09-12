@@ -50,13 +50,13 @@ export function FeatureExplorer() {
 
   return (
     <div>
-      <div className="flex flex-wrap items-end gap-3 rounded-lg border border-slate-200 p-4 dark:border-slate-800">
-        <label className="flex flex-col gap-1 text-xs">
-          <span className="uppercase tracking-widest text-slate-500">Family</span>
+      <div className="flex flex-wrap items-end gap-3 rounded-lg border border-line p-4">
+        <label className="flex flex-col gap-1.5">
+          <span className="label-micro">Family</span>
           <select
             value={family}
             onChange={(event) => setFamily(event.target.value)}
-            className="rounded border border-slate-300 bg-white px-2 py-1.5 text-sm dark:border-slate-700 dark:bg-slate-900"
+            className="rounded border border-line bg-sunken px-2 py-1.5 font-mono text-label-md text-ink focus:border-accent focus:outline-none"
           >
             <option value="">all families</option>
             {features.families.map((item) => (
@@ -67,33 +67,33 @@ export function FeatureExplorer() {
           </select>
         </label>
 
-        <label className="flex flex-col gap-1 text-xs">
-          <span className="uppercase tracking-widest text-slate-500">Name or description</span>
+        <label className="flex flex-col gap-1.5">
+          <span className="label-micro">Name or description</span>
           <input
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="mfcc, entropy, centroid&hellip;"
-            className="w-64 rounded border border-slate-300 bg-white px-2 py-1.5 text-sm dark:border-slate-700 dark:bg-slate-900"
+            className="w-64 rounded border border-line bg-panel px-2 py-1.5 text-sm"
           />
         </label>
 
         {vector.available ? (
-          <label className="flex items-center gap-2 text-sm">
+          <label className="flex items-center gap-2 text-body-md text-ink-2">
             <input
               type="checkbox"
               checked={showVector}
               onChange={(event) => setShowVector(event.target.checked)}
-              className="h-4 w-4"
+              className="h-4 w-4 accent-accent"
             />
             Show one record&rsquo;s values
           </label>
         ) : null}
       </div>
 
-      <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
+      <p className="mt-3 text-sm text-ink-2">
         Showing{' '}
-        <span className="tabular-nums font-medium text-slate-800 dark:text-slate-200">
+        <span className="tabular-nums font-medium text-ink">
           {rows.length}
         </span>{' '}
         of {features.n_features} features, in registry order. This is a count of your
@@ -107,9 +107,9 @@ export function FeatureExplorer() {
           description="Loosen the filter or reset it. The whole registry is loaded."
         />
       ) : (
-        <div className="mt-4 max-h-[36rem] overflow-auto rounded-lg border border-slate-200 dark:border-slate-800">
+        <div className="mt-4 max-h-[36rem] overflow-auto rounded-lg border border-line">
           <table className="min-w-full text-left text-sm">
-            <thead className="sticky top-0 bg-slate-50 text-xs uppercase tracking-widest text-slate-500 dark:bg-slate-900">
+            <thead className="sticky top-0 border-b-2 border-line bg-sunken font-mono text-label-sm uppercase text-ink-3">
               <tr>
                 <th scope="col" className="px-3 py-2">
                   #
@@ -137,12 +137,12 @@ export function FeatureExplorer() {
               {rows.map((item) => (
                 <tr
                   key={item.index}
-                  className="border-t border-slate-100 dark:border-slate-800"
+                  className="border-t border-line"
                 >
-                  <td className="px-3 py-1.5 tabular-nums text-slate-500">{item.index}</td>
+                  <td className="px-3 py-1.5 tabular-nums text-ink-3">{item.index}</td>
                   <td className="px-3 py-1.5 font-mono">{item.name}</td>
                   <td className="px-3 py-1.5">{item.family}</td>
-                  <td className="px-3 py-1.5 text-slate-500">{item.extractor}</td>
+                  <td className="px-3 py-1.5 text-ink-3">{item.extractor}</td>
                   <td className="px-3 py-1.5 tabular-nums">{item.abs_cohens_d_display}</td>
                   {showVector && vector.available ? (
                     <td className="px-3 py-1.5 tabular-nums">
@@ -157,13 +157,13 @@ export function FeatureExplorer() {
       )}
 
       {showVector && vector.available ? (
-        <p className="mt-3 text-xs text-slate-500 dark:text-slate-500">
+        <p className="mt-3 text-xs text-ink-3">
           Values are for record <span className="font-mono">{vector.record_uid}</span>.{' '}
           {vector.note} Read from {vector.source}.
         </p>
       ) : null}
 
-      <p className="mt-2 text-xs text-slate-500 dark:text-slate-500">
+      <p className="mt-2 text-xs text-ink-3">
         Cohen&rsquo;s d is the class separation measured in
         outputs/03_features/feature_class_separation.csv. It describes one feature in
         isolation and is not a model result: a feature with a small d can still matter

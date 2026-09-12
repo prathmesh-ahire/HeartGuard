@@ -25,7 +25,10 @@ export function SectionHeader({
     <div className={cn('flex flex-wrap items-start justify-between gap-4', className)}>
       <div className="max-w-3xl">
         {eyebrow ? (
-          <p className={cn(TYPE_SCALE.micro, SURFACE.subtle)}>{eyebrow}</p>
+          <p className={cn(TYPE_SCALE.micro, SURFACE.subtle, 'flex items-center gap-2')}>
+            <span aria-hidden="true" className="h-2.5 w-0.5 shrink-0 bg-accent" />
+            {eyebrow}
+          </p>
         ) : null}
         <Heading className={cn(size, eyebrow && 'mt-1')}>{title}</Heading>
         {description ? (

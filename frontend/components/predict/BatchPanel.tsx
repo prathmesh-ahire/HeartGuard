@@ -160,8 +160,8 @@ export function BatchPanel({ task, className }: { task: string; className?: stri
         <label
           htmlFor="batch-files"
           className={cn(
-            'cursor-pointer rounded border border-slate-300 px-3 py-1.5 text-sm font-medium',
-            'hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800',
+            'cursor-pointer rounded border border-line px-3 py-1.5 text-sm font-medium',
+            'hover:bg-sunken',
             running && 'pointer-events-none opacity-60',
           )}
         >
@@ -172,8 +172,8 @@ export function BatchPanel({ task, className }: { task: string; className?: stri
           onClick={download}
           disabled={rows.length === 0 || running}
           className={cn(
-            'rounded border border-slate-300 px-3 py-1.5 text-sm font-medium',
-            'hover:bg-slate-100 disabled:opacity-50 dark:border-slate-700 dark:hover:bg-slate-800',
+            'rounded border border-line px-3 py-1.5 text-sm font-medium',
+            'hover:bg-sunken disabled:opacity-50',
           )}
         >
           Export results as CSV
@@ -193,9 +193,9 @@ export function BatchPanel({ task, className }: { task: string; className?: stri
           description="Recordings are sent one at a time: the service does real preprocessing and feature extraction per file, so parallel uploads would only make each one slower."
         />
       ) : (
-        <div className="mt-4 overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-800">
+        <div className="mt-4 overflow-x-auto rounded-lg border border-line">
           <table className="min-w-full text-left text-sm">
-            <thead className="bg-slate-50 text-xs uppercase tracking-widest text-slate-500 dark:bg-slate-900/60">
+            <thead className="border-b-2 border-line bg-sunken font-mono text-label-sm uppercase text-ink-3">
               <tr>
                 <th scope="col" className="px-3 py-2">File</th>
                 <th scope="col" className="px-3 py-2">Indication</th>
@@ -206,7 +206,7 @@ export function BatchPanel({ task, className }: { task: string; className?: stri
             </thead>
             <tbody>
               {rows.map((row) => (
-                <tr key={row.name} className="border-t border-slate-100 dark:border-slate-800">
+                <tr key={row.name} className="border-t border-line">
                   <td className="px-3 py-1.5 font-mono">{row.name}</td>
                   <td className="px-3 py-1.5">
                     {row.result?.predicted_class ?? (row.status === 'failed' ? '—' : '…')}

@@ -22,10 +22,12 @@ export function DisclaimerBanner() {
     <div
       role="note"
       aria-label="Scope and safety notice"
-      className="border-b border-amber-300 bg-amber-50 px-4 py-2 text-center text-xs leading-relaxed text-amber-900 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-200"
+      className="flex items-start gap-2 border-b border-line bg-sunken px-4 py-1.5 text-body-sm leading-relaxed text-ink-2 lg:px-6"
     >
-      <span className="font-semibold">Screening and research use only.</span>{' '}
-      {DISCLAIMER_TEXT}
+      <span className="mt-px shrink-0 rounded border border-accent-line bg-accent-soft px-1.5 py-0.5 font-mono text-label-sm uppercase text-accent-deep">
+        Screening only
+      </span>
+      <span className="min-w-0">{DISCLAIMER_TEXT}</span>
     </div>
   );
 }

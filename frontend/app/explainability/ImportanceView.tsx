@@ -31,7 +31,7 @@ export function ImportanceView({ groups }: { groups: Group[] }) {
           <select
             value={index}
             onChange={(event) => setIndex(Number(event.target.value))}
-            className="rounded border border-slate-300 bg-white px-2 py-1 dark:border-slate-700 dark:bg-slate-900"
+            className="rounded border border-line bg-panel px-2 py-1"
           >
             {groups.map((item, position) => (
               <option key={item.task + item.model_id + item.kind} value={position}>

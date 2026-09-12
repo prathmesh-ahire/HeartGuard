@@ -96,7 +96,7 @@ export function LastPrediction() {
           </p>
           <table className="w-full border-collapse text-left">
             <thead>
-              <tr className={cn(TYPE_SCALE.caption, 'border-b border-slate-300 dark:border-slate-700')}>
+              <tr className={cn(TYPE_SCALE.caption, 'border-b border-line')}>
                 <th scope="col" className="px-2 py-1.5">Feature</th>
                 <th scope="col" className="px-2 py-1.5">Family</th>
                 <th scope="col" className="px-2 py-1.5">Value</th>
@@ -111,7 +111,7 @@ export function LastPrediction() {
                   largest > 0 && row.contribution !== null ? Math.abs(row.contribution) / largest : 0;
                 const positive = (row.contribution ?? 0) > 0;
                 return (
-                  <tr key={row.feature} className="border-b border-slate-200 dark:border-slate-800">
+                  <tr key={row.feature} className="border-b border-line">
                     <td className={cn(TYPE_SCALE.caption, 'px-2 py-1 font-mono')}>{row.feature}</td>
                     <td className={cn(TYPE_SCALE.caption, 'px-2 py-1')}>{row.family}</td>
                     <td className={cn(TYPE_SCALE.caption, 'px-2 py-1 tabular-nums')}>{row.value_display}</td>
@@ -123,7 +123,7 @@ export function LastPrediction() {
                       <span className="flex items-center gap-2">
                         <span
                           aria-hidden="true"
-                          className={cn('h-2.5 rounded-sm', positive ? 'bg-rose-500' : 'bg-sky-600')}
+                          className={cn('h-2.5 rounded-sm', positive ? 'bg-rose-500' : 'bg-accent')}
                           style={{ width: String(size * 6) + 'rem' }}
                         />
                         <span className="tabular-nums">{row.contribution_display}</span>

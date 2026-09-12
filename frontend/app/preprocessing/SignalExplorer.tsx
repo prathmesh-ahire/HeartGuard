@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 
+import { GlassCard } from '@/components/ui/GlassCard';
 import { SignalChart } from '@/components/charts/SignalChart';
 import { EmptyState } from '@/components/ui/States';
 import { preprocessingExamples as examples } from '@/lib/generated/signals';
@@ -83,13 +84,13 @@ export function SignalExplorer() {
   return (
     <div>
       {/* ---------------------------------------------------------------- */}
-      <div className="flex flex-wrap items-end gap-4 rounded-lg border border-slate-200 p-4 dark:border-slate-800">
-        <label className="flex flex-col gap-1 text-xs">
-          <span className="uppercase tracking-widest text-slate-500">Recording</span>
+      <div className="flex flex-wrap items-end gap-4 rounded-xl border border-line bg-panel px-4 py-3 shadow-panel">
+        <label className="flex flex-col gap-1.5">
+          <span className="label-micro">Recording</span>
           <select
             value={record.key}
             onChange={(event) => setRecordKey(event.target.value)}
-            className="rounded border border-slate-300 bg-white px-2 py-1.5 text-sm dark:border-slate-700 dark:bg-slate-900"
+            className="rounded border border-line bg-sunken px-2 py-1.5 font-mono text-label-md text-ink focus:border-accent focus:outline-none"
           >
             {examples.records.map((item) => (
               <option key={item.key} value={item.key}>
@@ -101,41 +102,46 @@ export function SignalExplorer() {
 
         <fieldset className="flex items-center gap-4">
           <legend className="sr-only">Preprocessing stages</legend>
-          <label className="flex items-center gap-2 text-sm">
+          <label className="flex items-center gap-2 text-body-md text-ink-2">
             <input
               type="checkbox"
               checked={useFilter}
               onChange={(event) => setUseFilter(event.target.checked)}
-              className="h-4 w-4"
+              className="h-4 w-4 accent-accent"
             />
             Band-pass filter
           </label>
-          <label className="flex items-center gap-2 text-sm">
+          <label className="flex items-center gap-2 text-body-md text-ink-2">
             <input
               type="checkbox"
               checked={useNormalize}
               onChange={(event) => setUseNormalize(event.target.checked)}
-              className="h-4 w-4"
+              className="h-4 w-4 accent-accent"
             />
             Normalize
           </label>
-          <label className="flex items-center gap-2 text-sm">
+          <label className="flex items-center gap-2 text-body-md text-ink-2">
             <input
               type="checkbox"
               checked={overlay}
               onChange={(event) => setOverlay(event.target.checked)}
-              className="h-4 w-4"
+              className="h-4 w-4 accent-accent"
             />
             Overlay raw
           </label>
         </fieldset>
       </div>
 
-      <p className="mt-3 max-w-3xl text-sm text-slate-600 dark:text-slate-400">{record.note}</p>
+      <p className="mt-3 max-w-3xl text-body-md text-ink-2">{record.note}</p>
 
       {/* ---------------------------------------------------------------- */}
       {overlay ? (
-        <div className="mt-6">
+        <GlassCard
+          className="mt-3"
+          eyebrow="Waveform"
+          title="Raw and processed, shared axis"
+          bodyClassName="telemetry-grid"
+        >
           <SignalChart
             time={record.time_sec}
             series={[
@@ -146,53 +152,60 @@ export function SignalExplorer() {
             caption="One shared amplitude axis. A raw waveform and a normalized one differ by orders of magnitude, so on this axis the smaller of the two is close to flat — that is the axis, not the signal."
             height={320}
           />
-        </div>
+        </GlassCard>
       ) : (
-        <div className="mt-6 grid gap-6 lg:grid-cols-2">
-          <SignalChart
+        <div className="mt-3 grid gap-3 lg:grid-cols-2">
+          <GlassCard eyebrow="Waveform" title="Raw" bodyClassName="telemetry-grid">
+            <SignalChart
             time={record.time_sec}
             series={[{ name: stateLabel('raw'), values: rawSeries, colorIndex: 0 }]}
-            label="Raw waveform"
-            caption="As read from the file, after mono collapse and resampling to the working rate."
-          />
-          <SignalChart
+              label="Raw waveform"
+              caption="As read from the file, after mono collapse and resampling to the working rate."
+            />
+          </GlassCard>
+          <GlassCard
+            eyebrow="Waveform"
+            title={stateLabel(selected)}
+            bodyClassName="telemetry-grid"
+          >
+            <SignalChart
             time={record.time_sec}
             series={[{ name: stateLabel(selected), values: selectedSeries, colorIndex: 1 }]}
             label={stateLabel(selected) + ' waveform'}
-            caption={
-              selected === 'raw'
-                ? 'Both stages off: this is the same series as the panel beside it.'
-                : 'Each axis is scaled to its own series, so both traces are visible.'
-            }
-          />
+              caption={
+                selected === 'raw'
+                  ? 'Both stages off: this is the same series as the panel beside it.'
+                  : 'Each axis is scaled to its own series, so both traces are visible.'
+              }
+            />
+          </GlassCard>
         </div>
       )}
 
       {/* ---------------------------------------------------------------- */}
-      <section className="mt-8">
-        <h3 className="text-sm font-semibold uppercase tracking-widest text-slate-500">
-          Quality indicators for this recording
-        </h3>
-        <dl className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+      <GlassCard
+        as="section"
+        className="mt-3"
+        eyebrow="Signal quality"
+        title="Measured for this recording"
+      >
+        <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-6">
           {record.quality.map((item) => (
-            <div
-              key={item.name}
-              className="rounded border border-slate-200 p-3 dark:border-slate-800"
-            >
-              <dt className="text-xs text-slate-500">{item.label}</dt>
-              <dd className="mt-0.5 tabular-nums font-medium">{item.display}</dd>
+            <div key={item.name} className="rounded-lg border border-line bg-sunken p-2.5">
+              <dt className="label-micro">{item.label}</dt>
+              <dd className="stat mt-1 font-mono text-telemetry-sm text-ink">{item.display}</dd>
             </div>
           ))}
         </dl>
-        <p className="mt-3 text-xs text-slate-500 dark:text-slate-500">
+        <p className="mt-3 text-body-sm text-ink-3">
           Measured during the preprocessing run and read from
           outputs/02_preprocessing/signal_quality_flags.csv. Reported as measurements,
           never graded: no threshold here turns a number into a verdict.
         </p>
-      </section>
+      </GlassCard>
 
       {/* ---------------------------------------------------------------- */}
-      <p className="mt-6 text-xs text-slate-500 dark:text-slate-500">
+      <p className="mt-3 text-body-sm text-ink-3">
         Record <span className="font-mono">{record.record_uid}</span> · native{' '}
         {record.native_fs} Hz, shown at the working rate of {record.fs} Hz ·{' '}
         {examples.window_seconds} s window · {record.n_points} points, every{' '}

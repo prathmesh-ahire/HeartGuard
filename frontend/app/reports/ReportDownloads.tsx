@@ -26,13 +26,13 @@ import { SURFACE, TYPE_SCALE } from '@/lib/tokens';
 
 const BUTTON = cn(
   'rounded border px-3 py-1.5 text-sm font-medium',
-  'border-slate-300 hover:bg-slate-50 disabled:opacity-50',
-  'dark:border-slate-700 dark:hover:bg-slate-800',
+  'border-line hover:bg-sunken disabled:opacity-50',
+  '',
 );
 
 const SELECT = cn(
   'rounded border px-2 py-1 text-sm',
-  'border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-900',
+  'border-line bg-panel',
 );
 
 type Key = 'sample' | 'experiment' | 'objective';

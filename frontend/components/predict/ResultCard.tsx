@@ -52,8 +52,10 @@ export function ProbabilityBars({
         return (
           <li key={name}>
             <div className="flex items-baseline justify-between gap-3">
-              <span className={cn(TYPE_SCALE.body, top && 'font-semibold')}>{name}</span>
-              <span className={cn(TYPE_SCALE.caption, 'tabular-nums', top && 'font-semibold')}>
+              <span className={cn('font-mono text-label-md uppercase', top ? 'text-accent-deep' : 'text-ink-2')}>
+                {name}
+              </span>
+              <span className={cn('stat font-mono text-telemetry-sm', top ? 'text-ink' : 'text-ink-2')}>
                 {result.display.probabilities[name] ?? 'n/a'}
                 <span className={cn(SURFACE.muted, 'ml-2')}>
                   {result.display.probabilities_percent[name] ?? ''}
@@ -61,7 +63,7 @@ export function ProbabilityBars({
               </span>
             </div>
             <div
-              className="mt-1 h-2 w-full overflow-hidden rounded bg-slate-200 dark:bg-slate-800"
+              className="mt-1 h-1.5 w-full overflow-hidden rounded-full border border-line bg-sunken"
               role="img"
               aria-label={name + ' probability ' + (result.display.probabilities[name] ?? 'n/a')}
             >
@@ -103,16 +105,16 @@ export function ResultCard({
     return (
       <section
         className={cn(
-          'rounded-lg border-2 border-amber-400 p-5 dark:border-amber-600',
+          'rounded-xl border-2 border-amber-400 p-4 dark:border-amber-600',
           'bg-amber-50 dark:bg-amber-950/40',
           className,
         )}
         aria-label="Prediction result"
       >
-        <p className={cn(TYPE_SCALE.caption, 'text-amber-900 dark:text-amber-100')}>
+        <p className="font-mono text-label-sm uppercase text-amber-900 dark:text-amber-100">
           Screening indication
         </p>
-        <p className={cn(TYPE_SCALE.h2, 'mt-0.5 text-amber-900 dark:text-amber-100')}>
+        <p className={cn(TYPE_SCALE.h1, 'mt-1 text-amber-900 dark:text-amber-100')}>
           Not scored
         </p>
         <p
@@ -125,15 +127,15 @@ export function ResultCard({
         <dl className={cn(TYPE_SCALE.caption, 'mt-4 grid gap-x-6 gap-y-1 sm:grid-cols-2')}>
           <div className="flex justify-between gap-3">
             <dt className={SURFACE.muted}>Features requested</dt>
-            <dd className="tabular-nums">{result.display.n_features}</dd>
+            <dd className="stat font-mono text-ink">{result.display.n_features}</dd>
           </div>
           <div className="flex justify-between gap-3">
             <dt className={SURFACE.muted}>Features not computable</dt>
-            <dd className="tabular-nums">{result.display.n_missing_features}</dd>
+            <dd className="stat font-mono text-ink">{result.display.n_missing_features}</dd>
           </div>
           <div className="flex justify-between gap-3">
             <dt className={SURFACE.muted}>Duration</dt>
-            <dd className="tabular-nums">{result.display.duration_seconds ?? 'n/a'}</dd>
+            <dd className="stat font-mono text-ink">{result.display.duration_seconds ?? 'n/a'}</dd>
           </div>
           <div className="flex justify-between gap-3">
             <dt className={SURFACE.muted}>Task</dt>
@@ -149,13 +151,17 @@ export function ResultCard({
 
   return (
     <section
-      className={cn('rounded-lg border border-slate-200 p-5 dark:border-slate-800', className)}
+      className={cn(
+        'overflow-hidden rounded-xl border border-line bg-panel shadow-panel',
+        className,
+      )}
       aria-label="Prediction result"
     >
-      <header className="flex flex-wrap items-center justify-between gap-3">
+      <div aria-hidden="true" className="h-0.5 w-full bg-accent" />
+      <header className="flex flex-wrap items-center justify-between gap-3 p-4 pb-0">
         <div>
-          <p className={cn(TYPE_SCALE.caption, SURFACE.muted)}>Screening indication</p>
-          <p className={cn(TYPE_SCALE.h2, 'mt-0.5')}>{result.predicted_class}</p>
+          <p className="label-micro">Screening indication</p>
+          <p className={cn(TYPE_SCALE.h1, 'mt-1 text-ink')}>{result.predicted_class}</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           {result.low_confidence ? (
@@ -189,39 +195,39 @@ export function ResultCard({
 
       <ProbabilityBars result={result} classes={classes} />
 
-      <dl className="mt-5 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
+      <dl className="mx-4 mt-4 grid gap-x-4 gap-y-1.5 border-t border-line pt-3 text-body-sm sm:grid-cols-2">
         <div className="flex justify-between gap-3">
-          <dt className={SURFACE.muted}>Confidence</dt>
-          <dd className="tabular-nums">{result.display.confidence}</dd>
+          <dt className="label-micro">Confidence</dt>
+          <dd className="stat font-mono text-ink">{result.display.confidence}</dd>
         </div>
         <div className="flex justify-between gap-3">
-          <dt className={SURFACE.muted}>Operating point</dt>
-          <dd className="tabular-nums">{result.display.operating_threshold ?? 'argmax'}</dd>
+          <dt className="label-micro">Operating point</dt>
+          <dd className="stat font-mono text-ink">{result.display.operating_threshold ?? 'argmax'}</dd>
         </div>
         <div className="flex justify-between gap-3">
-          <dt className={SURFACE.muted}>Duration</dt>
-          <dd className="tabular-nums">{result.display.duration_seconds ?? 'n/a'}</dd>
+          <dt className="label-micro">Duration</dt>
+          <dd className="stat font-mono text-ink">{result.display.duration_seconds ?? 'n/a'}</dd>
         </div>
         <div className="flex justify-between gap-3">
-          <dt className={SURFACE.muted}>Features used</dt>
-          <dd className="tabular-nums">{result.display.n_features}</dd>
+          <dt className="label-micro">Features used</dt>
+          <dd className="stat font-mono text-ink">{result.display.n_features}</dd>
         </div>
         <div className="flex justify-between gap-3">
-          <dt className={SURFACE.muted}>Features with no value</dt>
-          <dd className="tabular-nums">{result.display.n_missing_features}</dd>
+          <dt className="label-micro">Features with no value</dt>
+          <dd className="stat font-mono text-ink">{result.display.n_missing_features}</dd>
         </div>
         <div className="flex justify-between gap-3">
-          <dt className={SURFACE.muted}>Total inference time</dt>
-          <dd className="tabular-nums">{result.display.timings_seconds.total ?? 'n/a'}</dd>
+          <dt className="label-micro">Total inference time</dt>
+          <dd className="stat font-mono text-ink">{result.display.timings_seconds.total ?? 'n/a'}</dd>
         </div>
       </dl>
 
-      <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mt-4')}>
+      <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mx-4 mt-3')}>
         {result.operating_point_note}
       </p>
 
       {result.model.note ? (
-        <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mt-2')}>
+        <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mx-4 mt-2')}>
           Model {result.model.model_id}: {result.model.note}
         </p>
       ) : null}
@@ -230,7 +236,7 @@ export function ResultCard({
         <ul
           className={cn(
             TYPE_SCALE.caption,
-            'mt-4 list-disc space-y-1 rounded border border-amber-300 bg-amber-50 p-3 pl-7',
+            'mx-4 mt-3 list-disc space-y-1 rounded-lg border border-amber-300 bg-amber-50 p-3 pl-7',
             'text-amber-900 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-100',
           )}
         >
@@ -241,8 +247,8 @@ export function ResultCard({
       ) : null}
 
       {reference !== null ? (
-        <details className="mt-5 rounded border border-slate-200 p-3 dark:border-slate-800">
-          <summary className={cn(TYPE_SCALE.body, 'cursor-pointer font-medium')}>
+        <details className="mx-4 mt-3 rounded-lg border border-line bg-sunken p-3">
+          <summary className="cursor-pointer font-mono text-label-md uppercase text-accent-strong marker:text-accent">
             What {reference.experiment} stored for this recording
           </summary>
           <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mt-2')}>
@@ -252,15 +258,15 @@ export function ResultCard({
             {reference.fold_labels.map((fold, index) => (
               <li key={fold} className="flex justify-between gap-3">
                 <span className="font-mono">{fold}</span>
-                <span className="tabular-nums">
+                <span className="stat font-mono">
                   {reference.probabilities_display[index]}{' '}
                   <span className={SURFACE.muted}>{reference.predicted_classes[index]}</span>
                 </span>
               </li>
             ))}
-            <li className="flex justify-between gap-3 border-t border-slate-200 pt-1 font-medium dark:border-slate-800">
+            <li className="flex justify-between gap-3 border-t border-line pt-1 font-medium">
               <span>mean over {reference.n_repeats} repeats</span>
-              <span className="tabular-nums">{reference.mean_probability_display}</span>
+              <span className="stat font-mono">{reference.mean_probability_display}</span>
             </li>
           </ul>
           <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mt-2')}>
@@ -276,8 +282,7 @@ export function ResultCard({
       <p
         className={cn(
           TYPE_SCALE.caption,
-          'mt-5 rounded border border-sky-300 bg-sky-50 p-3 text-sky-900',
-          'dark:border-sky-800 dark:bg-sky-950/40 dark:text-sky-100',
+          'mt-4 border-t border-accent-line bg-accent-soft p-3 text-accent-deep',
         )}
       >
         {result.disclaimer}

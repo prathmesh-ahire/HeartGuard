@@ -4,6 +4,8 @@ import { DatasetExplorer } from '@/app/dataset/DatasetExplorer';
 import { GroupedBars } from '@/components/charts/Charts';
 import { FigureDownload } from '@/components/charts/FigureDownload';
 import { ResultsTable } from '@/components/table/ResultsTable';
+import { GlassCard } from '@/components/ui/GlassCard';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { StatTile } from '@/components/ui/StatTile';
 import { datasetSummary } from '@/lib/generated';
@@ -38,18 +40,12 @@ export const metadata: Metadata = {
  */
 export default function Page() {
   return (
-    <div className="space-y-14">
-      <section>
-        <h1 className="text-3xl font-semibold tracking-tight">Dataset Overview</h1>
-        <p className="mt-3 max-w-3xl text-slate-600 dark:text-slate-400">
-          Four public phonocardiogram corpora, audited file by file rather than taken
-          from their documentation. Where the published counts and the files on disk
-          disagreed, the files won and the discrepancy is recorded.
-        </p>
-        <p className="mt-3 max-w-3xl text-sm text-slate-600 dark:text-slate-400">
-          {datasetSummary.scope_note}
-        </p>
-      </section>
+    <div className="space-y-6">
+      <PageHeader
+        title="Dataset Overview"
+        lede="Four public phonocardiogram corpora, audited file by file rather than taken from their documentation. Where the published counts and the files on disk disagreed, the files won and the discrepancy is recorded."
+        note={datasetSummary.scope_note}
+      />
 
       {/* ----------------------------------------------------------------- */}
       <section>
@@ -58,7 +54,7 @@ export default function Page() {
           title="Files on disk, and the subset actually modelled"
           level={2}
         />
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
           {datasetSummary.summary.map((row) => (
             <StatTile
               key={row.dataset_source}
@@ -81,11 +77,12 @@ export default function Page() {
       {/* ----------------------------------------------------------------- */}
       <section>
         <SectionHeader eyebrow="T01" title="Dataset inventory" level={2} />
-        <ResultsTable
-          className="mt-5"
-          table={table('T01')}
-          caption="Every file found on disk, with the subject-identifier origin per corpus. Counts here are the whole folder, not the modelled subset."
-        />
+        <GlassCard className="mt-4" bodyClassName="p-3">
+          <ResultsTable
+            table={table('T01')}
+            caption="Every file found on disk, with the subject-identifier origin per corpus. Counts here are the whole folder, not the modelled subset."
+          />
+        </GlassCard>
       </section>
 
       {/* ----------------------------------------------------------------- */}
@@ -96,10 +93,12 @@ export default function Page() {
           description="Labelled records only, per task. The five label spaces are separate and are never merged: a row belongs to exactly one of them."
           level={2}
         />
-        <ResultsTable className="mt-5" table={table('T02')} />
+        <GlassCard className="mt-4" bodyClassName="p-3">
+          <ResultsTable table={table('T02')} />
+        </GlassCard>
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-2">
-          <div>
+        <div className="mt-3 grid gap-3 lg:grid-cols-2">
+          <GlassCard eyebrow="G02" title="Records per class">
             <GroupedBars
               source={G02}
               categoryColumn="class"
@@ -109,8 +108,8 @@ export default function Page() {
               height={340}
             />
             <FigureDownload figureId="G02" className="mt-2" />
-          </div>
-          <div>
+          </GlassCard>
+          <GlassCard eyebrow="G03" title="Class share within each dataset">
             <GroupedBars
               source={G03}
               categoryColumn="class"
@@ -120,7 +119,7 @@ export default function Page() {
               height={340}
             />
             <FigureDownload figureId="G03" className="mt-2" />
-          </div>
+          </GlassCard>
         </div>
       </section>
 
@@ -132,8 +131,10 @@ export default function Page() {
           description="Duration statistics over the supervised subset. Corpus-wide hours are in T01 and are a different population; the two are deliberately not shown on the same row."
           level={2}
         />
-        <ResultsTable className="mt-5" table={table('T03')} />
-        <div className="mt-8">
+        <GlassCard className="mt-4" bodyClassName="p-3">
+          <ResultsTable table={table('T03')} />
+        </GlassCard>
+        <GlassCard className="mt-3" eyebrow="G04" title="Recording duration histogram">
           <GroupedBars
             source={G04}
             categoryColumn="bin_low_sec"
@@ -143,7 +144,7 @@ export default function Page() {
             height={320}
           />
           <FigureDownload figureId="G04" className="mt-2" />
-        </div>
+        </GlassCard>
       </section>
 
       {/* ----------------------------------------------------------------- */}
@@ -154,7 +155,7 @@ export default function Page() {
           description="Filter by corpus, subset, label or flag, and search by record or subject identifier. The whole audited corpus is loaded — nothing is sampled or truncated."
           level={2}
         />
-        <div className="mt-6">
+        <div className="mt-4">
           <DatasetExplorer />
         </div>
       </section>

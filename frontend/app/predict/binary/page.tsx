@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 
 import { PredictionPanel } from '@/components/predict/PredictionPanel';
 import { BatchPanel } from '@/components/predict/BatchPanel';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { prediction } from '@/lib/generated/prediction';
 import { routeFor } from '@/lib/routes';
@@ -25,13 +26,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <div className="space-y-12">
-      <SectionHeader
-        level={1}
-        eyebrow="Prediction"
-        title="Binary screening"
-        description={route?.summary ?? ''}
-      />
+    <div className="space-y-6">
+      <PageHeader title="Binary screening" lede={route?.summary ?? ''} />
 
       <PredictionPanel offered={[{ task: 'binary', label: 'Binary (PhysioNet 2016)' }]} />
 
@@ -41,7 +37,7 @@ export default function Page() {
           title="Batch screening"
           description="Several recordings in one pass, with the results exported as CSV."
         />
-        <BatchPanel task="binary" className="mt-6" />
+        <BatchPanel task="binary" className="mt-4" />
       </section>
 
       <section>
@@ -50,7 +46,7 @@ export default function Page() {
           title="What this page does not do"
           description=""
         />
-        <ul className="mt-4 max-w-prose list-disc space-y-2 pl-5 text-sm text-slate-600 dark:text-slate-400">
+        <ul className="mt-4 max-w-prose list-disc space-y-2 rounded-xl border border-line bg-panel p-4 pl-8 text-body-md text-ink-2 shadow-panel">
           <li>{prediction.disclaimer}</li>
           <li>{prediction.operating_point.note}</li>
           <li>{prediction.reference.note}</li>

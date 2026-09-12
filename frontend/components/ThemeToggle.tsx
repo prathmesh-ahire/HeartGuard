@@ -3,6 +3,8 @@
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 
+import { Icon } from '@/components/ui/Icon';
+
 /**
  * The theme is only known in the browser, so the button renders a stable
  * placeholder until it mounts. Without that guard the server-rendered markup
@@ -15,9 +17,10 @@ export function ThemeToggle() {
 
   useEffect(() => setMounted(true), []);
 
+  const dark = mounted && resolvedTheme === 'dark';
   const label = !mounted
     ? 'Theme'
-    : resolvedTheme === 'dark'
+    : dark
       ? 'Switch to light theme'
       : 'Switch to dark theme';
 
@@ -26,10 +29,11 @@ export function ThemeToggle() {
       type="button"
       aria-label={label}
       title={label}
-      onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-      className="rounded border border-slate-300 px-2 py-1 text-xs text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+      onClick={() => setTheme(dark ? 'light' : 'dark')}
+      className="flex items-center gap-1.5 rounded-lg border border-line bg-panel px-2 py-1.5 font-mono text-label-md text-ink-2 transition-colors hover:border-accent-line hover:text-accent-strong"
     >
-      {mounted ? (resolvedTheme === 'dark' ? 'Light' : 'Dark') : 'Theme'}
+      <Icon name={dark ? 'sun' : 'moon'} className="h-3.5 w-3.5 text-accent" />
+      <span className="hidden sm:inline">{mounted ? (dark ? 'LIGHT' : 'DARK') : 'THEME'}</span>
     </button>
   );
 }

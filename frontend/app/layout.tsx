@@ -1,23 +1,38 @@
 import type { Metadata } from 'next';
+import { Hanken_Grotesk, JetBrains_Mono } from 'next/font/google';
 
 import './globals.css';
 
-import { DisclaimerBanner } from '@/components/Disclaimer';
-import { Footer } from '@/components/Footer';
+import { AppShell } from '@/components/AppShell';
 import { SmoothScroll } from '@/components/motion/SmoothScroll';
-import { Navbar } from '@/components/Navbar';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { ThemeToggle } from '@/components/ThemeToggle';
 
 /**
  * The root layout (T110.3).
  *
- * The disclaimer, the navbar and the run-manifest footer live HERE rather than
- * on each page. Per-page placement is how a disclaimer goes missing: a route
- * added later simply does not get one and nothing fails. From here it is
- * structurally impossible for a page to render without its scope notice or
- * without the provenance of the numbers it is showing.
+ * The disclaimer, the navigation and the run-manifest footer live in
+ * `AppShell`, rendered HERE rather than on each page. Per-page placement is how
+ * a disclaimer goes missing: a route added later simply does not get one and
+ * nothing fails. From here it is structurally impossible for a page to render
+ * without its scope notice or without the provenance of the numbers it shows.
+ *
+ * Both faces are self-hosted through next/font. A <link> to fonts.googleapis
+ * would leave the static export dependent on a network it will not always
+ * have, and the fallback metrics next/font emits also stop the layout shifting
+ * when the face lands.
  */
+const sans = Hanken_Grotesk({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-sans',
+});
+
+const mono = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-mono',
+});
+
 export const metadata: Metadata = {
   title: {
     default: 'PV-MEPCG / PulseVision',
@@ -33,17 +48,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="flex min-h-screen flex-col">
+    <html lang="en" suppressHydrationWarning className={`${sans.variable} ${mono.variable}`}>
+      <body>
         <ThemeProvider>
           <SmoothScroll>
-            <DisclaimerBanner />
-            <Navbar />
-            <div className="mx-auto flex w-full max-w-7xl justify-end px-4 pt-3">
-              <ThemeToggle />
-            </div>
-            <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8">{children}</main>
-            <Footer />
+            <AppShell>{children}</AppShell>
           </SmoothScroll>
         </ThemeProvider>
       </body>

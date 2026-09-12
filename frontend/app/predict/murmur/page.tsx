@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 
 import { PredictionPanel } from '@/components/predict/PredictionPanel';
 import { PatientPanel } from '@/components/predict/PatientPanel';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { prediction } from '@/lib/generated/prediction';
 import { routeFor } from '@/lib/routes';
@@ -26,13 +27,8 @@ const MURMUR = prediction.tasks.find((task) => task.task === 'murmur');
 
 export default function Page() {
   return (
-    <div className="space-y-12">
-      <SectionHeader
-        level={1}
-        eyebrow="Prediction"
-        title="Murmur and clinical outcome"
-        description={route?.summary ?? ''}
-      />
+    <div className="space-y-6">
+      <PageHeader title="Murmur and clinical outcome" lede={route?.summary ?? ''} />
 
       <PredictionPanel
         offered={[
@@ -47,12 +43,12 @@ export default function Page() {
           title="Recording level and patient level"
           description="The same subject at all four auscultation locations, collapsed by every declared rule."
         />
-        <PatientPanel task="murmur" className="mt-6" />
+        <PatientPanel task="murmur" className="mt-4" />
       </section>
 
       <section>
         <SectionHeader eyebrow="Scope" title="What these two labels are" description="" />
-        <ul className="mt-4 max-w-prose list-disc space-y-2 pl-5 text-sm text-slate-600 dark:text-slate-400">
+        <ul className="mt-4 max-w-prose list-disc space-y-2 rounded-xl border border-line bg-panel p-4 pl-8 text-body-md text-ink-2 shadow-panel">
           {MURMUR !== undefined ? <li>{MURMUR.description}</li> : null}
           <li>
             Murmur and outcome are separate label spaces with separate models. A murmur

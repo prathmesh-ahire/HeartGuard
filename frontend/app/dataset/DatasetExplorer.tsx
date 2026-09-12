@@ -83,9 +83,9 @@ export function DatasetExplorer() {
   return (
     <div>
       {/* ---------------------------------------------------------------- */}
-      <div className="flex flex-wrap items-end gap-3 rounded-lg border border-slate-200 p-4 dark:border-slate-800">
-        <label className="flex flex-col gap-1 text-xs">
-          <span className="uppercase tracking-widest text-slate-500">Record or subject</span>
+      <div className="flex flex-wrap items-end gap-3 rounded-lg border border-line p-4">
+        <label className="flex flex-col gap-1.5">
+          <span className="label-micro">Record or subject</span>
           <input
             type="search"
             value={query}
@@ -94,17 +94,17 @@ export function DatasetExplorer() {
               setQuery(event.target.value);
             }}
             placeholder="a0005, 85197&hellip;"
-            className="w-56 rounded border border-slate-300 bg-white px-2 py-1.5 text-sm dark:border-slate-700 dark:bg-slate-900"
+            className="w-56 rounded border border-line bg-panel px-2 py-1.5 text-sm"
           />
         </label>
 
         {records.facets.map((facet) => (
-          <label key={facet.name} className="flex flex-col gap-1 text-xs">
-            <span className="uppercase tracking-widest text-slate-500">{facet.label}</span>
+          <label key={facet.name} className="flex flex-col gap-1.5">
+            <span className="label-micro">{facet.label}</span>
             <select
               value={filters[facet.name] ?? ''}
               onChange={(event) => setFilter(facet.name, event.target.value)}
-              className="rounded border border-slate-300 bg-white px-2 py-1.5 text-sm dark:border-slate-700 dark:bg-slate-900"
+              className="rounded border border-line bg-sunken px-2 py-1.5 font-mono text-label-md text-ink focus:border-accent focus:outline-none"
             >
               <option value="">any</option>
               {facet.values.map((value) => (
@@ -123,15 +123,15 @@ export function DatasetExplorer() {
             setQuery('');
             setPage(0);
           }}
-          className="rounded border border-slate-300 px-3 py-1.5 text-sm dark:border-slate-700"
+          className="rounded border border-line px-3 py-1.5 text-sm"
         >
           Reset
         </button>
       </div>
 
       {/* ---------------------------------------------------------------- */}
-      <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
-        <span className="tabular-nums font-medium text-slate-800 dark:text-slate-200">
+      <p className="mt-3 text-sm text-ink-2">
+        <span className="tabular-nums font-medium text-ink">
           {matching.length.toLocaleString('en-US')}
         </span>{' '}
         of {records.n_records.toLocaleString('en-US')} audited recordings match this
@@ -146,9 +146,9 @@ export function DatasetExplorer() {
           description="Loosen a filter, or reset. Nothing is hidden: the whole audited corpus is loaded."
         />
       ) : (
-        <div className="mt-4 overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-800">
+        <div className="mt-4 overflow-x-auto rounded-lg border border-line">
           <table className="min-w-full text-left text-sm">
-            <thead className="bg-slate-50 text-xs uppercase tracking-widest text-slate-500 dark:bg-slate-900/60">
+            <thead className="border-b-2 border-line bg-sunken font-mono text-label-sm uppercase text-ink-3">
               <tr>
                 {tableColumns.map((column) => (
                   <th key={column.name} scope="col" className="whitespace-nowrap px-3 py-2">
@@ -161,7 +161,7 @@ export function DatasetExplorer() {
               {shown.map((index) => (
                 <tr
                   key={index}
-                  className="border-t border-slate-100 odd:bg-white even:bg-slate-50/60 dark:border-slate-800 dark:odd:bg-transparent dark:even:bg-slate-900/40"
+                  className="border-t border-line odd:bg-panel even:bg-sunken/60 dark:odd:bg-transparent"
                 >
                   {tableColumns.map((column) => (
                     <td
@@ -189,25 +189,25 @@ export function DatasetExplorer() {
             type="button"
             disabled={page === 0}
             onClick={() => setPage((current) => Math.max(0, current - 1))}
-            className="rounded border border-slate-300 px-3 py-1 disabled:opacity-40 dark:border-slate-700"
+            className="rounded border border-line px-3 py-1 disabled:opacity-40"
           >
             Previous
           </button>
-          <span className="tabular-nums text-slate-600 dark:text-slate-400">
+          <span className="tabular-nums text-ink-2">
             Page {page + 1} of {lastPage + 1}
           </span>
           <button
             type="button"
             disabled={page >= lastPage}
             onClick={() => setPage((current) => Math.min(lastPage, current + 1))}
-            className="rounded border border-slate-300 px-3 py-1 disabled:opacity-40 dark:border-slate-700"
+            className="rounded border border-line px-3 py-1 disabled:opacity-40"
           >
             Next
           </button>
         </div>
       ) : null}
 
-      <p className="mt-4 text-xs text-slate-500 dark:text-slate-500">
+      <p className="mt-4 text-xs text-ink-3">
         Source: {records.source}. Every cell is a string formatted in Python; this view
         selects rows and renders them.
       </p>

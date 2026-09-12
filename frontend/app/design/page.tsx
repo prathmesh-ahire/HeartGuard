@@ -28,7 +28,7 @@ export default function DesignPage() {
   return (
     <>
       <DesignClient tables={{ T01: table('T01'), T02: table('T02') }} />
-      <section className="mt-10 space-y-4">
+      <section className="mt-6 space-y-3">
         <SectionHeader
           level={2}
           title="Equations"

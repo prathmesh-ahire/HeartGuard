@@ -101,13 +101,13 @@ export function EnsembleVote({ className }: { className?: string }) {
                 }
               >
                 <div
-                  className={cn('h-full rounded transition-none', outlined ? 'ring-1 ring-inset ring-slate-900/50 dark:ring-white/60' : '')}
+                  className={cn('h-full rounded transition-none', outlined ? 'ring-1 ring-inset ring-ink/50' : '')}
                   style={{ width: width + '%', backgroundColor: fill }}
                 />
                 {/* The equal-weight line: the reference the search barely beat. */}
                 <span
                   aria-hidden="true"
-                  className="absolute inset-y-0 w-px bg-slate-900/60 dark:bg-white/60"
+                  className="absolute inset-y-0 w-px bg-ink/60"
                   style={{ left: (equal / maxWeight) * 100 + '%' }}
                 />
               </div>

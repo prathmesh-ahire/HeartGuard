@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { PredictionPanel } from '@/components/predict/PredictionPanel';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { prediction } from '@/lib/generated/prediction';
 import { routeFor } from '@/lib/routes';
@@ -26,13 +27,8 @@ const PASCAL_A = prediction.tasks.find((task) => task.task === 'pascal_a');
 
 export default function Page() {
   return (
-    <div className="space-y-12">
-      <SectionHeader
-        level={1}
-        eyebrow="Prediction"
-        title="Multiclass acoustic events"
-        description={route?.summary ?? ''}
-      />
+    <div className="space-y-6">
+      <PageHeader title="Multiclass acoustic events" lede={route?.summary ?? ''} />
 
       <PredictionPanel
         offered={[
@@ -47,7 +43,7 @@ export default function Page() {
           title="Two datasets, two label spaces, one page"
           description=""
         />
-        <ul className="mt-4 max-w-prose list-disc space-y-2 pl-5 text-sm text-slate-600 dark:text-slate-400">
+        <ul className="mt-4 max-w-prose list-disc space-y-2 rounded-xl border border-line bg-panel p-4 pl-8 text-body-md text-ink-2 shadow-panel">
           <li>
             PASCAL A and PASCAL B are separate tasks with separate models. This page offers
             both and merges neither: a recording is scored against one vocabulary or the

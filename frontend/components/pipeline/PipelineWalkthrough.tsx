@@ -102,7 +102,7 @@ export function PipelineWalkthrough({ className }: { className?: string }) {
               className={cn(
                 SURFACE.card,
                 'p-5 transition-colors',
-                !reduced && index === active ? 'ring-2 ring-offset-2 dark:ring-offset-slate-950' : '',
+                !reduced && index === active ? 'ring-2 ring-offset-2' : '',
               )}
               style={
                 !reduced && index === active
@@ -120,7 +120,7 @@ export function PipelineWalkthrough({ className }: { className?: string }) {
                   className={cn(
                     TYPE_SCALE.caption,
                     'mt-3 border-l-2 pl-3 italic',
-                    'border-slate-300 dark:border-slate-700',
+                    'border-line',
                   )}
                 >
                   {step.rule}
@@ -157,8 +157,8 @@ function StepNumber({ index, number }: { index: number; number: number }) {
       aria-hidden="true"
       className={cn(
         'inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full',
-        'text-xs font-semibold tabular-nums text-white',
-        outlined ? 'text-slate-900 ring-1 ring-slate-900/60 dark:ring-white/60' : '',
+        'text-xs font-semibold tabular-nums text-on-accent',
+        outlined ? 'text-ink ring-1 ring-ink/60' : '',
       )}
       style={{ backgroundColor: fill }}
     >
@@ -183,7 +183,7 @@ function ProgressRail({
               className={cn(
                 TYPE_SCALE.caption,
                 'flex items-center gap-2 rounded px-2 py-1',
-                active === index ? 'bg-slate-100 font-medium dark:bg-slate-800' : SURFACE.subtle,
+                active === index ? 'bg-sunken font-medium' : SURFACE.subtle,
               )}
             >
               <span

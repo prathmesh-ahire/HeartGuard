@@ -5,6 +5,8 @@ import { GroupedBars } from '@/components/charts/Charts';
 import { FigureDownload } from '@/components/charts/FigureDownload';
 import { EquationList } from '@/components/equations/Equations';
 import { ResultsTable } from '@/components/table/ResultsTable';
+import { GlassCard } from '@/components/ui/GlassCard';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { StatTile } from '@/components/ui/StatTile';
 import { G10 } from '@/lib/generated/figures/G10';
@@ -29,24 +31,17 @@ export default function Page() {
   const selected = features.selected;
 
   return (
-    <div className="space-y-14">
-      <section>
-        <h1 className="text-3xl font-semibold tracking-tight">Feature Extraction</h1>
-        <p className="mt-3 max-w-3xl text-slate-600 dark:text-slate-400">
-          Every recording becomes the same 138 numbers, in the same order, whichever
-          corpus it came from. That fixed vector is what makes a PASCAL recording and a
-          PhysioNet one comparable at all, and its column order is a locked literal
-          rather than something the extractor happens to produce.
-        </p>
-        <p className="mt-3 max-w-3xl text-sm text-slate-600 dark:text-slate-400">
-          {features.registry_note}
-        </p>
-      </section>
+    <div className="space-y-6">
+      <PageHeader
+        title="Feature Extraction"
+        lede="Every recording becomes the same fixed vector, in the same order, whichever corpus it came from. That is what makes a PASCAL recording and a PhysioNet one comparable at all, and its column order is a locked literal rather than something the extractor happens to produce."
+        note={features.registry_note}
+      />
 
       {/* ----------------------------------------------------------------- */}
       <section>
         <SectionHeader eyebrow="Composition" title="The six families" level={2} />
-        <div className="mt-6 grid gap-4 sm:grid-cols-3 lg:grid-cols-6">
+        <div className="mt-4 grid gap-3 sm:grid-cols-3 xl:grid-cols-6">
           {features.families.map((item) => (
             <StatTile
               key={item.family}
@@ -58,7 +53,7 @@ export default function Page() {
             />
           ))}
         </div>
-        <div className="mt-8">
+        <GlassCard className="mt-3" eyebrow="G10" title="Features per family">
           <GroupedBars
             source={G10}
             categoryColumn="family"
@@ -68,17 +63,18 @@ export default function Page() {
             height={300}
           />
           <FigureDownload figureId="G10" className="mt-2" />
-        </div>
+        </GlassCard>
       </section>
 
       {/* ----------------------------------------------------------------- */}
       <section>
         <SectionHeader eyebrow="T05" title="Feature inventory and counts" level={2} />
-        <ResultsTable
-          className="mt-5"
-          table={table('T05')}
-          caption="The per-family counts are recomputed from the 138-row inventory and checked against the extractor's own summary; the table refuses to build if they disagree or if the total is not 138."
-        />
+        <GlassCard className="mt-4" bodyClassName="p-3">
+          <ResultsTable
+            table={table('T05')}
+            caption="The per-family counts are recomputed from the registry inventory and checked against the extractor's own summary; the table refuses to build if they disagree or if the total is wrong."
+          />
+        </GlassCard>
       </section>
 
       {/* ----------------------------------------------------------------- */}
@@ -89,7 +85,7 @@ export default function Page() {
           description="The registry in its locked order, filterable by family or name. Turn on the value column to see the full vector for a single recording."
           level={2}
         />
-        <div className="mt-6">
+        <div className="mt-4">
           <FeatureExplorer />
         </div>
       </section>
@@ -103,9 +99,9 @@ export default function Page() {
           level={2}
         />
         {selected.available ? (
-          <div className="mt-5 overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-800">
-            <table className="min-w-full text-left text-sm">
-              <thead className="bg-slate-50 text-xs uppercase tracking-widest text-slate-500 dark:bg-slate-900/60">
+          <div className="mt-4 overflow-x-auto rounded-lg border border-line bg-panel">
+            <table className="min-w-full border-collapse text-left text-body-sm">
+              <thead className="border-b-2 border-line bg-sunken font-mono text-label-sm uppercase text-ink-3">
                 <tr>
                   <th scope="col" className="px-3 py-2">
                     Rank
@@ -131,23 +127,25 @@ export default function Page() {
                 {selected.features.map((row) => (
                   <tr
                     key={String(row.feature)}
-                    className="border-t border-slate-100 dark:border-slate-800"
+                    className="border-t border-line hover:bg-accent-soft/40"
                   >
-                    <td className="px-3 py-1.5 tabular-nums">{String(row.rank)}</td>
+                    <td className="stat px-3 py-1.5">{String(row.rank)}</td>
                     <td className="px-3 py-1.5 font-mono">{String(row.feature)}</td>
                     <td className="px-3 py-1.5">{String(row.family)}</td>
-                    <td className="px-3 py-1.5 text-slate-500">{String(row.ranker)}</td>
-                    <td className="px-3 py-1.5 tabular-nums">
+                    <td className="px-3 py-1.5 text-ink-3">{String(row.ranker)}</td>
+                    <td className="stat px-3 py-1.5">
                       {String(row.selected_in_folds)} of {String(row.n_folds)} folds
                     </td>
-                    <td className="px-3 py-1.5 tabular-nums">{String(row.share_display)}</td>
+                    <td className="stat px-3 py-1.5">{String(row.share_display)}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         ) : (
-          <p className="mt-5 text-sm text-amber-800 dark:text-amber-300">{selected.reason}</p>
+          <p className="mt-4 rounded-lg border border-amber-300 bg-amber-50 p-3 text-body-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-200">
+            {selected.reason}
+          </p>
         )}
       </section>
 
@@ -159,7 +157,7 @@ export default function Page() {
           description="Rendered at build time from the source document's own section 11, each cross-checked against the module that implements it."
           level={2}
         />
-        <EquationList className="mt-6" />
+        <EquationList className="mt-4" />
       </section>
     </div>
   );

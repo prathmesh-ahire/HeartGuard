@@ -3,6 +3,8 @@ import Link from 'next/link';
 
 import { EvidenceLink } from '@/components/evidence/EvidenceLink';
 import { EmptyState } from '@/components/ui/States';
+import { GlassCard } from '@/components/ui/GlassCard';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import type { GeneratedPayloadSource } from '@/lib/generated/types';
 import { limitations } from '@/lib/generated/limitations';
@@ -13,12 +15,12 @@ export const metadata: Metadata = {
     'What the results cannot support: population mismatch, PASCAL sample sizes, the CirCor public subset and the recording-source confound.',
 };
 
-const CELL = 'px-3 py-1.5 text-xs tabular-nums';
-const HEAD = 'px-3 py-2 text-xs font-semibold';
+const CELL = 'stat px-3 py-1.5 text-body-sm';
+const HEAD = 'whitespace-nowrap px-3 py-2 font-mono text-label-sm uppercase text-ink-3';
 
 function Sources({ sources }: { sources: GeneratedPayloadSource[] }) {
   return (
-    <p className="mt-3 text-xs text-slate-500">
+    <p className="mt-3 text-xs text-ink-3">
       {sources.length === 1 ? 'source ' : 'sources '}
       {sources.map((source, index) => (
         <span key={source.path}>
@@ -41,23 +43,24 @@ export default function Page() {
   const { population, pascal, circor, source_holdout: holdout } = limitations;
 
   return (
-    <div className="max-w-4xl space-y-14">
-      <section>
-        <h1 className="text-3xl font-semibold tracking-tight">Limitations</h1>
-        <p className="mt-3 text-slate-600 dark:text-slate-400">
-          What the results on this site can and cannot support. These are properties of the
-          public corpora, not open bugs, and each one is stated in the thesis rather than worked
-          around. Read them before quoting any number from the{' '}
-          <Link href="/models/" className="underline">
-            model
-          </Link>{' '}
-          or{' '}
-          <Link href="/robustness/" className="underline">
-            robustness
-          </Link>{' '}
-          pages.
-        </p>
-      </section>
+    <div className="max-w-5xl space-y-6">
+      <PageHeader
+        title="Limitations"
+        lede="What the results on this site can and cannot support. These are properties of the public corpora, not open bugs, and each one is stated in the thesis rather than worked around."
+        note={
+          <span>
+            Read them before quoting any number from the{' '}
+            <Link href="/models/" className="text-accent-strong underline decoration-dotted underline-offset-2">
+              model
+            </Link>{' '}
+            or{' '}
+            <Link href="/robustness/" className="text-accent-strong underline decoration-dotted underline-offset-2">
+              robustness
+            </Link>{' '}
+            pages.
+          </span>
+        }
+      />
 
       <section>
         <SectionHeader
@@ -66,7 +69,7 @@ export default function Page() {
           level={2}
         />
         {population.available ? (
-          <div className="mt-4 space-y-3 text-sm text-slate-700 dark:text-slate-300">
+          <GlassCard className="mt-4" bodyClassName="space-y-3 text-body-md text-ink-2">
             <p>{population.design}</p>
             <p>
               The training corpus, {population.train_dataset}, records a numeric age for{' '}
@@ -84,12 +87,12 @@ export default function Page() {
             {population.transfer && population.transfer.length > 0 ? (
               <div className="overflow-x-auto">
                 <table className="min-w-full border-collapse text-left">
-                  <caption className="caption-bottom pt-2 text-left text-xs text-slate-500">
+                  <caption className="caption-bottom pt-2 text-left text-xs text-ink-3">
                     Balanced accuracy of the deployed binary model in-domain (PhysioNet 2016
                     cross-validation) and applied unchanged to CirCor, from T16.
                   </caption>
                   <thead>
-                    <tr className="border-b border-slate-300 dark:border-slate-700">
+                    <tr className="border-b border-line">
                       <th scope="col" className={HEAD}>Level</th>
                       <th scope="col" className={HEAD}>Collapse rule</th>
                       <th scope="col" className={HEAD}>Units</th>
@@ -99,7 +102,7 @@ export default function Page() {
                   </thead>
                   <tbody>
                     {population.transfer.map((row) => (
-                      <tr key={row.level + row.rule} className="border-b border-slate-200 dark:border-slate-800">
+                      <tr key={row.level + row.rule} className="border-b border-line">
                         <td className={CELL}>{row.level}</td>
                         <td className={CELL}>{row.rule}</td>
                         <td className={CELL}>{row.n_units_display}</td>
@@ -112,7 +115,7 @@ export default function Page() {
               </div>
             ) : null}
             <Sources sources={population.sources} />
-          </div>
+          </GlassCard>
         ) : (
           <EmptyState className="mt-4" title="Not generated" description={population.reason} />
         )}
@@ -125,7 +128,7 @@ export default function Page() {
           level={2}
         />
         {holdout.available ? (
-          <div className="mt-4 space-y-3 text-sm text-slate-700 dark:text-slate-300">
+          <GlassCard className="mt-4" bodyClassName="space-y-3 text-body-md text-ink-2">
             <p>
               Holding out one PhysioNet sub-collection at a time ({holdout.n_folds_display} folds),
               the deployed model {holdout.model_id} falls from a pooled AUC of{' '}
@@ -142,7 +145,7 @@ export default function Page() {
               field performance is made anywhere.
             </p>
             <Sources sources={holdout.sources} />
-          </div>
+          </GlassCard>
         ) : (
           <EmptyState className="mt-4" title="Not generated" description={holdout.reason} />
         )}
@@ -151,15 +154,15 @@ export default function Page() {
       <section>
         <SectionHeader eyebrow="PASCAL" title="The PASCAL tracks are small" level={2} />
         {pascal.available && pascal.tracks ? (
-          <div className="mt-4 space-y-4 text-sm text-slate-700 dark:text-slate-300">
+          <GlassCard className="mt-4" bodyClassName="space-y-4 text-body-md text-ink-2">
             {pascal.tracks.map((track) => (
-              <div key={track.task}>
+              <div key={track.task} className="rounded-lg border border-line bg-sunken p-3">
                 <p>
                   {track.title}: {track.n_records_display} labelled recordings in total; the
                   smallest class, <span className="font-mono">{track.smallest_class}</span>, has{' '}
                   {track.smallest_n_display}.
                 </p>
-                <ul className="mt-1 flex flex-wrap gap-x-4 text-xs text-slate-600 dark:text-slate-400">
+                <ul className="mt-1.5 flex flex-wrap gap-x-4 font-mono text-body-sm text-ink-3">
                   {track.classes.map((row) => (
                     <li key={row.class}>
                       <span className="font-mono">{row.class}</span> {row.n_records_display}{' '}
@@ -178,7 +181,7 @@ export default function Page() {
               tasks and are never merged.
             </p>
             <Sources sources={pascal.sources} />
-          </div>
+          </GlassCard>
         ) : (
           <EmptyState className="mt-4" title="Not generated" description={pascal.reason} />
         )}
@@ -187,7 +190,7 @@ export default function Page() {
       <section>
         <SectionHeader eyebrow="CirCor" title="CirCor is the public subset only" level={2} />
         {circor.available ? (
-          <div className="mt-4 space-y-3 text-sm text-slate-700 dark:text-slate-300">
+          <GlassCard className="mt-4" bodyClassName="space-y-3 text-body-md text-ink-2">
             <p>
               The public CirCor DigiScope 2022 release is the Challenge&apos;s training portion:{' '}
               {circor.n_patients_display} patients and {circor.n_recordings_display} recordings.
@@ -203,7 +206,7 @@ export default function Page() {
               declared collapse rule.
             </p>
             <Sources sources={circor.sources} />
-          </div>
+          </GlassCard>
         ) : (
           <EmptyState className="mt-4" title="Not generated" description={circor.reason} />
         )}

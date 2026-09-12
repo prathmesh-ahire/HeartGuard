@@ -120,17 +120,17 @@ export function ResultsTable({
             onChange={(event) => setFilter(event.target.value)}
             placeholder={'search ' + source.id}
             className={cn(
-              'rounded border px-2 py-1',
-              'border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-900',
+              'rounded border border-line bg-panel px-2 py-1 font-mono text-label-md',
+              'placeholder:text-ink-3 focus:border-accent focus:outline-none',
             )}
           />
         </label>
         <DownloadCsv source={source} rows={visible.map((row) => row.original)} />
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto rounded-lg border border-line bg-panel">
         <table className="w-full border-collapse text-left">
-          <caption className={cn(TYPE_SCALE.caption, SURFACE.muted, 'caption-bottom pt-2')}>
+          <caption className={cn(TYPE_SCALE.caption, SURFACE.muted, 'caption-bottom px-3 py-2 text-left')}>
             {caption ?? source.caption}
           </caption>
           <thead>
@@ -150,8 +150,8 @@ export function ResultsTable({
                             : 'none'
                       }
                       className={cn(
-                        TYPE_SCALE.caption,
-                        'border-b border-slate-300 px-3 py-2 font-semibold dark:border-slate-700',
+                        'border-b-2 border-line bg-sunken px-3 py-2',
+                        'whitespace-nowrap font-mono text-label-sm uppercase text-ink-3',
                       )}
                     >
                       <button
@@ -172,11 +172,14 @@ export function ResultsTable({
           </thead>
           <tbody>
             {visible.map((row) => (
-              <tr key={row.id} className="border-b border-slate-200 dark:border-slate-800">
+              <tr
+                key={row.id}
+                className="border-b border-line last:border-0 hover:bg-accent-soft/40"
+              >
                 {row.getVisibleCells().map((cell) => (
                   <td
                     key={cell.id}
-                    className={cn(TYPE_SCALE.caption, 'px-3 py-1.5 tabular-nums')}
+                    className={cn(TYPE_SCALE.caption, 'stat px-3 py-1.5')}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext()) ??
                       String(cell.getValue())}
@@ -230,7 +233,7 @@ function DownloadCsv({ source, rows }: { source: GeneratedTable; rows: Row[] }) 
         className={cn(
           TYPE_SCALE.caption,
           'rounded border px-2.5 py-1',
-          'border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800',
+          'border-line hover:bg-sunken',
         )}
       >
         Download CSV as displayed

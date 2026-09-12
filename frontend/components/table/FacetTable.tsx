@@ -83,7 +83,7 @@ export function FacetTable({
                 }
                 className={cn(
                   'rounded border px-2 py-1',
-                  'border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-900',
+                  'border-line bg-panel',
                 )}
               >
                 <option value={ALL}>all</option>
@@ -103,7 +103,7 @@ export function FacetTable({
             className={cn(
               TYPE_SCALE.caption,
               'rounded border px-2.5 py-1',
-              'border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800',
+              'border-line hover:bg-sunken',
             )}
           >
             Clear filters

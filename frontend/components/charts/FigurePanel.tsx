@@ -31,7 +31,7 @@ export function FigurePanel({ figureId, className }: { figureId: string; classNa
         src={meta.png}
         alt={meta.id + ': ' + meta.title}
         loading="lazy"
-        className="w-full rounded border border-slate-200 bg-white dark:border-slate-800"
+        className="w-full rounded border border-line bg-panel"
       />
       <figcaption className={cn(TYPE_SCALE.caption, SURFACE.muted)}>
         <span className="font-semibold">

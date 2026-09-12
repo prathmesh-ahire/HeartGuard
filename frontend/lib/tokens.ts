@@ -17,6 +17,19 @@ import { theme } from '@/lib/generated';
 /** Okabe-Ito, in the fixed order every figure uses. Index 0 is series 1. */
 export const SERIES_COLORS: readonly string[] = theme.palette.series;
 
+/**
+ * The brand accent, as a literal.
+ *
+ * Every other surface takes its colour from a CSS variable, but a WebGL
+ * material is not styled by CSS and needs a value it can pass to Three. This
+ * is decoration -- the hero heart -- and never a data mark: a mark that
+ * encodes a value still comes from `SERIES_COLORS`, which the figures share.
+ */
+export const BRAND = {
+  accent: '#e11d48',
+  accentDark: '#fb7185',
+} as const;
+
 /** Semantic roles, so a page never indexes the palette by a magic number. */
 export const ROLE_COLORS = theme.palette.roles;
 
@@ -31,16 +44,18 @@ export function seriesColor(index: number): string {
  * enough that hierarchy is legible without weight changes.
  */
 export const TYPE_SCALE = {
-  micro: 'text-[10px] leading-4 tracking-widest uppercase',
-  caption: 'text-xs leading-5',
-  body: 'text-sm leading-6',
-  lead: 'text-base leading-7',
-  h3: 'text-lg font-semibold leading-7 tracking-tight',
-  h2: 'text-xl font-semibold leading-8 tracking-tight',
-  h1: 'text-2xl font-semibold leading-9 tracking-tight',
-  display: 'text-3xl font-semibold leading-10 tracking-tight',
+  micro: 'font-mono text-label-sm uppercase',
+  /** A provenance line: monospace for the paths, but not shouted. */
+  provenance: 'font-mono text-body-sm normal-case tracking-normal',
+  caption: 'text-body-sm',
+  body: 'text-body-md',
+  lead: 'text-body-lg',
+  h3: 'text-headline-sm',
+  h2: 'text-headline-md',
+  h1: 'text-headline-lg',
+  display: 'text-headline-xl',
   /** Metrics are tabular so digits line up column to column. */
-  stat: 'text-3xl font-semibold tabular-nums leading-none tracking-tight',
+  stat: 'stat font-mono text-telemetry',
 } as const;
 
 /** A 4px base step. Named so a card and a section cannot drift apart. */
@@ -52,12 +67,11 @@ export const SPACING = {
 } as const;
 
 export const SURFACE = {
-  card: 'rounded-lg border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900',
-  glass:
-    'rounded-lg border border-slate-200/70 bg-white/70 backdrop-blur-md dark:border-slate-700/60 dark:bg-slate-900/60',
-  sunken: 'rounded-lg border border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950',
-  muted: 'text-slate-600 dark:text-slate-400',
-  subtle: 'text-slate-500 dark:text-slate-500',
+  card: 'rounded-xl border border-line bg-panel shadow-panel',
+  glass: 'rounded-xl border border-line bg-panel/80 backdrop-blur-md shadow-panel',
+  sunken: 'rounded-lg border border-line bg-sunken',
+  muted: 'text-ink-2',
+  subtle: 'text-ink-3',
 } as const;
 
 /**
@@ -66,13 +80,11 @@ export const SURFACE = {
  * same viewport, or the reader will read a legend that is not there.
  */
 export const STATUS = {
-  neutral:
-    'bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700',
-  info: 'bg-sky-50 text-sky-800 border-sky-300 dark:bg-sky-950/50 dark:text-sky-200 dark:border-sky-800',
-  good: 'bg-emerald-50 text-emerald-800 border-emerald-300 dark:bg-emerald-950/50 dark:text-emerald-200 dark:border-emerald-800',
-  warn: 'bg-amber-50 text-amber-900 border-amber-300 dark:bg-amber-950/50 dark:text-amber-200 dark:border-amber-800',
-  danger:
-    'bg-rose-50 text-rose-800 border-rose-300 dark:bg-rose-950/50 dark:text-rose-200 dark:border-rose-800',
+  neutral: 'bg-sunken text-ink-2 border-line',
+  info: 'bg-sky-50 text-sky-800 border-sky-200 dark:bg-sky-950/50 dark:text-sky-200 dark:border-sky-900',
+  good: 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-200 dark:border-emerald-900',
+  warn: 'bg-amber-50 text-amber-900 border-amber-200 dark:bg-amber-950/50 dark:text-amber-200 dark:border-amber-900',
+  danger: 'bg-accent-soft text-accent-deep border-accent-line',
 } as const;
 
 export type StatusTone = keyof typeof STATUS;

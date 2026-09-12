@@ -80,16 +80,16 @@ export function ModelComparison() {
   return (
     <div>
       {/* ---------------------------------------------------------------- */}
-      <div className="flex flex-wrap items-end gap-4 rounded-lg border border-slate-200 p-4 dark:border-slate-800">
-        <label className="flex flex-col gap-1 text-xs">
-          <span className="uppercase tracking-widest text-slate-500">Experiment</span>
+      <div className="flex flex-wrap items-end gap-4 rounded-xl border border-line bg-panel px-4 py-3 shadow-panel">
+        <label className="flex flex-col gap-1.5">
+          <span className="label-micro">Experiment</span>
           <select
             value={experiment.exp_id}
             onChange={(event) => {
               setExpId(event.target.value);
               setModelId('');
             }}
-            className="rounded border border-slate-300 bg-white px-2 py-1.5 text-sm dark:border-slate-700 dark:bg-slate-900"
+            className="rounded border border-line bg-sunken px-2 py-1.5 font-mono text-label-md text-ink focus:border-accent focus:outline-none"
           >
             {available.map((item) => (
               <option key={item.exp_id} value={item.exp_id}>
@@ -99,12 +99,12 @@ export function ModelComparison() {
           </select>
         </label>
 
-        <label className="flex flex-col gap-1 text-xs">
-          <span className="uppercase tracking-widest text-slate-500">Model</span>
+        <label className="flex flex-col gap-1.5">
+          <span className="label-micro">Model</span>
           <select
             value={selectedModel}
             onChange={(event) => setModelId(event.target.value)}
-            className="rounded border border-slate-300 bg-white px-2 py-1.5 text-sm dark:border-slate-700 dark:bg-slate-900"
+            className="rounded border border-line bg-sunken px-2 py-1.5 font-mono text-label-md text-ink focus:border-accent focus:outline-none"
           >
             {models.map((item) => (
               <option key={item.model_id} value={item.model_id}>
@@ -114,7 +114,7 @@ export function ModelComparison() {
           </select>
         </label>
 
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-ink-3">
           {experiment.tuned === true
             ? 'Hyperparameters searched inside each training fold.'
             : experiment.tuned === false
@@ -123,7 +123,7 @@ export function ModelComparison() {
         </p>
       </div>
 
-      <p className="mt-3 max-w-3xl text-sm text-slate-600 dark:text-slate-400">
+      <p className="mt-3 max-w-3xl text-sm text-ink-2">
         {experiment.description}
       </p>
       {experiment.caveat ? (
@@ -133,9 +133,9 @@ export function ModelComparison() {
       ) : null}
 
       {/* ---------------------------------------------------------------- */}
-      <div className="mt-6 overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-800">
+      <div className="mt-6 overflow-x-auto rounded-lg border border-line">
         <table className="min-w-full text-left text-sm">
-          <thead className="bg-slate-50 text-xs uppercase tracking-widest text-slate-500 dark:bg-slate-900/60">
+          <thead className="border-b-2 border-line bg-sunken font-mono text-label-sm uppercase text-ink-3">
             <tr>
               <th scope="col" className="px-3 py-2">
                 Model
@@ -167,8 +167,8 @@ export function ModelComparison() {
                 key={row.model_id}
                 className={
                   row.model_id === selectedModel
-                    ? 'border-t border-slate-100 bg-sky-50/60 dark:border-slate-800 dark:bg-sky-950/30'
-                    : 'border-t border-slate-100 dark:border-slate-800'
+                    ? 'border-t border-line bg-accent-soft/60'
+                    : 'border-t border-line'
                 }
               >
                 <td className="px-3 py-1.5 font-medium">{row.model_id}</td>
@@ -182,7 +182,7 @@ export function ModelComparison() {
           </tbody>
         </table>
       </div>
-      <p className="mt-2 text-xs text-slate-500 dark:text-slate-500">
+      <p className="mt-2 text-xs text-ink-3">
         Mean +/- standard deviation across {models[0]?.n_folds_display ?? 'the'} folds, read
         from {experiment.directory}/aggregate_metrics.csv. Sorting reorders rows; it never
         changes what a cell says.
@@ -191,12 +191,12 @@ export function ModelComparison() {
       {/* ---------------------------------------------------------------- */}
       {(experiment.models?.[0]?.per_class ?? []).length > 0 ? (
         <section className="mt-8">
-          <h3 className="text-sm font-semibold uppercase tracking-widest text-slate-500">
+          <h3 className="label-micro">
             Per class, for {selectedModel}
           </h3>
-          <div className="mt-3 overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-800">
+          <div className="mt-3 overflow-x-auto rounded-lg border border-line">
             <table className="min-w-full text-left text-sm">
-              <thead className="bg-slate-50 text-xs uppercase tracking-widest text-slate-500 dark:bg-slate-900/60">
+              <thead className="border-b-2 border-line bg-sunken font-mono text-label-sm uppercase text-ink-3">
                 <tr>
                   <th className="px-3 py-2">Class</th>
                   <th className="px-3 py-2">Recall</th>
@@ -213,7 +213,7 @@ export function ModelComparison() {
                     return (
                       <tr
                         key={String(row.class)}
-                        className="border-t border-slate-100 dark:border-slate-800"
+                        className="border-t border-line"
                       >
                         <td className="px-3 py-1.5">{String(row.class)}</td>
                         <td className="px-3 py-1.5 tabular-nums">{cell('recall')}</td>
@@ -229,7 +229,7 @@ export function ModelComparison() {
               </tbody>
             </table>
           </div>
-          <p className="mt-2 text-xs text-slate-500 dark:text-slate-500">
+          <p className="mt-2 text-xs text-ink-3">
             A macro average says nothing about the thinnest class. Support is on every row
             so the weight behind each number is visible.
           </p>
@@ -239,7 +239,7 @@ export function ModelComparison() {
       {/* ---------------------------------------------------------------- */}
       <section className="mt-10 grid gap-8 lg:grid-cols-2">
         <div>
-          <h3 className="text-sm font-semibold uppercase tracking-widest text-slate-500">
+          <h3 className="label-micro">
             ROC — {selectedModel}
           </h3>
           {curves?.available && curveModel?.roc ? (
@@ -263,7 +263,7 @@ export function ModelComparison() {
           )}
         </div>
         <div>
-          <h3 className="text-sm font-semibold uppercase tracking-widest text-slate-500">
+          <h3 className="label-micro">
             Precision-recall — {selectedModel}
           </h3>
           {curves?.available && curveModel?.pr ? (
@@ -287,21 +287,21 @@ export function ModelComparison() {
         </div>
       </section>
       {curves?.available ? (
-        <p className="mt-3 text-xs text-slate-500 dark:text-slate-500">
+        <p className="mt-3 text-xs text-ink-3">
           {curves.aggregation_note}
         </p>
       ) : null}
 
       {/* ---------------------------------------------------------------- */}
       <section className="mt-10">
-        <h3 className="text-sm font-semibold uppercase tracking-widest text-slate-500">
+        <h3 className="label-micro">
           Confusion matrix — {selectedModel}
         </h3>
         {confusion?.available && confusion.models?.[selectedModel] ? (
           <>
-            <div className="mt-3 inline-block overflow-hidden rounded-lg border border-slate-200 dark:border-slate-800">
+            <div className="mt-3 inline-block overflow-hidden rounded-lg border border-line">
               <table className="text-sm">
-                <thead className="bg-slate-50 text-xs uppercase tracking-widest text-slate-500 dark:bg-slate-900/60">
+                <thead className="border-b-2 border-line bg-sunken font-mono text-label-sm uppercase text-ink-3">
                   <tr>
                     <th className="px-3 py-2 text-left">True \ Predicted</th>
                     {(confusion.class_names ?? []).map((name) => (
@@ -315,7 +315,7 @@ export function ModelComparison() {
                   {confusion.models[selectedModel].total.map((row, index) => (
                     <tr
                       key={(confusion.class_names ?? [])[index] ?? index}
-                      className="border-t border-slate-100 dark:border-slate-800"
+                      className="border-t border-line"
                     >
                       <th scope="row" className="px-3 py-2 text-left font-medium">
                         {(confusion.class_names ?? [])[index] ?? index}
@@ -326,7 +326,7 @@ export function ModelComparison() {
                           className={
                             index === column
                               ? 'px-4 py-2 text-center tabular-nums font-semibold'
-                              : 'px-4 py-2 text-center tabular-nums text-slate-600 dark:text-slate-400'
+                              : 'px-4 py-2 text-center tabular-nums text-ink-2'
                           }
                         >
                           {cell.toLocaleString('en-US')}
@@ -337,7 +337,7 @@ export function ModelComparison() {
                 </tbody>
               </table>
             </div>
-            <p className="mt-2 max-w-3xl text-xs text-slate-500 dark:text-slate-500">
+            <p className="mt-2 max-w-3xl text-xs text-ink-3">
               {confusion.note}
             </p>
           </>

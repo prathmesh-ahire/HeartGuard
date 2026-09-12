@@ -3,6 +3,8 @@ import Link from 'next/link';
 
 import { FigurePanel } from '@/components/charts/FigurePanel';
 import { FacetTable } from '@/components/table/FacetTable';
+import { GlassCard } from '@/components/ui/GlassCard';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { table } from '@/lib/generated/tables';
 
@@ -109,35 +111,34 @@ const SECTIONS: readonly Section[] = [
 
 export default function Page() {
   return (
-    <div className="space-y-14">
-      <section>
-        <h1 className="text-3xl font-semibold tracking-tight">Robustness Analytics</h1>
-        <p className="mt-3 max-w-3xl text-slate-600 dark:text-slate-400">
-          How far the headline results hold when the conditions change: noisier or shorter
-          recordings, a different auscultation position, an unseen recording setup, and a
-          different population altogether. Every table can be narrowed by the columns that
-          define its rows; the rows themselves are the committed ones.
-        </p>
-        <p className="mt-3 max-w-3xl text-sm text-slate-600 dark:text-slate-400">
-          Read these against the{' '}
-          <Link href="/limitations/" className="underline">
-            limitations
-          </Link>
-          . Every pooled PhysioNet figure elsewhere on this site is a within-corpus
-          cross-validation and must be quoted as such.
-        </p>
-        <nav aria-label="Sections" className="mt-5 flex flex-wrap gap-2 text-sm">
-          {SECTIONS.map((section) => (
-            <a
-              key={section.id}
-              href={'#' + section.id}
-              className="rounded border border-slate-300 px-2.5 py-1 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
-            >
-              {section.title}
-            </a>
-          ))}
-        </nav>
-      </section>
+    <div className="space-y-6">
+      <PageHeader
+        title="Robustness Analytics"
+        lede="How far the headline results hold when the conditions change: noisier or shorter recordings, a different auscultation position, an unseen recording setup, and a different population altogether. Every table can be narrowed by the columns that define its rows; the rows themselves are the committed ones."
+        note={
+          <span>
+            Read these against the{' '}
+            <Link href="/limitations/" className="text-accent-strong underline decoration-dotted underline-offset-2">
+              limitations
+            </Link>
+            . Every pooled PhysioNet figure elsewhere on this site is a within-corpus
+            cross-validation and must be quoted as such.
+          </span>
+        }
+      />
+
+      {/* The section index, as an instrument selector rather than a link list. */}
+      <nav aria-label="Sections" className="flex flex-wrap gap-1.5">
+        {SECTIONS.map((section) => (
+          <a
+            key={section.id}
+            href={'#' + section.id}
+            className="rounded-lg border border-line bg-panel px-2.5 py-1 font-mono text-label-md uppercase text-ink-2 transition-colors hover:border-accent-line hover:text-accent-strong"
+          >
+            {section.title}
+          </a>
+        ))}
+      </nav>
 
       {SECTIONS.map((section) => {
         const source = table(section.tableId);
@@ -149,9 +150,13 @@ export default function Page() {
               description={section.body}
               level={2}
             />
-            <FacetTable className="mt-5" table={source} facets={section.facets} />
+            <GlassCard className="mt-4" bodyClassName="p-3">
+              <FacetTable table={source} facets={section.facets} />
+            </GlassCard>
             {section.figureId ? (
-              <FigurePanel className="mt-8 max-w-4xl" figureId={section.figureId} />
+              <GlassCard className="mt-3" eyebrow={section.figureId}>
+                <FigurePanel className="max-w-4xl" figureId={section.figureId} />
+              </GlassCard>
             ) : null}
           </section>
         );

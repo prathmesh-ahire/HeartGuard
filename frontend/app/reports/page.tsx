@@ -3,6 +3,8 @@ import type { Metadata } from 'next';
 import { EvidenceFilter } from '@/app/reports/EvidenceFilter';
 import { ReportDownloads } from '@/app/reports/ReportDownloads';
 import { ResultsTable } from '@/components/table/ResultsTable';
+import { GlassCard } from '@/components/ui/GlassCard';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { evidence } from '@/lib/generated/evidence';
 import type { GeneratedEvidenceEntry } from '@/lib/generated/types';
@@ -39,11 +41,8 @@ export default function Page() {
   const groups = groupByArtifact(evidence);
 
   return (
-    <div className="space-y-14">
-      <section>
-        <h1 className="text-3xl font-semibold tracking-tight">Reports</h1>
-        <p className="mt-3 max-w-3xl text-slate-600 dark:text-slate-400">{reports.note}</p>
-      </section>
+    <div className="space-y-6">
+      <PageHeader title="Reports" lede={reports.note} />
 
       <section>
         <SectionHeader
@@ -52,7 +51,7 @@ export default function Page() {
           description="Each document carries the screening-only disclaimer and the provenance of every number in it. Generating one needs the inference API running; the rest of this page does not."
           level={2}
         />
-        <div className="mt-6">
+        <div className="mt-4">
           <ReportDownloads reports={reports} samples={prediction.samples} />
         </div>
       </section>
@@ -64,7 +63,9 @@ export default function Page() {
           description="The six locked objectives, what answers each one, and what is still outstanding."
           level={2}
         />
-        <ResultsTable className="mt-5" table={table('T29')} />
+        <GlassCard className="mt-4" bodyClassName="p-3">
+          <ResultsTable table={table('T29')} />
+        </GlassCard>
       </section>
 
       <section id="evidence">
@@ -74,10 +75,10 @@ export default function Page() {
           description="Every exported table column, figure and page payload, mapped to the committed file it was read from and that file's sha256 at export time. Each link opens the served copy of that file."
           level={2}
         />
-        <div className="mt-5">
+        <div className="mt-4">
           <EvidenceFilter total={evidence.length} />
         </div>
-        <div className="mt-4 space-y-2">
+        <div className="mt-3 space-y-1.5">
           {groups.map(([artifact, entries]) => {
             const files = Array.from(new Set(entries.map((entry) => entry.generated_from)));
             const text = (artifact + ' ' + files.join(' ') + ' ' + entries.map((e) => e.key).join(' ')).toLowerCase();
@@ -88,19 +89,21 @@ export default function Page() {
                 data-evidence-group=""
                 data-evidence-text={text}
                 data-evidence-count={String(entries.length)}
-                className="scroll-mt-24 rounded border border-slate-200 px-3 py-2 dark:border-slate-800"
+                className="scroll-mt-24 rounded-lg border border-line bg-panel px-3 py-2 open:shadow-panel"
               >
-                <summary className="cursor-pointer text-sm">
-                  <span className="font-semibold">{artifact}</span>{' '}
-                  <span className="text-xs text-slate-500">
+                <summary className="cursor-pointer text-body-md marker:text-accent">
+                  <span className="font-mono text-label-md uppercase text-accent-strong">
+                    {artifact}
+                  </span>{' '}
+                  <span className="text-body-sm text-ink-3">
                     {entries.length} {entries.length === 1 ? 'entry' : 'entries'} ·{' '}
                     {files.length === 1 ? files[0] : files.length + ' files'}
                   </span>
                 </summary>
-                <ul className="mt-2 space-y-1.5 text-xs">
+                <ul className="mt-2 space-y-1.5 border-t border-line pt-2 text-body-sm">
                   {entries.map((entry) => (
                     <li key={entry.key} className="grid gap-x-3 sm:grid-cols-[16rem_1fr]">
-                      <span className="font-mono text-slate-600 dark:text-slate-400">{entry.key}</span>
+                      <span className="font-mono text-ink-2">{entry.key}</span>
                       <span className="break-all">
                         {entry.url ? (
                           <a href={entry.url} className="font-mono underline decoration-dotted underline-offset-2">
@@ -109,11 +112,11 @@ export default function Page() {
                         ) : (
                           <span className="font-mono">{entry.generated_from}</span>
                         )}{' '}
-                        <span className="font-mono text-slate-500" title={entry.generated_from_sha256}>
+                        <span className="font-mono text-ink-3" title={entry.generated_from_sha256}>
                           sha256 {entry.generated_from_sha256.slice(0, 12)}
                         </span>
                         {entry.upstream_sources.length > 0 ? (
-                          <span className="block text-slate-500">
+                          <span className="block text-ink-3">
                             built from {entry.upstream_sources.join(', ')}
                           </span>
                         ) : null}

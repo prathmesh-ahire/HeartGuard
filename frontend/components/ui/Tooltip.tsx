@@ -41,14 +41,14 @@ export function Tooltip({
           sideOffset={6}
           collisionPadding={8}
           className={cn(
-            'z-50 max-w-xs rounded border border-slate-700 bg-slate-900 px-2.5 py-1.5',
-            'text-xs leading-relaxed text-slate-100 shadow-lg',
-            'dark:border-slate-600 dark:bg-slate-800',
+            'z-50 max-w-xs rounded border border-line bg-ink px-2.5 py-1.5',
+            'text-xs leading-relaxed text-on-accent shadow-lg',
+            '',
             className,
           )}
         >
           {content}
-          <RadixTooltip.Arrow className="fill-slate-900 dark:fill-slate-800" />
+          <RadixTooltip.Arrow className="fill-ink" />
         </RadixTooltip.Content>
       </RadixTooltip.Portal>
     </RadixTooltip.Root>

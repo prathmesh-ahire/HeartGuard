@@ -95,8 +95,8 @@ export function FileUpload({
         className={cn(
           'rounded-lg border-2 border-dashed p-8 text-center transition-colors',
           dragging
-            ? 'border-sky-500 bg-sky-50 dark:border-sky-400 dark:bg-sky-950/30'
-            : 'border-slate-300 dark:border-slate-700',
+            ? 'border-accent bg-accent-soft'
+            : 'border-line',
           disabled && 'opacity-60',
         )}
       >
@@ -111,9 +111,9 @@ export function FileUpload({
         <label
           htmlFor={inputId}
           className={cn(
-            'mt-4 inline-block cursor-pointer rounded border border-slate-300 px-3 py-1.5',
-            'text-sm font-medium hover:bg-slate-100',
-            'dark:border-slate-700 dark:hover:bg-slate-800',
+            'mt-4 inline-block cursor-pointer rounded border border-line px-3 py-1.5',
+            'text-sm font-medium hover:bg-sunken',
+            '',
             disabled && 'pointer-events-none',
           )}
         >
@@ -141,10 +141,10 @@ export function FileUpload({
               aria-valuemax={100}
               aria-valuenow={progress ?? undefined}
               aria-label={phase === 'validating' ? 'Validating' : 'Uploading'}
-              className="h-1.5 w-full overflow-hidden rounded bg-slate-200 dark:bg-slate-800"
+              className="h-1.5 w-full overflow-hidden rounded bg-sunken"
             >
               <div
-                className="h-full bg-sky-600 transition-[width] dark:bg-sky-500"
+                className="h-full bg-accent transition-[width]"
                 style={{ width: progress === null ? '35%' : `${progress}%` }}
               />
             </div>

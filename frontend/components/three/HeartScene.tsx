@@ -5,7 +5,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 
-import { SERIES_COLORS } from '@/lib/tokens';
+import { BRAND } from '@/lib/tokens';
 
 /**
  * The animated heart (T112.2). **This module is never imported directly.**
@@ -97,7 +97,7 @@ function Heart({ animate }: { animate: boolean }): JSX.Element {
   return (
     <mesh ref={mesh} geometry={geometry} castShadow receiveShadow>
       <meshStandardMaterial
-        color={SERIES_COLORS[1] ?? '#D55E00'}
+        color={BRAND.accent}
         roughness={0.35}
         metalness={0.15}
         envMapIntensity={0.6}

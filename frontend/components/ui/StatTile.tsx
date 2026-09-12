@@ -5,7 +5,9 @@ import { SURFACE, TYPE_SCALE } from '@/lib/tokens';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 
 /**
- * One headline figure.
+ * One headline figure, in the shape of an instrument readout: a status rule
+ * across the top, the label in micro type, the value in tabular monospace with
+ * its unit trailing, and the file it came from in the footer.
  *
  * `display` is required and is the only thing rendered at rest -- the string
  * Python formatted under the thesis rounding rules. `value` is optional and
@@ -25,6 +27,8 @@ export function StatTile({
   hint,
   className,
   animate = false,
+  /** Draws the top rule in the accent rather than the neutral hairline. */
+  marked = false,
 }: {
   label: string;
   display: string;
@@ -34,24 +38,39 @@ export function StatTile({
   hint?: ReactNode;
   className?: string;
   animate?: boolean;
+  marked?: boolean;
 }) {
   return (
-    <div className={cn(SURFACE.card, 'p-4', className)}>
-      <p className={cn(TYPE_SCALE.micro, SURFACE.subtle)}>{label}</p>
-      <p className="mt-2 flex items-baseline gap-1.5">
-        {animate && value !== null ? (
-          <AnimatedCounter value={value} display={display} />
-        ) : (
-          <span className={TYPE_SCALE.stat}>{display}</span>
-        )}
-        {unit ? <span className={cn(TYPE_SCALE.caption, SURFACE.subtle)}>{unit}</span> : null}
-      </p>
-      {hint ? <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mt-2')}>{hint}</p> : null}
-      {source ? (
-        <p className={cn(TYPE_SCALE.caption, SURFACE.subtle, 'mt-2 font-mono break-all')}>
-          {source}
+    <div className={cn(SURFACE.card, 'overflow-hidden', className)}>
+      <div
+        aria-hidden="true"
+        className={cn('h-0.5 w-full', marked ? 'bg-accent' : 'bg-line')}
+      />
+      <div className="p-4">
+        <p className={cn(TYPE_SCALE.micro, SURFACE.subtle)}>{label}</p>
+        <p className="mt-2 flex items-baseline gap-1.5">
+          {animate && value !== null ? (
+            <AnimatedCounter value={value} display={display} />
+          ) : (
+            <span className={cn(TYPE_SCALE.stat, 'text-ink')}>{display}</span>
+          )}
+          {unit ? (
+            <span className={cn('font-mono text-label-md uppercase', SURFACE.subtle)}>{unit}</span>
+          ) : null}
         </p>
-      ) : null}
+        {hint ? <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mt-2')}>{hint}</p> : null}
+        {source ? (
+          <p
+            className={cn(
+              TYPE_SCALE.caption,
+              SURFACE.subtle,
+              'mt-3 break-all border-t border-line pt-2 font-mono',
+            )}
+          >
+            {source}
+          </p>
+        ) : null}
+      </div>
     </div>
   );
 }

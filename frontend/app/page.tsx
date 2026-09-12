@@ -3,6 +3,9 @@ import Link from 'next/link';
 import { Objectives } from '@/components/objectives/Objectives';
 import { Hero3D } from '@/components/three/Hero3D';
 import { PipelineWalkthrough } from '@/components/pipeline/PipelineWalkthrough';
+import { ButtonLink } from '@/components/ui/Button';
+import { GlassCard } from '@/components/ui/GlassCard';
+import { Icon, type IconName } from '@/components/ui/Icon';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { StatTile } from '@/components/ui/StatTile';
 import { datasetSummary, manifest } from '@/lib/generated';
@@ -24,6 +27,20 @@ import { GROUP_LABELS, ROUTES } from '@/lib/routes';
  * tile showing one while the reader assumes the other is how a wrong count gets
  * into a thesis.
  */
+const PAGE_ICONS: Record<string, IconName> = {
+  '/dataset/': 'dataset',
+  '/preprocessing/': 'waveform',
+  '/features/': 'features',
+  '/models/': 'models',
+  '/optimization/': 'optimization',
+  '/robustness/': 'robustness',
+  '/explainability/': 'explainability',
+  '/reports/': 'reports',
+  '/predict/binary/': 'binary',
+  '/predict/multiclass/': 'multiclass',
+  '/predict/murmur/': 'murmur',
+};
+
 export default function HomePage() {
   const groups = (['overview', 'method', 'results', 'predict'] as const).map((group) => ({
     group,
@@ -31,44 +48,65 @@ export default function HomePage() {
   }));
 
   return (
-    <div className="space-y-16">
+    <div className="space-y-6">
       {/* ----------------------------------------------------------------- */}
-      <section className="grid items-center gap-8 lg:grid-cols-2">
-        <div>
-          <p className="text-xs uppercase tracking-widest text-slate-500">
-            Phonocardiogram heart-sound classification
-          </p>
-          <h1 className="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">
-            {manifest.framework}
-          </h1>
-          <p className="mt-5 max-w-xl text-lg text-slate-600 dark:text-slate-400">
-            A search-optimized heterogeneous ensemble over engineered acoustic
-            features, evaluated across four public PCG corpora under subject-grouped
-            cross-validation.
-          </p>
-          <p className="mt-4 max-w-xl text-slate-600 dark:text-slate-400">
-            This site is the reporting surface for that work. Every precomputed value
-            it shows was generated from the pipeline&rsquo;s own output files at build
-            time and can be traced back to the CSV that produced it. The only thing
-            computed while you are here is a prediction you ask for yourself.
-          </p>
-          <div className="mt-7 flex flex-wrap gap-3">
-            <Link
-              href="/dataset/"
-              className="rounded-md bg-sky-700 px-4 py-2 text-sm font-medium text-white hover:bg-sky-800 dark:bg-sky-600 dark:hover:bg-sky-500"
-            >
-              Explore the corpus
-            </Link>
-            <Link
-              href="/predict/binary/"
-              className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-800 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-900"
-            >
-              Screen a recording
-            </Link>
+      {/* The hero reads as the instrument's front panel: identity on the
+          left, the specimen on the right, and the operating parameters along
+          the bottom rail in instrument type. */}
+      <GlassCard marked flush as="section" className="relative">
+        <div
+          aria-hidden="true"
+          className="telemetry-grid pointer-events-none absolute inset-0"
+        />
+        <div className="relative grid items-center gap-6 p-6 lg:grid-cols-[1.15fr_1fr] lg:p-8">
+          <div>
+            <p className="label-micro flex items-center gap-2">
+              <span aria-hidden="true" className="h-2.5 w-0.5 bg-accent" />
+              Phonocardiogram heart-sound classification
+            </p>
+            <h1 className="mt-3 text-headline-xl text-ink sm:text-[40px] sm:leading-[46px]">
+              {manifest.framework}
+            </h1>
+            <p className="mt-4 max-w-xl text-body-lg text-ink-2">
+              A search-optimized heterogeneous ensemble over engineered acoustic
+              features, evaluated across four public PCG corpora under subject-grouped
+              cross-validation.
+            </p>
+            <p className="mt-3 max-w-xl text-body-md text-ink-3">
+              This site is the reporting surface for that work. Every precomputed value
+              it shows was generated from the pipeline&rsquo;s own output files at build
+              time and can be traced back to the CSV that produced it. The only thing
+              computed while you are here is a prediction you ask for yourself.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-2">
+              <ButtonLink href="/dataset/" tone="primary" size="lg" icon="dataset">
+                Explore the corpus
+              </ButtonLink>
+              <ButtonLink href="/predict/binary/" size="lg" icon="upload">
+                Screen a recording
+              </ButtonLink>
+            </div>
           </div>
+          <Hero3D height="20rem" interactive />
         </div>
-        <Hero3D height="22rem" interactive />
-      </section>
+
+        {/* The operating parameters, as an instrument rail. Every value here is
+            read from the export manifest -- nothing is stated about the run
+            that the run did not record. */}
+        <dl className="relative flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-line bg-sunken px-6 py-2.5">
+          {[
+            { term: 'Corpora', detail: datasetSummary.summary.length },
+            { term: 'Tables exported', detail: manifest.n_tables },
+            { term: 'Figures exported', detail: manifest.n_figures },
+            { term: 'Branch', detail: manifest.git_branch ?? 'unknown' },
+          ].map((entry) => (
+            <div key={entry.term} className="flex items-center gap-2">
+              <dt className="label-micro">{entry.term}</dt>
+              <dd className="stat font-mono text-label-md text-ink">{entry.detail}</dd>
+            </div>
+          ))}
+        </dl>
+      </GlassCard>
 
       {/* ----------------------------------------------------------------- */}
       <section>
@@ -77,14 +115,15 @@ export default function HomePage() {
           title="Four public datasets, audited against the files on disk"
           description={datasetSummary.scope_note}
         />
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {datasetSummary.summary.map((row) => (
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          {datasetSummary.summary.map((row, index) => (
             <StatTile
               key={row.dataset_source}
+              marked={index === 0}
               label={row.dataset_name}
               display={row.n_modelled_display}
               value={row.n_modelled}
-              unit="modelled recordings"
+              unit="modelled"
               source={datasetSummary.source}
               hint={
                 <>
@@ -104,7 +143,7 @@ export default function HomePage() {
           title="The six locked objectives"
           description="Quoted exactly as the source document fixes them."
         />
-        <Objectives className="mt-6" />
+        <Objectives className="mt-4" />
       </section>
 
       {/* ----------------------------------------------------------------- */}
@@ -114,34 +153,39 @@ export default function HomePage() {
           title="From a recording to a screened result"
           description="Twelve steps, each naming the module that implements it and the outputs directory that evidences it. Both are checked when this page is built."
         />
-        <PipelineWalkthrough className="mt-6" />
+        <PipelineWalkthrough className="mt-4" />
       </section>
 
       {/* ----------------------------------------------------------------- */}
       <section>
         <SectionHeader eyebrow="Contents" title="Pages" level={2} />
-        <div className="mt-6 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
           {groups.map(({ group, routes }) => (
-            <div key={group}>
-              <h3 className="text-xs uppercase tracking-widest text-slate-400 dark:text-slate-500">
-                {GROUP_LABELS[group]}
-              </h3>
-              <ul className="mt-3 space-y-3">
+            <GlassCard key={group} eyebrow={GROUP_LABELS[group]} flush>
+              <ul className="divide-y divide-line">
                 {routes.map((route) => (
                   <li key={route.href}>
                     <Link
                       href={route.href}
-                      className="font-medium text-sky-700 hover:underline dark:text-sky-400"
+                      className="group flex gap-2.5 p-3 transition-colors hover:bg-accent-soft/50"
                     >
-                      {route.label}
+                      <Icon
+                        name={PAGE_ICONS[route.href] ?? 'features'}
+                        className="mt-0.5 h-4 w-4 shrink-0 text-ink-3 transition-colors group-hover:text-accent"
+                      />
+                      <span className="min-w-0">
+                        <span className="block font-mono text-label-md uppercase text-accent-strong">
+                          {route.label}
+                        </span>
+                        <span className="mt-1 block text-body-sm text-ink-3">
+                          {route.summary}
+                        </span>
+                      </span>
                     </Link>
-                    <p className="mt-0.5 text-sm text-slate-600 dark:text-slate-400">
-                      {route.summary}
-                    </p>
                   </li>
                 ))}
               </ul>
-            </div>
+            </GlassCard>
           ))}
         </div>
       </section>

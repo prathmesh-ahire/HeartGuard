@@ -27,10 +27,10 @@ export function PagePlaceholder({
     <section className="max-w-3xl">
       <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
       {route ? (
-        <p className="mt-3 text-slate-600 dark:text-slate-400">{route.summary}</p>
+        <p className="mt-3 text-ink-2">{route.summary}</p>
       ) : null}
-      <div className="mt-6 rounded border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-600 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-400">
-        <p className="font-medium text-slate-800 dark:text-slate-200">
+      <div className="mt-6 rounded border border-dashed border-line bg-sunken p-4 text-sm text-ink-2">
+        <p className="font-medium text-ink">
           Route scaffolded; content not built yet.
         </p>
         <p className="mt-1">

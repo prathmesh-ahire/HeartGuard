@@ -67,13 +67,13 @@ export function PatientPanel({ task, className }: { task: string; className?: st
     <section className={className} aria-label="Patient-level analysis">
       <p className={cn(TYPE_SCALE.body, SURFACE.muted, 'max-w-prose')}>{group.note}</p>
 
-      <div className="mt-4 overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-800">
+      <div className="mt-4 overflow-x-auto rounded-lg border border-line">
         <table className="min-w-full text-left text-sm">
           <caption className={cn(TYPE_SCALE.caption, SURFACE.muted, 'p-3 text-left')}>
             Dataset sample {group.subject_id}: the four recordings this subject was screened
             with. Not a patient and not a case — de-identified paediatric screening data.
           </caption>
-          <thead className="bg-slate-50 text-xs uppercase tracking-widest text-slate-500 dark:bg-slate-900/60">
+          <thead className="border-b-2 border-line bg-sunken font-mono text-label-sm uppercase text-ink-3">
             <tr>
               <th scope="col" className="px-3 py-2">Recording</th>
               <th scope="col" className="px-3 py-2">Location</th>
@@ -91,7 +91,7 @@ export function PatientPanel({ task, className }: { task: string; className?: st
               return (
                 <tr
                   key={member.sample_id}
-                  className="border-t border-slate-100 dark:border-slate-800"
+                  className="border-t border-line"
                 >
                   <td className="px-3 py-1.5 font-mono">{member.record_uid}</td>
                   <td className="px-3 py-1.5">
@@ -133,8 +133,8 @@ export function PatientPanel({ task, className }: { task: string; className?: st
         onClick={() => void run()}
         disabled={busy}
         className={cn(
-          'mt-4 rounded px-4 py-2 text-sm font-semibold text-white',
-          'bg-sky-700 hover:bg-sky-800 disabled:opacity-50 dark:bg-sky-600 dark:hover:bg-sky-500',
+          'mt-4 rounded px-4 py-2 text-sm font-semibold text-on-accent',
+          'bg-accent-strong hover:bg-accent-strong disabled:opacity-50',
         )}
       >
         {busy ? 'Scoring all four recordings…' : 'Score this subject at every location'}
@@ -163,9 +163,9 @@ export function PatientPanel({ task, className }: { task: string; className?: st
             {result.rules.map((rule) => (
               <li
                 key={rule.rule}
-                className="rounded-lg border border-slate-200 p-4 dark:border-slate-800"
+                className="rounded-lg border border-line p-4"
               >
-                <p className="font-mono text-xs uppercase tracking-widest text-slate-500">
+                <p className="label-micro">
                   {rule.rule}
                 </p>
                 <p className={cn(TYPE_SCALE.h3, 'mt-1')}>{rule.predicted_class}</p>
@@ -177,8 +177,8 @@ export function PatientPanel({ task, className }: { task: string; className?: st
           <p
             className={cn(
               TYPE_SCALE.caption,
-              'mt-4 rounded border border-sky-300 bg-sky-50 p-3 text-sky-900',
-              'dark:border-sky-800 dark:bg-sky-950/40 dark:text-sky-100',
+              'mt-4 rounded border border-accent-line bg-accent-soft p-3 text-accent-deep',
+              '',
             )}
           >
             {result.disclaimer}
