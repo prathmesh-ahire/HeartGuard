@@ -266,7 +266,10 @@ def build_zip(destination: Path | None = None, *, root: Path | None = None) -> P
         if _excluded(relative):
             continue
         files.append(relative)
-    files.sort()
+    # By name at every level: `sorted()` on Path is case-folded on Windows and
+    # case-sensitive on Linux, which would make the archive's entry order (and
+    # therefore its sha256) depend on the machine that built it.
+    files.sort(key=lambda item: item.as_posix())
 
     counts = asset_inventory(base)
     manifest = _manifest(base, counts, files)
