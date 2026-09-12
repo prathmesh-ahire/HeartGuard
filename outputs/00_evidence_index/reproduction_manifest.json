@@ -1,0 +1,38 @@
+{
+  "mode": "full",
+  "resume": false,
+  "started_utc": "2026-09-12T11:00:38.359436+00:00",
+  "finished_utc": "2026-09-12T11:04:16.621078+00:00",
+  "total_seconds": 218.253,
+  "total_hours": 0.0606,
+  "n_stages": 3,
+  "n_ok": 3,
+  "n_failed": 0,
+  "n_skipped": 0,
+  "stages": [
+    {
+      "stage_id": "frontend_build",
+      "status": "ok",
+      "seconds": 101.899,
+      "returncode": 0,
+      "command": "C:\\Program Files\\nodejs\\npm.CMD run build",
+      "detail": ""
+    },
+    {
+      "stage_id": "screenshots",
+      "status": "ok",
+      "seconds": 113.553,
+      "returncode": 0,
+      "command": "D:\\Projects\\HeartGuard\\.venv\\Scripts\\python.exe scripts/47_dashboard_screenshots.py",
+      "detail": ""
+    },
+    {
+      "stage_id": "evidence_index_final",
+      "status": "ok",
+      "seconds": 2.798,
+      "returncode": 0,
+      "command": "D:\\Projects\\HeartGuard\\.venv\\Scripts\\python.exe scripts/42_evidence_index.py",
+      "detail": ""
+    }
+  ]
+}

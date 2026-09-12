@@ -1,0 +1,9 @@
+task,run,model_id,true_index,true_class,pred_index,pred_class,count_repeat0,count_all_folds,row_share_all_folds,n_folds_repeat0,n_folds_all
+binary,EXP-A2,M1,0,normal,0,normal,2146,10670,0.8287378640776699,5,25
+binary,EXP-A2,M1,0,normal,1,abnormal,429,2205,0.1712621359223301,5,25
+binary,EXP-A2,M1,1,abnormal,0,normal,96,449,0.1350375939849624,5,25
+binary,EXP-A2,M1,1,abnormal,1,abnormal,569,2876,0.8649624060150376,5,25
+binary,EXP-A2,M6,0,normal,0,normal,2185,10946,0.8501747572815535,5,25
+binary,EXP-A2,M6,0,normal,1,abnormal,390,1929,0.1498252427184466,5,25
+binary,EXP-A2,M6,1,abnormal,0,normal,92,460,0.13834586466165413,5,25
+binary,EXP-A2,M6,1,abnormal,1,abnormal,573,2865,0.8616541353383459,5,25

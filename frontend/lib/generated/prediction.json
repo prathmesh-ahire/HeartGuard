@@ -26,8 +26,8 @@
       ],
       "description": "Four PASCAL Dataset A categories. `artifact` is a RECORDING-QUALITY label, not a cardiac class, so this is not a four-class cardiac classifier.",
       "page": "/predict/multiclass/",
-      "model_available_at_export": false,
-      "reason_at_export": "no model at pascal_a/final; the experiment that produces it has not been run yet",
+      "model_available_at_export": true,
+      "reason_at_export": null,
       "model_dir": "pascal_a/final"
     },
     {
@@ -40,8 +40,8 @@
       ],
       "description": "Three PASCAL Dataset B categories.",
       "page": "/predict/multiclass/",
-      "model_available_at_export": false,
-      "reason_at_export": "no model at pascal_b/final; the experiment that produces it has not been run yet",
+      "model_available_at_export": true,
+      "reason_at_export": null,
       "model_dir": "pascal_b/final"
     },
     {
@@ -54,8 +54,8 @@
       ],
       "description": "Murmur annotation from the CirCor corpus. `Unknown` is the annotator's own third category, not a low-confidence bucket.",
       "page": "/predict/murmur/",
-      "model_available_at_export": false,
-      "reason_at_export": "no model at murmur/final; the experiment that produces it has not been run yet",
+      "model_available_at_export": true,
+      "reason_at_export": null,
       "model_dir": "murmur/final"
     },
     {
@@ -67,8 +67,8 @@
       ],
       "description": "Clinical outcome label from the CirCor per-patient text files.",
       "page": "/predict/murmur/",
-      "model_available_at_export": false,
-      "reason_at_export": "no model at outcome/final; the experiment that produces it has not been run yet",
+      "model_available_at_export": true,
+      "reason_at_export": null,
       "model_dir": "outcome/final"
     }
   ],
@@ -624,6 +624,6 @@
   "operating_point": {
     "threshold": 0.5,
     "threshold_display": "0.500",
-    "note": "The deployed binary bundle carries no in-fold threshold, and every stored prediction in outputs/06_binary_results/ is the plain argmax. Inference therefore decides at 0.5, which is what reproduces the experiments."
+    "note": "On a TWO-class task the deployed bundle carries no in-fold threshold, and every stored prediction in the experiment that backs it is the plain argmax, so inference decides at 0.5 -- which is what reproduces those results. A multiclass task has no single operating point at all: the highest probability wins. Each result below states which rule it used."
   }
 }

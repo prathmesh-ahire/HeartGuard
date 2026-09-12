@@ -91,15 +91,18 @@ REPORT_END = "=== END GENERATED COMPLETENESS AUDIT ==="
 
 PART_X_SCREENSHOTS = (
     "Dashboard screenshots are Phase 120 (Part X). T119.4 makes the displayed-value "
-    "audit a hard gate before any screenshot is taken, and that audit (Phase 119) has "
-    "not run, so no screenshot may exist yet."
+    "audit a hard gate before any screenshot is taken, so a missing screenshot here "
+    "means the gated capture (python scripts/47_dashboard_screenshots.py) has not been "
+    "run in this checkout -- it needs a built frontend/out/, a running inference "
+    "service and a local dataset/ copy."
 )
 PHASE_103 = "Produced by Phase 103 (Q1 / IEEE paper asset pack); regenerate this index after it."
 PHASE_104 = "Produced by Phase 104 (thesis asset pack); regenerate this index after it."
 ONE_COMMAND = (
-    "The single command reproducing the pipeline end to end is T122.1 "
-    "(scripts/00_run_everything.py, Phase 122). Every artifact already carries its own "
-    "reproduction command in this index; the one-command wrapper does not exist yet."
+    "The single command reproducing the pipeline end to end is "
+    "scripts/00_run_everything.py (T122.1). Every artifact also carries its own "
+    "reproduction command in this index, and tests/test_run_everything.py asserts "
+    "that every script named in this column appears in that runner's stage list."
 )
 FINAL_ZIP = "The delivery ZIP is packaged in Phase 126 (T126.3), after every other deliverable."
 M9_REASON = (

@@ -1,0 +1,24 @@
+{
+  "check": "T122.4 -- a second run of a committed experiment reproduces its metrics",
+  "why_not_the_whole_pipeline": "A complete run is a measured 67.6 h on this machine (see scripts/00_run_everything.py --estimate and outputs/missing_outputs_report.txt). Seed discipline is a property of the pipeline, not of any one experiment, so it is proven on a bounded one that exercises the whole stack: fold map, fold-safe scaling, imputation, six models including both ensembles, and the aggregation.",
+  "experiment": "EXP-B1-defaults (PASCAL A four-class, untuned, repeated 5x2 stratified)",
+  "command": "python scripts/11_run_experiment.py --exp EXP-B1 --variant defaults --out-dir <scratch> --no-resume",
+  "checked_utc": "2026-09-12T11:12:19.531630+00:00",
+  "git_commit": "a1c897159c569d6a9184980e9cc644dbbfa0b889",
+  "committed_file": "outputs/07_multiclass_results/EXP-B1-defaults/aggregate_metrics.csv",
+  "committed_sha256": "0c73338e66b90c351d7370d37cde8224d199cd88d24cdc26b0e57e105dbdc039",
+  "n_models": 6,
+  "n_columns_compared": 95,
+  "n_numeric_columns_compared": 91,
+  "columns_excluded_as_wall_clock": [
+    "fit_seconds_mean",
+    "fit_seconds_n",
+    "fit_seconds_sd",
+    "predict_seconds_mean",
+    "predict_seconds_n",
+    "predict_seconds_sd"
+  ],
+  "max_absolute_difference": 0.0,
+  "non_numeric_columns_identical": true,
+  "verdict": "identical"
+}

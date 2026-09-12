@@ -1,0 +1,7 @@
+family,extractor,n_features,first_index
+time,time_domain,24,0
+frequency,frequency,22,24
+mfcc,mfcc,39,46
+chroma,chroma,24,85
+dwt,wavelet,24,109
+envelope,envelope,5,133

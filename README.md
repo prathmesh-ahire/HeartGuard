@@ -146,7 +146,61 @@ that Node LTS and npm resolve. Exits nonzero on any failure.
 
 ### 5. Run the pipeline
 
-_Placeholder — entry points land in Part IX._
+```bash
+python scripts/00_run_everything.py --list        # the 65 stages, in order
+python scripts/00_run_everything.py --estimate    # what a full run costs, measured
+python scripts/00_run_everything.py               # everything, raw data to screenshots
+python scripts/00_run_everything.py --resume      # skip stages whose outputs exist
+```
+
+One command reproduces the project end to end: dataset audit, preprocessing,
+feature extraction, models, search, every experiment, every analysis, every
+table, figure, algorithm and asset pack, the evidence index, then the frontend
+chain (`npm ci`, `npm run build` with its guard rail and displayed-value audit)
+and the thirteen gated dashboard screenshots.
+
+**Read `--estimate` before starting one.** A complete run from an empty
+`outputs/` is **67.6 hours of CPU** on the machine this was built on — EXP-A2
+alone is 23.6 h and EXP-C1 is 16.4 h — and there is no GPU path. That figure is
+summed from the recorded start and finish of every run in
+`outputs/00_evidence_index/run_manifest.json`; it is a measurement, not an
+estimate. `--resume` skips any stage whose declared outputs already exist, so an
+interrupted run continues rather than restarting, and the long experiments carry
+their own per-fold checkpointing underneath that.
+
+Useful subsets:
+
+| Flag | Effect |
+|---|---|
+| `--from <stage>` | start partway through, e.g. `--from tables_setup` |
+| `--only <stage>` | one stage; repeatable |
+| `--skip-frontend` | stop after the evidence index |
+| `--dry-run` | print what would run and stop |
+| `--smoke` | the reduced path of every stage that declares one |
+
+`--smoke` runs each script's own reduced form. Those write into the normal output
+directories, so use it on a scratch checkout rather than over a completed
+`outputs/`.
+
+### Reproducibility
+
+- **Seed 42, everywhere.** Every run records its seed, fold map,
+  hyperparameters and package versions to `run_manifest.json`. Two runs of the
+  same command produce identical numbers.
+- **Every artifact carries its own command.** `evidence_index.csv`'s `command`
+  column is the exact invocation that produced that file, and
+  `tests/test_run_everything.py` asserts that every script named there appears in
+  the one-command runner — so "one command rebuilds this" cannot quietly stop
+  being true.
+- **`frontend/out/` is committed.** A grader with no Node install can serve the
+  whole dashboard from FastAPI alone (`python -m uvicorn src.api.main:app`).
+  Rebuild it only at a release point: every build rewrites the content-hashed
+  chunk names.
+- **The environment is frozen** at `outputs/configs/pip_freeze.txt` and
+  `frontend/package-lock.json`.
+- **What was not done** is written down. A literal single-pass run from an empty
+  `outputs/` is recorded in `outputs/missing_outputs_report.txt` with its reason
+  (67.6 h) and with exactly what was verified instead.
 
 ## What CI proves — and what it does not
 

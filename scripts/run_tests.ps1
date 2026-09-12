@@ -23,7 +23,7 @@
     Produce a coverage report over src/.
 
 .PARAMETER Frontend
-    After pytest, run the frontend suite (T118.6): a fresh `npm run build` (the
+    After pytest, run the frontend suite (T118.6 / T120.6): a fresh `npm run build` (the
     metric guard, the exporter, Next, the bundle budget), the Python
     displayed-value audits over the new build, Vitest, and Playwright. The build
     is never skipped, so the browser tests cannot run against a stale site.
@@ -96,7 +96,12 @@ if ($Frontend -or $FrontendOnly) {
                 (Join-Path $root 'tests\test_pages_4_6.py') `
                 (Join-Path $root 'tests\test_pages_10_12.py') -q -p no:cacheprovider } },
         @{ Name = 'vitest'; Run = { npm run test } },
-        @{ Name = 'playwright'; Run = { npm run test:e2e } }
+        @{ Name = 'playwright'; Run = { npm run test:e2e } },
+        # Phase 120. Last, and only reachable because the build above ends in
+        # the displayed-value audit: the capture's globalSetup refuses unless
+        # the site on disk is byte-for-byte the build that audit passed on.
+        @{ Name = 'dashboard screenshots (gated)'; Run = {
+            & $python (Join-Path $root 'scripts'_dashboard_screenshots.py') } }
     )
     Push-Location (Join-Path $root 'frontend')
     # npm, Next and Playwright's servers write progress to stderr. Under 'Stop',

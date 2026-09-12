@@ -1,0 +1,205 @@
+{
+  "task": "binary",
+  "model_id": "M1",
+  "method": "exact linear decomposition (coefficient x scaled value)",
+  "units": "log-odds (natural log of the odds of the positive class)",
+  "base_value": -2.1775501778952333,
+  "total_contribution": 4.549459298945884,
+  "decision_value": 2.3719091210506513,
+  "reconstruction_error": 8.881784197001252e-16,
+  "predicted_class": "abnormal",
+  "predicted_index": 1,
+  "probability": 0.9146599990078271,
+  "n_features": 138,
+  "n_shown": 20,
+  "top_contributions": [
+    {
+      "feature": "time_zcr_mean",
+      "family": "time",
+      "raw_value": 0.03960853494623656,
+      "scaled_value": -1.0268429322014694,
+      "weight": -2.619494272362021,
+      "contribution": 2.689809179517172,
+      "direction": "toward abnormal"
+    },
+    {
+      "feature": "dwt_cD1_entropy",
+      "family": "dwt",
+      "raw_value": 1.630111125390798,
+      "scaled_value": -0.8755158544289813,
+      "weight": -1.5807519250390885,
+      "contribution": 1.3839733722908545,
+      "direction": "toward abnormal"
+    },
+    {
+      "feature": "dwt_cA5_energy",
+      "family": "dwt",
+      "raw_value": 25523.994281032203,
+      "scaled_value": 1.7009192588671063,
+      "weight": 0.6392158848476573,
+      "contribution": 1.0872546091111588,
+      "direction": "toward abnormal"
+    },
+    {
+      "feature": "mfcc_04_mean",
+      "family": "mfcc",
+      "raw_value": 14.908208826800898,
+      "scaled_value": 0.7804066356165891,
+      "weight": 1.1733749379790743,
+      "contribution": 0.9157095876650733,
+      "direction": "toward abnormal"
+    },
+    {
+      "feature": "freq_centroid_mean",
+      "family": "frequency",
+      "raw_value": 72.03074661868833,
+      "scaled_value": -0.7610501184451026,
+      "weight": 1.006147259520661,
+      "contribution": -0.7657284910314145,
+      "direction": "toward normal"
+    },
+    {
+      "feature": "dwt_cD2_entropy",
+      "family": "dwt",
+      "raw_value": 1.5689916864591813,
+      "scaled_value": -1.0660936225842255,
+      "weight": 0.6573448843914399,
+      "contribution": -0.700791189088079,
+      "direction": "toward normal"
+    },
+    {
+      "feature": "mfcc_03_mean",
+      "family": "mfcc",
+      "raw_value": 21.13084266958355,
+      "scaled_value": 1.231783272945837,
+      "weight": 0.5669099194693465,
+      "contribution": 0.6983101560694125,
+      "direction": "toward abnormal"
+    },
+    {
+      "feature": "dwt_cD2_mean_abs",
+      "family": "dwt",
+      "raw_value": 0.03265170802252716,
+      "scaled_value": -0.5020041146473245,
+      "weight": 1.2219802944806957,
+      "contribution": -0.6134391358472585,
+      "direction": "toward normal"
+    },
+    {
+      "feature": "time_sample_entropy",
+      "family": "time",
+      "raw_value": 0.1800134007875518,
+      "scaled_value": -0.4315744778146266,
+      "weight": -1.3572515960198699,
+      "contribution": 0.5857551488153439,
+      "direction": "toward abnormal"
+    },
+    {
+      "feature": "time_hjorth_mobility",
+      "family": "time",
+      "raw_value": 0.1504762592898427,
+      "scaled_value": -0.6477117905476364,
+      "weight": -0.8981405447039444,
+      "contribution": 0.5817362203736213,
+      "direction": "toward abnormal"
+    },
+    {
+      "feature": "freq_centroid_std",
+      "family": "frequency",
+      "raw_value": 13.299007265283956,
+      "scaled_value": -0.8213755941118998,
+      "weight": 0.596719666308102,
+      "contribution": -0.4901309704320719,
+      "direction": "toward normal"
+    },
+    {
+      "feature": "dwt_cD5_energy",
+      "family": "dwt",
+      "raw_value": 33177.413895530524,
+      "scaled_value": 1.0559199481761146,
+      "weight": -0.4559535797161815,
+      "contribution": -0.4814504802646243,
+      "direction": "toward normal"
+    },
+    {
+      "feature": "freq_band_power_20_50",
+      "family": "frequency",
+      "raw_value": 0.7302009197855462,
+      "scaled_value": 0.7110586967294809,
+      "weight": 0.6717917830612522,
+      "contribution": 0.4776833897371081,
+      "direction": "toward abnormal"
+    },
+    {
+      "feature": "freq_rolloff85_mean",
+      "family": "frequency",
+      "raw_value": 120.7997311827957,
+      "scaled_value": -0.6754078236700847,
+      "weight": 0.6730670405420581,
+      "contribution": -0.45459474503657615,
+      "direction": "toward normal"
+    },
+    {
+      "feature": "chroma_10_mean",
+      "family": "chroma",
+      "raw_value": 0.8067299172104184,
+      "scaled_value": 1.2443374706968329,
+      "weight": 0.36089198583459103,
+      "contribution": 0.44907142084817225,
+      "direction": "toward abnormal"
+    },
+    {
+      "feature": "chroma_07_std",
+      "family": "chroma",
+      "raw_value": 0.12018747502806172,
+      "scaled_value": -0.8600701407772752,
+      "weight": 0.4958913986930384,
+      "contribution": -0.4265013850841614,
+      "direction": "toward normal"
+    },
+    {
+      "feature": "freq_flux_mean",
+      "family": "frequency",
+      "raw_value": 0.13713937093219844,
+      "scaled_value": 0.662027642636275,
+      "weight": -0.5453773376739663,
+      "contribution": -0.36105487320754365,
+      "direction": "toward normal"
+    },
+    {
+      "feature": "chroma_09_mean",
+      "family": "chroma",
+      "raw_value": 0.7694077465111865,
+      "scaled_value": 0.658675884592531,
+      "weight": -0.5214935044188261,
+      "contribution": -0.3434951953323293,
+      "direction": "toward normal"
+    },
+    {
+      "feature": "dwt_cD3_entropy",
+      "family": "dwt",
+      "raw_value": 1.7266213015012208,
+      "scaled_value": -1.320894660157196,
+      "weight": 0.24100390277473788,
+      "contribution": -0.3183407682521953,
+      "direction": "toward normal"
+    },
+    {
+      "feature": "dwt_cD1_mean_abs",
+      "family": "dwt",
+      "raw_value": 0.0047254529369915215,
+      "scaled_value": -0.3413963215892916,
+      "weight": 0.8998924737083724,
+      "contribution": -0.30721998034992665,
+      "direction": "toward normal"
+    }
+  ],
+  "caveats": [
+    "Contributions are in log-odds, not in probability and not in risk. A contribution of +0.8 did not add 80% of anything.",
+    "A contribution is the model's weight multiplied by how unusual this recording is on that feature, in standard deviations from the corpus mean. A large value is as much a statement about the recording being atypical as about the model's view of the feature.",
+    "PV-MEPCG / PulseVision is an academic screening and decision-support prototype. An explanation of a prediction is not a clinical explanation."
+  ],
+  "record_uid": "D1_training-a_a0001",
+  "true_class": "abnormal",
+  "selection_rule": "first abnormal D1 record in record_uid order"
+}

@@ -1,0 +1,9 @@
+model_id,permutation,impurity,shap,excluded_reason
+M1,True,False,False,
+M2,False,False,False,KNN has no feature_importances_ and is not in the reported model set; permutation importance would be measurable but the model is not one any table reports.
+M3,True,False,False,
+M4,True,True,True,
+M5,True,True,True,
+M6,False,False,False,"soft-voting ensemble: ~228 s to fit and ~0.58 s per batch prediction, so 138 features x 10 repeats is ~17 minutes per fold and ~85 minutes over the five. Its importance is a weighted blend of M3, M4 and M5, each reported individually here. Run with --models M6 to include it."
+M7,False,False,False,"same cost as M6, and M7 differs from it only in its weights. See M6."
+M8,True,True,True,
