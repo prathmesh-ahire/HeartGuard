@@ -161,7 +161,9 @@ def test_no_page_renders_its_own_disclaimer(scaffolded: None) -> None:
             page.name + " renders its own disclaimer; it belongs in the layout only"
         )
         for chrome in ("AppShell", "SideNav", "TopBar"):
-            assert chrome not in body, page.name + " renders " + chrome + "; it belongs in the layout only"
+            assert chrome not in body, (
+                page.name + " renders " + chrome + "; it belongs in the layout only"
+            )
 
 
 def test_the_disclaimer_uses_screening_language_and_no_diagnostic_claim(
