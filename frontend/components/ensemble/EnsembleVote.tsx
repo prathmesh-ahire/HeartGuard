@@ -154,9 +154,6 @@ export function EnsembleVote({ className }: { className?: string }) {
       )}
 
       <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mt-4')}>{ensemble.interpretation}</p>
-      <p className={cn(TYPE_SCALE.micro, SURFACE.subtle, 'mt-2 font-mono')}>
-        source {ensemble.source}
-      </p>
     </div>
   );
 }

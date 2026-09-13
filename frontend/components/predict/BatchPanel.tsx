@@ -6,6 +6,7 @@ import { cn } from '@/lib/cn';
 import { Badge } from '@/components/ui/Badge';
 import { EmptyState } from '@/components/ui/States';
 import { validateRecording } from '@/components/ui/FileUpload';
+import { SHOW_SCREENING_NOTICE } from '@/lib/flags';
 import { SURFACE, TYPE_SCALE } from '@/lib/tokens';
 import { prediction } from '@/lib/generated/prediction';
 import { ApiError, predictFile, type PredictResult } from '@/lib/api';
@@ -229,9 +230,11 @@ export function BatchPanel({ task, className }: { task: string; className?: stri
         </div>
       )}
 
-      <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mt-3')}>
-        {prediction.disclaimer}
-      </p>
+      {SHOW_SCREENING_NOTICE ? (
+        <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mt-3')}>
+          {prediction.disclaimer}
+        </p>
+      ) : null}
     </section>
   );
 }

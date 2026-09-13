@@ -174,6 +174,25 @@ class TestPlantedViolations:
         compliance._check_disclaimer(report, tmp_path)
         assert report.for_check("disclaimer"), "an empty tree passed the disclaimer check"
 
+    def test_the_built_page_check_is_suspended_only_by_the_flag(self, tmp_path: Path) -> None:
+        """T127.2: with the notice off the check says SUSPENDED; with it on it binds."""
+        page = tmp_path / "frontend" / "out" / "index.html"
+        page.parent.mkdir(parents=True)
+        page.write_text("<html><body>no notice</body></html>", encoding="utf-8")
+        flags = tmp_path / "frontend" / "lib" / "flags.ts"
+        flags.parent.mkdir(parents=True)
+
+        flags.write_text("export const SHOW_SCREENING_NOTICE = false;\n", encoding="utf-8")
+        report = ComplianceReport()
+        compliance._check_disclaimer(report, tmp_path)
+        assert "SUSPENDED" in report.notes["disclaimer"]
+        assert not any("built page" in f.why for f in report.for_check("disclaimer"))
+
+        flags.write_text("export const SHOW_SCREENING_NOTICE = true;\n", encoding="utf-8")
+        report = ComplianceReport()
+        compliance._check_disclaimer(report, tmp_path)
+        assert any("built page" in f.why for f in report.for_check("disclaimer"))
+
     def test_a_documented_count_that_contradicts_the_audit_is_caught(self, tmp_path: Path) -> None:
         audit = tmp_path / "outputs" / "01_dataset_audit"
         audit.mkdir(parents=True)

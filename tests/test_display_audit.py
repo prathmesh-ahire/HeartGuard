@@ -53,7 +53,9 @@ def small_site(tmp_path: Path) -> Path:
     site = tmp_path / "out"
     (site / "limitations").mkdir(parents=True)
     shutil.copyfile(OUT / "index.html", site / "index.html")
-    shutil.copyfile(OUT / "limitations" / "index.html", site / "limitations" / "index.html")
+    shutil.copyfile(
+        OUT / "about" / "limitations" / "index.html", site / "limitations" / "index.html"
+    )
     return site
 
 
@@ -113,34 +115,91 @@ def test_a_stale_evidence_digest_is_caught(small_site: Path, tmp_path: Path) -> 
 
 
 # ---------------------------------------------------------------------------
-# T119.5 -- the footer is the run
+# T119.5 -- the manifest is the run. Until T127.1 each page footer also had to
+# print the run id, commit and export time; the product UI shows no internal
+# information, so that half is now the inverse check below.
 # ---------------------------------------------------------------------------
 
 
-def test_every_page_footer_shows_the_run_that_produced_the_artifacts(real: da.AuditReport) -> None:
+def test_the_site_was_built_from_a_recorded_export_run(real: da.AuditReport) -> None:
     manifest: dict[str, Any] = json.loads((GENERATED / "manifest.json").read_text(encoding="utf-8"))
-    runs = json.loads(
-        (PROJECT_ROOT / "outputs" / "00_evidence_index" / "run_manifest.json").read_text(
-            encoding="utf-8"
-        )
-    )
+    runs = json.loads(REAL_MANIFEST.read_text(encoding="utf-8"))
     run = next(item for item in runs["runs"] if item["run_id"] == manifest["run_id"])
     assert run["name"] == "export_frontend_data"
-    assert real.findings["footer_is_the_run"] == []
+    assert real.findings["manifest_is_the_run"] == []
     assert real.run_id == manifest["run_id"]
 
 
-def test_a_footer_naming_an_unrecorded_run_is_caught(small_site: Path, tmp_path: Path) -> None:
+def test_a_manifest_naming_an_unrecorded_run_is_caught(small_site: Path, tmp_path: Path) -> None:
     generated = _copy_generated(tmp_path)
     manifest = json.loads((generated / "manifest.json").read_text(encoding="utf-8"))
     manifest["run_id"] = "20990101T000000Z-deadbeef"
     (generated / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
 
     findings = da.run_audit(out_dir=small_site, generated_dir=generated).findings[
-        "footer_is_the_run"
+        "manifest_is_the_run"
     ]
     assert any("is not in the project's run manifest" in item for item in findings)
-    assert any("the footer does not show 20990101T000000Z-deadbeef" in item for item in findings)
+
+
+# ---------------------------------------------------------------------------
+# T127.1 / T127.2 -- no internal information, and no half-removed notice
+# ---------------------------------------------------------------------------
+
+
+def test_the_real_build_shows_no_internal_information(real: da.AuditReport) -> None:
+    assert real.findings["internal_info"] == [], "\n".join(real.findings["internal_info"])
+
+
+@pytest.mark.parametrize(
+    "planted",
+    [
+        "outputs/06_models/T08_binary.csv",
+        "scripts/17_export_frontend_data.py",
+        "the run manifest",
+        "D:/Projects",
+    ],
+)
+def test_planted_internal_information_is_caught(small_site: Path, planted: str) -> None:
+    page = small_site / "limitations" / "index.html"
+    page.write_text(
+        page.read_text(encoding="utf-8").replace("</h1>", " " + planted + "</h1>", 1),
+        encoding="utf-8",
+    )
+    findings = da.run_audit(out_dir=small_site).findings["internal_info"]
+    assert findings, planted + " passed the internal-information check"
+
+
+def test_the_commit_hash_on_a_page_is_caught(small_site: Path) -> None:
+    commit = str(
+        json.loads((GENERATED / "manifest.json").read_text(encoding="utf-8"))["git_commit"]
+    )
+    page = small_site / "index.html"
+    page.write_text(
+        page.read_text(encoding="utf-8").replace("</h1>", " " + commit[:7] + "</h1>", 1),
+        encoding="utf-8",
+    )
+    findings = da.run_audit(out_dir=small_site).findings["internal_info"]
+    assert any(commit[:7] in item for item in findings)
+
+
+def test_the_notice_on_a_page_is_caught_only_while_the_flag_is_off(small_site: Path) -> None:
+    page = small_site / "index.html"
+    page.write_text(
+        page.read_text(encoding="utf-8").replace("</h1>", " Screening only</h1>", 1),
+        encoding="utf-8",
+    )
+    off = da.run_audit(out_dir=small_site, notice_enabled=False).findings["internal_info"]
+    on = da.run_audit(out_dir=small_site, notice_enabled=True).findings["internal_info"]
+    assert any("while the flag is off" in item for item in off)
+    assert not any("while the flag is off" in item for item in on)
+
+
+def test_the_flag_is_read_from_the_frontend_source() -> None:
+    flags = (PROJECT_ROOT / "frontend" / "lib" / "flags.ts").read_text(encoding="utf-8")
+    assert da.screening_notice_enabled(PROJECT_ROOT / "frontend") is (
+        "SHOW_SCREENING_NOTICE = true;" in flags
+    )
 
 
 # ---------------------------------------------------------------------------

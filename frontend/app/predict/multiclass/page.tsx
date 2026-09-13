@@ -1,59 +1,9 @@
-import type { Metadata } from 'next';
+import { Redirect } from '@/components/Redirect';
+import { LEGACY_REDIRECTS, routeFor } from '@/lib/routes';
 
-import { PredictionPanel } from '@/components/predict/PredictionPanel';
-import { PageHeader } from '@/components/ui/PageHeader';
-import { SectionHeader } from '@/components/ui/SectionHeader';
-import { prediction } from '@/lib/generated/prediction';
-import { routeFor } from '@/lib/routes';
+const to = LEGACY_REDIRECTS['/predict/multiclass/'] ?? '/';
 
-/**
- * PASCAL A and PASCAL B (T116.3).
- *
- * Two label spaces on one page and never merged into one: the selector switches
- * between two separate models with separate class vocabularies. PASCAL A's
- * `artifact` is a recording-quality label rather than a cardiac class, and the
- * caveat is rendered from the task's own declared description rather than
- * retyped here, so it cannot drift from the predictor's.
- */
-
-const route = routeFor('/predict/multiclass/');
-
-export const metadata: Metadata = {
-  title: 'Multiclass Prediction',
-  description: route?.summary,
-};
-
-const PASCAL_A = prediction.tasks.find((task) => task.task === 'pascal_a');
-
+/** A retired route (T127.4). Its content moved; this sends the reader to it. */
 export default function Page() {
-  return (
-    <div className="space-y-6">
-      <PageHeader title="Multiclass acoustic events" lede={route?.summary ?? ''} />
-
-      <PredictionPanel
-        offered={[
-          { task: 'pascal_a', label: 'PASCAL A — four classes' },
-          { task: 'pascal_b', label: 'PASCAL B — three classes' },
-        ]}
-      />
-
-      <section>
-        <SectionHeader
-          eyebrow="Scope"
-          title="Two datasets, two label spaces, one page"
-          description=""
-        />
-        <ul className="mt-4 max-w-prose list-disc space-y-2 rounded-xl border border-line bg-panel p-4 pl-8 text-body-md text-ink-2 shadow-panel">
-          <li>
-            PASCAL A and PASCAL B are separate tasks with separate models. This page offers
-            both and merges neither: a recording is scored against one vocabulary or the
-            other, never against their union.
-          </li>
-          {PASCAL_A !== undefined ? <li>{PASCAL_A.description}</li> : null}
-          <li>{prediction.disclaimer}</li>
-          <li>{prediction.low_confidence.note}</li>
-        </ul>
-      </section>
-    </div>
-  );
+  return <Redirect to={to} label={routeFor(to)?.label ?? 'the new page'} />;
 }

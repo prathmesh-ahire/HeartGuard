@@ -19,10 +19,17 @@ What it checks
 3. **Evidence is current.** Every evidence row's recorded sha256 must equal the
    digest of the committed file today, so the evidence browser cannot vouch for
    a file that has since changed.
-4. **The footer is the run (T119.5).** Every page must show the manifest's run
-   id, commit and export time; the run id must exist in the project's run
-   manifest as an `export_frontend_data` run with the same commit; and every
-   source the manifest fingerprinted must still have that fingerprint.
+4. **The manifest is the run (T119.5).** The generated manifest's run id must
+   exist in the project's run manifest as an `export_frontend_data` run with the
+   same commit, and every source the manifest fingerprinted must still have that
+   fingerprint. Until T127.1 every page also had to PRINT the run id, commit and
+   export time in its footer; the product UI shows no internal information, so
+   the provenance is verified here and no longer displayed.
+5. **No internal information on screen (T127.1, T127.2).** No page's visible
+   text or user-facing attribute may carry the commit, the run id, the export
+   timestamp, a repository path, a script or data file name, or pipeline
+   wording -- and while `SHOW_SCREENING_NOTICE` is off, none may carry the
+   screening notice either, so the flag cannot be half-applied.
 
 The gate
 --------
@@ -312,17 +319,85 @@ def _manifest_is_the_run(
         elif content_digest(path)[0] != source["sha256"]:
             findings.append("manifest source " + str(source["path"]) + " changed since the export")
 
-    shown = [run_id, str(manifest.get("exported_utc", ""))]
-    if commit:
-        shown.append(str(commit)[:12])
-    pages = _pages(out)
-    for page in pages:
-        text = _visible_text(page.read_text(encoding="utf-8"))
-        for value in shown:
-            if value and value not in text:
-                findings.append(_route(out, page) + ": the footer does not show " + value)
     report.checked["manifest_sources"] = len(manifest.get("sources", []))
-    report.findings["footer_is_the_run"] = findings
+    report.findings["manifest_is_the_run"] = findings
+
+
+#: A path into the repository, or a local drive path.
+_REPO_PATH = re.compile(
+    r"\b(?:outputs|scripts|src|configs|models_saved|cache|dataset|Docs|frontend|lib/generated)/[\w.\-/]*"
+    r"|\b[A-Za-z]:[\\/]"
+)
+#: A script, notebook, config or data file named on screen.
+_FILE_NAME = re.compile(r"\b[\w\-]+\.(?:py|ipynb|parquet|joblib|ya?ml|csv|json|tsx?)\b")
+#: Pipeline and provenance wording that means nothing to a person using the app.
+_INTERNAL_WORDS = re.compile(
+    r"\brun manifest\b|\brun id\b|\bgit commit\b|\bexporter\b|\bbuild-time export\b|\bgenerated/",
+    re.IGNORECASE,
+)
+#: User-facing attributes. `<script>` bodies are NOT scanned: they carry the
+#: serialized props of client components, which nobody reads.
+_ATTRIBUTES = re.compile(r'\s(?:href|src|title|alt|aria-label|placeholder)="([^"]*)"')
+#: Phrases of the screening notice, from `components/Disclaimer.tsx` and the
+#: predictor's DISCLAIMER constant.
+NOTICE_PHRASES: tuple[str, ...] = (
+    "Screening only",
+    "Scope and safety notice",
+    "it does not diagnose",
+    "Not a diagnostic device",
+)
+_FLAG = re.compile(r"export const SHOW_SCREENING_NOTICE = (true|false);")
+
+
+def screening_notice_enabled(frontend_root: str | Path | None = None) -> bool:
+    """Read T127.2's flag from `frontend/lib/flags.ts`. Raises if it is missing."""
+    root = (
+        Path(frontend_root)
+        if frontend_root is not None
+        else Path(_paths().require("frontend.root"))
+    )
+    match = _FLAG.search((root / "lib" / "flags.ts").read_text(encoding="utf-8"))
+    if match is None:
+        raise ValueError(
+            "frontend/lib/flags.ts does not declare SHOW_SCREENING_NOTICE as a literal"
+        )
+    return match.group(1) == "true"
+
+
+def _no_internal_info(
+    out: Path, generated: Path, report: AuditReport, notice_enabled: bool | None = None
+) -> None:
+    manifest = json.loads((generated / "manifest.json").read_text(encoding="utf-8"))
+    literals = [str(manifest.get("run_id") or ""), str(manifest.get("exported_utc") or "")]
+    commit = str(manifest.get("git_commit") or "")
+    if commit:
+        literals.append(commit[:7])
+    if notice_enabled is None:
+        notice_enabled = screening_notice_enabled()
+
+    findings: list[str] = []
+    for page in _pages(out):
+        raw = page.read_text(encoding="utf-8")
+        route = _route(out, page)
+        surfaces = [_visible_text(raw)] + [
+            html.unescape(value)
+            for value in _ATTRIBUTES.findall(re.sub(r"<script.*?</script>", " ", raw, flags=re.S))
+        ]
+        text = " ".join(surfaces)
+        for literal in literals:
+            if literal and literal in text:
+                findings.append(route + " shows the internal value " + literal)
+        for pattern in (_REPO_PATH, _FILE_NAME, _INTERNAL_WORDS):
+            for token in sorted(set(pattern.findall(text))):
+                findings.append(route + " shows " + repr(token))
+        if not notice_enabled:
+            for phrase in NOTICE_PHRASES:
+                if phrase.lower() in text.lower():
+                    findings.append(
+                        route + " shows the screening notice (" + phrase + ") while the flag is off"
+                    )
+    report.checked["notice_enabled"] = int(notice_enabled)
+    report.findings["internal_info"] = sorted(set(findings))
 
 
 # ---------------------------------------------------------------------------
@@ -345,8 +420,9 @@ def run_audit(
     out_dir: str | Path | None = None,
     generated_dir: str | Path | None = None,
     run_manifest: str | Path | None = None,
+    notice_enabled: bool | None = None,
 ) -> AuditReport:
-    """Crawl the built site and run all four checks. Never raises on a finding."""
+    """Crawl the built site and run all five checks. Never raises on a finding."""
     out = _out_dir(out_dir)
     generated = _generated_dir(generated_dir)
     if not (out / "index.html").is_file():
@@ -361,6 +437,7 @@ def run_audit(
     _source_to_generated(generated, report)
     _evidence_current(generated, report)
     _manifest_is_the_run(out, generated, report, run_manifest)
+    _no_internal_info(out, generated, report, notice_enabled)
     return report
 
 

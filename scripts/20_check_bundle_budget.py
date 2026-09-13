@@ -63,6 +63,24 @@ LAZY_MARKERS = {
     "wavesurfer.js": "WaveSurfer",
 }
 
+#: Lazy libraries that no production page uses right now, with the reason. For
+#: these, "not in any chunk" is the expected state and is reported rather than
+#: failed; if one IS bundled it is still held to the not-on-first-load rule.
+#: Every entry must name the task that removes it. An entry with no end is how
+#: a check quietly stops measuring anything.
+NOT_YET_BUNDLED: dict[str, str] = {
+    "three.js": (
+        "the 3D heart lived on the old home page, which T127.3 replaced with Analyse; "
+        "T136.5 tunes it for Analyse without slowing the first interaction, and "
+        "removes this entry"
+    ),
+    "wavesurfer.js": (
+        "only the design reference uses it, and T127.5 keeps that page out of the "
+        "production build; T130.3 puts the waveform player on Analyse and removes "
+        "this entry"
+    ),
+}
+
 #: Libraries that must not reach the browser AT ALL, with the evidence that
 #: they nevertheless ran.
 #:
@@ -190,7 +208,9 @@ def main(argv: list[str] | None = None) -> int:
         carriers = files_containing(marker)
         leaked = sorted(carriers & referenced)
         lazy_report[label] = {"chunks_containing": len(carriers), "in_first_load": leaked}
-        if leaked:
+        if not carriers and label in NOT_YET_BUNDLED:
+            lazy_report[label]["not_yet_bundled"] = NOT_YET_BUNDLED[label]
+        elif leaked:
             failures.append(
                 label
                 + " is fetched on first load by at least one page ("

@@ -321,7 +321,7 @@ def test_the_heart_animation_is_labelled_as_decoration(scaffolded: None) -> None
     # half everything with state. The hero copy lives in the client half.
     page = "".join(
         (APP / "design" / name).read_text(encoding="utf-8")
-        for name in ("page.tsx", "DesignClient.tsx")
+        for name in ("page.design.tsx", "DesignClient.tsx")
         if (APP / "design" / name).is_file()
     )
     assert "decoration with no " in page

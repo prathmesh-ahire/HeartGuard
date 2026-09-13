@@ -523,8 +523,6 @@ export interface GeneratedEvidenceEntry {
   generated_from: string;
   generated_from_sha256: string;
   upstream_sources: string[];
-  /** Site path of the served copy of `generated_from`, or null if none was copied. */
-  url: string | null;
 }
 
 export type GeneratedEvidence = GeneratedEvidenceEntry[];

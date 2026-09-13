@@ -1,6 +1,8 @@
-"""Phase 117's gate: are pages 10-12 traceable, and does the evidence browser resolve?
+"""Phase 117's gate: are pages 10-12 traceable?
 
 Same two directions as `tests/test_pages_1_3.py` and `tests/test_pages_4_6.py`.
+Since T127.3 the robustness and explainability content is the About the Model
+Performance tab, and the limitations content its Limitations tab.
 
 **Source to screen.** Every cell of the robustness tables is recomputed from its
 committed CSV through `tables.format_value` and asserted to be on the page. The
@@ -10,11 +12,9 @@ and every number on the limitations page from the file it names.
 **Screen to source.** Everything metric-shaped in the rendered text must be a
 string some generated payload carries, so a number typed into a page fails.
 
-**T117.7's own clause.** The evidence browser must resolve at least one link per
-page to a real CSV. "Resolve" is taken literally: the link's target is a file in
-the built site, and its bytes digest to the value `evidence.json` recorded AND to
-the committed file in `outputs/` today -- so a stale copy fails as well as a
-missing one.
+**T117.7's evidence links were removed by T127.1** (no file paths in the UI, at
+the user's request). What replaces the link check: the evidence index must still
+be complete and current, and no page may link a repository file at all.
 
 Skips when `frontend/out/` is absent. Runs in the frontend CI job.
 """
@@ -35,10 +35,9 @@ GENERATED = PROJECT_ROOT / "frontend" / "lib" / "generated"
 OUTPUTS = PROJECT_ROOT / "outputs"
 
 PAGES = {
-    "/robustness/": "robustness/index.html",
-    "/explainability/": "explainability/index.html",
+    "/about/performance/": "about/performance/index.html",
     "/reports/": "reports/index.html",
-    "/limitations/": "limitations/index.html",
+    "/about/limitations/": "about/limitations/index.html",
 }
 
 ROBUSTNESS_TABLES = ("T16", "T20", "T21", "T22", "T23", "T27", "T-S5")
@@ -91,7 +90,7 @@ def test_every_robustness_cell_is_its_source_csv_cell_and_is_on_the_page(table_i
     frame = pd.read_csv(PROJECT_ROOT / payload["source_csv"])
     assert payload["n_rows"] == len(frame), table_id + " row count differs from its CSV"
 
-    text = _text("/robustness/")
+    text = _text("/about/performance/")
     missing: list[str] = []
     for column in payload["columns"]:
         for position, shown in enumerate(column["display"]):
@@ -103,7 +102,7 @@ def test_every_robustness_cell_is_its_source_csv_cell_and_is_on_the_page(table_i
 
 
 def test_the_robustness_page_frames_the_cross_dataset_result_as_transfer() -> None:
-    text = _text("/robustness/")
+    text = _text("/about/performance/")
     assert (
         "cross-dataset transfer from an adult cohort to a predominantly paediatric cohort" in text
     )
@@ -112,7 +111,7 @@ def test_the_robustness_page_frames_the_cross_dataset_result_as_transfer() -> No
 
 def test_every_robustness_figure_is_its_canonical_png() -> None:
     figures = _generated("figures.json")
-    raw = _raw("/robustness/")
+    raw = _raw("/about/performance/")
     for figure_id in ("G29", "G30", "G31", "G32", "G34", "G35"):
         png = figures[figure_id]["png"]
         assert png and ('src="' + png + '"') in raw, figure_id + " PNG is not on the page"
@@ -133,7 +132,7 @@ def test_global_importance_is_recomputed_from_the_importance_summary() -> None:
     if not payload["available"]:
         pytest.skip(str(payload["reason"]))
     frame = pd.read_csv(OUTPUTS / "04_models" / "explainability" / "importance_summary.csv")
-    text = _text("/explainability/")
+    text = _text("/about/performance/")
 
     for group in payload["importance"]:
         rows = frame[
@@ -165,7 +164,7 @@ def test_family_shares_are_recomputed_from_the_family_importance() -> None:
     if not payload["available"]:
         pytest.skip(str(payload["reason"]))
     frame = pd.read_csv(OUTPUTS / "04_models" / "explainability" / "feature_family_importance.csv")
-    text = _text("/explainability/")
+    text = _text("/about/performance/")
     for group in payload["families"]:
         rows = frame[
             (frame["task"] == group["task"])
@@ -189,7 +188,7 @@ def test_the_stored_explanation_is_the_committed_decomposition() -> None:
             encoding="utf-8"
         )
     )
-    text = _text("/explainability/")
+    text = _text("/about/performance/")
     assert payload["record_uid"] == source["record_uid"]
     assert payload["probability_display"] == format_value(source["probability"], "metric")
     assert len(payload["rows"]) == len(source["top_contributions"])
@@ -201,7 +200,7 @@ def test_the_stored_explanation_is_the_committed_decomposition() -> None:
 
 def test_the_live_explanation_says_so_when_nothing_has_been_scored() -> None:
     """The static HTML has no session: it must render the stated absence."""
-    text = _text("/explainability/")
+    text = _text("/about/performance/")
     assert "No prediction has been made in this browser tab yet" in text
 
 
@@ -216,7 +215,7 @@ def test_every_limitations_number_is_read_from_its_named_file() -> None:
     from src.reporting.tables import format_value
 
     payload = _generated("limitations.json")
-    text = _text("/limitations/")
+    text = _text("/about/limitations/")
 
     population = json.loads(
         (
@@ -267,7 +266,7 @@ def test_every_limitations_number_is_read_from_its_named_file() -> None:
 
 
 def test_the_limitations_page_states_all_three_caveats_t117_5_names() -> None:
-    text = _text("/limitations/")
+    text = _text("/about/limitations/")
     assert "adult to paediatric" in text
     assert "The PASCAL tracks are small" in text
     assert "CirCor is the public subset only" in text
@@ -289,44 +288,34 @@ def test_the_reports_page_offers_all_three_reports() -> None:
         assert value in text
 
 
-def test_every_evidence_entry_is_listed_in_the_browser() -> None:
-    evidence = _generated("evidence.json")
-    text = _text("/reports/")
-    raw = _raw("/reports/")
-    assert len(evidence) > 500, "the evidence index is implausibly small"
-    for entry in evidence:
-        assert entry["key"] in text, entry["key"] + " is not in the evidence browser"
-        if entry["url"]:
-            assert 'href="' + entry["url"] + '"' in raw
+def test_the_evidence_index_is_complete_and_current() -> None:
+    """T117.4's index survives T127.1; only its on-screen browser was removed.
 
-
-def _resolves(href: str, evidence: list[dict[str, Any]]) -> None:
+    Every exported table column, figure and page payload is still mapped to the
+    committed file it came from, with that file's digest -- and the digest still
+    matches the file today. The displayed-value audit enforces the same on every
+    build; this pins the size, so an index that quietly emptied would fail.
+    """
     from src.reporting.tables import content_digest
 
-    relative = href[len("/evidence/") :]
-    served = OUT / "evidence" / relative
-    assert served.is_file(), href + " does not resolve to a file in the built site"
-    assert served.suffix.lower() in (".csv", ".json"), href + " is not a CSV or JSON"
-    recorded = {
-        entry["generated_from_sha256"] for entry in evidence if entry["generated_from"] == relative
-    }
-    digest = content_digest(served)[0]
-    if recorded:
-        assert digest in recorded, href + " served bytes differ from the digest in evidence.json"
-    committed = PROJECT_ROOT / relative
-    assert committed.is_file(), relative + " is not in outputs/"
-    assert content_digest(committed)[0] == digest, href + " is stale against outputs/"
+    evidence = _generated("evidence.json")
+    assert len(evidence) > 500, "the evidence index is implausibly small"
+    digests: dict[str, str] = {}
+    for entry in evidence:
+        relative = entry["generated_from"]
+        if relative not in digests:
+            digests[relative] = content_digest(PROJECT_ROOT / relative)[0]
+        assert digests[relative] == entry["generated_from_sha256"], relative + " changed"
 
 
 @pytest.mark.parametrize("page", sorted(PAGES))
-def test_at_least_one_evidence_link_per_page_resolves_to_a_real_csv(page: str) -> None:
-    """T117.7: the clause, taken literally -- and applied to every link, not one."""
-    evidence = _generated("evidence.json")
-    links = sorted(set(_HREF.findall(_raw(page))))
-    csv_links = [href for href in links if href.endswith(".csv")]
-    assert csv_links, page + " links no CSV through the evidence browser"
-    for href in links:
-        _resolves(href, evidence)
+def test_no_page_links_a_repository_file(page: str) -> None:
+    """T127.1: provenance is verified by the build, not printed for the user."""
+    path = OUT / (page.strip("/") + "/index.html")
+    assert _HREF.findall(path.read_text(encoding="utf-8")) == [], (
+        page + " still links a file under /evidence/"
+    )
+    assert not (OUT / "evidence").exists(), "the export still publishes repository files"
 
 
 # ---------------------------------------------------------------------------
@@ -378,10 +367,13 @@ def test_nothing_that_looks_like_a_metric_is_unaccounted_for(page: str) -> None:
 
 @pytest.mark.parametrize("page", sorted(PAGES))
 def test_the_page_uses_screening_language_and_the_framework_name(page: str) -> None:
+    from src.reporting.display_audit import screening_notice_enabled
+
     text = _text(page)
     assert "PV-MEPCG" in text or "PulseVision" in text
     assert "HeartGuard" not in text
     lowered = text.lower()
-    assert "does not diagnose" in lowered
+    # T127.2: the notice follows its flag in both directions.
+    assert ("does not diagnose" in lowered) is screening_notice_enabled(PROJECT_ROOT / "frontend")
     for forbidden in ("diagnosis of", "treatment plan", "replaces a doctor"):
         assert forbidden not in lowered, "clinical language on " + page + ": " + forbidden

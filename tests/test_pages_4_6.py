@@ -45,9 +45,8 @@ GENERATED = PROJECT_ROOT / "frontend" / "lib" / "generated"
 OUTPUTS = PROJECT_ROOT / "outputs"
 
 PAGES = {
-    "/features/": "features/index.html",
-    "/models/": "models/index.html",
-    "/optimization/": "optimization/index.html",
+    "/about/features/": "about/features/index.html",
+    "/about/models/": "about/models/index.html",
 }
 
 METRIC_LIKE = re.compile(r"\b\d+\.\d{3,}\b|\b\d+(?:\.\d+)?%")
@@ -87,7 +86,7 @@ def test_the_family_counts_are_recomputed_from_the_inventory() -> None:
 
     inventory = pd.read_csv(OUTPUTS / "03_features" / "feature_inventory.csv")
     payload = _generated("features.json")
-    text = _text("/features/")
+    text = _text("/about/features/")
 
     counted = inventory.groupby("family", sort=False).size().to_dict()
     assert sum(counted.values()) == 138, "the registry is not 138 features"
@@ -119,7 +118,7 @@ def test_the_features_page_presents_the_registry_in_its_locked_order() -> None:
         "mfcc, chroma, dwt, envelope and it is load-bearing"
     )
 
-    text = _text("/features/")
+    text = _text("/about/features/")
     assert payload["features"][0]["name"] in text
     assert payload["features"][-1]["name"] in text
 
@@ -140,7 +139,7 @@ def test_the_selected_subset_reports_how_many_folds_kept_each_feature() -> None:
     if not payload["available"]:
         pytest.skip(str(payload["reason"]))
 
-    text = _text("/features/")
+    text = _text("/about/features/")
     for row in payload["features"]:
         assert 0 < int(row["selected_in_folds"]) <= int(row["n_folds"])
     assert "of " + str(payload["features"][0]["n_folds"]) + " folds" in " ".join(text.split())
@@ -157,7 +156,7 @@ def test_every_metric_cell_equals_its_aggregate_metrics_cell() -> None:
     from src.reporting.tables import format_value
 
     payload = _generated("experiments.json")
-    text = _text("/models/")
+    text = _text("/about/models/")
     checked = 0
 
     for experiment in payload["experiments"]:
@@ -206,7 +205,7 @@ def test_the_confusion_matrix_counts_are_the_committed_ones() -> None:
 
 def test_the_page_states_that_the_confusion_support_is_not_the_corpus() -> None:
     """Four cells summing to five times the corpus needs its reason on the page."""
-    text = " ".join(_text("/models/").split())
+    text = " ".join(_text("/about/models/").split())
     assert "element-wise sum over folds" in text or "once per repeat" in text
 
 
@@ -218,7 +217,7 @@ def test_the_page_states_how_the_curves_were_aggregated() -> None:
     if not curved:
         pytest.skip("no experiment exported curve points")
 
-    text = " ".join(_text("/models/").split())
+    text = " ".join(_text("/about/models/").split())
     note = " ".join(curved[0]["curves"]["aggregation_note"].split())
     assert note in text, "the curve aggregation note is not rendered"
     assert "not the reported AUC" in note
@@ -227,7 +226,7 @@ def test_the_page_states_how_the_curves_were_aggregated() -> None:
 def test_an_experiment_that_has_not_run_is_listed_with_its_reason() -> None:
     payload = _generated("experiments.json")
     assert payload["n_declared"] >= payload["n_available"]
-    text = _text("/models/")
+    text = _text("/about/models/")
     for experiment in payload["experiments"]:
         if experiment["available"]:
             continue
@@ -294,14 +293,14 @@ def test_every_search_frame_cell_equals_its_source_csv_cell(key: str, relative: 
 
 def test_the_optimization_page_leads_with_fold_safety() -> None:
     payload = _generated("optimization.json")
-    text = " ".join(_text("/optimization/").split())
+    text = " ".join(_text("/about/models/").split())
     assert " ".join(payload["fold_safety_note"].split()) in text
     assert "never seen by a search" in text
 
 
 def test_every_declared_search_run_appears_with_its_state() -> None:
     payload = _generated("optimization.json")
-    text = _text("/optimization/")
+    text = _text("/about/models/")
     assert payload["n_runs"] == len(payload["runs"])
     for run in payload["runs"]:
         assert run["run_id"] in text, run["run_id"] + " is not on the page"
@@ -379,10 +378,14 @@ def test_nothing_that_looks_like_a_metric_is_unaccounted_for(page: str) -> None:
 
 @pytest.mark.parametrize("page", sorted(PAGES))
 def test_the_page_uses_screening_language_and_the_framework_name(page: str) -> None:
+    from src.reporting.display_audit import screening_notice_enabled
+
     text = _text(page)
     assert "PV-MEPCG" in text or "PulseVision" in text
     assert "HeartGuard" not in text
     lowered = text.lower()
-    assert "not a diagnostic device" in lowered or "does not diagnose" in lowered
+    # T127.2: the notice follows its flag in both directions.
+    shown = "not a diagnostic device" in lowered or "does not diagnose" in lowered
+    assert shown is screening_notice_enabled(PROJECT_ROOT / "frontend")
     for forbidden in ("diagnosis of", "treatment plan", "replaces a doctor"):
         assert forbidden not in lowered, "clinical language on " + page + ": " + forbidden

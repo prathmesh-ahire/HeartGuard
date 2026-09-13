@@ -517,22 +517,44 @@ def _check_disclaimer(report: ComplianceReport, root: Path) -> None:
 
     # Every page of the BUILT dashboard, not only the layout that is supposed to
     # put it there. A layout can carry the string and a route can opt out of it.
+    #
+    # EXCEPT while T127.2's flag is off: the user removed the on-screen notice
+    # for the presentation (Open Item 17). The check is then SUSPENDED, not
+    # passed -- the note says so in capitals, and the displayed-value audit
+    # separately proves the notice is gone from every page rather than from
+    # some. T138.6 flips the flag and this check binds again unchanged.
     built = root / "frontend" / "out"
     pages = sorted(built.rglob("index.html")) if built.is_dir() else []
-    without = [
-        _rel(page)
-        for page in pages
-        if not all(marker in page.read_text(encoding="utf-8").lower() for marker in ("screening",))
-    ]
+    flags = root / "frontend" / "lib" / "flags.ts"
+    suspended = flags.is_file() and (
+        "export const SHOW_SCREENING_NOTICE = false;" in flags.read_text(encoding="utf-8")
+    )
+    without = (
+        []
+        if suspended
+        else [
+            _rel(page)
+            for page in pages
+            if not all(
+                marker in page.read_text(encoding="utf-8").lower() for marker in ("screening",)
+            )
+        ]
+    )
     for page in without:
         report.add(Finding("disclaimer", page, 0, "", "a built page carries no screening notice"))
 
     report.scanned["disclaimer_surfaces"] = len(DISCLAIMER_SURFACES)
     report.scanned["built_pages"] = len(pages)
+    dashboard = (
+        "the built-page check is SUSPENDED: SHOW_SCREENING_NOTICE is false in "
+        "frontend/lib/flags.ts until T138.6 restores the notice"
+        if suspended
+        else f"{len(pages) - len(without)} of {len(pages)} built dashboard pages"
+    )
     report.notes["disclaimer"] = (
         f"{present} of {len(DISCLAIMER_SURFACES)} declared surfaces carry it "
         "(literally or by reference to the canonical constant), "
-        f"{len(pages) - len(without)} of {len(pages)} built dashboard pages, "
+        f"{dashboard}, "
         f"and {len(DISCLAIMER_CONSTANTS)} canonical constants verified word for word"
     )
 
@@ -609,9 +631,7 @@ def _check_objectives(report: ComplianceReport, root: Path) -> None:
         data = json.loads(payload.read_text(encoding="utf-8"))
         entries = data.get("objectives", data if isinstance(data, list) else [])
         quoted = {
-            int(entry["number"]): str(entry["wording"])
-            for entry in entries
-            if "wording" in entry
+            int(entry["number"]): str(entry["wording"]) for entry in entries if "wording" in entry
         }
         for number, text in declared.items():
             if number not in quoted:

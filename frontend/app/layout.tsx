@@ -8,16 +8,19 @@ import { DisclaimerBanner } from '@/components/Disclaimer';
 import { Footer } from '@/components/Footer';
 import { SmoothScroll } from '@/components/motion/SmoothScroll';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import { SHOW_SCREENING_NOTICE } from '@/lib/flags';
 
 /**
- * The root layout (T110.3).
+ * The root layout (T110.3, T127.2).
  *
- * The disclaimer and the run-manifest footer are rendered HERE, handed to
- * `AppShell` as slots, and the navigation lives inside that shell -- none of
- * the three is placed on a page. Per-page placement is how
- * a disclaimer goes missing: a route added later simply does not get one and
- * nothing fails. From here it is structurally impossible for a page to render
- * without its scope notice or without the provenance of the numbers it shows.
+ * The screening notice and the footer are rendered HERE, handed to `AppShell`
+ * as slots, and the navigation lives inside that shell -- none of the three is
+ * placed on a page. Per-page placement is how a notice goes missing: a route
+ * added later simply does not get one and nothing fails.
+ *
+ * The notice is switched off for the presentation by `SHOW_SCREENING_NOTICE`
+ * (Open Item 17). It stays wired here, so T138.6 restores it on every route by
+ * flipping that one flag.
  *
  * Both faces are self-hosted through next/font. A <link> to fonts.googleapis
  * would leave the static export dependent on a network it will not always
@@ -41,10 +44,7 @@ export const metadata: Metadata = {
     default: 'PV-MEPCG / PulseVision',
     template: '%s · PV-MEPCG / PulseVision',
   },
-  description:
-    'Search-optimized heterogeneous ensemble for phonocardiogram heart-sound ' +
-    'classification. Academic screening and decision-support prototype; not a ' +
-    'diagnostic tool.',
+  description: 'Heart-sound analysis: upload a phonocardiogram recording and see the result.',
   applicationName: 'PV-MEPCG / PulseVision',
   robots: { index: false, follow: false },
 };
@@ -55,7 +55,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ThemeProvider>
           <SmoothScroll>
-            <AppShell disclaimer={<DisclaimerBanner />} footer={<Footer />}>
+            <AppShell
+              disclaimer={SHOW_SCREENING_NOTICE ? <DisclaimerBanner /> : null}
+              footer={<Footer />}
+            >
               {children}
             </AppShell>
           </SmoothScroll>

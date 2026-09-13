@@ -140,16 +140,18 @@ CAPTURE_PLAN: tuple[ShotSpec, ...] = (
     ShotSpec(
         2,
         "Dataset inventory and class distribution",
-        "/dataset/",
+        "/about/datasets/",
         "The four public PCG corpora as audited against the files on disk "
         "(T01): per-dataset inventory, class balance and the duration profile. "
         "Every count is read from outputs/01_dataset_audit/, never from the "
         "source documents, which disagree with the files in two places.",
+        # The route moved in T127.3; the committed filename did not.
+        slug="dataset",
     ),
     ShotSpec(
         3,
         "Signal upload and waveform",
-        "/predict/binary/",
+        "/",
         "Choosing a recording on the binary screening page. A built-in dataset "
         "sample has been selected and its waveform drawn from audio served by "
         "the local inference service; no corpus audio is committed to the "
@@ -164,44 +166,54 @@ CAPTURE_PLAN: tuple[ShotSpec, ...] = (
             "No model is deployed for this task yet",
             "This chart could not be drawn.",
         ),
+        # The route moved in T127.3; the committed filename did not.
+        slug="predict_binary",
     ),
     ShotSpec(
         4,
         "Preprocessing before/after",
-        "/preprocessing/",
+        "/about/",
         "The preprocessing chain (T02): resampling, band-pass filtering, "
         "normalization and signal-quality assessment, with the same recording "
         "before and after each stage and the spectral effect of the filter.",
+        # The route moved in T127.3; the committed filename did not.
+        slug="preprocessing",
     ),
     ShotSpec(
         5,
         "Feature extraction summary",
-        "/features/",
+        "/about/features/",
         "The locked 138-feature registry across six families (T03), the "
         "fold-safe subset selected inside the training folds, and the family "
         "each selected feature belongs to. The column order is a literal in "
         "the registry and is fingerprinted, not derived.",
+        # The route moved in T127.3; the committed filename did not.
+        slug="features",
     ),
     ShotSpec(
         6,
         "Model comparison dashboard",
-        "/models/",
+        "/about/models/",
         "The declared models and their fold-wise comparison (T04, T08). "
         "Sensitivity, specificity, F1, balanced accuracy and AUC are reported "
         "together; accuracy alone never decides anything here.",
+        # The route moved in T127.3; the committed filename did not.
+        slug="models",
     ),
     ShotSpec(
         7,
         "Search optimization dashboard",
-        "/optimization/",
+        "/about/models/",
         "The search space, the methods compared at equal budget, the selected "
         "parameters and what the search actually bought (T05-T07). Every "
         "search shown ran inside a training fold.",
+        # The route moved in T127.3; the committed filename did not.
+        slug="optimization",
     ),
     ShotSpec(
         8,
         "Binary prediction output",
-        "/predict/binary/",
+        "/",
         "A live binary screening indication for one PhysioNet 2016 recording, "
         "produced by POST /predict against the deployed model. The panel shows "
         "the class probabilities, the confidence margin, the operating "
@@ -209,22 +221,31 @@ CAPTURE_PLAN: tuple[ShotSpec, ...] = (
         "stored out-of-fold probability is five numbers rather than one.",
         steps=(_sample("binary-abnormal"), _click("2. Run the screening model"), _await_result()),
         must_contain=("3. Result",),
+        # The route moved in T127.3; the committed filename did not.
+        slug="predict_binary",
     ),
     ShotSpec(
         9,
         "Multiclass prediction output",
-        "/predict/multiclass/",
+        "/",
         "A live PASCAL A four-class acoustic-event output with the full "
         "probability distribution. PASCAL A and PASCAL B are offered as two "
         "separate label spaces on this page and are never merged; `artifact` "
         "is a recording-quality label, not a cardiac class.",
-        steps=(_sample("pascal-a-murmur"), _click("2. Run the screening model"), _await_result()),
+        steps=(
+            _click("PASCAL A — four classes"),
+            _sample("pascal-a-murmur"),
+            _click("2. Run the screening model"),
+            _await_result(),
+        ),
         must_contain=("3. Result", "PASCAL A"),
+        # The route moved in T127.3; the committed filename did not.
+        slug="predict_multiclass",
     ),
     ShotSpec(
         10,
         "CirCor murmur/outcome output",
-        "/predict/murmur/",
+        "/",
         "The CirCor page with both of its label spaces exercised: a live "
         "clinical-outcome indication for one recording above, and below it the "
         "same subject collapsed from all four auscultation locations to a "
@@ -240,16 +261,20 @@ CAPTURE_PLAN: tuple[ShotSpec, ...] = (
         ),
         must_contain=("Recording level and patient level",),
         height=1800,
+        # The route moved in T127.3; the committed filename did not.
+        slug="predict_murmur",
     ),
     ShotSpec(
         11,
         "Robustness analytics",
-        "/robustness/",
+        "/about/performance/",
         "How the results move under added noise, shortened recordings, a "
         "different corpus and a different auscultation location (T19-T22, "
         "T-S5). The leave-one-sub-collection-out result is shown beside the "
         "pooled one rather than in place of it.",
         height=1800,
+        # The route moved in T127.3; the committed filename did not.
+        slug="robustness",
     ),
     ShotSpec(
         12,
@@ -258,7 +283,7 @@ CAPTURE_PLAN: tuple[ShotSpec, ...] = (
         # `sessionStorage`, so the capture scores a recording first and then
         # navigates. A capture that opened this route cold would photograph the
         # "no prediction yet" state, which is exactly what T120.7 forbids.
-        "/predict/binary/",
+        "/",
         "Global feature importance and family-level contribution (T23), and "
         "the per-sample explanation of the prediction made in this browser "
         "tab: the contribution of each feature to that recording's own "
@@ -267,7 +292,7 @@ CAPTURE_PLAN: tuple[ShotSpec, ...] = (
             _sample("binary-abnormal"),
             _click("2. Run the screening model"),
             _await_result(),
-            {"action": "goto", "route": "/explainability/"},
+            {"action": "goto", "route": "/about/performance/"},
         ),
         must_contain=("Explainability",),
         must_not_contain=(

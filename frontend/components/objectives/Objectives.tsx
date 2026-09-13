@@ -62,34 +62,12 @@ export function Objectives({ className }: { className?: string }) {
                 {objective.pending_reason}
               </p>
             ) : null}
-
-            <dl className="mt-4 space-y-1 text-xs text-ink-3">
-              <div className="flex gap-2">
-                <dt className="shrink-0">Implemented in</dt>
-                <dd className="font-mono">{objective.modules.join(', ')}</dd>
-              </div>
-              {objective.evidence.length > 0 ? (
-                <div className="flex gap-2">
-                  <dt className="shrink-0">Evidence</dt>
-                  <dd className="font-mono">
-                    {objective.evidence.map((item) => item.dir).join(', ')}
-                  </dd>
-                </div>
-              ) : null}
-              <div className="flex gap-2">
-                <dt className="shrink-0">Wording sha256</dt>
-                <dd className="font-mono">{objective.wording_sha256.slice(0, 16)}</dd>
-              </div>
-            </dl>
           </li>
         ))}
       </ol>
 
       <div className="mt-6 rounded border border-line p-4 text-xs text-ink-3">
-        <p>
-          Quoted from {objectives.source}, section 1, page {objectives.source_page}. Source
-          sha256 <span className="font-mono">{objectives.source_sha256.slice(0, 16)}</span>.
-        </p>
+        <p>Quoted from the project blueprint, section 1, page {objectives.source_page}.</p>
         <ul className="mt-2 list-disc space-y-1 pl-5">
           {objectives.transcription_notes.map((note) => (
             <li key={note}>{note}</li>

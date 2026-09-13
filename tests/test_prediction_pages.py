@@ -68,7 +68,6 @@ from src.reporting.tables import format_value
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 FRONTEND = PROJECT_ROOT / "frontend"
-APP = FRONTEND / "app" / "predict"
 COMPONENTS = FRONTEND / "components" / "predict"
 GENERATED = FRONTEND / "lib" / "generated"
 MATRIX = PROJECT_ROOT / "outputs" / "03_features" / "all_features_matrix.parquet"
@@ -561,11 +560,9 @@ def test_the_sample_endpoint_and_the_upload_endpoint_agree(client: Any) -> None:
 # ---------------------------------------------------------------------------
 
 
-PAGES = (
-    APP / "binary" / "page.tsx",
-    APP / "multiclass" / "page.tsx",
-    APP / "murmur" / "page.tsx",
-)
+#: T127.3 joined the three prediction pages into Analyse (`app/page.tsx`); the
+#: old routes are redirects now, so the checks follow the capability there.
+PAGES = (FRONTEND / "app" / "page.tsx",)
 
 
 def test_the_three_pages_exist_and_are_no_longer_placeholders() -> None:
@@ -679,7 +676,7 @@ def test_the_client_posts_the_fields_the_api_declares() -> None:
 
 def test_the_multiclass_page_offers_two_separate_label_spaces() -> None:
     """Never merged: two tasks on one page is not a seven-class selector."""
-    body = (APP / "multiclass" / "page.tsx").read_text(encoding="utf-8")
+    body = (FRONTEND / "app" / "page.tsx").read_text(encoding="utf-8")
     assert "'pascal_a'" in body
     assert "'pascal_b'" in body
     assert "merges neither" in body

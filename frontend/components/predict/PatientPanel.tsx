@@ -5,6 +5,7 @@ import { useCallback, useState } from 'react';
 import { cn } from '@/lib/cn';
 import { Badge } from '@/components/ui/Badge';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/States';
+import { SHOW_SCREENING_NOTICE } from '@/lib/flags';
 import { SURFACE, TYPE_SCALE } from '@/lib/tokens';
 import { prediction } from '@/lib/generated/prediction';
 import { ApiError, predictPatient, type PatientResult } from '@/lib/api';
@@ -174,15 +175,16 @@ export function PatientPanel({ task, className }: { task: string; className?: st
               </li>
             ))}
           </ul>
-          <p
-            className={cn(
-              TYPE_SCALE.caption,
-              'mt-4 rounded border border-accent-line bg-accent-soft p-3 text-accent-deep',
-              '',
-            )}
-          >
-            {result.disclaimer}
-          </p>
+          {SHOW_SCREENING_NOTICE ? (
+            <p
+              className={cn(
+                TYPE_SCALE.caption,
+                'mt-4 rounded border border-accent-line bg-accent-soft p-3 text-accent-deep',
+              )}
+            >
+              {result.disclaimer}
+            </p>
+          ) : null}
         </div>
       ) : null}
 

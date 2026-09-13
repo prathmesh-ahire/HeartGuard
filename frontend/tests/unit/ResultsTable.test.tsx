@@ -54,14 +54,19 @@ describe('ResultsTable', () => {
     expect(screen.getByText(/1 of/)).toBeTruthy();
   });
 
-  it('links its source CSV to the served evidence copy', () => {
+  it('shows no repository path or file link (T127.1)', () => {
     const t02 = real('T02');
-    render(<ResultsTable table={t02} />);
-    const link = screen.getByRole('link', { name: t02.source_csv });
-    expect(link.getAttribute('href')).toBe('/evidence/' + t02.source_csv);
-    expect(screen.getByRole('link', { name: 'evidence' }).getAttribute('href')).toBe(
-      '/reports/#evidence-T02',
-    );
+    const { container } = render(<ResultsTable table={t02} />);
+    expect(screen.queryAllByRole('link')).toHaveLength(0);
+    expect(container.textContent ?? '').not.toContain(t02.source_csv);
+  });
+
+  it('leaves a hidden column out of the view and out of the download', () => {
+    const t01 = real('T01');
+    render(<ResultsTable table={t01} hideColumns={['folder']} />);
+    expect(screen.queryByRole('button', { name: /^folder/ })).toBeNull();
+    const folder = t01.columns.find((column) => column.name === 'folder');
+    for (const shown of folder?.display ?? []) expect(screen.queryByText(shown)).toBeNull();
   });
 
   it('downloads exactly the displayed strings as CSV', async () => {

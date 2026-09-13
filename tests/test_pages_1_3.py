@@ -43,9 +43,8 @@ GENERATED = PROJECT_ROOT / "frontend" / "lib" / "generated"
 OUTPUTS = PROJECT_ROOT / "outputs"
 
 PAGES = {
-    "/": "index.html",
-    "/dataset/": "dataset/index.html",
-    "/preprocessing/": "preprocessing/index.html",
+    "/about/": "about/index.html",
+    "/about/datasets/": "about/datasets/index.html",
 }
 
 #: Anything matching this in the page text has to be justified by a source.
@@ -63,6 +62,17 @@ STRUCTURAL: frozenset[str] = frozenset(
         "114.5",
     }
 )
+
+
+#: Table columns a page deliberately does not render (T127.1): T01's `folder` is
+#: a repository path. Named individually, and the page source must name the same
+#: column in its `hideColumns`, so this list cannot grow without the page changing.
+HIDDEN_COLUMNS: frozenset[tuple[str, str]] = frozenset({("T01", "folder")})
+
+
+def test_the_hidden_columns_are_the_ones_the_page_hides() -> None:
+    section = PROJECT_ROOT / "frontend" / "app" / "about" / "_sections" / "DatasetSection.tsx"
+    assert "hideColumns={['folder']}" in section.read_text(encoding="utf-8")
 
 
 def _pages_built() -> bool:
@@ -108,15 +118,16 @@ def test_the_home_tiles_are_the_audited_corpus_counts() -> None:
     from src.reporting.tables import format_value
 
     frame = pd.read_csv(OUTPUTS / "01_dataset_audit" / "metadata_master.csv")
-    text = _text("/")
+    # T127.3 moved the corpus tiles from home to About the Model -> Datasets.
+    text = _text("/about/datasets/")
 
     for source, part in frame.groupby("dataset_source", sort=True):
         modelled = int(part["use_in_supervised"].astype(bool).sum())
         assert format_value(modelled, "count") in text, (
-            "the home page does not show " + str(source) + "'s modelled count"
+            "the Datasets tab does not show " + str(source) + "'s modelled count"
         )
         assert format_value(len(part), "count") in text, (
-            "the home page does not show " + str(source) + "'s file count"
+            "the Datasets tab does not show " + str(source) + "'s file count"
         )
 
 
@@ -129,17 +140,22 @@ def test_the_home_page_quotes_all_six_objectives_verbatim() -> None:
     """
     from src.reporting.objectives import OBJECTIVES, wording_digest
 
-    text = " ".join(_text("/").split())
+    text = " ".join(_text("/about/").split())
     for objective in OBJECTIVES:
         assert objective.wording in text, (
-            "objective " + str(objective.number) + " is not quoted verbatim on the home page"
+            "objective " + str(objective.number) + " is not quoted verbatim on the About page"
         )
-        assert wording_digest(objective.wording)[:16] in text
+    # The digest is no longer printed (T127.1). It is still carried by the payload
+    # the page renders, and must be the digest of the locked wording.
+    for exported in _generated("objectives.json")["objectives"]:
+        locked = next(item for item in OBJECTIVES if item.number == exported["number"])
+        assert exported["wording"] == locked.wording
+        assert exported["wording_sha256"] == wording_digest(locked.wording)
 
 
 @pytest.mark.parametrize(
     ("page", "table_ids"),
-    [("/dataset/", ("T01", "T02", "T03")), ("/preprocessing/", ("T04",))],
+    [("/about/datasets/", ("T01", "T02", "T03")), ("/about/", ("T04",))],
 )
 def test_every_table_cell_on_the_page_equals_its_source_csv_cell(
     page: str, table_ids: tuple[str, ...]
@@ -161,6 +177,9 @@ def test_every_table_cell_on_the_page_equals_its_source_csv_cell(
             name = column["name"]
             if name not in frame.columns:
                 continue
+            # T127.1 hides repository paths from the page. The exported cell is
+            # still checked against its CSV below; only the on-page half is skipped.
+            hidden = (table_id, name) in HIDDEN_COLUMNS
             kind = column.get("kind") or infer_kind(name, frame[name])
             for position, shown in enumerate(column["display"]):
                 expected = format_value(frame[name].iloc[position], kind)
@@ -175,7 +194,7 @@ def test_every_table_cell_on_the_page_equals_its_source_csv_cell(
                     + ", source gives "
                     + repr(expected)
                 )
-                assert shown in text, (
+                assert hidden or shown in text, (
                     table_id
                     + "."
                     + name
@@ -324,13 +343,17 @@ def test_nothing_that_looks_like_a_metric_is_unaccounted_for(page: str) -> None:
 
 @pytest.mark.parametrize("page", list(PAGES))
 def test_the_page_carries_the_screening_disclaimer_and_the_framework_name(page: str) -> None:
+    from src.reporting.display_audit import screening_notice_enabled
+
     text = _text(page)
     assert "PV-MEPCG" in text or "PulseVision" in text
     assert "HeartGuard" not in text, (
         "HeartGuard is the repository name; deliverables say PV-MEPCG / PulseVision"
     )
     lowered = text.lower()
-    assert "not a diagnostic device" in lowered or "does not diagnose" in lowered
+    # T127.2: the notice follows its flag in both directions.
+    shown = "not a diagnostic device" in lowered or "does not diagnose" in lowered
+    assert shown is screening_notice_enabled(PROJECT_ROOT / "frontend")
     for forbidden in ("diagnosis of", "treatment plan", "replaces a doctor"):
         assert forbidden not in lowered, "clinical language on " + page + ": " + forbidden
 
@@ -342,7 +365,7 @@ def test_the_dataset_page_states_both_populations_rather_than_one() -> None:
     records — both numbers correct, the row impossible. The page must show the
     file count and the modelled count together, and say they differ.
     """
-    text = " ".join(_text("/dataset/").split())
+    text = " ".join(_text("/about/datasets/").split())
     summary = _generated("dataset_summary.json")
     for row in summary["summary"]:
         assert row["n_files_display"] in text
@@ -351,12 +374,10 @@ def test_the_dataset_page_states_both_populations_rather_than_one() -> None:
     assert summary["scope_note"] in text
 
 
-def test_the_footer_timestamp_is_the_one_the_exporter_recorded() -> None:
-    """The instant removed from the metric scan is checked here instead."""
+def test_no_page_prints_the_export_timestamp_or_the_commit() -> None:
+    """T127.1 inverted the old footer check: provenance is verified, not displayed."""
     manifest = _generated("manifest.json")
     for page in PAGES:
         text = _text(page)
-        assert manifest["exported_utc"] in text, (
-            page + " does not carry the export timestamp from manifest.json"
-        )
-        assert manifest["git_commit"][:12] in text
+        assert manifest["exported_utc"] not in text, page + " prints the export timestamp"
+        assert manifest["git_commit"][:7] not in text, page + " prints the commit"

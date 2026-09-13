@@ -88,7 +88,6 @@ export function PipelineWalkthrough({ className }: { className?: string }) {
 
   return (
     <div ref={container} className={cn('relative', className)}>
-      <p className={cn(TYPE_SCALE.caption, SURFACE.subtle, 'mb-6')}>{pipeline.note}</p>
 
       <div className="lg:grid lg:grid-cols-[13rem_1fr] lg:gap-10">
         <ProgressRail steps={steps} active={reduced ? null : active} />
@@ -126,16 +125,6 @@ export function PipelineWalkthrough({ className }: { className?: string }) {
                   {step.rule}
                 </p>
               )}
-              <dl className={cn(TYPE_SCALE.micro, SURFACE.subtle, 'mt-3 flex flex-wrap gap-x-6')}>
-                <div className="flex gap-1">
-                  <dt>module</dt>
-                  <dd className="font-mono normal-case tracking-normal">{step.module}</dd>
-                </div>
-                <div className="flex gap-1">
-                  <dt>evidence</dt>
-                  <dd className="font-mono normal-case tracking-normal">{step.evidence_dir}</dd>
-                </div>
-              </dl>
             </li>
           ))}
         </ol>

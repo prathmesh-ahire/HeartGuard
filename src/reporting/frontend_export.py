@@ -182,11 +182,6 @@ GENERATED_FILES: tuple[str, ...] = (
     "index.ts",
 )
 
-#: Where the evidence browser's copies of the source CSVs go, under `public/`.
-#: A static export can only link to what it serves, and T117.7 asks that the
-#: link resolve. Rebuilt on every export and gitignored.
-EVIDENCE_PUBLIC_DIR = "evidence"
-
 #: T01-T30, and the supplementary T-S1..T-S5. T-S5 (EXP-F3's source hold-out)
 #: is the evidence behind Known Limitation 1 and has to be on the robustness page.
 _TABLE_ID = re.compile(r"^T(?:\d{2}|-S\d+)$")
@@ -1143,8 +1138,6 @@ export interface GeneratedEvidenceEntry {{
   generated_from: string;
   generated_from_sha256: string;
   upstream_sources: string[];
-  /** Site path of the served copy of `generated_from`, or null if none was copied. */
-  url: string | null;
 }}
 
 export type GeneratedEvidence = GeneratedEvidenceEntry[];
@@ -1544,8 +1537,7 @@ _SPLIT_MODULES: tuple[tuple[str, str, str, str, str], ...] = (
         "explainability.json",
         "explainability",
         "GeneratedExplainability",
-        "Permutation importance, family shares and one stored per-record "
-        "decomposition (T117.2).",
+        "Permutation importance, family shares and one stored per-record decomposition (T117.2).",
     ),
     (
         "limitations",
@@ -1756,37 +1748,19 @@ def _reject_constant(name: str) -> Any:
 # ---------------------------------------------------------------------------
 
 
-def _publish_evidence(evidence: list[dict[str, Any]], directory: Path) -> None:
-    """Copy each `generated_from` file under `public/evidence/` and record its URL.
+def _retire_published_evidence(directory: Path) -> None:
+    """Remove `public/evidence/`, which earlier exports populated (T127.6).
 
-    A static export can only link to a file it serves. A link to a path in the
-    repository would resolve for nobody reading the dashboard, and T117.7 asks
-    that the link resolve to a real CSV. The directory is rebuilt from scratch on
-    every export, so a file that left `outputs/` leaves the site too. Only
-    committed, readable types are copied; a `url` of null states that no copy
-    exists rather than linking to a 404.
+    Until T127.1 the evidence browser linked a served copy of every source CSV.
+    The product UI shows no repository files, so nothing links them and they are
+    no longer copied; `evidence.json` still maps every exported value to its
+    source and digest, and the displayed-value audit still checks it. A stale
+    copy left in `public/` would otherwise be republished into `out/` forever.
     """
     import shutil
 
     if directory.is_dir():
         shutil.rmtree(directory)
-    copied: dict[str, str] = {}
-    for entry in evidence:
-        relative = str(entry["generated_from"])
-        if relative not in copied:
-            source = _project_root() / relative
-            if (
-                relative.startswith("outputs/")
-                and source.is_file()
-                and source.suffix.lower() in READABLE_SUFFIXES
-            ):
-                target = directory / relative
-                ensure_dir(target.parent)
-                shutil.copyfile(source, target)
-                copied[relative] = "/" + EVIDENCE_PUBLIC_DIR + "/" + relative
-            else:
-                copied[relative] = ""
-        entry["url"] = copied[relative] or None
 
 
 # ---------------------------------------------------------------------------
@@ -1870,7 +1844,7 @@ def export_all(
     reports = reports_payload()
     evidence += payload_evidence("explainability", explainability)
     evidence += payload_evidence("limitations", limitations)
-    _publish_evidence(evidence, public_root(public_dir) / EVIDENCE_PUBLIC_DIR)
+    _retire_published_evidence(public_root(public_dir) / "evidence")
 
     run = current_run()
     git = git_info()

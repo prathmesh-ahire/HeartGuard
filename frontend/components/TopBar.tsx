@@ -4,11 +4,10 @@ import { usePathname } from 'next/navigation';
 
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Icon } from '@/components/ui/Icon';
-import { ALL_ROUTES } from '@/lib/routes';
+import { sectionFor } from '@/lib/routes';
 
 /**
- * The workstation top bar: where you are, what mode the system is in, and the
- * theme control.
+ * The top bar: which page you are on, and the theme control.
  *
  * The title is read from the route table rather than passed in per page, for
  * the same reason the rail is: two lists of pages drift, one does not.
@@ -21,12 +20,7 @@ import { ALL_ROUTES } from '@/lib/routes';
  */
 export function TopBar({ onMenu }: { onMenu: () => void }) {
   const pathname = usePathname();
-  const route =
-    ALL_ROUTES.find(
-      (entry) => pathname === entry.href || pathname === entry.href.slice(0, -1),
-    ) ?? ALL_ROUTES[0];
-
-  const isPredict = route?.group === 'predict';
+  const route = sectionFor(pathname);
 
   return (
     <header className="sticky top-0 z-20 flex h-topbar items-center justify-between gap-4 border-b border-line bg-panel/95 px-4 backdrop-blur lg:px-6">
@@ -41,12 +35,7 @@ export function TopBar({ onMenu }: { onMenu: () => void }) {
           <Icon name="menu" className="h-4 w-4" />
         </button>
 
-        <h1 className="truncate text-headline-sm text-ink">{route?.label}</h1>
-
-        <span className="hidden items-center gap-1.5 rounded border border-accent-line bg-accent-soft px-2 py-0.5 font-mono text-label-sm uppercase text-accent-deep sm:flex">
-          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-          {isPredict ? 'Live inference' : 'Precomputed'}
-        </span>
+        <p className="truncate text-headline-sm text-ink">{route.label}</p>
       </div>
 
       <div className="flex shrink-0 items-center gap-2">

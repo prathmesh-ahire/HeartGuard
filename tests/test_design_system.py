@@ -252,7 +252,7 @@ def design_page_source() -> str:
     following the interactive half around.
     """
     parts = []
-    for name in ("page.tsx", "DesignClient.tsx"):
+    for name in ("page.design.tsx", "DesignClient.tsx"):
         path = FRONTEND / "app" / "design" / name
         if path.is_file():
             parts.append(path.read_text(encoding="utf-8"))
@@ -260,11 +260,11 @@ def design_page_source() -> str:
 
 
 def test_the_design_page_exists_and_is_a_declared_route(scaffolded: None) -> None:
-    assert (FRONTEND / "app" / "design" / "page.tsx").is_file()
+    # T127.5: the page file is `page.design.tsx`, a page under `next dev` only.
+    assert (FRONTEND / "app" / "design" / "page.design.tsx").is_file()
     assert (FRONTEND / "app" / "design" / "DesignClient.tsx").is_file()
     routes = (FRONTEND / "lib" / "routes.ts").read_text(encoding="utf-8")
-    assert "UTILITY_ROUTES" in routes
-    assert "'/design/'" in routes
+    assert "export const DESIGN_ROUTE = '/design/';" in routes
 
 
 def test_the_design_page_reads_real_payloads_rather_than_placeholder_numbers(

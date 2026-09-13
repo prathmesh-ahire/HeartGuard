@@ -158,9 +158,6 @@ export function ReportDownloads({
               ))}
             </select>
           </label>
-          <p className={cn(TYPE_SCALE.micro, SURFACE.subtle, 'font-mono normal-case tracking-normal')}>
-            {reports.experiments.find((item) => item.exp_id === expId)?.directory}
-          </p>
           <button
             type="button"
             className={BUTTON}

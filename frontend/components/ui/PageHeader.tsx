@@ -17,13 +17,17 @@ export function PageHeader({
   note,
   actions,
   className,
+  level = 1,
 }: {
   title: string;
   lede?: ReactNode;
   note?: ReactNode;
   actions?: ReactNode;
   className?: string;
+  /** 2 when the header opens a section inside a page that already has an h1. */
+  level?: 1 | 2;
 }) {
+  const Heading = level === 1 ? 'h1' : 'h2';
   return (
     <header
       className={cn(
@@ -32,7 +36,7 @@ export function PageHeader({
       )}
     >
       <div className="max-w-3xl">
-        <h1 className="text-headline-lg text-ink">{title}</h1>
+        <Heading className="text-headline-lg text-ink">{title}</Heading>
         {lede ? <div className="mt-2 text-body-lg text-ink-2">{lede}</div> : null}
         {note ? (
           <div className="mt-3 flex gap-2 border-l-2 border-accent-line pl-3 text-body-sm text-ink-3">

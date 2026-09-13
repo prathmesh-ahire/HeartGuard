@@ -12,9 +12,9 @@ import {
 import { useMemo, useState } from 'react';
 
 import { cn } from '@/lib/cn';
-import { EvidenceLink } from '@/components/evidence/EvidenceLink';
 import type { GeneratedTable } from '@/lib/generated';
 import { EmptyState } from '@/components/ui/States';
+import { userFacing } from '@/lib/internal';
 import { SURFACE, TYPE_SCALE } from '@/lib/tokens';
 
 /**
@@ -42,16 +42,29 @@ interface Row {
 }
 
 export function ResultsTable({
-  table: source,
+  table: fullSource,
   className,
   caption,
   initialSort,
+  hideColumns,
 }: {
   table?: GeneratedTable;
   className?: string;
   caption?: string;
   initialSort?: string;
+  /**
+   * Columns left out of the view (T127.1): repository paths and module names,
+   * which a thesis table carries and a product page does not show. The
+   * exported table is unchanged; only what is rendered is narrowed.
+   */
+  hideColumns?: readonly string[];
 }) {
+  const hiddenKey = (hideColumns ?? []).join('|');
+  const source = useMemo<GeneratedTable | undefined>(() => {
+    if (fullSource === undefined || hiddenKey === '') return fullSource;
+    const hidden = new Set(hiddenKey.split('|'));
+    return { ...fullSource, columns: fullSource.columns.filter((column) => !hidden.has(column.name)) };
+  }, [fullSource, hiddenKey]);
   const [sorting, setSorting] = useState<SortingState>(
     initialSort === undefined ? [] : [{ id: initialSort, desc: true }],
   );
@@ -131,7 +144,7 @@ export function ResultsTable({
       <div className="overflow-x-auto rounded-lg border border-line bg-panel">
         <table className="w-full border-collapse text-left">
           <caption className={cn(TYPE_SCALE.caption, SURFACE.muted, 'caption-bottom px-3 py-2 text-left')}>
-            {caption ?? source.caption}
+            {caption ?? userFacing(source.caption)}
           </caption>
           <thead>
             {table.getHeaderGroups().map((group) => (
@@ -197,12 +210,7 @@ export function ResultsTable({
         </p>
       ) : (
         <p className={cn(TYPE_SCALE.micro, SURFACE.subtle)}>
-          {visible.length} of {source.n_rows} rows · source{' '}
-          <EvidenceLink
-            path={source.source_csv}
-            artifact={source.id}
-            className="normal-case tracking-normal"
-          />
+          {visible.length} of {source.n_rows} rows
         </p>
       )}
     </div>

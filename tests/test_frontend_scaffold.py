@@ -10,9 +10,12 @@ files on disk:
 
 * `npm run build` cannot run without the exporter running first (T110.5);
 * the config is a static export with TypeScript strict mode on (T110.1/T110.6);
-* the disclaimer, navbar and run-manifest footer live in the ROOT layout, so no
-  route can render without them (T110.3);
-* every declared route has a page and every page is declared (T110.4);
+* the screening notice, navigation and footer live in the ROOT layout, so no
+  route can render without them (T110.3), and the notice is switched by one
+  flag (T127.2);
+* the navigation is the five product pages, every declared route and every
+  retired route has a page, and every page is declared (T110.4, T127.3/4);
+* the design reference is not a production page (T127.5);
 * no page imports a generated JSON payload directly, bypassing the typed index.
 
 A change that breaks any of these breaks the build too -- but it breaks it in
@@ -147,10 +150,27 @@ def test_the_root_layout_renders_the_disclaimer_navigation_and_footer(
     layout = (APP / "layout.tsx").read_text(encoding="utf-8")
     for element in ("<DisclaimerBanner />", "<AppShell", "<Footer />"):
         assert element in layout, element + " is not in the root layout"
+    # T127.2: hidden for the presentation, but still wired here behind ONE flag,
+    # so T138.6 restores it everywhere by flipping that flag.
+    assert "SHOW_SCREENING_NOTICE ? <DisclaimerBanner /> : null" in layout
 
     shell = (FRONTEND / "components" / "AppShell.tsx").read_text(encoding="utf-8")
     for element in ("<SideNav", "<TopBar", "{disclaimer}", "{footer}"):
         assert element in shell, element + " is not rendered by the app shell"
+
+
+def test_the_screening_notice_has_exactly_one_switch(scaffolded: None) -> None:
+    """Every place that renders the notice reads the same flag, and nothing else hides it."""
+    import re
+
+    flags = (FRONTEND / "lib" / "flags.ts").read_text(encoding="utf-8")
+    assert re.search(r"export const SHOW_SCREENING_NOTICE = (true|false);", flags)
+    for path in list(APP.rglob("*.tsx")) + list((FRONTEND / "components").rglob("*.tsx")):
+        body = path.read_text(encoding="utf-8")
+        if ".disclaimer}" in body:
+            assert "SHOW_SCREENING_NOTICE ?" in body, (
+                path.name + " renders the disclaimer without the T127.2 flag"
+            )
 
 
 def test_no_page_renders_its_own_disclaimer(scaffolded: None) -> None:
@@ -178,11 +198,17 @@ def test_the_disclaimer_uses_screening_language_and_no_diagnostic_claim(
         assert forbidden not in lowered, "diagnostic language in the disclaimer: " + forbidden
 
 
-def test_the_footer_shows_the_run_manifest(scaffolded: None) -> None:
-    footer = (FRONTEND / "components" / "Footer.tsx").read_text(encoding="utf-8")
-    assert "from '@/lib/generated'" in footer
-    for field in ("git_commit", "exported_utc", "run_id", "excluded_dirs"):
-        assert field in footer, "the footer does not surface manifest." + field
+def test_no_chrome_shows_the_run_manifest(scaffolded: None) -> None:
+    """T127.1 inverted the old footer check: the run is verified, never displayed.
+
+    `scripts/45_audit_displayed_values.py` still proves the site was built from a
+    recorded export run, and fails the build if a commit, run id or path reaches
+    any page.
+    """
+    for name in ("Footer.tsx", "SideNav.tsx", "TopBar.tsx", "AppShell.tsx"):
+        body = (FRONTEND / "components" / name).read_text(encoding="utf-8")
+        for field in ("git_commit", "git_branch", "exported_utc", "run_id", "excluded_dirs"):
+            assert field not in body, name + " surfaces manifest." + field
 
 
 def test_the_ui_is_named_pv_mepcg_never_the_repository(scaffolded: None) -> None:
@@ -211,17 +237,26 @@ def _route_block(name: str) -> str:
 
 
 def _declared_routes() -> list[str]:
-    """The document pages: home plus the eleven results pages."""
+    """The five product pages, in navigation order."""
     import re
 
     return re.findall(r"href:\s*'([^']+)'", _route_block("ROUTES"))
 
 
-def _utility_routes() -> list[str]:
-    """Real routes that are not document pages -- /design/, and later ones."""
+def _about_tabs() -> list[str]:
     import re
 
-    return re.findall(r"href:\s*'([^']+)'", _route_block("UTILITY_ROUTES"))
+    return re.findall(r"href:\s*'([^']+)'", _route_block("ABOUT_TABS"))
+
+
+def _legacy_redirects() -> dict[str, str]:
+    """Every retired route and its new home (T127.4)."""
+    import re
+
+    source = (FRONTEND / "lib" / "routes.ts").read_text(encoding="utf-8")
+    start = source.index("export const LEGACY_REDIRECTS")
+    block = source[start : source.index("\n};", start)]
+    return dict(re.findall(r"'(/[^']*)':\s*'(/[^']*)'", block))
 
 
 def _page_routes() -> list[str]:
@@ -232,27 +267,51 @@ def _page_routes() -> list[str]:
     return sorted(routes)
 
 
-def test_home_plus_eleven_document_pages_are_declared(scaffolded: None) -> None:
+def test_the_navigation_is_exactly_the_five_product_pages(scaffolded: None) -> None:
     declared = _declared_routes()
-    assert declared[0] == "/", "home is the first route"
-    assert len(declared) == 12, "home plus the eleven document pages"
-    assert len(set(declared)) == len(declared), "a route is declared twice"
+    assert declared == ["/", "/history/", "/insights/", "/reports/", "/about/"], declared
+    nav = (FRONTEND / "components" / "SideNav.tsx").read_text(encoding="utf-8")
+    assert "ROUTES.map" in nav, "the rail must be built from the route table"
 
 
 def test_every_declared_route_has_a_page_and_every_page_is_declared(
     scaffolded: None,
 ) -> None:
-    declared = set(_declared_routes()) | set(_utility_routes())
+    declared = set(_declared_routes()) | set(_about_tabs()) | set(_legacy_redirects())
     built = set(_page_routes())
     assert declared - built == set(), "declared but not built: " + str(sorted(declared - built))
     assert built - declared == set(), "built but not declared: " + str(sorted(built - declared))
 
 
+def test_every_retired_route_redirects_to_a_live_page(scaffolded: None) -> None:
+    redirects = _legacy_redirects()
+    retired = {
+        "/dataset/", "/preprocessing/", "/features/", "/models/", "/optimization/",
+        "/robustness/", "/explainability/", "/limitations/",
+        "/predict/binary/", "/predict/multiclass/", "/predict/murmur/",
+    }  # fmt: skip
+    assert set(redirects) == retired
+    live = set(_declared_routes()) | set(_about_tabs())
+    for source, target in redirects.items():
+        assert target in live, source + " redirects to " + target + ", which is not a page"
+        body = (APP / source.strip("/") / "page.tsx").read_text(encoding="utf-8")
+        assert "<Redirect" in body and "LEGACY_REDIRECTS['" + source + "']" in body, source
+
+
 def test_every_route_carries_a_summary_used_as_its_description(scaffolded: None) -> None:
-    # Counted inside the ROUTES literal only: `summary:` also appears once in
-    # the RouteDefinition interface above it, and once per utility route below.
+    # Counted inside each literal only: `summary:` also appears once in the
+    # RouteDefinition interface.
     assert _route_block("ROUTES").count("summary:") == len(_declared_routes())
-    assert _route_block("UTILITY_ROUTES").count("summary:") == len(_utility_routes())
+    assert _route_block("ABOUT_TABS").count("summary:") == len(_about_tabs())
+
+
+def test_the_design_reference_is_not_a_production_page(scaffolded: None) -> None:
+    """T127.5: `page.design.tsx` is a page only under `next dev` or PV_DESIGN_PAGE=1."""
+    assert (APP / "design" / "page.design.tsx").is_file()
+    assert not (APP / "design" / "page.tsx").exists()
+    config = (FRONTEND / "next.config.mjs").read_text(encoding="utf-8")
+    assert "PHASE_DEVELOPMENT_SERVER" in config
+    assert "pageExtensions: includeDesign ? ['design.tsx', 'tsx', 'ts'] : ['tsx', 'ts']" in config
 
 
 def test_a_scaffold_page_says_it_is_a_scaffold(scaffolded: None) -> None:

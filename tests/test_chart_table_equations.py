@@ -154,7 +154,7 @@ def test_equations_render_on_the_server_not_in_the_browser(scaffolded: None) -> 
     assert "throwOnError: true" in component, (
         "a malformed formula must fail the build, not render as red text"
     )
-    page = APP / "design" / "page.tsx"
+    page = APP / "design" / "page.design.tsx"
     assert not is_client_component(page), (
         "the page rendering EquationList must stay a server component"
     )

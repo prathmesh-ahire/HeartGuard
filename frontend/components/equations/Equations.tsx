@@ -89,10 +89,6 @@ export function EquationCard({ equation }: { equation: GeneratedEquation }) {
           {equation.transcription_note}
         </p>
       )}
-
-      <p className={cn(TYPE_SCALE.micro, SURFACE.subtle, 'mt-3 font-mono')}>
-        implemented in {equation.implemented_in} · {equation.implements}
-      </p>
     </article>
   );
 }
@@ -101,8 +97,7 @@ export function EquationList({ className }: { className?: string }) {
   return (
     <div className={cn('space-y-4', className)}>
       <p className={cn(TYPE_SCALE.caption, SURFACE.subtle)}>
-        {generatedEquations.n_equations} equations from {generatedEquations.source}.{' '}
-        {generatedEquations.note}
+        {generatedEquations.n_equations} equations.
       </p>
       {generatedEquations.equations.map((equation) => (
         <EquationCard key={equation.key} equation={equation} />

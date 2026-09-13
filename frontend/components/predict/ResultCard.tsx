@@ -2,6 +2,7 @@
 
 import { cn } from '@/lib/cn';
 import { Badge } from '@/components/ui/Badge';
+import { SHOW_SCREENING_NOTICE } from '@/lib/flags';
 import { SURFACE, TYPE_SCALE, seriesColor } from '@/lib/tokens';
 import { prediction } from '@/lib/generated/prediction';
 import type { GeneratedSample } from '@/lib/generated/types';
@@ -19,12 +20,13 @@ import type { PredictResult } from '@/lib/api';
  * the model layer, because a client that inferred it from a probability near the
  * middle would be a second implementation of a rule that already exists.
  *
- * ## The screening banner is not conditional
+ * ## The screening notice belongs to this component, behind one flag
  *
  * T116.2 asks for the screening notice on every result, so it is part of this
  * component rather than something a page remembers to add. A page that forgot it
  * would render a clean class name with no scope statement, which is the exact
- * shape of a diagnostic claim.
+ * shape of a diagnostic claim. It is hidden for the presentation by
+ * `SHOW_SCREENING_NOTICE` (T127.2) and restored with it in T138.6.
  *
  * ## Low confidence is shown as loudly as the class
  *
@@ -142,9 +144,11 @@ export function ResultCard({
             <dd>{result.task}</dd>
           </div>
         </dl>
-        <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mt-4 max-w-prose')}>
-          {result.disclaimer}
-        </p>
+        {SHOW_SCREENING_NOTICE ? (
+          <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mt-4 max-w-prose')}>
+            {result.disclaimer}
+          </p>
+        ) : null}
       </section>
     );
   }
@@ -273,20 +277,21 @@ export function ResultCard({
             {reference.folds_agree
               ? 'All repeats agreed on the class.'
               : 'The repeats did NOT all agree on the class: this recording sits near the boundary and its prediction changed with the training split.'}{' '}
-            Source: <span className="font-mono">{reference.source}</span>, model{' '}
-            {reference.model_id}, positive class {reference.positive_class}.
+            Model {reference.model_id}, positive class {reference.positive_class}.
           </p>
         </details>
       ) : null}
 
-      <p
-        className={cn(
-          TYPE_SCALE.caption,
-          'mt-4 border-t border-accent-line bg-accent-soft p-3 text-accent-deep',
-        )}
-      >
-        {result.disclaimer}
-      </p>
+      {SHOW_SCREENING_NOTICE ? (
+        <p
+          className={cn(
+            TYPE_SCALE.caption,
+            'mt-4 border-t border-accent-line bg-accent-soft p-3 text-accent-deep',
+          )}
+        >
+          {result.disclaimer}
+        </p>
+      ) : null}
     </section>
   );
 }

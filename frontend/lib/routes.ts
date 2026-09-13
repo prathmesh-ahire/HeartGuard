@@ -1,143 +1,126 @@
 /**
- * The route tree (T110.4): home plus the eleven document pages.
+ * The route tree (T127.3, T127.4).
  *
- * Declared once, here, and consumed by the navbar, the footer and the
- * Playwright smoke test (T118.2), so a page that exists but is unreachable --
- * or a nav link to a route that was never built -- is a type error rather than
- * a 404 somebody finds later.
+ * Declared once, here, and consumed by the navigation, the top bar, the About
+ * tab bar and the Playwright smoke test, so a page that exists but is
+ * unreachable -- or a nav link to a route that was never built -- is a type
+ * error rather than a 404 somebody finds later.
  *
- * `/design` (T111.6) and `/limitations` (T117.5) are added by the phases that
- * build them; they are not document pages.
+ * Five product pages. Everything about the project itself lives under About
+ * the Model, as tabs. The old document routes still resolve: each one is a
+ * redirect page to its new home, so a bookmark or a thesis reference never
+ * lands on a 404.
  */
 export interface RouteDefinition {
   /** The URL path. */
   href: string;
-  /** Short label for the navbar. */
+  /** Short label for the navigation. */
   label: string;
   /** What the page is for, used as the page description and the nav tooltip. */
   summary: string;
-  /** Navbar grouping. */
-  group: 'overview' | 'method' | 'results' | 'predict';
 }
 
 export const ROUTES: readonly RouteDefinition[] = [
   {
     href: '/',
-    label: 'Home',
-    summary:
-      'The framework, the six research objectives, and what this prototype is and is not.',
-    group: 'overview',
+    label: 'Analyse',
+    summary: 'Upload or record a heart sound and get a screening result with its confidence.',
   },
   {
-    href: '/dataset/',
-    label: 'Dataset',
-    summary:
-      'The four public PCG corpora as audited against the files on disk: inventory, class balance, durations and the fold map.',
-    group: 'overview',
+    href: '/history/',
+    label: 'History',
+    summary: 'Every recording you have analysed, with its result, notes and tags.',
   },
   {
-    href: '/preprocessing/',
-    label: 'Preprocessing',
-    summary:
-      'Resampling, band-pass filtering, normalization and the signal-quality assessment applied before any feature is computed.',
-    group: 'method',
-  },
-  {
-    href: '/features/',
-    label: 'Features',
-    summary:
-      'The locked 138-feature registry across six families, and the subset selected inside the training folds.',
-    group: 'method',
-  },
-  {
-    href: '/models/',
-    label: 'Models',
-    summary:
-      'The declared models, their configuration, and the fold-wise comparison between them.',
-    group: 'results',
-  },
-  {
-    href: '/optimization/',
-    label: 'Optimization',
-    summary:
-      'The search space, the methods compared, the parameters selected and what the search actually bought.',
-    group: 'results',
-  },
-  {
-    href: '/robustness/',
-    label: 'Robustness',
-    summary:
-      'How results move under added noise, shortened recordings, a different corpus and a different auscultation location.',
-    group: 'results',
-  },
-  {
-    href: '/explainability/',
-    label: 'Explainability',
-    summary:
-      'Global feature importance, family-level contribution, and a per-sample explanation of the most recent prediction.',
-    group: 'results',
+    href: '/insights/',
+    label: 'Insights',
+    summary: 'Trends across your analyses: how many, what they found, and how confident.',
   },
   {
     href: '/reports/',
     label: 'Reports',
-    summary:
-      'Generated reports, and the evidence browser linking every displayed value to the CSV it came from.',
-    group: 'results',
+    summary: 'Download a report for a recording, or a summary of the model.',
   },
   {
-    href: '/predict/binary/',
-    label: 'Binary',
-    summary:
-      'Upload a recording for a normal / abnormal screening indication with its confidence.',
-    group: 'predict',
-  },
-  {
-    href: '/predict/multiclass/',
-    label: 'Multiclass',
-    summary:
-      'PASCAL A four-class and PASCAL B three-class acoustic-event output with the full probability distribution.',
-    group: 'predict',
-  },
-  {
-    href: '/predict/murmur/',
-    label: 'Murmur / Outcome',
-    summary:
-      'CirCor murmur and clinical-outcome output at recording and patient level, with the per-location breakdown.',
-    group: 'predict',
+    href: '/about/',
+    label: 'About the Model',
+    summary: 'How the model works, the data it learned from, how well it performs, and its limits.',
   },
 ];
 
-export const GROUP_LABELS: Record<RouteDefinition['group'], string> = {
-  overview: 'Overview',
-  method: 'Method',
-  results: 'Results',
-  predict: 'Prediction',
-};
-
-export function routeFor(href: string): RouteDefinition | undefined {
-  return ROUTES.find((route) => route.href === href);
-}
+/** The tabs of About the Model. The first is the About landing page itself. */
+export const ABOUT_TABS: readonly RouteDefinition[] = [
+  {
+    href: '/about/',
+    label: 'How it works',
+    summary: 'The research objectives, the steps from a recording to a result, and how each recording is cleaned.',
+  },
+  {
+    href: '/about/datasets/',
+    label: 'Datasets',
+    summary: 'The four public heart-sound collections the model learned from.',
+  },
+  {
+    href: '/about/features/',
+    label: 'Features',
+    summary: 'The measurements taken from every recording, and which ones the model kept.',
+  },
+  {
+    href: '/about/models/',
+    label: 'Models',
+    summary: 'The models compared, and how their settings were searched.',
+  },
+  {
+    href: '/about/performance/',
+    label: 'Performance',
+    summary: 'How results hold up under harder conditions, and what the model relies on.',
+  },
+  {
+    href: '/about/limitations/',
+    label: 'Limitations',
+    summary: 'What these results can and cannot support.',
+  },
+];
 
 /**
- * Routes that exist but are not document pages: they carry no results and are
- * not in the primary navigation. Declared here anyway so that "every route has
- * a page and every page is declared" stays an assertion rather than a hope.
+ * Every retired route and its new home (T127.4). Each key has a page under
+ * `app/` that does nothing but redirect here.
+ *
+ * `/reports/` is not in the list: the new Reports page lives at the same URL.
  */
-export const UTILITY_ROUTES: readonly RouteDefinition[] = [
-  {
-    href: '/design/',
-    label: 'Design reference',
-    summary:
-      'Every design-system component in every state, for visual QA. Not a results page.',
-    group: 'overview',
-  },
-  {
-    href: '/limitations/',
-    label: 'Limitations',
-    summary:
-      'What the results cannot support: the adult-to-paediatric population mismatch, the PASCAL sample sizes, the CirCor public subset and the recording-source confound.',
-    group: 'results',
-  },
-];
+export const LEGACY_REDIRECTS: Readonly<Record<string, string>> = {
+  '/dataset/': '/about/datasets/',
+  '/preprocessing/': '/about/',
+  '/features/': '/about/features/',
+  '/models/': '/about/models/',
+  '/optimization/': '/about/models/',
+  '/robustness/': '/about/performance/',
+  '/explainability/': '/about/performance/',
+  '/limitations/': '/about/limitations/',
+  '/predict/binary/': '/',
+  '/predict/multiclass/': '/',
+  '/predict/murmur/': '/',
+};
 
-export const ALL_ROUTES: readonly RouteDefinition[] = [...ROUTES, ...UTILITY_ROUTES];
+/**
+ * The design reference (T127.5). Served by `next dev` only: its page file is
+ * `page.design.tsx`, which `next.config.mjs` treats as a page outside a
+ * production build. Never in the navigation.
+ */
+export const DESIGN_ROUTE = '/design/';
+
+export function routeFor(href: string): RouteDefinition | undefined {
+  return ROUTES.find((route) => route.href === href) ?? ABOUT_TABS.find((tab) => tab.href === href);
+}
+
+/** True when `pathname` is `href`, with or without its trailing slash. */
+export function matchesRoute(pathname: string, href: string): boolean {
+  return pathname === href || pathname === href.slice(0, -1) || `${pathname}/` === href;
+}
+
+/** The top-level page a pathname belongs to. */
+export function sectionFor(pathname: string): RouteDefinition {
+  const about = ROUTES[ROUTES.length - 1] as RouteDefinition;
+  if (pathname.startsWith('/about')) return about;
+  return ROUTES.find((route) => matchesRoute(pathname, route.href)) ?? (ROUTES[0] as RouteDefinition);
+}
