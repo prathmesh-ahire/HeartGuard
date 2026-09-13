@@ -2,8 +2,6 @@
 
 import { useState, type ReactNode } from 'react';
 
-import { DisclaimerBanner } from '@/components/Disclaimer';
-import { Footer } from '@/components/Footer';
 import { SideNav } from '@/components/SideNav';
 import { TopBar } from '@/components/TopBar';
 
@@ -13,13 +11,23 @@ import { TopBar } from '@/components/TopBar';
  *
  * It exists as one client component only because the rail and the bar share a
  * single piece of state -- whether the mobile drawer is open. Everything else
- * here is layout, and the root layout stays a server component.
+ * here is layout.
  *
- * The disclaimer sits ABOVE the bar, in the frame, not on the page. Per-page
- * placement is how a disclaimer goes missing: a route added later simply does
- * not get one and nothing fails.
+ * The disclaimer and the footer are SLOTS, filled by the root layout, not
+ * imported here. T110.3's guarantee is that the root layout itself renders
+ * them, so no route -- including one added later -- can render without its
+ * scope notice or the provenance of its numbers; `tests/test_frontend_scaffold.py`
+ * reads `app/layout.tsx` for exactly that.
  */
-export function AppShell({ children }: { children: ReactNode }) {
+export function AppShell({
+  children,
+  disclaimer,
+  footer,
+}: {
+  children: ReactNode;
+  disclaimer: ReactNode;
+  footer: ReactNode;
+}) {
   const [navOpen, setNavOpen] = useState(false);
 
   return (
@@ -27,12 +35,12 @@ export function AppShell({ children }: { children: ReactNode }) {
       <SideNav open={navOpen} onClose={() => setNavOpen(false)} />
 
       <div className="flex min-h-screen flex-col lg:pl-rail">
-        <DisclaimerBanner />
+        {disclaimer}
         <TopBar onMenu={() => setNavOpen(true)} />
         <main className="flex-1 px-4 py-6 lg:px-6">
           <div className="mx-auto w-full max-w-[1600px]">{children}</div>
         </main>
-        <Footer />
+        {footer}
       </div>
     </>
   );

@@ -134,12 +134,23 @@ def test_tailwind_follows_the_theme_class_not_the_os_setting(scaffolded: None) -
 # ---------------------------------------------------------------------------
 
 
-def test_the_root_layout_renders_the_disclaimer_navbar_and_footer(
+def test_the_root_layout_renders_the_disclaimer_navigation_and_footer(
     scaffolded: None,
 ) -> None:
+    """The layout owns all three, so no route can render without them.
+
+    Until 2026-09-13 the navigation was a `<Navbar />` rendered by the layout.
+    It is now a rail and a bar inside `AppShell`, which the layout renders and
+    which receives the disclaimer and footer as slots. The guarantee is
+    unchanged: every element is placed by the layout, never by a page.
+    """
     layout = (APP / "layout.tsx").read_text(encoding="utf-8")
-    for element in ("<DisclaimerBanner />", "<Navbar />", "<Footer />"):
+    for element in ("<DisclaimerBanner />", "<AppShell", "<Footer />"):
         assert element in layout, element + " is not in the root layout"
+
+    shell = (FRONTEND / "components" / "AppShell.tsx").read_text(encoding="utf-8")
+    for element in ("<SideNav", "<TopBar", "{disclaimer}", "{footer}"):
+        assert element in shell, element + " is not rendered by the app shell"
 
 
 def test_no_page_renders_its_own_disclaimer(scaffolded: None) -> None:
@@ -149,6 +160,8 @@ def test_no_page_renders_its_own_disclaimer(scaffolded: None) -> None:
         assert "DisclaimerBanner" not in body, (
             page.name + " renders its own disclaimer; it belongs in the layout only"
         )
+        for chrome in ("AppShell", "SideNav", "TopBar"):
+            assert chrome not in body, page.name + " renders " + chrome + "; it belongs in the layout only"
 
 
 def test_the_disclaimer_uses_screening_language_and_no_diagnostic_claim(

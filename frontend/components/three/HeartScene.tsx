@@ -2,10 +2,9 @@
 
 import { Environment, OrbitControls } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { useMemo, useRef } from 'react';
+import { useTheme } from 'next-themes';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
-
-import { BRAND } from '@/lib/tokens';
 
 /**
  * The animated heart (T112.2). **This module is never imported directly.**
@@ -78,7 +77,7 @@ function beatEnvelope(elapsed: number): number {
   return 0;
 }
 
-function Heart({ animate }: { animate: boolean }): JSX.Element {
+function Heart({ animate, color }: { animate: boolean; color: string }): JSX.Element {
   const mesh = useRef<THREE.Mesh>(null);
   const geometry = useHeartGeometry();
 
@@ -97,7 +96,7 @@ function Heart({ animate }: { animate: boolean }): JSX.Element {
   return (
     <mesh ref={mesh} geometry={geometry} castShadow receiveShadow>
       <meshStandardMaterial
-        color={BRAND.accent}
+        color={color}
         roughness={0.35}
         metalness={0.15}
         envMapIntensity={0.6}
@@ -125,6 +124,8 @@ export default function HeartScene({
   interactive = false,
   fps = 30,
 }: HeartSceneProps): JSX.Element {
+  const color = useAccentColour();
+
   return (
     <Canvas
       // `frameloop="demand"` would render once and stop, which is exactly right
@@ -140,7 +141,7 @@ export default function HeartScene({
       <ambientLight intensity={0.6} />
       <directionalLight position={[3, 4, 5]} intensity={1.6} />
       <directionalLight position={[-4, -2, -3]} intensity={0.4} />
-      <Heart animate={animate} />
+      {color !== null ? <Heart animate={animate} color={color} /> : null}
       <Environment preset="city" />
       {interactive ? (
         <OrbitControls enablePan={false} enableZoom={false} rotateSpeed={0.6} />
@@ -170,4 +171,33 @@ function FrameLimiter({ fps, enabled }: { fps: number; enabled: boolean }): null
     last.current = now;
   });
   return null;
+}
+
+/**
+ * The heart takes the page's accent from the stylesheet rather than from a
+ * literal.
+ *
+ * A WebGL material is not styled by CSS, so the value has to be read out of the
+ * `--accent` custom property and handed to Three. Reading it -- instead of
+ * restating `#e11d48` in TypeScript -- keeps `globals.css` the only place the
+ * brand colour is defined, and makes the heart follow the theme: rose-600 on the
+ * light ground, rose-400 on the dark one. The variable holds space-separated RGB
+ * channels so Tailwind can apply alpha to it; Three wants the comma form.
+ *
+ * Re-read on every theme change. `null` until the first read, so the mesh never
+ * renders one frame in Three's default white.
+ */
+function useAccentColour(): string | null {
+  const { resolvedTheme } = useTheme();
+  const [colour, setColour] = useState<string | null>(null);
+
+  useEffect(() => {
+    const channels = getComputedStyle(document.documentElement)
+      .getPropertyValue('--accent')
+      .trim()
+      .split(/\s+/);
+    if (channels.length === 3) setColour('rgb(' + channels.join(', ') + ')');
+  }, [resolvedTheme]);
+
+  return colour;
 }

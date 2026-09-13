@@ -4,14 +4,17 @@ import { Hanken_Grotesk, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 
 import { AppShell } from '@/components/AppShell';
+import { DisclaimerBanner } from '@/components/Disclaimer';
+import { Footer } from '@/components/Footer';
 import { SmoothScroll } from '@/components/motion/SmoothScroll';
 import { ThemeProvider } from '@/components/ThemeProvider';
 
 /**
  * The root layout (T110.3).
  *
- * The disclaimer, the navigation and the run-manifest footer live in
- * `AppShell`, rendered HERE rather than on each page. Per-page placement is how
+ * The disclaimer and the run-manifest footer are rendered HERE, handed to
+ * `AppShell` as slots, and the navigation lives inside that shell -- none of
+ * the three is placed on a page. Per-page placement is how
  * a disclaimer goes missing: a route added later simply does not get one and
  * nothing fails. From here it is structurally impossible for a page to render
  * without its scope notice or without the provenance of the numbers it shows.
@@ -52,7 +55,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ThemeProvider>
           <SmoothScroll>
-            <AppShell>{children}</AppShell>
+            <AppShell disclaimer={<DisclaimerBanner />} footer={<Footer />}>
+              {children}
+            </AppShell>
           </SmoothScroll>
         </ThemeProvider>
       </body>

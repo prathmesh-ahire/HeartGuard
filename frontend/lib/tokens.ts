@@ -17,19 +17,6 @@ import { theme } from '@/lib/generated';
 /** Okabe-Ito, in the fixed order every figure uses. Index 0 is series 1. */
 export const SERIES_COLORS: readonly string[] = theme.palette.series;
 
-/**
- * The brand accent, as a literal.
- *
- * Every other surface takes its colour from a CSS variable, but a WebGL
- * material is not styled by CSS and needs a value it can pass to Three. This
- * is decoration -- the hero heart -- and never a data mark: a mark that
- * encodes a value still comes from `SERIES_COLORS`, which the figures share.
- */
-export const BRAND = {
-  accent: '#e11d48',
-  accentDark: '#fb7185',
-} as const;
-
 /** Semantic roles, so a page never indexes the palette by a magic number. */
 export const ROLE_COLORS = theme.palette.roles;
 

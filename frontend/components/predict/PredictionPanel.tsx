@@ -211,7 +211,7 @@ export function PredictionPanel({
         />
       ) : (
         <div className="grid items-start gap-3 lg:grid-cols-2">
-          <GlassCard eyebrow="Step 1 · intake" title="Choose a recording">
+          <GlassCard eyebrow="Intake" title="1. Choose a recording">
 
             {pageSamples.length > 0 ? (
               <div className="mb-5">
@@ -301,7 +301,7 @@ export function PredictionPanel({
               {busy ? (
                 <span className="h-2 w-2 rounded-full bg-current animate-pulse-subtle" />
               ) : null}
-              {busy ? 'Scoring…' : 'Step 2 · run the screening model'}
+              {busy ? 'Scoring…' : '2. Run the screening model'}
             </button>
 
             {probeFailed !== null ? (
@@ -317,7 +317,7 @@ export function PredictionPanel({
             ) : null}
           </GlassCard>
 
-          <GlassCard eyebrow="Step 3 · result" title="Screening indication">
+          <GlassCard eyebrow="Screening indication" title="3. Result">
             <WaveformPreview
               className="telemetry-grid mb-3 rounded-lg border border-line p-2"
               source={
