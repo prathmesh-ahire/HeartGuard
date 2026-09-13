@@ -218,7 +218,7 @@ export function BatchPanel({ task, className }: { task: string; className?: stri
                   <td className="px-3 py-1.5 tabular-nums">{row.result?.display.margin ?? ''}</td>
                   <td className="px-3 py-1.5">
                     {row.error !== null ? (
-                      <span className="text-rose-700 dark:text-rose-300">{row.error}</span>
+                      <span className="text-danger">{row.error}</span>
                     ) : row.result?.low_confidence === true ? (
                       <Badge tone="warn">Low confidence</Badge>
                     ) : null}

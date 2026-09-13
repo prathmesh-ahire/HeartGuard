@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { useReducedMotion } from '@/lib/capability';
 import { cn } from '@/lib/cn';
+import { tokenColour } from '@/lib/cssTokens';
 import { theme as generatedTheme } from '@/lib/generated';
 import { SURFACE, TYPE_SCALE } from '@/lib/tokens';
 
@@ -107,7 +108,7 @@ export function EChart({ option, ariaLabel, className, height = 320, caption }: 
         <div
           role="alert"
           className={cn(
-            'rounded border border-rose-300 bg-rose-50 p-4 dark:border-rose-800 dark:bg-rose-950/50',
+            'rounded border border-danger-line bg-danger-soft p-4 text-danger',
             TYPE_SCALE.caption,
           )}
         >
@@ -130,19 +131,22 @@ export function EChart({ option, ariaLabel, className, height = 320, caption }: 
  *
  * Returned rather than exported as a constant because it reads the resolved
  * theme: the axis of a chart on a dark page has to be light, and a single
- * static object cannot be both.
+ * static object cannot be both. The chrome colours are read from the
+ * stylesheet's tokens (T128.1), so axes and tooltips sit in the scheme; the
+ * series colours stay Okabe-Ito, shared with the matplotlib figures. Callers
+ * pass `dark` so their memo re-reads the tokens when the theme flips.
  */
 export function chartBase(dark: boolean): EChartsOption {
-  const ink = dark ? '#e2e8f0' : '#0f172a';
-  const muted = dark ? '#94a3b8' : '#475569';
-  const grid = dark ? '#1e293b' : '#e2e8f0';
+  const ink = tokenColour('ink');
+  const muted = tokenColour('ink-3');
+  const grid = tokenColour('line', dark ? 0.8 : 0.6);
   return {
     backgroundColor: 'transparent',
     grid: { left: 56, right: 20, top: 28, bottom: 44, containLabel: true },
     textStyle: { color: ink },
     tooltip: {
       trigger: 'item',
-      backgroundColor: dark ? '#0f172a' : '#ffffff',
+      backgroundColor: tokenColour('raised'),
       borderColor: grid,
       textStyle: { color: ink },
     },

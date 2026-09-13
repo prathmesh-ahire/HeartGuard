@@ -75,7 +75,7 @@ export function ReportDownloads({
         <ErrorState className="mt-3" title="The report was not produced" detail={failure.message} />
       ) : null}
       {saved?.key === key ? (
-        <p className={cn(TYPE_SCALE.caption, 'mt-2 text-emerald-700 dark:text-emerald-400')}>
+        <p className={cn(TYPE_SCALE.caption, 'mt-2 text-good')}>
           Saved {saved.filename}.
         </p>
       ) : null}
@@ -187,7 +187,7 @@ export function ReportDownloads({
               {busy === 'objective' ? 'Fetching…' : 'Download objective-coverage report'}
             </button>
           ) : (
-            <p className={cn(TYPE_SCALE.caption, 'text-amber-800 dark:text-amber-300')}>
+            <p className={cn(TYPE_SCALE.caption, 'text-warn')}>
               {reports.objective.reason}
             </p>
           )}

@@ -308,8 +308,7 @@ export function PredictionPanel({
               <p
                 className={cn(
                   TYPE_SCALE.caption,
-                  'mt-3 rounded border border-amber-300 bg-amber-50 p-2 text-amber-900',
-                  'dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-100',
+                  'mt-3 rounded border border-warn-line bg-warn-soft p-2 text-warn',
                 )}
               >
                 {probeFailed}

@@ -123,7 +123,7 @@ export function LastPrediction() {
                       <span className="flex items-center gap-2">
                         <span
                           aria-hidden="true"
-                          className={cn('h-2.5 rounded-sm', positive ? 'bg-rose-500' : 'bg-accent')}
+                          className={cn('h-2.5 rounded-sm', positive ? 'bg-danger' : 'bg-accent')}
                           style={{ width: String(size * 6) + 'rem' }}
                         />
                         <span className="tabular-nums">{row.contribution_display}</span>

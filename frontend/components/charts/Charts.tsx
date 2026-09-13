@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { EChart, chartBase, type EChartsOption } from '@/components/charts/EChart';
 import { EmptyState } from '@/components/ui/States';
+import { tokenColour } from '@/lib/cssTokens';
 import { needsOutlineOn, seriesColor } from '@/lib/tokens';
 import {
   displayColumn,
@@ -83,7 +84,7 @@ function curveOption(
               type: 'line',
               data: chance,
               showSymbol: false,
-              lineStyle: { type: 'dashed', width: 1, color: dark ? '#64748b' : '#94a3b8' },
+              lineStyle: { type: 'dashed', width: 1, color: tokenColour('ink-3') },
               silent: true,
             },
           ]),
@@ -195,14 +196,14 @@ export function ConfusionMatrix({
         orient: 'horizontal',
         left: 'center',
         bottom: 0,
-        textStyle: { color: dark ? '#94a3b8' : '#475569' },
+        textStyle: { color: tokenColour('ink-2') },
       },
       series: [
         {
           type: 'heatmap',
           data: cells,
-          label: { show: true, color: dark ? '#e2e8f0' : '#0f172a' },
-          emphasis: { itemStyle: { borderColor: dark ? '#e2e8f0' : '#0f172a', borderWidth: 1 } },
+          label: { show: true, color: tokenColour('ink') },
+          emphasis: { itemStyle: { borderColor: tokenColour('ink'), borderWidth: 1 } },
         },
       ],
     };
@@ -259,9 +260,7 @@ export function GroupedBars({
           color: seriesColor(index),
           // theme.json says this fill disappears into the page. Stroke it.
           borderColor: needsOutlineOn(index, dark ? 'dark' : 'light')
-            ? dark
-              ? '#e2e8f0'
-              : '#0f172a'
+            ? tokenColour('ink')
             : 'transparent',
           borderWidth: needsOutlineOn(index, dark ? 'dark' : 'light') ? 1 : 0,
         },
@@ -316,7 +315,7 @@ export function ScatterPlot({
           itemStyle: {
             color: seriesColor(2),
             opacity: 0.85,
-            borderColor: outlined ? (dark ? '#e2e8f0' : '#0f172a') : 'transparent',
+            borderColor: outlined ? (tokenColour('ink')) : 'transparent',
             borderWidth: outlined ? 1 : 0,
           },
         },
@@ -369,7 +368,7 @@ export function CalibrationCurve({
           ],
           showSymbol: false,
           silent: true,
-          lineStyle: { type: 'dashed', width: 1, color: dark ? '#64748b' : '#94a3b8' },
+          lineStyle: { type: 'dashed', width: 1, color: tokenColour('ink-3') },
         },
         {
           name: 'observed',

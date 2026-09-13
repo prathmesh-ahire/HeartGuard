@@ -4,6 +4,7 @@ import { LazyMotion, m } from 'framer-motion';
 import type { ReactNode } from 'react';
 
 import { useReducedMotion } from '@/lib/capability';
+import { DURATION, EASE_OUT, STAGGER_STEP, transitionFor } from '@/lib/motion';
 
 const loadFeatures = () => import('./features').then((mod) => mod.default);
 
@@ -106,6 +107,65 @@ export function RevealList({
         </Reveal>
       ))}
     </div>
+  );
+}
+
+/**
+ * An orchestrated staggered reveal (T128.5): a group that enters together, its
+ * `StaggerItem` children one after another. For a row of tiles or a short list
+ * that is seen at once -- unlike `RevealList`, whose items each wait for their
+ * own viewport trigger.
+ *
+ * Reduced motion keeps the same start and end states and the same tree, with a
+ * zero-length transition and no stagger, so the group simply appears.
+ */
+export function Stagger({
+  children,
+  className,
+  step = STAGGER_STEP,
+}: {
+  children: ReactNode;
+  className?: string;
+  step?: number;
+}) {
+  const reduced = useReducedMotion();
+
+  return (
+    <LazyMotion features={loadFeatures} strict>
+      <m.div
+        className={className}
+        initial="hidden"
+        animate={reduced ? 'shown' : undefined}
+        whileInView={reduced ? undefined : 'shown'}
+        viewport={{ once: true, margin: '0px 0px -48px 0px' }}
+        variants={{
+          hidden: {},
+          shown: { transition: { staggerChildren: reduced ? 0 : step } },
+        }}
+      >
+        {children}
+      </m.div>
+    </LazyMotion>
+  );
+}
+
+export function StaggerItem({ children, className }: { children: ReactNode; className?: string }) {
+  const reduced = useReducedMotion();
+
+  return (
+    <m.div
+      className={className}
+      variants={{
+        hidden: { opacity: 0, y: 12 },
+        shown: {
+          opacity: 1,
+          y: 0,
+          transition: transitionFor(reduced, { duration: DURATION.base, ease: EASE_OUT }),
+        },
+      }}
+    >
+      {children}
+    </m.div>
   );
 }
 

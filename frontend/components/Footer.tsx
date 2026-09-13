@@ -1,3 +1,6 @@
+import { cn } from '@/lib/cn';
+import { LAYOUT } from '@/lib/tokens';
+
 /**
  * The footer (T127.1).
  *
@@ -9,8 +12,8 @@
  */
 export function Footer() {
   return (
-    <footer className="mt-10 border-t border-line px-4 py-6 text-body-sm text-ink-3 lg:px-6">
-      <div className="mx-auto flex w-full max-w-[1600px] flex-wrap items-center justify-between gap-2">
+    <footer className="mt-10 border-t border-line text-body-sm text-ink-3">
+      <div className={cn(LAYOUT.page, 'flex flex-wrap items-center justify-between gap-2 py-6')}>
         <p className="font-mono text-label-md uppercase text-ink-2">PV-MEPCG / PulseVision</p>
         <p>Phonocardiogram heart-sound analysis · academic research prototype</p>
       </div>

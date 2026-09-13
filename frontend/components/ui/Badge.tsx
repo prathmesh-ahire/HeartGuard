@@ -31,7 +31,7 @@ export function Badge({
           aria-hidden="true"
           className={cn(
             'h-1.5 w-1.5 shrink-0 rounded-full bg-current',
-            pulse && 'animate-pulse-subtle',
+            pulse && 'motion-safe:animate-pulse-subtle',
           )}
         />
       ) : null}

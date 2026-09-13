@@ -82,7 +82,7 @@ export function EquationCard({ equation }: { equation: GeneratedEquation }) {
         <p
           className={cn(
             TYPE_SCALE.caption,
-            'mt-3 border-l-2 border-amber-400 pl-3 dark:border-amber-600',
+            'mt-3 border-l-2 border-warn-line pl-3',
           )}
         >
           <span className="font-medium">Transcription note. </span>

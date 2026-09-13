@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import { RefreshPreview } from '@/app/design/RefreshPreview';
 import { cn } from '@/lib/cn';
 import { theme } from '@/lib/generated';
 import { G01 } from '@/lib/generated/figures/G01';
@@ -74,6 +75,12 @@ export function DesignClient({ tables }: { tables: SampledTables }) {
           title="Components, in every state"
           lede="Every component the dashboard is built from, rendered in each of its states for visual QA."
           note="Nothing on this page is a result. Every value shown is read from the generated payloads rather than typed in, so this page is also a live check that those payloads are usable."
+        />
+
+        <RefreshPreview
+          count={
+            files ? { value: files.values?.[0] ?? null, display: files.display[0] ?? '' } : null
+          }
         />
 
         <section className="space-y-3">

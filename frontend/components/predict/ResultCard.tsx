@@ -107,21 +107,20 @@ export function ResultCard({
     return (
       <section
         className={cn(
-          'rounded-xl border-2 border-amber-400 p-4 dark:border-amber-600',
-          'bg-amber-50 dark:bg-amber-950/40',
+          'rounded-xl border-2 border-warn-line bg-warn-soft p-4',
           className,
         )}
         aria-label="Prediction result"
       >
-        <p className="font-mono text-label-sm uppercase text-amber-900 dark:text-amber-100">
+        <p className="font-mono text-label-sm uppercase text-warn">
           Screening indication
         </p>
-        <p className={cn(TYPE_SCALE.h1, 'mt-1 text-amber-900 dark:text-amber-100')}>
+        <p className={cn(TYPE_SCALE.h1, 'mt-1 text-warn')}>
           Not scored
         </p>
         <p
           role="alert"
-          className={cn(TYPE_SCALE.body, 'mt-4 max-w-prose text-amber-900 dark:text-amber-100')}
+          className={cn(TYPE_SCALE.body, 'mt-4 max-w-prose text-warn')}
         >
           {result.not_scorable_reason ??
             'This recording could not be scored, so no screening indication was produced.'}
@@ -186,8 +185,7 @@ export function ResultCard({
           role="alert"
           className={cn(
             TYPE_SCALE.body,
-            'mt-4 rounded border-2 border-amber-400 bg-amber-50 p-3 text-amber-900',
-            'dark:border-amber-600 dark:bg-amber-950/40 dark:text-amber-100',
+            'mt-4 rounded border-2 border-warn-line bg-warn-soft p-3 text-warn',
           )}
         >
           The gap between the top two classes is {result.display.margin}, below the{' '}
@@ -240,8 +238,8 @@ export function ResultCard({
         <ul
           className={cn(
             TYPE_SCALE.caption,
-            'mx-4 mt-3 list-disc space-y-1 rounded-lg border border-amber-300 bg-amber-50 p-3 pl-7',
-            'text-amber-900 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-100',
+            'mx-4 mt-3 list-disc space-y-1 rounded-lg border border-warn-line bg-warn-soft p-3 pl-7',
+            'text-warn',
           )}
         >
           {result.warnings.map((warning) => (

@@ -3,26 +3,40 @@
 @tailwind utilities;
 
 /*
- * The colour ground for both modes.
+ * The colour ground for both modes (T128.1).
  *
- * Light is the authored theme: a warm blush page, white panels, crimson
- * arterial accent. Dark is the same system with the luminance inverted rather
- * than a second unrelated palette -- the accent shifts to rose-400 because
- * #e11d48 on a near-black ground falls under 4.5:1 and stops being readable
- * as body-adjacent text.
+ * The brand is the user's four-colour scheme, and nothing else:
+ *
+ *   #F2E0D2  cream  -- the page ground        (--surface)
+ *   #9E182B  wine   -- the accent             (--accent)
+ *   #F2AFBC  pink   -- rules and borders      (--line, --accent-line)
+ *   #F9CBD6  blush  -- soft fills             (--accent-soft)
+ *
+ * Every other brand token is one of those four moved in lightness only -- a
+ * darker wine for a pressed button, a near-black wine for text, a paler cream
+ * for a recessed panel -- so its hue stays on the scheme. Panels are white
+ * because a table or a chart reads best on the cleanest ground.
+ * `tests/test_design_refresh.py` holds this: the four values exact, every
+ * other brand token within a few degrees of a scheme hue, every text token at
+ * least 4.5:1 on every ground it can sit on, and the focus ring at least 3:1.
+ *
+ * Dark is the same four colours with the lightness inverted, not a second
+ * palette: the cream becomes the text, the pink becomes the accent, the wine
+ * becomes the rule, and the grounds are the wine taken almost to black.
+ *
+ * Status colours (--good, --warn, --danger) are NOT brand. They are what a
+ * result or a failure means, and they are deliberately off the scheme so a
+ * warning can never be mistaken for a button.
  *
  * Values are space-separated RGB channels, not hex, so Tailwind can apply an
  * alpha to them (`bg-accent/10`).
  */
-:root {
+/* `.light` restates the light tokens on any element, so the design reference
+ * can show a light panel beside a dark one whatever the page theme is. */
+:root,
+.light {
   color-scheme: light;
 
-  /* The user's palette (2026-09-13): #F2E0D2 cream ground, #9E182B wine
-   * accent, #F2AFBC pink rules, #F9CBD6 blush fills. Panels stay white so
-   * tables and charts read on the cleanest ground. Every text token below
-   * was measured at >= 4.5:1 on every ground it can sit on, the lowest being
-   * ink-3 on the blush fill at 4.57. Neutrals are warm rather than slate: a
-   * cool grey on cream reads as dirt. */
   --surface: 242 224 210;
   --panel: 255 255 255;
   --sunken: 251 243 238;
@@ -42,12 +56,23 @@
   --accent-line: 242 175 188;
   --on-accent: 255 255 255;
 
-  /* Failure is NOT the brand colour. The accent is a wine red, so an error in
-   * red would read as a button; it is pushed to burnt orange and keeps its
-   * heavier border and icon, so hue is never the only signal. */
-  --danger: 194 65 12;
+  /* The veil behind a modal, drawer or sheet. */
+  --scrim: 36 22 26;
+
+  /* Failure. A burnt orange rather than a red, because the accent is a wine
+   * red: an error in red would read as a button. It also carries a heavier
+   * border and an icon, so hue is never the only signal. */
+  --danger: 168 52 10;
   --danger-soft: 255 237 213;
   --danger-line: 251 146 60;
+
+  --good: 22 101 52;
+  --good-soft: 220 252 231;
+  --good-line: 134 239 172;
+
+  --warn: 146 64 14;
+  --warn-soft: 254 243 199;
+  --warn-line: 252 211 77;
 
   --grid: 158 24 43;
 }
@@ -55,8 +80,6 @@
 .dark {
   color-scheme: dark;
 
-  /* The same palette, luminance inverted: the cream becomes the text, the
-   * pink becomes the accent, the wine becomes the rule. */
   --surface: 23 13 16;
   --panel: 34 20 24;
   --sunken: 28 16 19;
@@ -76,9 +99,19 @@
   --accent-line: 158 24 43;
   --on-accent: 23 13 16;
 
+  --scrim: 0 0 0;
+
   --danger: 253 186 116;
   --danger-soft: 67 20 7;
   --danger-line: 154 52 18;
+
+  --good: 134 239 172;
+  --good-soft: 5 46 22;
+  --good-line: 22 101 52;
+
+  --warn: 253 230 138;
+  --warn-soft: 66 32 6;
+  --warn-line: 146 64 14;
 
   --grid: 242 175 188;
 }
@@ -91,7 +124,7 @@ body {
   @apply bg-surface font-sans text-body-md text-ink antialiased;
 }
 
-/* A reader tabbing through the evidence links must always see where they are. */
+/* The focus ring is the accent at 2px, measured at >= 3:1 on every ground. */
 :focus-visible {
   @apply outline-2 outline-offset-2 outline-accent;
 }
@@ -151,6 +184,11 @@ body {
   background: rgb(var(--accent-line));
 }
 
+/*
+ * The backstop for reduced motion (T128.5). The primitives already put every
+ * animation behind `motion-safe:`, so under `prefers-reduced-motion: reduce`
+ * they have no animation at all; this catches anything that forgot.
+ */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -158,5 +196,6 @@ body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

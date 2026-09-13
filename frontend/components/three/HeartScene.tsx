@@ -179,9 +179,9 @@ function FrameLimiter({ fps, enabled }: { fps: number; enabled: boolean }): null
  *
  * A WebGL material is not styled by CSS, so the value has to be read out of the
  * `--accent` custom property and handed to Three. Reading it -- instead of
- * restating `#e11d48` in TypeScript -- keeps `globals.css` the only place the
- * brand colour is defined, and makes the heart follow the theme: rose-600 on the
- * light ground, rose-400 on the dark one. The variable holds space-separated RGB
+ * restating the hex in TypeScript -- keeps `globals.css` the only place the
+ * brand colour is defined, and makes the heart follow the theme: the wine accent
+ * on the light ground, the pink on the dark one. The variable holds space-separated RGB
  * channels so Tailwind can apply alpha to it; Three wants the comma form.
  *
  * Re-read on every theme change. `null` until the first read, so the mesh never

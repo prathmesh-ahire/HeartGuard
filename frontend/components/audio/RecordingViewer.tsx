@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { cn } from '@/lib/cn';
+import { tokenColour } from '@/lib/cssTokens';
 import { segmentation } from '@/lib/generated';
 import { EmptyState } from '@/components/ui/States';
 import { SURFACE, TYPE_SCALE, seriesColor } from '@/lib/tokens';
@@ -79,7 +80,7 @@ export function RecordingViewer({ className }: { className?: string }) {
         const player = WaveSurfer.create({
           container: node,
           height: 96,
-          waveColor: '#94a3b8',
+          waveColor: tokenColour('ink-3'),
           progressColor: seriesColor(0),
           cursorColor: seriesColor(1),
           normalize: true,
@@ -197,7 +198,7 @@ export function RecordingViewer({ className }: { className?: string }) {
           role="alert"
           className={cn(
             TYPE_SCALE.caption,
-            'mt-3 rounded border border-rose-300 bg-rose-50 p-3 dark:border-rose-800 dark:bg-rose-950/50',
+            'mt-3 rounded border border-danger-line bg-danger-soft p-3 text-danger',
           )}
         >
           The recording could not be loaded — this is a failure, not an empty result. {message}

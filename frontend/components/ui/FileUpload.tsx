@@ -166,8 +166,7 @@ export function FileUpload({
           role="alert"
           className={cn(
             TYPE_SCALE.caption,
-            'mt-3 rounded border-2 border-rose-400 bg-rose-50 p-3 text-rose-800',
-            'dark:border-rose-700 dark:bg-rose-950/40 dark:text-rose-200',
+            'mt-3 rounded border-2 border-danger-line bg-danger-soft p-3 text-danger',
           )}
         >
           {shownError}

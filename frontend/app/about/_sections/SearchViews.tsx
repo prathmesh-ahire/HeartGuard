@@ -81,7 +81,7 @@ export function ConvergencePanel({ run }: { run: Run }) {
           {run.title}
         </h3>
         {!run.available ? (
-          <span className="rounded border border-amber-300 bg-amber-50 px-1.5 py-0.5 font-mono text-label-sm uppercase text-amber-900 dark:border-amber-900 dark:bg-amber-950/50 dark:text-amber-200">
+          <span className="rounded border border-warn-line bg-warn-soft px-1.5 py-0.5 font-mono text-label-sm uppercase text-warn">
             not run
           </span>
         ) : null}

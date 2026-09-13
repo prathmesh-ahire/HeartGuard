@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { EChart, chartBase, type EChartsOption } from '@/components/charts/EChart';
 import { EmptyState } from '@/components/ui/States';
+import { tokenColour } from '@/lib/cssTokens';
 import { seriesColor } from '@/lib/tokens';
 
 /**
@@ -124,7 +125,7 @@ export function CurveChart({
                 name: 'chance',
                 type: 'line',
                 symbol: 'none',
-                lineStyle: { type: 'dashed', width: 1, color: dark ? '#94a3b8' : '#64748b' },
+                lineStyle: { type: 'dashed', width: 1, color: tokenColour('ink-3') },
                 data: x,
                 silent: true,
               },

@@ -36,8 +36,8 @@ export function Objectives({ className }: { className?: string }) {
               <span
                 className={
                   objective.status === 'produced'
-                    ? 'rounded-full bg-emerald-50 px-2 py-0.5 text-xs text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300'
-                    : 'rounded-full bg-amber-50 px-2 py-0.5 text-xs text-amber-800 dark:bg-amber-950/50 dark:text-amber-300'
+                    ? 'rounded-full bg-good-soft px-2 py-0.5 text-xs text-good'
+                    : 'rounded-full bg-warn-soft px-2 py-0.5 text-xs text-warn'
                 }
               >
                 {objective.status === 'produced' ? 'evidence produced' : 'evidence pending'}
@@ -58,7 +58,7 @@ export function Objectives({ className }: { className?: string }) {
             ) : null}
 
             {objective.pending_reason ? (
-              <p className="mt-3 text-sm text-amber-800 dark:text-amber-300">
+              <p className="mt-3 text-sm text-warn">
                 {objective.pending_reason}
               </p>
             ) : null}

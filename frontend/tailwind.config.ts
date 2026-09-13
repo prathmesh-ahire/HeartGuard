@@ -1,7 +1,7 @@
 import type { Config } from 'tailwindcss';
 
 /**
- * Design tokens for the rose clinical workstation theme.
+ * Design tokens for the PulseVision scheme (T128.1, T128.2).
  *
  * Colour is declared as CSS custom properties in `globals.css` and referenced
  * here through `rgb(var(--x) / <alpha-value>)`, for one reason: the same
@@ -14,6 +14,11 @@ import type { Config } from 'tailwindcss';
  *
  * `darkMode: 'class'` rather than 'media', because next-themes toggles a class
  * on <html> and needs Tailwind to follow it rather than the OS setting.
+ *
+ * The layout scale follows the spacing of the Stitch reference project
+ * ("PulseVision Clinical Dashboard"): a 4px base, 16 / 24 / 40px page margins
+ * at phone / tablet / desktop, one content width. Shapes only -- nothing in
+ * that project is a number this dashboard may show.
  */
 const withOpacity = (variable: string) => `rgb(var(${variable}) / <alpha-value>)`;
 
@@ -27,7 +32,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        /** The page ground, one step below every panel. */
+        /** The page ground (#F2E0D2), one step below every panel. */
         surface: withOpacity('--surface'),
         /** Card, panel and table ground. */
         panel: withOpacity('--panel'),
@@ -36,7 +41,7 @@ const config: Config = {
         /** Floating ground: popovers, dropdowns, tooltips. */
         raised: withOpacity('--raised'),
 
-        /** Hairline structural rules. `line-strong` is for focused controls. */
+        /** Rules and borders (#F2AFBC). `line-strong` is for focused controls. */
         line: withOpacity('--line'),
         'line-strong': withOpacity('--line-strong'),
 
@@ -49,15 +54,24 @@ const config: Config = {
         accent: withOpacity('--accent'),
         'accent-strong': withOpacity('--accent-strong'),
         'accent-deep': withOpacity('--accent-deep'),
-        /** Blush wash behind active chips and selected rows. */
+        /** Blush fill (#F9CBD6) behind active chips and selected rows. */
         'accent-soft': withOpacity('--accent-soft'),
         'accent-line': withOpacity('--accent-line'),
         'on-accent': withOpacity('--on-accent'),
 
-        /** Failure. Deliberately not the accent -- see globals.css. */
+        /** The veil behind an overlay. */
+        scrim: withOpacity('--scrim'),
+
+        /** Status, never brand: failure, a good outcome, a caution. */
         danger: withOpacity('--danger'),
         'danger-soft': withOpacity('--danger-soft'),
         'danger-line': withOpacity('--danger-line'),
+        good: withOpacity('--good'),
+        'good-soft': withOpacity('--good-soft'),
+        'good-line': withOpacity('--good-line'),
+        warn: withOpacity('--warn'),
+        'warn-soft': withOpacity('--warn-soft'),
+        'warn-line': withOpacity('--warn-line'),
       },
       fontFamily: {
         sans: ['var(--font-sans)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
@@ -79,6 +93,17 @@ const config: Config = {
         'headline-md': ['18px', { lineHeight: '24px', letterSpacing: '-0.01em', fontWeight: '600' }],
         'headline-lg': ['24px', { lineHeight: '32px', letterSpacing: '-0.015em', fontWeight: '600' }],
         'headline-xl': ['32px', { lineHeight: '40px', letterSpacing: '-0.02em', fontWeight: '700' }],
+        /* T128.2: the page title area. Larger and looser than a section head,
+         * so each page opens with one clear statement of what it is for. */
+        lede: ['16px', { lineHeight: '26px' }],
+        title: ['30px', { lineHeight: '38px', letterSpacing: '-0.02em', fontWeight: '650' }],
+        display: ['40px', { lineHeight: '48px', letterSpacing: '-0.02em', fontWeight: '700' }],
+      },
+      maxWidth: {
+        /** One content width for every page (T128.2). */
+        content: '76rem',
+        /** A comfortable line length for prose. */
+        reading: '42rem',
       },
       borderRadius: {
         /* Instrument geometry: tighter than the Tailwind defaults at every
@@ -94,8 +119,8 @@ const config: Config = {
         topbar: '3.5rem',
       },
       boxShadow: {
-        panel: '0 1px 2px rgb(15 23 42 / 0.04)',
-        raised: '0 4px 12px -2px rgb(15 23 42 / 0.08)',
+        panel: '0 1px 2px rgb(var(--scrim) / 0.04)',
+        raised: '0 12px 32px -8px rgb(var(--scrim) / 0.22)',
         accent: '0 2px 10px rgb(var(--accent) / 0.28)',
       },
       keyframes: {
@@ -103,9 +128,28 @@ const config: Config = {
           '0%, 100%': { opacity: '1', transform: 'scale(1)' },
           '50%': { opacity: '0.45', transform: 'scale(0.96)' },
         },
+        /* T128.3 / T128.5 -- entrances. Each is used only behind `motion-safe:`. */
+        'overlay-in': { from: { opacity: '0' }, to: { opacity: '1' } },
+        'modal-in': {
+          from: { opacity: '0', transform: 'translateY(8px) scale(0.98)' },
+          to: { opacity: '1', transform: 'translateY(0) scale(1)' },
+        },
+        'drawer-in-right': { from: { transform: 'translateX(100%)' }, to: { transform: 'translateX(0)' } },
+        'drawer-in-left': { from: { transform: 'translateX(-100%)' }, to: { transform: 'translateX(0)' } },
+        'sheet-in': { from: { transform: 'translateY(100%)' }, to: { transform: 'translateY(0)' } },
+        skeleton: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.5' },
+        },
       },
       animation: {
         'pulse-subtle': 'pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'overlay-in': 'overlay-in 180ms ease-out',
+        'modal-in': 'modal-in 220ms cubic-bezier(0.16, 1, 0.3, 1)',
+        'drawer-in-right': 'drawer-in-right 280ms cubic-bezier(0.16, 1, 0.3, 1)',
+        'drawer-in-left': 'drawer-in-left 280ms cubic-bezier(0.16, 1, 0.3, 1)',
+        'sheet-in': 'sheet-in 280ms cubic-bezier(0.16, 1, 0.3, 1)',
+        skeleton: 'skeleton 1.6s ease-in-out infinite',
       },
     },
   },

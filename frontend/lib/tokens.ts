@@ -68,10 +68,33 @@ export const SURFACE = {
  */
 export const STATUS = {
   neutral: 'bg-sunken text-ink-2 border-line',
-  info: 'bg-sky-50 text-sky-800 border-sky-200 dark:bg-sky-950/50 dark:text-sky-200 dark:border-sky-900',
-  good: 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-200 dark:border-emerald-900',
-  warn: 'bg-amber-50 text-amber-900 border-amber-200 dark:bg-amber-950/50 dark:text-amber-200 dark:border-amber-900',
+  /* T128.1: `info` is brand, so it is drawn in the scheme. `good` and `warn`
+   * are meanings, so they have their own tokens -- and those tokens are CSS
+   * variables, not Tailwind palette names, so they follow the theme. */
+  info: 'bg-panel text-accent-strong border-accent-line',
+  good: 'bg-good-soft text-good border-good-line',
+  warn: 'bg-warn-soft text-warn border-warn-line',
   danger: 'bg-accent-soft text-accent-deep border-accent-line',
+} as const;
+
+/**
+ * The layout scale (T128.2): one content width, the Stitch reference's page
+ * margins (16 / 24 / 40px), and generous vertical rhythm, so a page reads as a
+ * few calm blocks around one primary action rather than a wall of panels.
+ */
+export const LAYOUT = {
+  /** The canvas every page sits in. */
+  page: 'mx-auto w-full max-w-content px-4 sm:px-6 lg:px-10',
+  /** Vertical breathing room above and below a page's content. */
+  pageBlock: 'py-8 lg:py-12',
+  /** Between the major blocks of one page. */
+  stack: 'space-y-12',
+  /** Inside one block: its heading, then its content. */
+  section: 'space-y-5',
+  /** A comfortable line length for prose. */
+  reading: 'max-w-reading',
+  /** Cards side by side. */
+  grid: 'grid gap-4 lg:gap-6',
 } as const;
 
 export type StatusTone = keyof typeof STATUS;
