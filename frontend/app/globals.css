@@ -17,63 +17,70 @@
 :root {
   color-scheme: light;
 
-  --surface: 250 246 247;
+  /* The user's palette (2026-09-13): #F2E0D2 cream ground, #9E182B wine
+   * accent, #F2AFBC pink rules, #F9CBD6 blush fills. Panels stay white so
+   * tables and charts read on the cleanest ground. Every text token below
+   * was measured at >= 4.5:1 on every ground it can sit on, the lowest being
+   * ink-3 on the blush fill at 4.57. Neutrals are warm rather than slate: a
+   * cool grey on cream reads as dirt. */
+  --surface: 242 224 210;
   --panel: 255 255 255;
-  --sunken: 255 245 246;
+  --sunken: 251 243 238;
   --raised: 255 255 255;
 
-  --line: 254 205 211;
-  --line-strong: 253 164 175;
+  --line: 242 175 188;
+  --line-strong: 230 140 158;
 
-  --ink: 15 23 42;
-  --ink-2: 71 85 105;
-  --ink-3: 100 116 139;
+  --ink: 36 22 26;
+  --ink-2: 78 63 67;
+  --ink-3: 107 88 93;
 
-  --accent: 225 29 72;
-  --accent-strong: 190 18 60;
-  --accent-deep: 159 18 57;
-  --accent-soft: 255 228 230;
-  --accent-line: 253 164 175;
+  --accent: 158 24 43;
+  --accent-strong: 127 19 34;
+  --accent-deep: 106 15 28;
+  --accent-soft: 249 203 214;
+  --accent-line: 242 175 188;
   --on-accent: 255 255 255;
 
-  /* Failure is NOT the brand crimson. With a rose accent on every control,
-   * an error styled in rose reads as chrome; it is pushed to a deeper, duller
-   * red and carries a heavier border and an icon so hue is never the only
-   * signal. */
-  --danger: 185 28 28;
-  --danger-soft: 254 226 226;
-  --danger-line: 248 113 113;
+  /* Failure is NOT the brand colour. The accent is a wine red, so an error in
+   * red would read as a button; it is pushed to burnt orange and keeps its
+   * heavier border and icon, so hue is never the only signal. */
+  --danger: 194 65 12;
+  --danger-soft: 255 237 213;
+  --danger-line: 251 146 60;
 
-  --grid: 244 63 94;
+  --grid: 158 24 43;
 }
 
 .dark {
   color-scheme: dark;
 
-  --surface: 18 11 13;
-  --panel: 28 17 20;
-  --sunken: 22 13 16;
-  --raised: 36 22 26;
+  /* The same palette, luminance inverted: the cream becomes the text, the
+   * pink becomes the accent, the wine becomes the rule. */
+  --surface: 23 13 16;
+  --panel: 34 20 24;
+  --sunken: 28 16 19;
+  --raised: 42 25 30;
 
-  --line: 63 32 39;
-  --line-strong: 136 19 55;
+  --line: 74 36 45;
+  --line-strong: 158 24 43;
 
-  --ink: 248 250 252;
-  --ink-2: 203 213 225;
-  --ink-3: 148 163 184;
+  --ink: 242 224 210;
+  --ink-2: 217 195 201;
+  --ink-3: 168 146 154;
 
-  --accent: 251 113 133;
-  --accent-strong: 253 164 175;
-  --accent-deep: 254 205 211;
-  --accent-soft: 76 5 25;
-  --accent-line: 136 19 55;
-  --on-accent: 26 4 11;
+  --accent: 242 175 188;
+  --accent-strong: 249 203 214;
+  --accent-deep: 249 203 214;
+  --accent-soft: 61 10 20;
+  --accent-line: 158 24 43;
+  --on-accent: 23 13 16;
 
-  --danger: 252 165 165;
-  --danger-soft: 69 10 10;
-  --danger-line: 153 27 27;
+  --danger: 253 186 116;
+  --danger-soft: 67 20 7;
+  --danger-line: 154 52 18;
 
-  --grid: 251 113 133;
+  --grid: 242 175 188;
 }
 
 html {

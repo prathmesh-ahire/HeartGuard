@@ -45,7 +45,7 @@ const config: Config = {
         'ink-2': withOpacity('--ink-2'),
         'ink-3': withOpacity('--ink-3'),
 
-        /** Crimson arterial. Primary actions, active nav, live indicators. */
+        /** Wine accent (#9E182B). Primary actions, active nav, live indicators. */
         accent: withOpacity('--accent'),
         'accent-strong': withOpacity('--accent-strong'),
         'accent-deep': withOpacity('--accent-deep'),
@@ -96,7 +96,7 @@ const config: Config = {
       boxShadow: {
         panel: '0 1px 2px rgb(15 23 42 / 0.04)',
         raised: '0 4px 12px -2px rgb(15 23 42 / 0.08)',
-        accent: '0 2px 8px rgb(225 29 72 / 0.25)',
+        accent: '0 2px 10px rgb(var(--accent) / 0.28)',
       },
       keyframes: {
         'pulse-subtle': {

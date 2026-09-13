@@ -221,7 +221,7 @@ ENTRIES (newest last)
     120-122 entry in Docs/note.md.
 
 === BEGIN GENERATED COMPLETENESS AUDIT (Phase 102; rewritten by python scripts/42_evidence_index.py -- do not edit inside this block) ===
-Generated 2026-09-13T05:21:49.676096+00:00. Every mandatory item of the
+Generated 2026-09-13T06:32:32.185079+00:00. Every mandatory item of the
 extraction spec and the developer blueprint that is not present on disk, with its
 technical reason. 340 items checked; 335 present; 5 listed below. The full table is the 'mandatory_items' sheet
 of outputs/00_evidence_index/evidence_index.xlsx.

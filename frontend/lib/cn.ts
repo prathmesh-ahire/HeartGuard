@@ -1,5 +1,39 @@
 import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { extendTailwindMerge } from 'tailwind-merge';
+
+/**
+ * The custom font-size keys declared in `tailwind.config.ts`.
+ *
+ * tailwind-merge only knows Tailwind's built-in scale. Any other `text-*` class
+ * it assumes is a text COLOUR, so `cn('text-on-accent', 'text-label-lg')` used
+ * to decide the two conflicted and silently drop `text-on-accent` -- every
+ * primary button rendered its label in body ink on the accent fill. Declaring
+ * the keys as font sizes makes a size and a colour coexist, as they should.
+ *
+ * Keep this list in step with `theme.extend.fontSize`.
+ */
+const FONT_SIZES = [
+  'label-sm',
+  'label-md',
+  'label-lg',
+  'telemetry-sm',
+  'telemetry',
+  'body-sm',
+  'body-md',
+  'body-lg',
+  'headline-sm',
+  'headline-md',
+  'headline-lg',
+  'headline-xl',
+];
+
+const twMerge = extendTailwindMerge({
+  extend: {
+    classGroups: {
+      'font-size': [{ text: FONT_SIZES }],
+    },
+  },
+});
 
 /**
  * Compose Tailwind classes, letting a later class win over an earlier one that
