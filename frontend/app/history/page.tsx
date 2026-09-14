@@ -1,14 +1,35 @@
 import type { Metadata } from 'next';
 
-import { PagePlaceholder } from '@/components/PagePlaceholder';
+import { HistoryBrowser } from '@/components/history/HistoryBrowser';
+import { ButtonLink } from '@/components/ui/Button';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { routeFor } from '@/lib/routes';
+
+const route = routeFor('/history/');
 
 export const metadata: Metadata = {
   title: 'History',
-  description: routeFor('/history/')?.summary,
+  description: route?.summary,
 };
 
-/** History (T127.3). Built in Phases 129 and 132. */
+/**
+ * History (T132). Every analysis saved by Analyse, read from the local History
+ * store at runtime: it is the operator's own record, not a precomputed result,
+ * so it cannot come from `generated/`. The page declares no number.
+ */
 export default function Page() {
-  return <PagePlaceholder title="History" href="/history/" />;
+  return (
+    <div className="space-y-8">
+      <PageHeader
+        title="History"
+        lede={route?.summary ?? ''}
+        primaryAction={
+          <ButtonLink href="/" tone="primary" icon="pulse">
+            Analyse a recording
+          </ButtonLink>
+        }
+      />
+      <HistoryBrowser />
+    </div>
+  );
 }

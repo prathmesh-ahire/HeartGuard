@@ -336,9 +336,16 @@ def test_f16_routes_are_the_applications_and_only_predict_computes(
     # Phase 131 added POST /api/history/export, which also runs no model: it
     # writes a batch table as CSV from rows already in History. Named too, so
     # the exemption is still a list of routes, never a prefix anything fits.
+    #
+    # Phase 132 added POST /api/history/{record_id}/restore, the undo of one
+    # deletion: it puts a stored row back and runs no model. Named as well.
     history = [path for path in posts if path.startswith("/api/history")]
     computing = [path for path in posts if path not in history]
-    assert history == ["/api/history", "/api/history/export"], history
+    assert history == [
+        "/api/history",
+        "/api/history/export",
+        "/api/history/{record_id}/restore",
+    ], history
     assert computing and all(
         path.startswith("/predict") or path == "/report/sample" for path in computing
     )

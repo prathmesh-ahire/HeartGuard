@@ -1105,6 +1105,18 @@ def _register_history_routes(application: FastAPI) -> None:
             raise missing(record_id)
         return {"deleted": 1, "id": record_id}
 
+    @application.post("/api/history/{record_id}/restore", tags=["history"], responses=not_found)
+    def history_restore(record_id: str) -> dict[str, Any]:
+        """T132.4: undo one deletion -- the same row, same id and date. Runs no model."""
+        row = _history_call(application, lambda store: store.restore(record_id))
+        if row is None:
+            raise HTTPException(
+                status_code=404,
+                detail="This deletion can no longer be undone: the service was restarted, "
+                "History was emptied, or many later deletions replaced it.",
+            )
+        return row
+
 
 def _positive_class(classes: list[str]) -> str:
     """The class a patient-level collapse is about.

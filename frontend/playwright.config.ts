@@ -28,6 +28,14 @@ const PYTHON = JSON.stringify(
       : resolve(__dirname, '..', '.venv', 'bin', 'python')),
 );
 
+/**
+ * The API's History file for this run. Set once in the runner and inherited by
+ * the workers, which load this config again under their own pid: T132.7 reads
+ * the TinyDB file itself, so every process must name the same one.
+ */
+process.env.PV_E2E_HISTORY_DB ??= join(tmpdir(), 'pv-mepcg-e2e-' + String(process.pid), 'history.json');
+export const E2E_HISTORY_DB: string = process.env.PV_E2E_HISTORY_DB;
+
 export const API_URL = 'http://127.0.0.1:8000';
 export const STATIC_ONLY_URL = 'http://127.0.0.1:8001';
 
@@ -60,7 +68,7 @@ export default defineConfig({
       // gets a fresh file in the temp folder -- the same redirect the root
       // conftest applies to pytest.
       env: {
-        HEARTGUARD__PATHS__CACHE__HISTORY_DB: join(tmpdir(), 'pv-mepcg-e2e-' + String(process.pid), 'history.json'),
+        HEARTGUARD__PATHS__CACHE__HISTORY_DB: E2E_HISTORY_DB,
       },
     },
     {

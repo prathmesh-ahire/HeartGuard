@@ -119,6 +119,9 @@ MAX_BATCH_ROWS = 500
 _FORMULA_LEADS = ("=", "+", "-", "@", "\t", "\r")
 #: UTC-14 .. UTC+14, the real range of civil time zones.
 MAX_TZ_OFFSET_MINUTES = 14 * 60
+#: T132.4: how many one-by-one deletions can still be undone. Held in memory
+#: only, so a restart (or a delete-all) ends every undo.
+UNDO_DEPTH = 50
 
 #: How often `os.replace` is retried. On Windows an antivirus scanner or the
 #: search indexer can hold a just-written file open for a few milliseconds, and
@@ -366,6 +369,9 @@ class HistoryStore:
         self._lock = threading.RLock()
         self._db: TinyDB | None = None
         self._recoveries: list[str] = []
+        #: T132.4: rows deleted one by one, newest last, so an undo puts back
+        #: the same row -- same id, same date -- rather than a copy.
+        self._deleted: dict[str, dict[str, Any]] = {}
 
     # -- plumbing ---------------------------------------------------------
 
@@ -518,14 +524,38 @@ class HistoryStore:
         return self.present(dict(found))
 
     def delete(self, record_id: str) -> bool:
+        """Remove one row from the file now, keeping it in memory for `restore`."""
         with self._lock:
-            return bool(self._table().remove(Query().id == record_id))
+            table = self._table()
+            found = table.get(Query().id == record_id)
+            if found is None:
+                return False
+            table.remove(Query().id == record_id)
+            self._deleted.pop(record_id, None)
+            self._deleted[record_id] = dict(found)
+            while len(self._deleted) > UNDO_DEPTH:
+                self._deleted.pop(next(iter(self._deleted)))
+            return True
+
+    def restore(self, record_id: str) -> dict[str, Any] | None:
+        """T132.4: undo one deletion. None when it can no longer be undone."""
+        with self._lock:
+            row = self._deleted.get(record_id)
+            if row is None:
+                return None
+            table = self._table()
+            if table.get(Query().id == record_id) is None:
+                table.insert(row)
+            del self._deleted[record_id]
+        return self.present(row)
 
     def delete_all(self) -> int:
+        """Empty the history. Asked for with a confirmation, so it has no undo."""
         with self._lock:
             table = self._table()
             count = len(table)
             table.truncate()
+            self._deleted.clear()
             return count
 
     # -- reads ------------------------------------------------------------

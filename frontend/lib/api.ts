@@ -326,6 +326,78 @@ export function exportBatchCsv(
   });
 }
 
+/**
+ * One History entry (Phase 129), as `/api/history` presents it. Numeric fields
+ * size marks only; the page renders `display.*`.
+ */
+export interface HistoryRecord {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  file_name: string;
+  task: string;
+  task_title: string;
+  source_kind: 'upload' | 'sample' | 'manual';
+  scorable: boolean;
+  result: string | null;
+  confidence: number | null;
+  low_confidence: boolean;
+  probabilities: Record<string, number | null>;
+  notes: string;
+  tags: string[];
+  batch_id: string | null;
+  display: {
+    result: string;
+    confidence: string;
+    confidence_percent: string;
+    probabilities: Record<string, string>;
+    probabilities_percent: Record<string, string>;
+  };
+}
+
+export interface HistoryPage {
+  items: HistoryRecord[];
+  total: number;
+  page: number;
+  page_size: number;
+  pages: number;
+  display: { total: string; page: string; pages: string };
+  /** Set when a damaged history file was set aside and a new one started. */
+  notice: string | null;
+}
+
+/** T132.1-T132.2: one page of History, filtered and searched on the server. */
+export function listHistory(params: Record<string, string>): Promise<HistoryPage> {
+  const query = new URLSearchParams(params).toString();
+  return call('/api/history' + (query === '' ? '' : '?' + query));
+}
+
+export function getHistoryRecord(id: string): Promise<HistoryRecord> {
+  return call('/api/history/' + encodeURIComponent(id));
+}
+
+/** T132.3: notes and tags are the only editable fields. */
+export function updateHistoryRecord(id: string, changes: { notes?: string; tags?: string[] }): Promise<HistoryRecord> {
+  return call('/api/history/' + encodeURIComponent(id), {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(changes),
+  });
+}
+
+export function deleteHistoryRecord(id: string): Promise<{ deleted: number; id: string }> {
+  return call('/api/history/' + encodeURIComponent(id), { method: 'DELETE' });
+}
+
+/** T132.4: undo one deletion; the same entry comes back. */
+export function restoreHistoryRecord(id: string): Promise<HistoryRecord> {
+  return call('/api/history/' + encodeURIComponent(id) + '/restore', { method: 'POST' });
+}
+
+export function deleteAllHistory(): Promise<{ deleted: number; deleted_display: string }> {
+  return call('/api/history?confirm=true', { method: 'DELETE' });
+}
+
 export function predictSample(sampleId: string, task: string): Promise<PredictResult> {
   const body = new FormData();
   body.append('sample_id', sampleId);
