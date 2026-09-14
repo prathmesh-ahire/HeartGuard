@@ -901,21 +901,26 @@ def build_f16() -> DiagramCanvas:
     from src.reporting.frontend_export import DEFAULT_SOURCE_DIRS, GENERATED_FILES
 
     routes = api_routes()
-    compute = [path for method, path in routes if method == "POST"]
-    status = [path for method, path in routes if method == "GET"]
+    # Phase 129's History routes run no model: they store results the POST
+    # routes already produced, and count them. Drawn as their own store so the
+    # "only routes that compute" box stays true.
+    history = list(dict.fromkeys(path for _, path in routes if path.startswith("/api/history")))
+    compute = [path for method, path in routes if method == "POST" and path not in history]
+    status = [path for method, path in routes if method == "GET" and path not in history]
     sources = [
         Path(str(_config("paths").require("outputs." + key))).name for key in DEFAULT_SOURCE_DIRS
     ]
 
     canvas = DiagramCanvas(
         columns=12.0,
-        rows=12.2,
-        size=(9.0, 9.4),
+        rows=13.6,
+        size=(9.0, 10.5),
         title="F16  Dashboard system architecture",
         subtitle=(
             "Every precomputed number reaches the browser through build-time codegen; only "
-            "the POST routes compute at runtime. Routes are read from the FastAPI "
-            "application, the generated files from the exporter."
+            "the predict and report routes compute at runtime, and History only stores their "
+            "results. Routes are read from the FastAPI application, the generated files from "
+            "the exporter."
         ),
         legend_rows=3,
     )
@@ -978,8 +983,17 @@ def build_f16() -> DiagramCanvas:
             "store",
             "loaded once per process; an upload is deleted after scoring",
         ),
+        (
+            "history",
+            "History store (TinyDB, cache/history/)",
+            "store",
+            "keeps each scored result and counts them, never a metric: " + ", ".join(history),
+        ),
     ):
-        row = _place_row(canvas, [(key, label, kind, right, width, sub)], row, gap_inches=0.34)
+        # Narrower than the build column: the gutter carries the History arrow.
+        row = _place_row(
+            canvas, [(key, label, kind, right, width - 0.5, sub)], row, gap_inches=0.34
+        )
     height = max(row, build_bottom) - 0.05
     canvas.lane("build time", col=0.15, row=0.05, width=5.6, height=height)
     canvas.lane("runtime", col=6.25, row=0.05, width=5.6, height=height)
@@ -988,6 +1002,10 @@ def build_f16() -> DiagramCanvas:
     canvas.edge("browser", "api", kind="flow")
     canvas.edge("api", "predict", kind="flow")
     canvas.edge("predict", "bundle", kind="flow")
+    # Around the model bundle on the right, not through it.
+    canvas.edge(
+        "predict", "history", kind="flow", source_side="right", target_side="right", rad=-0.12
+    )
     canvas.edge("browser", "outputs", kind="forbidden")
 
     canvas.text(

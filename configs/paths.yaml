@@ -81,6 +81,10 @@ dataset:
 # --- derived data (regenerable; gitignored) ---------------------------------
 cache:
   root: "cache"
+  # The History database (Phase 129). Gitignored with the rest of cache/, but
+  # NOT regenerable: it is the operator's own saved results. Clearing cache/
+  # deletes it. Tests redirect it through HEARTGUARD__PATHS__CACHE__HISTORY_DB.
+  history_db: "cache/history/history.json"
   preprocessed: "cache/preprocessed"
   features: "cache/features"
   metadata: "cache/metadata"

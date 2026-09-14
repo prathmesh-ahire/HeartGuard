@@ -327,7 +327,20 @@ def test_f16_routes_are_the_applications_and_only_predict_computes(
     # the same `predict_recording` pass before rendering its DOCX. The invariant
     # is "every POST route runs the predictor and nothing else computes", so it
     # is named explicitly rather than widened to any path.
-    assert posts and all(path.startswith("/predict") or path == "/report/sample" for path in posts)
+    #
+    # Phase 129 added POST /api/history, which runs NO model: it stores a result
+    # already produced (or entered by hand). It is exempted by name, and F16 must
+    # draw it as the History store rather than inside the box of routes that
+    # compute -- asserted below, so the exemption cannot hide it in that box.
+    history = [path for path in posts if path.startswith("/api/history")]
+    computing = [path for path in posts if path not in history]
+    assert history == ["/api/history"], history
+    assert computing and all(
+        path.startswith("/predict") or path == "/report/sample" for path in computing
+    )
+    assert "POST " + ", ".join(computing) + " " in text, "the computing box names exactly these"
+    assert "POST /api/history" not in text, "History must not be drawn as a computing route"
+    assert "History store" in text
     for _, path in routes:
         assert path in text
     assert str(len(GENERATED_FILES)) + " generated files" in text

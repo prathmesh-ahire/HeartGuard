@@ -47,6 +47,7 @@ DATASET_ROOT = ROOT / "dataset"
 REAL_RUN_MANIFEST = ROOT / "outputs" / "00_evidence_index" / "run_manifest.json"
 
 MANIFEST_ENV = "HEARTGUARD__PATHS__OUTPUTS__RUN_MANIFEST"
+HISTORY_ENV = "HEARTGUARD__PATHS__CACHE__HISTORY_DB"
 
 _manifest_sandbox: Path | None = None
 
@@ -113,6 +114,11 @@ def _redirect_run_manifest() -> None:
 
     _manifest_sandbox = Path(tempfile.mkdtemp(prefix="pvmepcg-manifest-"))
     os.environ[MANIFEST_ENV] = str(_manifest_sandbox / "run_manifest.json")
+    # The same promise for the History database (Phase 129): every successful
+    # /predict in a test saves a row, and those rows must not land in the
+    # operator's own history.
+    if not os.environ.get(HISTORY_ENV):
+        os.environ[HISTORY_ENV] = str(_manifest_sandbox / "history" / "history.json")
 
     from src.utils.config import clear_cache
 

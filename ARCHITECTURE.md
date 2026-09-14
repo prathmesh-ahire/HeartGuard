@@ -66,7 +66,7 @@ Listed in the order a recording travels through them.
 | [`src/explainability/`](src/explainability/) | Feature-importance and model-explanation utilities. | 2 |
 | [`src/reporting/`](src/reporting/) | Table, figure and document generation for the deliverables. | 49 |
 | [`src/inference/`](src/inference/) | Single-recording prediction path used by the API. | 1 |
-| [`src/api/`](src/api/) | FastAPI application exposing live inference. | 1 |
+| [`src/api/`](src/api/) | FastAPI application exposing live inference. | 2 |
 | [`src/pipeline/`](src/pipeline/) | Whole-pipeline orchestration (Phase 122). | 1 |
 
 ### `src/utils/` -- Config, seeding, logging, IO, manifest and evidence-index helpers.
@@ -269,6 +269,7 @@ Listed in the order a recording travels through them.
 
 | Module | What it does |
 |---|---|
+| [`history_store.py`](src/api/history_store.py) | The History store (Phase 129). |
 | [`main.py`](src/api/main.py) | The inference service (Phase 108). |
 
 ### `src/pipeline/` -- Whole-pipeline orchestration (Phase 122).

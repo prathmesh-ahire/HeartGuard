@@ -827,6 +827,7 @@ Every path in the project, resolved against the repository root.
 | `dataset.heartbeat_sound.is_training_source` | `false` | bool |  |
 | `cache` |  | section | --- derived data (regenerable; gitignored) --------------------------------- |
 | `cache.root` | `cache` | str |  |
+| `cache.history_db` | `cache/history/history.json` | str | The History database (Phase 129). Gitignored with the rest of cache/, but NOT regenerable: it is the operator's own saved results. Clearing cache/ deletes it. Tests redirect it through HEARTGUARD__PATHS__CACHE__HISTORY_DB. |
 | `cache.preprocessed` | `cache/preprocessed` | str |  |
 | `cache.features` | `cache/features` | str |  |
 | `cache.metadata` | `cache/metadata` | str |  |

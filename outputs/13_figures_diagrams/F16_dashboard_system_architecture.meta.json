@@ -15,12 +15,12 @@
   "palette": "Okabe-Ito (colourblind-safe); shape carries meaning, colour repeats it",
   "source_module": "src/reporting/diagrams/pipeline_figures.py",
   "source_function": "build_f16",
-  "source_sha256": "41e7a85f242917171c475ad347e10e230d76e1db7f0e56901e6f7ee64a7dec5f",
+  "source_sha256": "2ac1beae6e1b53b1c71e8cfec3b16c6ac6cd3c75a540a81e2c4e5704a374857c",
   "legibility": {
     "clipped": [],
     "figure_inches": [
       9.0,
-      9.4
+      10.5
     ],
     "print_scale": 0.6667,
     "min_effective_pt": 7.48,
@@ -34,14 +34,14 @@
       "subtitle": 7.48,
       "title": 11.05
     },
-    "strings": 29,
+    "strings": 31,
     "overflowing_nodes": [],
     "overlapping_nodes": [],
     "nodes_off_canvas": [],
     "text_over_nodes": [],
     "violations": []
   },
-  "generated_utc": "2026-09-11T18:19:31.153233+00:00",
+  "generated_utc": "2026-09-14T06:57:31.724955+00:00",
   "command": "python scripts/05_render_diagrams.py --only F16",
   "sources": [],
   "written": {

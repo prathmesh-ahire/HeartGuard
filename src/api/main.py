@@ -1,7 +1,9 @@
 """The inference service (Phase 108).
 
 One runtime endpoint does real work — `POST /predict`. Everything else this API
-serves is either a status report or a file already on disk.
+serves is either a status report, a file already on disk, or the operator's own
+History (`/api/history`, Phase 129: see `src/api/history_store.py`). History
+holds past screening results and counts of them; it is never a model metric.
 
 ## The API computes nothing
 
@@ -63,11 +65,13 @@ from pathlib import Path
 from typing import Annotated, Any
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi import Query as QueryParam
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response
 from fastapi.routing import APIRoute
 from pydantic import BaseModel, Field
 
+from src.api.history_store import MAX_PAGE_SIZE, HistoryStore, HistoryValidationError
 from src.evaluation.aggregation import AGGREGATION_RULES, POSITIVE_LABEL
 from src.inference.predictor import (
     DISCLAIMER,
@@ -346,6 +350,12 @@ class PredictResponse(BaseModel):
     #: false and `reason` says why, rather than global importance being
     #: substituted for a per-recording answer.
     explanation: dict[str, Any] | None = None
+    #: T129.5: the History row this result was saved as. `history_saved` is
+    #: false for a recording that could not be screened (never saved) and when
+    #: the store failed; the prediction itself is returned either way.
+    history_id: str | None = None
+    history_saved: bool = False
+    history_note: str | None = None
 
     model_config = {"protected_namespaces": ()}
 
@@ -353,6 +363,27 @@ class PredictResponse(BaseModel):
 class ErrorResponse(BaseModel):
     detail: str
     disclaimer: str = DISCLAIMER
+
+
+class HistoryCreate(BaseModel):
+    """T129.4: a History row created directly rather than by `/predict`."""
+
+    file_name: str
+    task: str
+    result: str | None = None
+    confidence: float | None = None
+    probabilities: dict[str, float | None] = Field(default_factory=dict)
+    low_confidence: bool = False
+    scorable: bool = True
+    notes: str | None = None
+    tags: list[str] | None = None
+
+
+class HistoryUpdate(BaseModel):
+    """Only notes and tags are editable; a stored result never is."""
+
+    notes: str | None = None
+    tags: list[str] | None = None
 
 
 class SampleSummary(BaseModel):
@@ -466,14 +497,23 @@ async def lifespan(application: FastAPI) -> AsyncIterator[None]:
     finally:
         clear_bundle_cache()
         application.state.loaded_tasks = []
+        application.state.history.close()
 
 
-def create_app(*, static_root: Path | None = None, preload: bool = True) -> FastAPI:
+def create_app(
+    *,
+    static_root: Path | None = None,
+    preload: bool = True,
+    history_path: Path | None = None,
+) -> FastAPI:
     """Build the application.
 
     `preload=False` is for tests that must not spend a second unpickling a model
     they never call; it changes nothing about how a request is served, because
     `predict_recording` loads on demand through the same cache.
+
+    `history_path` overrides `cache.history_db`. The store opens lazily, so
+    building the app never touches the disk.
     """
     application = FastAPI(
         title=API_TITLE,
@@ -491,12 +531,13 @@ def create_app(*, static_root: Path | None = None, preload: bool = True) -> Fast
     # including any added after this function returns -- gets the coercion.
     application.router.route_class = SafeRoute
     application.state.loaded_tasks = []
+    application.state.history = HistoryStore(history_path)
 
     application.add_middleware(
         CORSMiddleware,
         allow_origins=list(DEV_ORIGINS),
         allow_credentials=False,
-        allow_methods=["GET", "POST", "OPTIONS"],
+        allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
         allow_headers=["*"],
     )
 
@@ -588,7 +629,10 @@ def _register_routes(application: FastAPI) -> None:
             except ModelUnavailableError as error:
                 raise HTTPException(status_code=503, detail=str(error)) from error
 
-            return _response_for(result, source=file.filename or None, detail=detail)
+            response = _response_for(result, source=file.filename or None, detail=detail)
+            return _save_to_history(
+                application, response, file_name=file.filename or "upload.wav", source_kind="upload"
+            )
         finally:
             with suppress(OSError):
                 target.unlink()
@@ -685,7 +729,8 @@ def _register_routes(application: FastAPI) -> None:
             raise HTTPException(status_code=400, detail=str(error)) from error
         except ModelUnavailableError as error:
             raise HTTPException(status_code=503, detail=str(error)) from error
-        return _response_for(result, source=sample_id, detail=detail)
+        response = _response_for(result, source=sample_id, detail=detail)
+        return _save_to_history(application, response, file_name=sample_id, source_kind="sample")
 
     # -- T117.3: reports ---------------------------------------------------
     #
@@ -832,6 +877,159 @@ def _register_routes(application: FastAPI) -> None:
             rules=_patient_rules(results, classes),
             locations=locations,
         )
+
+    _register_history_routes(application)
+
+
+# ---------------------------------------------------------------------------
+# T129.4 / T129.6 -- History and Insights
+# ---------------------------------------------------------------------------
+#
+# Under `/api/`, unlike the older endpoints, because the exported site has a
+# page at `/history/`: a GET route at `/history` would answer a user who types
+# the address without its trailing slash with JSON instead of the page.
+
+HISTORY_UNAVAILABLE = (
+    "History is unavailable right now: the saved history could not be read or "
+    "written on this machine. Screening still works; results are not being saved."
+)
+
+
+def _history_call(application: FastAPI, action: Callable[[HistoryStore], Any]) -> Any:
+    """Run one store operation, mapping its failures to status codes.
+
+    A validation problem is the caller's (400). A disk problem is the service's
+    (503), and its detail never names a path -- the OSError text does, and no
+    file path is shown on any page (T127.1).
+    """
+    try:
+        return action(application.state.history)
+    except HistoryValidationError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
+    except OSError as error:
+        log.exception("history store failed")
+        raise HTTPException(status_code=503, detail=HISTORY_UNAVAILABLE) from error
+
+
+def _save_to_history(
+    application: FastAPI, response: PredictResponse, *, file_name: str, source_kind: str
+) -> PredictResponse:
+    """T129.5: keep a successful result. Never lose the prediction over it.
+
+    Called only once a response has been built, so a request that raised never
+    reaches here. A `scorable: false` result is a 200 without a result and is
+    not saved either.
+    """
+    if not response.scorable:
+        return response.model_copy(
+            update={
+                "history_saved": False,
+                "history_note": "Not saved to History: the recording could not be screened.",
+            }
+        )
+    try:
+        row = application.state.history.record_prediction(
+            response.model_dump(), file_name=file_name, source_kind=source_kind
+        )
+    except Exception:  # a store failure must not cost the result
+        log.exception("could not save a prediction to history")
+        return response.model_copy(
+            update={"history_saved": False, "history_note": HISTORY_UNAVAILABLE}
+        )
+    if row is None:
+        return response.model_copy(update={"history_saved": False})
+    return response.model_copy(update={"history_id": row["id"], "history_saved": True})
+
+
+def _register_history_routes(application: FastAPI) -> None:
+    not_found: dict[int | str, dict[str, Any]] = {
+        404: {"model": ErrorResponse, "description": "No such History entry"}
+    }
+
+    def missing(record_id: str) -> HTTPException:
+        return HTTPException(status_code=404, detail="no History entry with id " + repr(record_id))
+
+    @application.post("/api/history", status_code=201, tags=["history"])
+    def history_create(body: HistoryCreate) -> dict[str, Any]:
+        return _history_call(
+            application, lambda store: store.create(**body.model_dump(), source_kind="manual")
+        )
+
+    @application.get("/api/history", tags=["history"])
+    def history_list(
+        q: Annotated[str | None, QueryParam(description="Free-text search")] = None,
+        task: str | None = None,
+        result: str | None = None,
+        tag: str | None = None,
+        low_confidence: bool | None = None,
+        date_from: Annotated[str | None, QueryParam(description="YYYY-MM-DD or ISO")] = None,
+        date_to: Annotated[str | None, QueryParam(description="YYYY-MM-DD (inclusive)")] = None,
+        sort: str = "created_at",
+        order: str = "desc",
+        page: Annotated[int, QueryParam(ge=1)] = 1,
+        page_size: Annotated[int, QueryParam(ge=1, le=MAX_PAGE_SIZE)] = 20,
+    ) -> dict[str, Any]:
+        return _history_call(
+            application,
+            lambda store: store.list_records(
+                query=q,
+                task=task,
+                result=result,
+                tag=tag,
+                low_confidence=low_confidence,
+                date_from=date_from,
+                date_to=date_to,
+                sort=sort,
+                order=order,
+                page=page,
+                page_size=page_size,
+            ),
+        )
+
+    @application.delete("/api/history", tags=["history"])
+    def history_delete_all(confirm: bool = False) -> dict[str, Any]:
+        """Delete every entry. Refused without `confirm=true`, so no stray call empties it."""
+        if not confirm:
+            raise HTTPException(status_code=400, detail="deleting all History needs confirm=true")
+        deleted = _history_call(application, lambda store: store.delete_all())
+        return {"deleted": deleted, "deleted_display": format_value(deleted, "count")}
+
+    # Registered before `/api/history/{record_id}`, which would otherwise take
+    # "insights" as an id.
+    @application.get("/api/history/insights", tags=["history"])
+    def history_insights(
+        task: str | None = None,
+        days: Annotated[int, QueryParam(ge=1, le=366)] = 30,
+        tz_offset_minutes: Annotated[int, QueryParam(ge=-840, le=840)] = 0,
+    ) -> dict[str, Any]:
+        """T129.6: counts of the operator's own results, formatted here."""
+        return _history_call(
+            application,
+            lambda store: store.insights(task=task, days=days, tz_offset_minutes=tz_offset_minutes),
+        )
+
+    @application.get("/api/history/{record_id}", tags=["history"], responses=not_found)
+    def history_get(record_id: str) -> dict[str, Any]:
+        row = _history_call(application, lambda store: store.get(record_id))
+        if row is None:
+            raise missing(record_id)
+        return row
+
+    @application.patch("/api/history/{record_id}", tags=["history"], responses=not_found)
+    def history_update(record_id: str, body: HistoryUpdate) -> dict[str, Any]:
+        row = _history_call(
+            application,
+            lambda store: store.update(record_id, notes=body.notes, tags=body.tags),
+        )
+        if row is None:
+            raise missing(record_id)
+        return row
+
+    @application.delete("/api/history/{record_id}", tags=["history"], responses=not_found)
+    def history_delete(record_id: str) -> dict[str, Any]:
+        if not _history_call(application, lambda store: store.delete(record_id)):
+            raise missing(record_id)
+        return {"deleted": 1, "id": record_id}
 
 
 def _positive_class(classes: list[str]) -> str:
