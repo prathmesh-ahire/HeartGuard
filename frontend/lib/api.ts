@@ -97,6 +97,14 @@ export interface PredictResult {
   not_scorable_reason?: string | null;
   display: PredictDisplay;
   /**
+   * T129.5: the History row this result was saved as. `history_saved` is false
+   * for an unscorable result or a failed store, and `history_note` then says
+   * which, in words fit to show.
+   */
+  history_id?: string | null;
+  history_saved?: boolean;
+  history_note?: string | null;
+  /**
    * What drove THIS recording's decision (T117.2), formatted by the API. Absent
    * from a response made before Phase 117, and `available: false` with a reason
    * for any estimator the decomposition is not exact for.

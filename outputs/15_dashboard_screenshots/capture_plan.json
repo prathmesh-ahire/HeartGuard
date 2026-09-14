@@ -26,7 +26,7 @@
     {
       "number": 2,
       "title": "Dataset inventory and class distribution",
-      "route": "/dataset/",
+      "route": "/about/datasets/",
       "caption": "The four public PCG corpora as audited against the files on disk (T01): per-dataset inventory, class balance and the duration profile. Every count is read from outputs/01_dataset_audit/, never from the source documents, which disagree with the files in two places.",
       "steps": [],
       "must_contain": [],
@@ -36,7 +36,7 @@
         "This chart could not be drawn.",
         "Nothing scored yet"
       ],
-      "slug": "",
+      "slug": "dataset",
       "full_page": true,
       "height": 1400,
       "shot_id": "SS-02",
@@ -45,7 +45,7 @@
     {
       "number": 3,
       "title": "Signal upload and waveform",
-      "route": "/predict/binary/",
+      "route": "/",
       "caption": "Choosing a recording on the binary screening page. A built-in dataset sample has been selected and its waveform drawn from audio served by the local inference service; no corpus audio is committed to the repository. The model has not been run yet -- this is the upload and preview step alone.",
       "steps": [
         {
@@ -62,7 +62,7 @@
         "No model is deployed for this task yet",
         "This chart could not be drawn."
       ],
-      "slug": "",
+      "slug": "predict_binary",
       "full_page": true,
       "height": 1400,
       "shot_id": "SS-03",
@@ -71,7 +71,7 @@
     {
       "number": 4,
       "title": "Preprocessing before/after",
-      "route": "/preprocessing/",
+      "route": "/about/",
       "caption": "The preprocessing chain (T02): resampling, band-pass filtering, normalization and signal-quality assessment, with the same recording before and after each stage and the spectral effect of the filter.",
       "steps": [],
       "must_contain": [],
@@ -81,7 +81,7 @@
         "This chart could not be drawn.",
         "Nothing scored yet"
       ],
-      "slug": "",
+      "slug": "preprocessing",
       "full_page": true,
       "height": 1400,
       "shot_id": "SS-04",
@@ -90,7 +90,7 @@
     {
       "number": 5,
       "title": "Feature extraction summary",
-      "route": "/features/",
+      "route": "/about/features/",
       "caption": "The locked 138-feature registry across six families (T03), the fold-safe subset selected inside the training folds, and the family each selected feature belongs to. The column order is a literal in the registry and is fingerprinted, not derived.",
       "steps": [],
       "must_contain": [],
@@ -100,7 +100,7 @@
         "This chart could not be drawn.",
         "Nothing scored yet"
       ],
-      "slug": "",
+      "slug": "features",
       "full_page": true,
       "height": 1400,
       "shot_id": "SS-05",
@@ -109,7 +109,7 @@
     {
       "number": 6,
       "title": "Model comparison dashboard",
-      "route": "/models/",
+      "route": "/about/models/",
       "caption": "The declared models and their fold-wise comparison (T04, T08). Sensitivity, specificity, F1, balanced accuracy and AUC are reported together; accuracy alone never decides anything here.",
       "steps": [],
       "must_contain": [],
@@ -119,7 +119,7 @@
         "This chart could not be drawn.",
         "Nothing scored yet"
       ],
-      "slug": "",
+      "slug": "models",
       "full_page": true,
       "height": 1400,
       "shot_id": "SS-06",
@@ -128,7 +128,7 @@
     {
       "number": 7,
       "title": "Search optimization dashboard",
-      "route": "/optimization/",
+      "route": "/about/models/",
       "caption": "The search space, the methods compared at equal budget, the selected parameters and what the search actually bought (T05-T07). Every search shown ran inside a training fold.",
       "steps": [],
       "must_contain": [],
@@ -138,7 +138,7 @@
         "This chart could not be drawn.",
         "Nothing scored yet"
       ],
-      "slug": "",
+      "slug": "optimization",
       "full_page": true,
       "height": 1400,
       "shot_id": "SS-07",
@@ -147,7 +147,7 @@
     {
       "number": 8,
       "title": "Binary prediction output",
-      "route": "/predict/binary/",
+      "route": "/",
       "caption": "A live binary screening indication for one PhysioNet 2016 recording, produced by POST /predict against the deployed model. The panel shows the class probabilities, the confidence margin, the operating threshold and the corpus label, and states that the recording's stored out-of-fold probability is five numbers rather than one.",
       "steps": [
         {
@@ -156,14 +156,14 @@
         },
         {
           "action": "click",
-          "name": "2. Run the screening model"
+          "name": "Analyse recording"
         },
         {
           "action": "await_result"
         }
       ],
       "must_contain": [
-        "3. Result"
+        "Probability of each category"
       ],
       "must_not_contain": [
         "Route scaffolded; content not built yet.",
@@ -171,7 +171,7 @@
         "This chart could not be drawn.",
         "Nothing scored yet"
       ],
-      "slug": "",
+      "slug": "predict_binary",
       "full_page": true,
       "height": 1400,
       "shot_id": "SS-08",
@@ -180,23 +180,31 @@
     {
       "number": 9,
       "title": "Multiclass prediction output",
-      "route": "/predict/multiclass/",
+      "route": "/",
       "caption": "A live PASCAL A four-class acoustic-event output with the full probability distribution. PASCAL A and PASCAL B are offered as two separate label spaces on this page and are never merged; `artifact` is a recording-quality label, not a cardiac class.",
       "steps": [
+        {
+          "action": "click",
+          "name": "Sound type"
+        },
+        {
+          "action": "click",
+          "name": "PASCAL A — four classes"
+        },
         {
           "action": "sample",
           "sample_id": "pascal-a-murmur"
         },
         {
           "action": "click",
-          "name": "2. Run the screening model"
+          "name": "Analyse recording"
         },
         {
           "action": "await_result"
         }
       ],
       "must_contain": [
-        "3. Result",
+        "Probability of each category",
         "PASCAL A"
       ],
       "must_not_contain": [
@@ -205,7 +213,7 @@
         "This chart could not be drawn.",
         "Nothing scored yet"
       ],
-      "slug": "",
+      "slug": "predict_multiclass",
       "full_page": true,
       "height": 1400,
       "shot_id": "SS-09",
@@ -214,9 +222,13 @@
     {
       "number": 10,
       "title": "CirCor murmur/outcome output",
-      "route": "/predict/murmur/",
+      "route": "/",
       "caption": "The CirCor page with both of its label spaces exercised: a live clinical-outcome indication for one recording above, and below it the same subject collapsed from all four auscultation locations to a patient-level murmur indication under every declared aggregation rule. Murmur and outcome are separate tasks with separate models.",
       "steps": [
+        {
+          "action": "click",
+          "name": "Murmur and outcome"
+        },
         {
           "action": "click",
           "name": "Clinical outcome"
@@ -227,7 +239,7 @@
         },
         {
           "action": "click",
-          "name": "2. Run the screening model"
+          "name": "Analyse recording"
         },
         {
           "action": "await_result"
@@ -249,7 +261,7 @@
         "This chart could not be drawn.",
         "Nothing scored yet"
       ],
-      "slug": "",
+      "slug": "predict_murmur",
       "full_page": true,
       "height": 1800,
       "shot_id": "SS-10",
@@ -258,7 +270,7 @@
     {
       "number": 11,
       "title": "Robustness analytics",
-      "route": "/robustness/",
+      "route": "/about/performance/",
       "caption": "How the results move under added noise, shortened recordings, a different corpus and a different auscultation location (T19-T22, T-S5). The leave-one-sub-collection-out result is shown beside the pooled one rather than in place of it.",
       "steps": [],
       "must_contain": [],
@@ -268,7 +280,7 @@
         "This chart could not be drawn.",
         "Nothing scored yet"
       ],
-      "slug": "",
+      "slug": "robustness",
       "full_page": true,
       "height": 1800,
       "shot_id": "SS-11",
@@ -277,7 +289,7 @@
     {
       "number": 12,
       "title": "Feature importance/explainability",
-      "route": "/predict/binary/",
+      "route": "/",
       "caption": "Global feature importance and family-level contribution (T23), and the per-sample explanation of the prediction made in this browser tab: the contribution of each feature to that recording's own decision, computed by the API over the exact vector it scored.",
       "steps": [
         {
@@ -286,14 +298,14 @@
         },
         {
           "action": "click",
-          "name": "2. Run the screening model"
+          "name": "Analyse recording"
         },
         {
           "action": "await_result"
         },
         {
           "action": "goto",
-          "route": "/explainability/"
+          "route": "/about/performance/"
         }
       ],
       "must_contain": [

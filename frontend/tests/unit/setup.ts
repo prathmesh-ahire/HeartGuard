@@ -28,6 +28,23 @@ if (typeof globalThis.ResizeObserver === 'undefined') {
   } as unknown as typeof ResizeObserver;
 }
 
+// `whileInView` (the result card's staggered reveal) observes intersection.
+// Nothing ever intersects here, so a reveal keeps its start state; the DOM is
+// complete either way, which is what the tests read.
+if (typeof globalThis.IntersectionObserver === 'undefined') {
+  globalThis.IntersectionObserver = class {
+    readonly root = null;
+    readonly rootMargin = '';
+    readonly thresholds: number[] = [];
+    observe(): void {}
+    unobserve(): void {}
+    disconnect(): void {}
+    takeRecords(): IntersectionObserverEntry[] {
+      return [];
+    }
+  } as unknown as typeof IntersectionObserver;
+}
+
 if (typeof URL.createObjectURL !== 'function') {
   URL.createObjectURL = () => 'blob:stub';
   URL.revokeObjectURL = () => undefined;

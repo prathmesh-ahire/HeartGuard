@@ -63,7 +63,7 @@ def test_every_prediction_capture_waits_for_a_result_before_the_shutter() -> Non
     """A prediction page photographed mid-request shows a spinner, not output."""
     for shot in ss.CAPTURE_PLAN:
         runs_model = any(
-            step.get("action") == "click" and step.get("name") == "2. Run the screening model"
+            step.get("action") == "click" and step.get("name") == ss.RUN_BUTTON
             for step in shot.steps
         )
         if not runs_model:

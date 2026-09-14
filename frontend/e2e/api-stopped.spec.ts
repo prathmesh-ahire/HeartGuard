@@ -17,9 +17,9 @@ test('the Analyse page shows a visible error when the API is not there', async (
   await expect(page.getByText(/404|did not answer|File not found/i).first()).toBeVisible();
 
   // Scoring a built-in sample must fail loudly, with the reason.
-  const sample = page.locator('ul button').first();
+  const sample = page.locator('button[data-sample-id]').first();
   await sample.click();
-  await page.getByRole('button', { name: '2. Run the screening model' }).click();
+  await page.getByRole('button', { name: 'Analyse recording' }).click();
   const failure = page.getByRole('alert').filter({ hasText: 'No prediction was produced' });
   await expect(failure).toBeVisible();
   await expect(page.getByText('Nothing scored yet')).toHaveCount(0);

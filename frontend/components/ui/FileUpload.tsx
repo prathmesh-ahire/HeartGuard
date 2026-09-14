@@ -104,8 +104,8 @@ export function FileUpload({
           Drop a heart-sound recording here
         </p>
         <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mt-1')}>
-          Uncompressed WAV, up to {MAX_BYTES / (1024 * 1024)} MB. The file is sent to the
-          local inference service and is not stored.
+          Uncompressed WAV, up to {MAX_BYTES / (1024 * 1024)} MB. The audio is analysed on
+          this computer and not kept; the result is saved to History.
         </p>
 
         <label

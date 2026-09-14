@@ -59,8 +59,10 @@ LAZY_MARKERS = {
     # ECharts is ~300 kB. `zrender` is its rendering engine and appears only
     # where the library itself is bundled.
     "echarts": "zrender",
-    # WaveSurfer's exported class name. Present in its own chunk, nowhere else.
-    "wavesurfer.js": "WaveSurfer",
+    # A property WaveSurfer's plugin base sets on itself. NOT the class name
+    # "WaveSurfer": T130.3 found production minification renames the class,
+    # while a property name survives. Present in its own chunk, nowhere else.
+    "wavesurfer.js": "this.wavesurfer=",
 }
 
 #: Lazy libraries that no production page uses right now, with the reason. For
@@ -73,11 +75,6 @@ NOT_YET_BUNDLED: dict[str, str] = {
         "the 3D heart lived on the old home page, which T127.3 replaced with Analyse; "
         "T136.5 tunes it for Analyse without slowing the first interaction, and "
         "removes this entry"
-    ),
-    "wavesurfer.js": (
-        "only the design reference uses it, and T127.5 keeps that page out of the "
-        "production build; T130.3 puts the waveform player on Analyse and removes "
-        "this entry"
     ),
 }
 

@@ -62,6 +62,10 @@ MIN_BYTES = 20_000
 
 DISCLAIMER_MARK = "Screening and research use only."
 
+#: The Analyse page's one primary action (T130). A capture that scores a
+#: recording clicks this and must then wait for the result.
+RUN_BUTTON = "Analyse recording"
+
 
 class ScreenshotError(RuntimeError):
     """A screenshot is missing, empty, or was taken of the wrong thing."""
@@ -219,8 +223,8 @@ CAPTURE_PLAN: tuple[ShotSpec, ...] = (
         "the class probabilities, the confidence margin, the operating "
         "threshold and the corpus label, and states that the recording's "
         "stored out-of-fold probability is five numbers rather than one.",
-        steps=(_sample("binary-abnormal"), _click("2. Run the screening model"), _await_result()),
-        must_contain=("3. Result",),
+        steps=(_sample("binary-abnormal"), _click(RUN_BUTTON), _await_result()),
+        must_contain=("Probability of each category",),
         # The route moved in T127.3; the committed filename did not.
         slug="predict_binary",
     ),
@@ -233,12 +237,13 @@ CAPTURE_PLAN: tuple[ShotSpec, ...] = (
         "separate label spaces on this page and are never merged; `artifact` "
         "is a recording-quality label, not a cardiac class.",
         steps=(
+            _click("Sound type"),
             _click("PASCAL A — four classes"),
             _sample("pascal-a-murmur"),
-            _click("2. Run the screening model"),
+            _click(RUN_BUTTON),
             _await_result(),
         ),
-        must_contain=("3. Result", "PASCAL A"),
+        must_contain=("Probability of each category", "PASCAL A"),
         # The route moved in T127.3; the committed filename did not.
         slug="predict_multiclass",
     ),
@@ -252,9 +257,10 @@ CAPTURE_PLAN: tuple[ShotSpec, ...] = (
         "patient-level murmur indication under every declared aggregation "
         "rule. Murmur and outcome are separate tasks with separate models.",
         steps=(
+            _click("Murmur and outcome"),
             _click("Clinical outcome"),
             _sample("circor-murmur-present"),
-            _click("2. Run the screening model"),
+            _click(RUN_BUTTON),
             _await_result(),
             _click("Score this subject at every location"),
             {"action": "await_patient"},
@@ -290,7 +296,7 @@ CAPTURE_PLAN: tuple[ShotSpec, ...] = (
         "decision, computed by the API over the exact vector it scored.",
         steps=(
             _sample("binary-abnormal"),
-            _click("2. Run the screening model"),
+            _click(RUN_BUTTON),
             _await_result(),
             {"action": "goto", "route": "/about/performance/"},
         ),

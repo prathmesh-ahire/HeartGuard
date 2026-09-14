@@ -39,6 +39,9 @@ const PATHS = {
   upload: 'M12 16V4m0 0L8 8m4-4 4 4M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3',
   check: 'm5 12.5 4.5 4.5L19 7',
   pulse: 'M3 12h4l2-5 3 10 2-7 1.5 2H21',
+  mic: 'M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3ZM5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21',
+  play: 'M8 5.5v13l10.5-6.5L8 5.5Z',
+  pause: 'M9 5v14M15 5v14',
 } as const;
 
 export type IconName = keyof typeof PATHS;

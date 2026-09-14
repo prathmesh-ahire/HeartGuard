@@ -15,30 +15,50 @@ export const metadata: Metadata = {
 };
 
 /**
- * Analyse (home, T127.3).
+ * Analyse (home, T130).
  *
- * The three old prediction pages, joined: one panel offering every label space
- * -- still five separate tasks with five separate models; PASCAL A and B are
- * offered side by side and the panel merges neither -- plus
- * batch scoring and the per-patient view. Phase 130 rebuilds this page; until
- * then it keeps every capability the old routes had, so nothing redirected here
- * lands on less than it left.
+ * One primary action: add a recording and analyse it. The three checks group
+ * the five label spaces in plain words; inside a check each task is still its
+ * own model -- PASCAL A and B sit side by side under "Sound type" and the panel
+ * merges neither, and CirCor murmur and outcome likewise.
+ *
+ * Batch scoring and the per-patient view stay below until Phase 131 rebuilds
+ * batch and compare, so nothing redirected here lands on less than it left.
  *
  * The page declares no number. Every value on it arrives formatted from the
  * server or from `generated/prediction.json`.
  */
 export default function Page() {
   return (
-    <div className="space-y-8">
-      <PageHeader title="Analyse a recording" lede={route?.summary ?? ''} />
+    <div className="space-y-12">
+      <PageHeader title="Analyse a heart sound" lede={route?.summary ?? ''} />
 
       <PredictionPanel
-        offered={[
-          { task: 'binary', label: 'Normal / abnormal' },
-          { task: 'pascal_a', label: 'PASCAL A — four classes' },
-          { task: 'pascal_b', label: 'PASCAL B — three classes' },
-          { task: 'murmur', label: 'Murmur annotation' },
-          { task: 'outcome', label: 'Clinical outcome' },
+        checks={[
+          {
+            id: 'normal',
+            label: 'Normal or abnormal',
+            description: 'Screens the heart sound as normal, or as abnormal and worth a closer look.',
+            tasks: [{ task: 'binary', label: 'Normal / abnormal' }],
+          },
+          {
+            id: 'sound',
+            label: 'Sound type',
+            description: 'Sorts the sound into categories such as murmur or an extra heart sound.',
+            tasks: [
+              { task: 'pascal_a', label: 'PASCAL A — four classes' },
+              { task: 'pascal_b', label: 'PASCAL B — three classes' },
+            ],
+          },
+          {
+            id: 'murmur',
+            label: 'Murmur and outcome',
+            description: 'Looks for a murmur, or screens the overall result, in a child’s recording.',
+            tasks: [
+              { task: 'murmur', label: 'Murmur annotation' },
+              { task: 'outcome', label: 'Clinical outcome' },
+            ],
+          },
         ]}
       />
 

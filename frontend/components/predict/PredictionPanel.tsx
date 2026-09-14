@@ -4,12 +4,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { cn } from '@/lib/cn';
 import { GlassCard } from '@/components/ui/GlassCard';
-import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/States';
 import { FileUpload, type UploadPhase } from '@/components/ui/FileUpload';
+import { MicRecorder } from '@/components/audio/MicRecorder';
+import { WaveformPlayer } from '@/components/audio/WaveformPlayer';
+import { CheckSelector, type AnalyseCheck } from '@/components/predict/CheckSelector';
 import { ResultCard } from '@/components/predict/ResultCard';
-import { WaveformPreview } from '@/components/predict/WaveformPreview';
-import { SURFACE, TYPE_SCALE } from '@/lib/tokens';
+import { TYPE_SCALE } from '@/lib/tokens';
 import { prediction } from '@/lib/generated/prediction';
 import { rememberPrediction } from '@/lib/lastPrediction';
 import type { GeneratedSample, GeneratedTaskSpec } from '@/lib/generated/types';
@@ -18,7 +20,9 @@ import {
   predictFile,
   predictSample,
   sampleAudioUrl,
+  sampleReport,
   samples as fetchSamples,
+  saveDocument,
   tasks as fetchTasks,
   type PredictResult,
   type SampleStatus,
@@ -26,39 +30,30 @@ import {
 } from '@/lib/api';
 
 /**
- * Upload or pick a sample, score it, show the result (T116.1, T116.5, T116.6).
+ * The Analyse workspace (T116.1, rebuilt in T130.1-T130.6).
  *
- * One component behind all three prediction pages. The pages differ only in
- * which label spaces they offer, and building three of these would guarantee
- * that the low-confidence warning or the disclaimer eventually appeared on two
- * of them.
+ * Choose a check, add a recording -- dropped, recorded or a built-in sample --
+ * hear and scrub it, analyse it, and read the result beside it. One primary
+ * action: "Analyse recording".
+ *
+ * ## One path for every recording
+ *
+ * A dropped file and a microphone recording both arrive through `acceptFile`,
+ * as a validated WAV `File`. From there they are the same thing: the same
+ * preview, the same `POST /predict`, the same History row, the same report.
+ * Only a built-in sample differs, because its audio is on the server already.
  *
  * ## Availability is a runtime question, asked at runtime
  *
  * `generated/prediction.json` records whether each task had a saved model when
- * the export ran. That is a build-time fact and it goes stale the moment a model
- * is saved, so the panel re-reads `GET /tasks` on mount and prefers the live
- * answer. A task with no model renders the reason the API gives — not an empty
- * form that fails on submit, and not a silent absence.
- *
- * ## The samples are the operator's own corpus, not shipped audio
- *
- * `GET /samples` says which pinned recordings this process can reach. None are
- * committed: the PhysioNet and PASCAL copies carry no licence file, so the audio
- * stays in the read-only `dataset/` folder it came from. Where the corpus is
- * absent the sample list explains that rather than disappearing.
+ * the export ran. That goes stale the moment a model is saved, so the panel
+ * re-reads `GET /tasks` on mount and prefers the live answer.
  *
  * ## Nothing is rounded here
  *
  * Every number rendered downstream comes from `result.display.*`, formatted in
- * Python by the same function that formatted the precomputed tables.
+ * Python.
  */
-
-export interface PanelTask {
-  task: string;
-  /** Short label for the task selector. Longer text comes from the payload. */
-  label: string;
-}
 
 function taskSpec(name: string): GeneratedTaskSpec | undefined {
   return prediction.tasks.find((entry) => entry.task === name);
@@ -69,14 +64,14 @@ function samplesFor(name: string): GeneratedSample[] {
 }
 
 export function PredictionPanel({
-  offered,
+  checks,
   className,
 }: {
-  /** The label spaces this page offers. Never merged into one selector. */
-  offered: readonly PanelTask[];
+  /** The checks offered. Each task inside a check is still its own label space. */
+  checks: readonly AnalyseCheck[];
   className?: string;
 }) {
-  const [task, setTask] = useState(offered[0]?.task ?? 'binary');
+  const [task, setTask] = useState(checks[0]?.tasks[0]?.task ?? 'binary');
   const [live, setLive] = useState<TaskStatus[] | null>(null);
   const [servable, setServable] = useState<SampleStatus[] | null>(null);
   const [probeFailed, setProbeFailed] = useState<string | null>(null);
@@ -126,6 +121,16 @@ export function PredictionPanel({
     setPhase('idle');
   }, []);
 
+  /** T130.1 and T130.2: an upload and a recording both land here. */
+  const acceptFile = useCallback(
+    (chosen: File) => {
+      setFile(chosen);
+      setChosenSample(null);
+      reset();
+    },
+    [reset],
+  );
+
   const run = useCallback(async () => {
     setBusy(true);
     setFailure(null);
@@ -139,13 +144,12 @@ export function PredictionPanel({
             ? await predictFile(file, task)
             : null;
       if (outcome === null) {
-        setFailure('Choose a sample or a file first.');
+        setFailure('Choose a recording first.');
         setPhase('error');
         return;
       }
       setResult(outcome);
-      // T117.2: hand the response to /explainability, which renders its
-      // `explanation` block as the API formatted it.
+      // T117.2: hand the response to About the Model's Performance tab.
       rememberPrediction(outcome);
       setPhase('done');
     } catch (error) {
@@ -156,111 +160,99 @@ export function PredictionPanel({
     }
   }, [chosenSample, file, task]);
 
+  /** T130.6: the report is rebuilt by the API from the same recording. */
+  const downloadReport = useCallback(async () => {
+    const source =
+      chosenSample !== null ? { sampleId: chosenSample } : file !== null ? { file } : null;
+    if (source === null) throw new Error('The recording is no longer selected.');
+    saveDocument(await sampleReport(task, source));
+  }, [chosenSample, file, task]);
+
+  const source = file ?? (chosenSample !== null ? sampleAudioUrl(chosenSample) : null);
+
   return (
-    <div className={className}>
-      {offered.length > 1 ? (
-        <fieldset className="mb-6">
-          <legend className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mb-2')}>
-            Label space — these are separate tasks with separate models and are never merged
-          </legend>
-          <div className="flex flex-wrap gap-2">
-            {offered.map((entry) => (
-              <button
-                key={entry.task}
-                type="button"
-                onClick={() => {
-                  setTask(entry.task);
-                  setChosenSample(null);
-                  reset();
-                }}
-                aria-pressed={entry.task === task}
-                className={cn(
-                  'rounded-lg border px-3 py-1.5 font-mono text-label-md uppercase transition-all',
-                  entry.task === task
-                    ? 'border-accent-strong bg-accent text-on-accent shadow-accent'
-                    : 'border-line bg-panel text-ink-2 hover:border-accent-line hover:text-accent-strong',
-                )}
-              >
-                {entry.label}
-              </button>
-            ))}
-          </div>
-        </fieldset>
-      ) : null}
+    <div className={cn('grid items-start gap-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]', className)}>
+      <div className="space-y-6">
+        <GlassCard eyebrow="Step 1" title="Choose a check">
+          <CheckSelector
+            checks={checks}
+            task={task}
+            disabled={busy}
+            onChange={(next) => {
+              setTask(next);
+              setChosenSample(null);
+              reset();
+            }}
+          />
+          {spec !== undefined ? (
+            <p className={cn(TYPE_SCALE.caption, 'mt-3 max-w-prose text-ink-3')}>
+              {spec.description} Categories: {spec.classes.join(', ')}.
+            </p>
+          ) : null}
+        </GlassCard>
 
-      {spec !== undefined ? (
-        <p className={cn(TYPE_SCALE.body, SURFACE.muted, 'mb-6 max-w-prose')}>
-          <span className="font-medium text-ink">{spec.title}.</span>{' '}
-          {spec.description} Classes: {spec.classes.join(', ')}.
-        </p>
-      ) : null}
+        {!available ? (
+          <EmptyState
+            title="No model is deployed for this task yet"
+            description={<p>{unavailableReason}</p>}
+          />
+        ) : (
+          <GlassCard eyebrow="Step 2" title="Add a recording">
+            <FileUpload onFile={acceptFile} phase={phase} fileName={file?.name ?? null} disabled={busy} />
 
-      {!available ? (
-        <EmptyState
-          title="No model is deployed for this task yet"
-          description={
-            <>
-              <p>{unavailableReason}</p>
-              <p className="mt-2">
-                The page is complete and will score recordings as soon as{' '}
-                <span className="font-mono">{spec?.model_dir ?? task}</span> holds a saved
-                model. Nothing here fabricates a result in the meantime.
-              </p>
-            </>
-          }
-        />
-      ) : (
-        <div className="grid items-start gap-3 lg:grid-cols-2">
-          <GlassCard eyebrow="Intake" title="1. Choose a recording">
+            <MicRecorder
+              onFile={acceptFile}
+              className="mt-4"
+              maxSeconds={prediction.upload.max_duration_seconds}
+              minSeconds={prediction.upload.min_duration_seconds}
+              minDisplay={prediction.upload.min_duration_display}
+              disabled={busy}
+            />
+
+            <p className={cn(TYPE_SCALE.caption, 'mt-4 text-ink-3')}>
+              Accepted: {prediction.upload.accepted_suffixes.join(', ')}, between{' '}
+              {prediction.upload.min_duration_display} and {prediction.upload.max_duration_display}.{' '}
+              {prediction.upload.duration_note}
+            </p>
 
             {pageSamples.length > 0 ? (
-              <div className="mb-5">
-                <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mb-2')}>
-                  Built-in dataset samples. No corpus audio is committed to the repository:
-                  these are served by the local inference service from its own read-only copy.
-                </p>
-                <ul className="space-y-2">
+              <div className="mt-5">
+                <p className="label-micro">Or try a sample from the datasets</p>
+                <ul className="mt-2 grid gap-2 sm:grid-cols-2">
                   {pageSamples.map((entry) => {
                     const reachable = servable === null || servableIds.has(entry.sample_id);
                     const active = entry.sample_id === chosenSample;
+                    const label = entry.labels[task];
                     return (
                       <li key={entry.sample_id}>
                         <button
                           type="button"
-                          // The visible label is the record uid; the sample id
-                          // is what the Phase 120 capture plan names, so it is
-                          // addressable without matching on display text.
+                          // Addressed by sample id (the capture plan and the
+                          // browser tests), not by its visible text.
                           data-sample-id={entry.sample_id}
                           disabled={!reachable || busy}
                           aria-pressed={active}
+                          title={entry.selection}
                           onClick={() => {
                             setChosenSample(active ? null : entry.sample_id);
                             setFile(null);
                             reset();
                           }}
                           className={cn(
-                            'w-full rounded-lg border px-3 py-2 text-left text-body-sm transition-colors',
+                            'w-full rounded-lg border px-3 py-2 text-left transition-colors',
                             active
                               ? 'border-accent bg-accent-soft shadow-panel'
                               : 'border-line bg-sunken hover:border-accent-line',
                             !reachable && 'cursor-not-allowed opacity-55',
                           )}
                         >
-                          <span className="flex flex-wrap items-baseline justify-between gap-2">
-                            <span className="font-mono text-label-lg text-ink">
-                              {entry.record_uid}
-                            </span>
-                            <span className={cn(TYPE_SCALE.caption, SURFACE.muted)}>
-                              {entry.dataset_name} · {entry.duration_display}
-                            </span>
+                          <span className={cn(TYPE_SCALE.body, 'block font-medium capitalize text-ink')}>
+                            {label ?? entry.dataset_name}
                           </span>
-                          <span className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mt-1 block')}>
-                            {entry.labels[task] !== null && entry.labels[task] !== undefined ? (
-                              <>Corpus label: {entry.labels[task]}. </>
-                            ) : null}
+                          <span className={cn(TYPE_SCALE.caption, 'mt-0.5 block text-ink-3')}>
                             {reachable
-                              ? entry.selection
-                              : 'Not on this machine — dataset/ is read-only input and is never committed.'}
+                              ? entry.dataset_name + ' · ' + entry.duration_display
+                              : 'The datasets are not on this machine.'}
                           </span>
                         </button>
                       </li>
@@ -270,91 +262,55 @@ export function PredictionPanel({
               </div>
             ) : null}
 
-            <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mb-2')}>
-              …or upload your own. {prediction.upload.duration_note} Accepted:{' '}
-              {prediction.upload.accepted_suffixes.join(', ')}, between{' '}
-              {prediction.upload.min_duration_display} and{' '}
-              {prediction.upload.max_duration_display}.
-            </p>
-            <FileUpload
-              onFile={(chosen) => {
-                setFile(chosen);
-                setChosenSample(null);
-                reset();
-              }}
-              phase={phase}
-              fileName={file?.name ?? null}
-              disabled={busy}
+            <WaveformPlayer
+              className="mt-5"
+              source={source}
+              label={file?.name ?? (activeSample !== null ? activeSample.dataset_name + ' sample' : 'recording')}
             />
 
-            <button
-              type="button"
+            <Button
+              tone="primary"
+              size="lg"
+              icon="pulse"
+              className="mt-5 w-full"
               onClick={() => void run()}
               disabled={busy || (file === null && chosenSample === null)}
-              className={cn(
-                'mt-4 flex w-full items-center justify-center gap-2 rounded-lg border',
-                'border-accent-strong bg-accent px-4 py-2.5 font-mono text-label-lg uppercase',
-                'text-on-accent shadow-accent transition-all hover:bg-accent-strong',
-                'active:scale-[0.99] disabled:opacity-50 disabled:shadow-none',
-              )}
             >
-              {busy ? (
-                <span className="h-2 w-2 rounded-full bg-current animate-pulse-subtle" />
-              ) : null}
-              {busy ? 'Scoring…' : '2. Run the screening model'}
-            </button>
+              {busy ? 'Analysing…' : 'Analyse recording'}
+            </Button>
 
             {probeFailed !== null ? (
-              <p
-                className={cn(
-                  TYPE_SCALE.caption,
-                  'mt-3 rounded border border-warn-line bg-warn-soft p-2 text-warn',
-                )}
-              >
+              <p className={cn(TYPE_SCALE.caption, 'mt-3 rounded border border-warn-line bg-warn-soft p-2 text-warn')}>
                 {probeFailed}
               </p>
             ) : null}
           </GlassCard>
+        )}
+      </div>
 
-          <GlassCard eyebrow="Screening indication" title="3. Result">
-            <WaveformPreview
-              className="telemetry-grid mb-3 rounded-lg border border-line p-2"
-              source={
-                file ?? (chosenSample !== null ? sampleAudioUrl(chosenSample) : null)
-              }
-              label={file?.name ?? activeSample?.record_uid ?? 'recording'}
-            />
-            {busy ? <LoadingState label="Preprocessing, extracting 138 features and scoring" /> : null}
-            {failure !== null ? (
-              <ErrorState
-                title="No prediction was produced"
-                detail={failure}
-                onRetry={() => void run()}
-              />
-            ) : null}
-            {result !== null && !busy ? (
-              <ResultCard
-                result={result}
-                classes={spec?.classes ?? []}
-                sample={activeSample}
-              />
-            ) : null}
-            {result === null && !busy && failure === null ? (
-              <EmptyState
-                title="Nothing scored yet"
-                description="Pick a recording on the left and run the model. Nothing is shown here until a real prediction comes back."
-              />
-            ) : null}
-          </GlassCard>
-        </div>
-      )}
-
-      <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mt-4 flex flex-wrap items-center gap-2')}>
-        <Badge tone="neutral" dot>
-          Operating point
-        </Badge>
-        {prediction.operating_point.note}
-      </p>
+      <section aria-label="Result" className="space-y-3 lg:sticky lg:top-6">
+        <h2 className={cn(TYPE_SCALE.h2, 'text-ink')}>Result</h2>
+        {busy ? <LoadingState label="Cleaning the recording, measuring it and scoring it" /> : null}
+        {failure !== null ? (
+          <ErrorState title="No prediction was produced" detail={failure} onRetry={() => void run()} />
+        ) : null}
+        {result !== null && !busy ? (
+          <ResultCard
+            result={result}
+            classes={spec?.classes ?? []}
+            taskTitle={spec?.title}
+            sample={activeSample}
+            onDownloadReport={downloadReport}
+          />
+        ) : null}
+        {result === null && !busy && failure === null ? (
+          <EmptyState
+            icon="pulse"
+            title="Nothing scored yet"
+            description="Add a recording and select Analyse recording. The result appears here."
+          />
+        ) : null}
+      </section>
     </div>
   );
 }

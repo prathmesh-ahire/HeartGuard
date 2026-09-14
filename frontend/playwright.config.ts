@@ -1,4 +1,5 @@
-import { resolve } from 'node:path';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
 
 import { defineConfig, devices } from '@playwright/test';
 
@@ -54,6 +55,13 @@ export default defineConfig({
       reuseExistingServer: false,
       stdout: 'ignore',
       stderr: 'pipe',
+      // T130.7 scores recordings, and every success is saved to History. A test
+      // run must never write into the operator's own History, so this process
+      // gets a fresh file in the temp folder -- the same redirect the root
+      // conftest applies to pytest.
+      env: {
+        HEARTGUARD__PATHS__CACHE__HISTORY_DB: join(tmpdir(), 'pv-mepcg-e2e-' + String(process.pid), 'history.json'),
+      },
     },
     {
       command: PYTHON + ' -m http.server 8001 --bind 127.0.0.1 --directory out',
