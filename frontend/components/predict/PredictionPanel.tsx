@@ -9,6 +9,7 @@ import { EmptyState, ErrorState, LoadingState } from '@/components/ui/States';
 import { FileUpload, type UploadPhase } from '@/components/ui/FileUpload';
 import { MicRecorder } from '@/components/audio/MicRecorder';
 import { WaveformPlayer } from '@/components/audio/WaveformPlayer';
+import { BatchPanel } from '@/components/predict/BatchPanel';
 import { CheckSelector, type AnalyseCheck } from '@/components/predict/CheckSelector';
 import { ResultCard } from '@/components/predict/ResultCard';
 import { TYPE_SCALE } from '@/lib/tokens';
@@ -82,6 +83,9 @@ export function PredictionPanel({
   const [result, setResult] = useState<PredictResult | null>(null);
   const [failure, setFailure] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  // T131: one recording, or a batch. A running batch locks the check and the mode.
+  const [mode, setMode] = useState<'single' | 'batch'>('single');
+  const [batchBusy, setBatchBusy] = useState(false);
 
   useEffect(() => {
     let disposed = false;
@@ -171,13 +175,19 @@ export function PredictionPanel({
   const source = file ?? (chosenSample !== null ? sampleAudioUrl(chosenSample) : null);
 
   return (
-    <div className={cn('grid items-start gap-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]', className)}>
-      <div className="space-y-6">
+    <div
+      className={cn(
+        'grid items-start gap-6',
+        mode === 'single' && 'lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]',
+        className,
+      )}
+    >
+      <div className="min-w-0 space-y-6">
         <GlassCard eyebrow="Step 1" title="Choose a check">
           <CheckSelector
             checks={checks}
             task={task}
-            disabled={busy}
+            disabled={busy || batchBusy}
             onChange={(next) => {
               setTask(next);
               setChosenSample(null);
@@ -197,6 +207,39 @@ export function PredictionPanel({
             description={<p>{unavailableReason}</p>}
           />
         ) : (
+          <>
+          <div role="group" aria-label="How many recordings" className="flex flex-wrap gap-2">
+            {(['single', 'batch'] as const).map((value) => (
+              <button
+                key={value}
+                type="button"
+                aria-pressed={mode === value}
+                disabled={busy || batchBusy}
+                onClick={() => setMode(value)}
+                className={cn(
+                  'rounded-lg border px-3 py-1.5 font-mono text-label-md uppercase transition-colors',
+                  mode === value
+                    ? 'border-accent bg-accent-soft text-accent-deep'
+                    : 'border-line bg-panel text-ink-2 hover:border-accent-line',
+                  (busy || batchBusy) && 'cursor-not-allowed opacity-60',
+                )}
+              >
+                {value === 'single' ? 'One recording' : 'Several recordings'}
+              </button>
+            ))}
+          </div>
+          {mode === 'batch' ? (
+            <GlassCard eyebrow="Step 2" title="Add several recordings">
+              {/* Keyed by task: a batch's rows belong to the check they were scored for. */}
+              <BatchPanel
+                key={task}
+                task={task}
+                taskTitle={spec?.title ?? task}
+                classes={spec?.classes ?? []}
+                onRunningChange={setBatchBusy}
+              />
+            </GlassCard>
+          ) : (
           <GlassCard eyebrow="Step 2" title="Add a recording">
             <FileUpload onFile={acceptFile} phase={phase} fileName={file?.name ?? null} disabled={busy} />
 
@@ -285,9 +328,12 @@ export function PredictionPanel({
               </p>
             ) : null}
           </GlassCard>
+          )}
+          </>
         )}
       </div>
 
+      {mode === 'single' ? (
       <section aria-label="Result" className="space-y-3 lg:sticky lg:top-6">
         <h2 className={cn(TYPE_SCALE.h2, 'text-ink')}>Result</h2>
         {busy ? <LoadingState label="Cleaning the recording, measuring it and scoring it" /> : null}
@@ -311,6 +357,7 @@ export function PredictionPanel({
           />
         ) : null}
       </section>
+      ) : null}
     </div>
   );
 }

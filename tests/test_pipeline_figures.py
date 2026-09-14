@@ -332,9 +332,13 @@ def test_f16_routes_are_the_applications_and_only_predict_computes(
     # already produced (or entered by hand). It is exempted by name, and F16 must
     # draw it as the History store rather than inside the box of routes that
     # compute -- asserted below, so the exemption cannot hide it in that box.
+    #
+    # Phase 131 added POST /api/history/export, which also runs no model: it
+    # writes a batch table as CSV from rows already in History. Named too, so
+    # the exemption is still a list of routes, never a prefix anything fits.
     history = [path for path in posts if path.startswith("/api/history")]
     computing = [path for path in posts if path not in history]
-    assert history == ["/api/history"], history
+    assert history == ["/api/history", "/api/history/export"], history
     assert computing and all(
         path.startswith("/predict") or path == "/report/sample" for path in computing
     )

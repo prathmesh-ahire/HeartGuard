@@ -286,11 +286,44 @@ export async function audioBytes(source: string): Promise<ArrayBuffer> {
   return response.arrayBuffer();
 }
 
-export function predictFile(file: File, task: string): Promise<PredictResult> {
+export function predictFile(
+  file: File,
+  task: string,
+  options: { batchId?: string } = {},
+): Promise<PredictResult> {
   const body = new FormData();
   body.append('file', file);
   body.append('task', task);
+  // T131.3: every result of one batch is saved to History under this id.
+  if (options.batchId !== undefined) body.append('batch_id', options.batchId);
   return call('/predict', { method: 'POST', body });
+}
+
+/** What one row of a batch table is. Only `scored` rows are in History. */
+export type BatchStatus = 'scored' | 'not_scored' | 'failed' | 'cancelled';
+
+export interface BatchExportRow {
+  file_name: string;
+  status: BatchStatus;
+  history_id?: string | null;
+  message?: string | null;
+}
+
+/**
+ * T131.6: the batch table as CSV, written by the API. The page sends which rows
+ * are in the table and in what order -- no number: a scored row's values are
+ * read back from its History entry and formatted in Python.
+ */
+export function exportBatchCsv(
+  batchId: string,
+  task: string,
+  rows: BatchExportRow[],
+): Promise<GeneratedDocument> {
+  return document('/api/history/export', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ batch_id: batchId, task, rows }),
+  });
 }
 
 export function predictSample(sampleId: string, task: string): Promise<PredictResult> {

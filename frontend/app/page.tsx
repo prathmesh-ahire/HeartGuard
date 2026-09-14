@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 
-import { BatchPanel } from '@/components/predict/BatchPanel';
 import { PatientPanel } from '@/components/predict/PatientPanel';
 import { PredictionPanel } from '@/components/predict/PredictionPanel';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -22,8 +21,10 @@ export const metadata: Metadata = {
  * own model -- PASCAL A and B sit side by side under "Sound type" and the panel
  * merges neither, and CirCor murmur and outcome likewise.
  *
- * Batch scoring and the per-patient view stay below until Phase 131 rebuilds
- * batch and compare, so nothing redirected here lands on less than it left.
+ * Several recordings at once, and comparing two of them, live inside the panel
+ * (T131: "Several recordings"), under the same chosen check. The per-patient
+ * view stays below: no Part XII task replaces it, and removing it would leave a
+ * redirected page with less than it had.
  *
  * The page declares no number. Every value on it arrives formatted from the
  * server or from `generated/prediction.json`.
@@ -61,15 +62,6 @@ export default function Page() {
           },
         ]}
       />
-
-      <section>
-        <SectionHeader
-          eyebrow="Batch"
-          title="Several recordings at once"
-          description="Normal / abnormal screening for a set of files, with the results downloadable as CSV."
-        />
-        <BatchPanel task="binary" className="mt-4" />
-      </section>
 
       <section>
         <SectionHeader

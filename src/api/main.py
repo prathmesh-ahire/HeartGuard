@@ -71,7 +71,13 @@ from fastapi.responses import JSONResponse, Response
 from fastapi.routing import APIRoute
 from pydantic import BaseModel, Field
 
-from src.api.history_store import MAX_PAGE_SIZE, HistoryStore, HistoryValidationError
+from src.api.history_store import (
+    BATCH_STATUSES,
+    MAX_PAGE_SIZE,
+    HistoryStore,
+    HistoryValidationError,
+    clean_batch_id,
+)
 from src.evaluation.aggregation import AGGREGATION_RULES, POSITIVE_LABEL
 from src.inference.predictor import (
     DISCLAIMER,
@@ -386,6 +392,25 @@ class HistoryUpdate(BaseModel):
     tags: list[str] | None = None
 
 
+class BatchExportRow(BaseModel):
+    """One row of the batch table, in the order the page shows it."""
+
+    file_name: str
+    status: str
+    #: Required for `scored`: the History row the values are read from.
+    history_id: str | None = None
+    #: The server's own words for a `failed` or `not_scored` row.
+    message: str | None = None
+
+
+class BatchExport(BaseModel):
+    """T131.6: a batch table to write as CSV. It carries no number."""
+
+    batch_id: str
+    task: str
+    rows: list[BatchExportRow]
+
+
 class SampleSummary(BaseModel):
     """One built-in sample recording and whether this process can serve it."""
 
@@ -593,6 +618,9 @@ def _register_routes(application: FastAPI) -> None:
     async def predict(
         file: Annotated[UploadFile, File(description="A mono or multi-channel WAV recording")],
         task: Annotated[str, Form(description="One of the declared label spaces")] = "binary",
+        batch_id: Annotated[
+            str | None, Form(description="T131.3: 32 hex characters naming a batch")
+        ] = None,
     ) -> PredictResponse:
         """T108.4: score one uploaded recording.
 
@@ -600,7 +628,14 @@ def _register_routes(application: FastAPI) -> None:
         `librosa` read paths, and because validation must see the real bytes
         before anything decodes them. The temporary file is removed whatever
         happens — an upload is never kept.
+
+        `batch_id` (T131.3) is checked before any work, so a malformed one costs
+        nothing, and is stored on the History row so a batch reads back as one.
         """
+        try:
+            batch = clean_batch_id(batch_id)
+        except HistoryValidationError as error:
+            raise HTTPException(status_code=400, detail=str(error)) from error
         if task not in TASKS:
             raise HTTPException(
                 status_code=400,
@@ -631,7 +666,11 @@ def _register_routes(application: FastAPI) -> None:
 
             response = _response_for(result, source=file.filename or None, detail=detail)
             return _save_to_history(
-                application, response, file_name=file.filename or "upload.wav", source_kind="upload"
+                application,
+                response,
+                file_name=file.filename or "upload.wav",
+                source_kind="upload",
+                batch_id=batch,
             )
         finally:
             with suppress(OSError):
@@ -912,7 +951,12 @@ def _history_call(application: FastAPI, action: Callable[[HistoryStore], Any]) -
 
 
 def _save_to_history(
-    application: FastAPI, response: PredictResponse, *, file_name: str, source_kind: str
+    application: FastAPI,
+    response: PredictResponse,
+    *,
+    file_name: str,
+    source_kind: str,
+    batch_id: str | None = None,
 ) -> PredictResponse:
     """T129.5: keep a successful result. Never lose the prediction over it.
 
@@ -929,7 +973,7 @@ def _save_to_history(
         )
     try:
         row = application.state.history.record_prediction(
-            response.model_dump(), file_name=file_name, source_kind=source_kind
+            response.model_dump(), file_name=file_name, source_kind=source_kind, batch_id=batch_id
         )
     except Exception:  # a store failure must not cost the result
         log.exception("could not save a prediction to history")
@@ -964,6 +1008,7 @@ def _register_history_routes(application: FastAPI) -> None:
         low_confidence: bool | None = None,
         date_from: Annotated[str | None, QueryParam(description="YYYY-MM-DD or ISO")] = None,
         date_to: Annotated[str | None, QueryParam(description="YYYY-MM-DD (inclusive)")] = None,
+        batch_id: Annotated[str | None, QueryParam(description="T131.3: one batch")] = None,
         sort: str = "created_at",
         order: str = "desc",
         page: Annotated[int, QueryParam(ge=1)] = 1,
@@ -979,11 +1024,40 @@ def _register_history_routes(application: FastAPI) -> None:
                 low_confidence=low_confidence,
                 date_from=date_from,
                 date_to=date_to,
+                batch_id=batch_id,
                 sort=sort,
                 order=order,
                 page=page,
                 page_size=page_size,
             ),
+        )
+
+    @application.post("/api/history/export", tags=["history"])
+    def history_export(body: BatchExport) -> Response:
+        """T131.6: a batch table as CSV, every value formatted here.
+
+        Runs no model. A `scored` row's values are read back from its History
+        entry, so the file holds what was saved, not what a browser sent; the
+        other rows carry the server's own refusal message. Rows keep the order
+        the page sends, which is the order its table shows.
+        """
+        if any(row.status not in BATCH_STATUSES for row in body.rows):
+            raise HTTPException(
+                status_code=400, detail="row status must be one of " + ", ".join(BATCH_STATUSES)
+            )
+        text = _history_call(
+            application,
+            lambda store: store.export_batch_csv(
+                batch_id=body.batch_id,
+                task=body.task,
+                rows=[row.model_dump() for row in body.rows],
+            ),
+        )
+        name = "pv-mepcg-batch-" + body.task + "-" + body.batch_id[:8] + ".csv"
+        return Response(
+            content=text.encode("utf-8"),
+            media_type="text/csv; charset=utf-8",
+            headers={"Content-Disposition": 'attachment; filename="' + name + '"'},
         )
 
     @application.delete("/api/history", tags=["history"])

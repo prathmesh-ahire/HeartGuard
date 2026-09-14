@@ -6,7 +6,8 @@ show it again. This module is the only code that reads or writes that record.
 ## What is stored, and what is not
 
 One row per result: id, created_at, the file's display name, the task, the
-predicted class, confidence, per-class probabilities, notes and tags (T129.2).
+predicted class, confidence, per-class probabilities, notes and tags (T129.2),
+and the batch it was scored in, if any (`batch_id`, T131.3).
 **The audio is never stored** -- `/predict` still deletes every upload -- and a
 file name is reduced to its last path component, so no client-side folder
 structure is kept either.
@@ -49,9 +50,12 @@ murmur are never added into one "positive" count.
 
 from __future__ import annotations
 
+import csv
+import io
 import json
 import math
 import os
+import re
 import threading
 import time
 import uuid
@@ -70,7 +74,9 @@ from src.reporting.tables import NA_TEXT, format_value
 from src.utils.logging_setup import get_logger
 
 __all__ = [
+    "BATCH_STATUSES",
     "CONFIDENCE_BINS",
+    "MAX_BATCH_ROWS",
     "MAX_NOTES_CHARS",
     "MAX_PAGE_SIZE",
     "MAX_TAGS",
@@ -80,6 +86,7 @@ __all__ = [
     "AtomicJSONStorage",
     "HistoryStore",
     "HistoryValidationError",
+    "clean_batch_id",
     "default_history_path",
 ]
 
@@ -100,6 +107,16 @@ SOURCE_KINDS = ("upload", "sample", "manual")
 #: Ten equal-width confidence bins over [0, 1].
 CONFIDENCE_BINS = 10
 MAX_TREND_DAYS = 366
+#: T131.3: a batch is named by 32 lowercase hex characters (a uuid4 without
+#: dashes), minted by the page when a batch starts.
+_BATCH_ID = re.compile(r"^[0-9a-f]{32}$")
+#: T131.6: what one row of an exported batch table can be. Only `scored` rows
+#: are in History; the other three never produced a result to save.
+BATCH_STATUSES = ("scored", "not_scored", "failed", "cancelled")
+#: More rows than any batch the page allows, and a bound on one request body.
+MAX_BATCH_ROWS = 500
+#: A cell opening with one of these is a formula to a spreadsheet (CSV injection).
+_FORMULA_LEADS = ("=", "+", "-", "@", "\t", "\r")
 #: UTC-14 .. UTC+14, the real range of civil time zones.
 MAX_TZ_OFFSET_MINUTES = 14 * 60
 
@@ -296,6 +313,20 @@ def _clean_task(value: Any) -> str:
     return str(value)
 
 
+def clean_batch_id(value: Any) -> str | None:
+    """T131.3: None or blank for no batch, else 32 lowercase hex characters."""
+    if value is None or (isinstance(value, str) and not value.strip()):
+        return None
+    if not isinstance(value, str) or not _BATCH_ID.match(value.strip()):
+        raise HistoryValidationError("batch_id must be 32 lowercase hexadecimal characters")
+    return value.strip()
+
+
+def _csv_text(value: str) -> str:
+    """Free text a spreadsheet would run as a formula is written as text."""
+    return "'" + value if value.startswith(_FORMULA_LEADS) else value
+
+
 def _day_bound(value: str | None, *, end: bool) -> str | None:
     """`YYYY-MM-DD` (whole UTC day, inclusive) or a full ISO time, as a stored-form string."""
     if value is None or not str(value).strip():
@@ -384,9 +415,11 @@ class HistoryStore:
         source_kind: str = "manual",
         notes: str | None = None,
         tags: Iterable[str] | None = None,
+        batch_id: str | None = None,
     ) -> dict[str, Any]:
         """Validate and insert one row. Returns the presented row."""
         clean_task = _clean_task(task)
+        clean_batch = clean_batch_id(batch_id)
         classes = TASKS[clean_task].classes
         if result is not None and result not in classes:
             raise HistoryValidationError(
@@ -426,13 +459,19 @@ class HistoryStore:
             "probabilities": clean_probabilities,
             "notes": _clean_notes(notes),
             "tags": _clean_tags(tags),
+            "batch_id": clean_batch,
         }
         with self._lock:
             self._table().insert(row)
         return self.present(row)
 
     def record_prediction(
-        self, payload: Mapping[str, Any], *, file_name: str, source_kind: str
+        self,
+        payload: Mapping[str, Any],
+        *,
+        file_name: str,
+        source_kind: str,
+        batch_id: str | None = None,
     ) -> dict[str, Any] | None:
         """T129.5: save one `/predict` response. A recording that was not scored is not saved.
 
@@ -451,6 +490,7 @@ class HistoryStore:
             low_confidence=bool(payload.get("low_confidence", False)),
             scorable=True,
             source_kind=source_kind,
+            batch_id=batch_id,
         )
 
     def update(
@@ -511,6 +551,7 @@ class HistoryStore:
         low_confidence: bool | None = None,
         date_from: str | None = None,
         date_to: str | None = None,
+        batch_id: str | None = None,
         sort: str = "created_at",
         order: str = "desc",
         page: int = 1,
@@ -539,6 +580,9 @@ class HistoryStore:
             )
         if low_confidence is not None:
             conditions.append(record.low_confidence == bool(low_confidence))
+        wanted_batch = clean_batch_id(batch_id)
+        if wanted_batch is not None:
+            conditions.append(record.batch_id == wanted_batch)
         lower = _day_bound(date_from, end=False)
         upper = _day_bound(date_to, end=True)
         if lower is not None:
@@ -582,6 +626,117 @@ class HistoryStore:
             },
             "notice": self.notice,
         }
+
+    # -- T131.6 -- batch export ---------------------------------------------
+
+    def export_batch_csv(
+        self, *, batch_id: str, task: str, rows: Iterable[Mapping[str, Any]]
+    ) -> str:
+        """One batch table as CSV text, in the order given.
+
+        A `scored` row is read back from its History entry, which must belong to
+        this batch and this task: the file then holds what was saved, formatted
+        by `format_value` exactly as `/predict` formatted it for the table. A
+        row of any other status has no History entry and carries its message.
+        One task per batch -- the five label spaces are never merged.
+        """
+        clean_batch = clean_batch_id(batch_id)
+        if clean_batch is None:
+            raise HistoryValidationError("batch_id is required")
+        clean_task = _clean_task(task)
+        classes = TASKS[clean_task].classes
+        items = list(rows)
+        if not items:
+            raise HistoryValidationError("there are no rows to export")
+        if len(items) > MAX_BATCH_ROWS:
+            raise HistoryValidationError(
+                "a batch export is limited to " + str(MAX_BATCH_ROWS) + " rows"
+            )
+        stored = {str(row.get("id")): _upgrade(dict(row)) for row in self._rows()}
+
+        buffer = io.StringIO()
+        writer = csv.writer(buffer, lineterminator="\r\n")
+        writer.writerow(
+            [
+                "file_name",
+                "status",
+                "task",
+                "result",
+                "confidence",
+                "low_confidence",
+                *["probability_" + name for name in classes],
+                "message",
+                "history_id",
+                "created_at",
+                "batch_id",
+            ]
+        )
+        for number, item in enumerate(items, start=1):
+            if not isinstance(item, Mapping):
+                raise HistoryValidationError("row " + str(number) + " is not an object")
+            status = item.get("status")
+            if status not in BATCH_STATUSES:
+                raise HistoryValidationError(
+                    "row " + str(number) + ": status must be one of " + ", ".join(BATCH_STATUSES)
+                )
+            file_name = _clean_file_name(item.get("file_name"))
+            if status == "scored":
+                record_id = str(item.get("history_id") or "")
+                record = stored.get(record_id)
+                if record is None or record.get("batch_id") != clean_batch:
+                    raise HistoryValidationError(
+                        "row "
+                        + str(number)
+                        + " ("
+                        + file_name
+                        + ") names no History entry of this batch; it may have been deleted"
+                    )
+                if record["task"] != clean_task:
+                    raise HistoryValidationError(
+                        "row " + str(number) + " belongs to another task; a batch is one task"
+                    )
+                probabilities = record.get("probabilities") or {}
+                writer.writerow(
+                    [
+                        _csv_text(record["file_name"]),
+                        status,
+                        clean_task,
+                        record.get("result") or "",
+                        format_value(record.get("confidence"), "metric"),
+                        "true" if record.get("low_confidence") else "false",
+                        *[format_value(probabilities.get(name), "metric") for name in classes],
+                        "",
+                        record["id"],
+                        record["created_at"],
+                        clean_batch,
+                    ]
+                )
+                continue
+            message = " ".join(str(item.get("message") or "").split())
+            if status in ("failed", "not_scored") and not message:
+                raise HistoryValidationError(
+                    "row "
+                    + str(number)
+                    + " ("
+                    + file_name
+                    + ") needs the message it was refused with"
+                )
+            writer.writerow(
+                [
+                    _csv_text(file_name),
+                    status,
+                    clean_task,
+                    "",
+                    "",
+                    "",
+                    *["" for _ in classes],
+                    _csv_text(message),
+                    "",
+                    "",
+                    clean_batch,
+                ]
+            )
+        return buffer.getvalue()
 
     # -- T129.6 -- Insights --------------------------------------------------
 
@@ -740,6 +895,7 @@ def _upgrade(row: dict[str, Any]) -> dict[str, Any]:
     row.setdefault("probabilities", {})
     row.setdefault("notes", "")
     row.setdefault("tags", [])
+    row.setdefault("batch_id", None)
     return row
 
 

@@ -682,8 +682,15 @@ def test_the_multiclass_page_offers_two_separate_label_spaces() -> None:
     assert "merges neither" in body
 
 
-def test_the_batch_panel_exports_csv_from_display_strings() -> None:
+def test_the_batch_panel_shows_display_strings_and_the_server_writes_the_csv() -> None:
+    """T116.5, re-pinned by T131.6: the CSV moved from the browser to the API.
+
+    The page used to join display strings into a CSV itself; T131.6 requires the
+    file to be formatted server-side, so the assertion that the browser builds a
+    `text/csv` blob is replaced by one that it asks the API for the file.
+    """
     body = (COMPONENTS / "BatchPanel.tsx").read_text(encoding="utf-8")
     assert "display.confidence" in body
-    assert "text/csv" in body
+    assert "exportBatchCsv(" in body
+    assert "text/csv" not in body
     assert "toFixed" not in body
