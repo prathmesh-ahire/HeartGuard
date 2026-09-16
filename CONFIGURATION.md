@@ -828,6 +828,8 @@ Every path in the project, resolved against the repository root.
 | `cache` |  | section | --- derived data (regenerable; gitignored) --------------------------------- |
 | `cache.root` | `cache` | str |  |
 | `cache.history_db` | `cache/history/history.json` | str | The History database (Phase 129). Gitignored with the rest of cache/, but NOT regenerable: it is the operator's own saved results. Clearing cache/ deletes it. Tests redirect it through HEARTGUARD__PATHS__CACHE__HISTORY_DB. |
+| `cache.reports_db` | `cache/reports/reports.json` | str | The Reports store (Phase 134): metadata index for T134.4's re-download list. Same gitignore/not-regenerable treatment as history_db above; the PDF/CSV files themselves live under reports_dir, named by report id. |
+| `cache.reports_dir` | `cache/reports/files` | str |  |
 | `cache.preprocessed` | `cache/preprocessed` | str |  |
 | `cache.features` | `cache/features` | str |  |
 | `cache.metadata` | `cache/metadata` | str |  |

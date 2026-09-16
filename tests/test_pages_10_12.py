@@ -278,14 +278,32 @@ def test_the_limitations_page_states_all_three_caveats_t117_5_names() -> None:
 # ---------------------------------------------------------------------------
 
 
-def test_the_reports_page_offers_all_three_reports() -> None:
+def test_the_reports_page_offers_the_product_reports() -> None:
+    """T134 replaced the three thesis-era DOCX pickers with the product reports.
+
+    The retired page named experiment ids and objective codes on screen, which is
+    the internal detail T127.1 removed everywhere else; its assertions are not
+    dropped but inverted, so the pickers cannot come back unnoticed.
+    """
     text = _text("/reports/")
-    assert "Generate recording report" in text
-    assert "Generate experiment report" in text
-    assert "Download objective-coverage report" in text
-    # T29 is rendered on the page it is downloadable from.
-    for value in _table("T29")["columns"][0]["display"]:
-        assert value in text
+    for panel in (
+        "Per-recording report",
+        "Bulk export",
+        "Model summary",
+        "Recently generated reports",
+    ):
+        assert panel in text, panel
+
+    for retired in (
+        "Generate experiment report",
+        "Download objective-coverage report",
+        "objective-coverage",
+    ):
+        assert retired not in text, retired
+
+    # No task id, experiment id or other internal marking reaches the page.
+    assert "T134." not in text
+    assert "EXP-" not in text
 
 
 def test_the_evidence_index_is_complete_and_current() -> None:

@@ -259,6 +259,14 @@ def _legacy_redirects() -> dict[str, str]:
     return dict(re.findall(r"'(/[^']*)':\s*'(/[^']*)'", block))
 
 
+def _utility_routes() -> list[str]:
+    """Pages outside the navigation that are still in the build (T134.3)."""
+    import re
+
+    source = (FRONTEND / "lib" / "routes.ts").read_text(encoding="utf-8")
+    return re.findall(r"export const PRINT_ROUTE = '([^']+)'", source)
+
+
 def _page_routes() -> list[str]:
     routes = []
     for page in APP.rglob("page.tsx"):
@@ -277,7 +285,12 @@ def test_the_navigation_is_exactly_the_five_product_pages(scaffolded: None) -> N
 def test_every_declared_route_has_a_page_and_every_page_is_declared(
     scaffolded: None,
 ) -> None:
-    declared = set(_declared_routes()) | set(_about_tabs()) | set(_legacy_redirects())
+    declared = (
+        set(_declared_routes())
+        | set(_about_tabs())
+        | set(_legacy_redirects())
+        | set(_utility_routes())
+    )
     built = set(_page_routes())
     assert declared - built == set(), "declared but not built: " + str(sorted(declared - built))
     assert built - declared == set(), "built but not declared: " + str(sorted(built - declared))

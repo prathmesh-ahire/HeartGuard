@@ -64,9 +64,9 @@ Listed in the order a recording travels through them.
 | [`src/optimization/`](src/optimization/) | Hyperparameter and ensemble-weight search. | 10 |
 | [`src/evaluation/`](src/evaluation/) | Cross-validation schemes, metrics and result aggregation. | 19 |
 | [`src/explainability/`](src/explainability/) | Feature-importance and model-explanation utilities. | 2 |
-| [`src/reporting/`](src/reporting/) | Table, figure and document generation for the deliverables. | 49 |
+| [`src/reporting/`](src/reporting/) | Table, figure and document generation for the deliverables. | 50 |
 | [`src/inference/`](src/inference/) | Single-recording prediction path used by the API. | 1 |
-| [`src/api/`](src/api/) | FastAPI application exposing live inference. | 2 |
+| [`src/api/`](src/api/) | FastAPI application exposing live inference. | 3 |
 | [`src/pipeline/`](src/pipeline/) | Whole-pipeline orchestration (Phase 122). | 1 |
 
 ### `src/utils/` -- Config, seeding, logging, IO, manifest and evidence-index helpers.
@@ -240,6 +240,7 @@ Listed in the order a recording travels through them.
 | [`omml.py`](src/reporting/omml.py) | LaTeX to Office Math (OMML), for the subset the equations reference uses (T100.4). |
 | [`pages_10_12.py`](src/reporting/pages_10_12.py) | Payloads for dashboard pages 10-12 and the limitations page (Phase 117). |
 | [`pascal_statements.py`](src/reporting/pascal_statements.py) | The written caveats that must travel with T11 and T12 (T66.6, T67.5, T67.6). |
+| [`pdf_report.py`](src/reporting/pdf_report.py) | Product Reports page: per-recording and model-summary PDFs (Phase 134). |
 | [`plot_style.py`](src/reporting/plot_style.py) | The one plotting style for every figure in this project (T28.6). |
 | [`project_docs.py`](src/reporting/project_docs.py) | Generated project documentation: the module map and the configuration reference. |
 | [`q1_pack.py`](src/reporting/q1_pack.py) | The Q1 / IEEE paper asset pack (Phase 103). |
@@ -271,6 +272,7 @@ Listed in the order a recording travels through them.
 |---|---|
 | [`history_store.py`](src/api/history_store.py) | The History store (Phase 129). |
 | [`main.py`](src/api/main.py) | The inference service (Phase 108). |
+| [`report_store.py`](src/api/report_store.py) | The Reports store (Phase 134, T134.4): recently generated reports, for |
 
 ### `src/pipeline/` -- Whole-pipeline orchestration (Phase 122).
 

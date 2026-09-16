@@ -6,6 +6,7 @@ import { cn } from '@/lib/cn';
 import { SHOW_SCREENING_NOTICE } from '@/lib/flags';
 import { SURFACE, TYPE_SCALE, LAYOUT } from '@/lib/tokens';
 import { formatWhen } from '@/lib/history';
+import { PRINT_ROUTE } from '@/lib/routes';
 import { prediction } from '@/lib/generated/prediction';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { GlassCard } from '@/components/ui/GlassCard';
@@ -65,7 +66,7 @@ function RecentRecordings({ onGenerated }: { onGenerated: () => void }) {
   );
 
   return (
-    <GlassCard as="section" ariaLabel="Per-recording report" eyebrow="T134.1 / T134.3" title="Per-recording report">
+    <GlassCard as="section" ariaLabel="Per-recording report" eyebrow="One analysis" title="Per-recording report">
       <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mb-3')}>
         A PDF of one analysis: result, probabilities, notes, date, and the waveform when the
         recording is still available (built-in samples only -- History never keeps audio). The
@@ -104,7 +105,7 @@ function RecentRecordings({ onGenerated }: { onGenerated: () => void }) {
                 ) : null}
               </div>
               <div className="flex shrink-0 gap-2">
-                <ButtonLink href={'/reports/print/?record=' + record.id} size="sm" icon="reports">
+                <ButtonLink href={PRINT_ROUTE + '?record=' + record.id} size="sm" icon="reports">
                   Print view
                 </ButtonLink>
                 <Button
@@ -150,7 +151,7 @@ function BulkExport({ onGenerated }: { onGenerated: () => void }) {
   };
 
   return (
-    <GlassCard as="section" ariaLabel="Bulk export" eyebrow="T134.2" title="Bulk export">
+    <GlassCard as="section" ariaLabel="Bulk export" eyebrow="Many analyses" title="Bulk export">
       <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mb-3')}>
         Every History row matching these filters, as one CSV -- the same values History shows, with
         no filter applied at all if left blank.
@@ -208,7 +209,7 @@ function ModelSummary({ onGenerated }: { onGenerated: () => void }) {
   };
 
   return (
-    <GlassCard as="section" ariaLabel="Model summary" eyebrow="T134.5" title="Model summary">
+    <GlassCard as="section" ariaLabel="Model summary" eyebrow="Overall performance" title="Model summary">
       {SHOW_SCREENING_NOTICE ? (
         <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mb-3')}>{prediction.disclaimer}</p>
       ) : null}
@@ -248,7 +249,7 @@ function RecentReports({ refreshKey }: { refreshKey: number }) {
   };
 
   return (
-    <GlassCard as="section" ariaLabel="Recently generated reports" eyebrow="T134.4" title="Recently generated reports">
+    <GlassCard as="section" ariaLabel="Recently generated reports" eyebrow="Recent downloads" title="Recently generated reports">
       {failed !== null ? (
         <ErrorState title="The report list could not be loaded" detail={failed} />
       ) : rows === null ? (

@@ -109,6 +109,14 @@ export const LEGACY_REDIRECTS: Readonly<Record<string, string>> = {
  */
 export const DESIGN_ROUTE = '/design/';
 
+/**
+ * The print view (T134.3). Unlike the design reference this IS in the
+ * production build: the Reports page links to it per record, and it renders
+ * that one record for the browser's own Print dialog. Deliberately outside
+ * the navigation -- it is an action's destination, not a place to browse to.
+ */
+export const PRINT_ROUTE = '/reports/print/';
+
 export function routeFor(href: string): RouteDefinition | undefined {
   return ROUTES.find((route) => route.href === href) ?? ABOUT_TABS.find((tab) => tab.href === href);
 }
