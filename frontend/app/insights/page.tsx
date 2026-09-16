@@ -1,14 +1,26 @@
 import type { Metadata } from 'next';
 
-import { PagePlaceholder } from '@/components/PagePlaceholder';
+import { InsightsBoard } from '@/components/insights/InsightsBoard';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { routeFor } from '@/lib/routes';
+
+const route = routeFor('/insights/');
 
 export const metadata: Metadata = {
   title: 'Insights',
-  description: routeFor('/insights/')?.summary,
+  description: route?.summary,
 };
 
-/** Insights (T127.3). Built in Phase 133. */
+/**
+ * Insights (T133). Aggregate counts of the operator's own History, read from
+ * the API at runtime: it is the operator's own record, not a precomputed
+ * result, so it cannot come from `generated/`. The page declares no number.
+ */
 export default function Page() {
-  return <PagePlaceholder title="Insights" href="/insights/" />;
+  return (
+    <div className="space-y-8">
+      <PageHeader title="Insights" lede={route?.summary ?? ''} />
+      <InsightsBoard />
+    </div>
+  );
 }

@@ -398,6 +398,101 @@ export function deleteAllHistory(): Promise<{ deleted: number; deleted_display: 
   return call('/api/history?confirm=true', { method: 'DELETE' });
 }
 
+// ---------------------------------------------------------------------------
+// T129.6 / T133 — Insights aggregate
+// ---------------------------------------------------------------------------
+
+export interface InsightCountEntry {
+  count: number;
+  count_display: string;
+  percent: number | null;
+  percent_display: string;
+}
+
+export interface InsightTaskEntry {
+  task: string;
+  title: string;
+  count: number;
+  count_display: string;
+  percent: number | null;
+  percent_display: string;
+}
+
+export interface InsightClassEntry {
+  class: string;
+  count: number;
+  count_display: string;
+  percent: number | null;
+  percent_display: string;
+}
+
+export interface InsightResultSplit {
+  task: string;
+  title: string;
+  total: number;
+  total_display: string;
+  classes: InsightClassEntry[];
+}
+
+export interface InsightTrendPoint {
+  date: string;
+  count: number;
+  count_display: string;
+}
+
+export interface InsightConfidenceBin {
+  lower: number;
+  upper: number;
+  label: string;
+  count: number;
+  count_display: string;
+  percent: number | null;
+  percent_display: string;
+}
+
+export interface InsightsData {
+  task: string | null;
+  total: number;
+  total_display: string;
+  low_confidence: InsightCountEntry;
+  by_task: InsightTaskEntry[];
+  result_split: InsightResultSplit[];
+  trend: {
+    days: number;
+    tz_offset_minutes: number;
+    first_date: string;
+    last_date: string;
+    in_window: number;
+    in_window_display: string;
+    points: InsightTrendPoint[];
+  };
+  confidence_distribution: {
+    n: number;
+    n_display: string;
+    bins: InsightConfidenceBin[];
+  };
+  notice: string | null;
+}
+
+/**
+ * T129.6: aggregate counts from the operator's History. All display strings
+ * come from the API (formatted in Python). The browser renders them.
+ *
+ * `tzOffsetMinutes` is the browser's UTC offset (positive east) so the server
+ * bins daily counts into the viewer's own calendar days, not UTC days.
+ */
+export function getInsights(
+  params: { task?: string; days?: number; tzOffsetMinutes?: number } = {},
+): Promise<InsightsData> {
+  const q = new URLSearchParams();
+  if (params.task) q.set('task', params.task);
+  if (params.days !== undefined) q.set('days', String(params.days));
+  if (params.tzOffsetMinutes !== undefined)
+    q.set('tz_offset_minutes', String(params.tzOffsetMinutes));
+  const qs = q.toString();
+  return call('/api/history/insights' + (qs ? '?' + qs : ''));
+}
+
 export function predictSample(sampleId: string, task: string): Promise<PredictResult> {
   const body = new FormData();
   body.append('sample_id', sampleId);
