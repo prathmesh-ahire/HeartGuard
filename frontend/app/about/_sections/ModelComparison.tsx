@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 
 import { CurveChart } from '@/components/charts/CurveChart';
+import { Disclosure } from '@/components/ui/Disclosure';
 import { EmptyState } from '@/components/ui/States';
 import { experiments as generated } from '@/lib/generated/experiments';
 
@@ -188,8 +189,12 @@ export function ModelComparison() {
       </p>
 
       {/* ---------------------------------------------------------------- */}
+      <Disclosure
+        className="mt-8"
+        summary={<>Per-class breakdown, ROC / precision-recall curves and confusion matrix for {selectedModel}</>}
+      >
       {(experiment.models?.[0]?.per_class ?? []).length > 0 ? (
-        <section className="mt-8">
+        <section>
           <h3 className="label-micro">
             Per class, for {selectedModel}
           </h3>
@@ -348,6 +353,7 @@ export function ModelComparison() {
           />
         )}
       </section>
+      </Disclosure>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { DatasetExplorer } from '@/app/about/_sections/DatasetExplorer';
 import { GroupedBars } from '@/components/charts/Charts';
 import { FigureDownload } from '@/components/charts/FigureDownload';
 import { ResultsTable } from '@/components/table/ResultsTable';
+import { Disclosure } from '@/components/ui/Disclosure';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionHeader } from '@/components/ui/SectionHeader';
@@ -112,38 +113,43 @@ export function DatasetSection() {
       </section>
 
       <section>
-        <SectionHeader
-          eyebrow="T03"
-          title="Recording duration and sampling"
-          description="Duration statistics over the supervised subset. Corpus-wide hours are in T01 and are a different population; the two are deliberately not shown on the same row."
-          level={2}
-        />
-        <GlassCard className="mt-4" bodyClassName="p-3">
-          <ResultsTable table={table('T03')} />
-        </GlassCard>
-        <GlassCard className="mt-3" eyebrow="G04" title="Recording duration histogram">
-          <GroupedBars
-            source={G04}
-            categoryColumn="bin_low_sec"
-            valueColumns={['n_records']}
-            label="Recording duration histogram"
-            caption="G04 — duration histogram over supervised records. The bin totals here and the bars in G01 count different populations and do not sum to the same number."
-            height={320}
-          />
-          <FigureDownload figureId="G04" className="mt-2" />
-        </GlassCard>
+        <SectionHeader eyebrow="T03" title="Recording duration and sampling" level={2} />
+        <Disclosure
+          className="mt-4"
+          summary="Duration statistics over the modelled subset, and the duration histogram"
+        >
+          <p className="mb-3 text-body-sm text-ink-2">
+            Corpus-wide hours are in T01 above and are a different population; the two are
+            deliberately not shown on the same row.
+          </p>
+          <GlassCard bodyClassName="p-3">
+            <ResultsTable table={table('T03')} />
+          </GlassCard>
+          <GlassCard className="mt-3" eyebrow="G04" title="Recording duration histogram">
+            <GroupedBars
+              source={G04}
+              categoryColumn="bin_low_sec"
+              valueColumns={['n_records']}
+              label="Recording duration histogram"
+              caption="G04 — duration histogram over supervised records. The bin totals here and the bars in G01 count different populations and do not sum to the same number."
+              height={320}
+            />
+            <FigureDownload figureId="G04" className="mt-2" />
+          </GlassCard>
+        </Disclosure>
       </section>
 
       <section>
-        <SectionHeader
-          eyebrow="Records"
-          title="Every audited recording"
-          description="Filter by corpus, subset, label or flag, and search by record or subject identifier. The whole audited corpus is loaded — nothing is sampled or truncated."
-          level={2}
-        />
-        <div className="mt-4">
+        <SectionHeader eyebrow="Records" title="Every audited recording" level={2} />
+        <Disclosure
+          className="mt-4"
+          summary="Browse and search all audited recordings — filter by corpus, subset, label or flag"
+        >
+          <p className="mb-3 text-body-sm text-ink-2">
+            The whole audited corpus is loaded here — nothing is sampled or truncated.
+          </p>
           <DatasetExplorer />
-        </div>
+        </Disclosure>
       </section>
     </div>
   );

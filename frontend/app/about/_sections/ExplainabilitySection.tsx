@@ -2,6 +2,7 @@ import { ImportanceView } from '@/app/about/_sections/ImportanceView';
 import { LastPrediction } from '@/app/about/_sections/LastPrediction';
 import { FigurePanel } from '@/components/charts/FigurePanel';
 import { EmptyState } from '@/components/ui/States';
+import { Disclosure } from '@/components/ui/Disclosure';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionHeader } from '@/components/ui/SectionHeader';
@@ -64,6 +65,7 @@ export function ExplainabilitySection() {
               description="Each family's share of the positive importance mass, averaged over folds, beside how many folds the family's net importance was negative."
               level={2}
             />
+            <Disclosure className="mt-4" summary="Per-model, per-family breakdown">
             {payload.families.map((group) => (
               <GlassCard
                 key={group.task + group.model_id + group.kind}
@@ -120,6 +122,7 @@ export function ExplainabilitySection() {
                 </ul>
               </GlassCard>
             ) : null}
+            </Disclosure>
           </section>
 
           <section>
@@ -135,18 +138,21 @@ export function ExplainabilitySection() {
           </section>
 
           {example.available && example.rows ? (
-            <section>
-              <SectionHeader
-                eyebrow="Per sample · stored"
-                title={'A worked example: ' + (example.record_uid ?? '')}
-                description={
-                  'Selected as the ' +
-                  (example.selection_rule ?? '') +
-                  '. Computed offline by the same decomposition, so it can be read without a running service.'
-                }
-                level={2}
-              />
-              <dl className="mt-4 grid gap-x-6 gap-y-1 text-xs sm:grid-cols-3">
+            <Disclosure
+              summary={
+                <>
+                  Worked example: {example.record_uid ?? ''}
+                  <span className="ml-2 font-normal text-ink-3">
+                    every term behind one stored decision
+                  </span>
+                </>
+              }
+            >
+              <p className="mb-4 text-body-sm text-ink-2">
+                Selected as the {example.selection_rule ?? ''}. Computed offline by the same
+                decomposition, so it can be read without a running service.
+              </p>
+              <dl className="grid gap-x-6 gap-y-1 text-xs sm:grid-cols-3">
                 <div className="flex gap-2">
                   <dt className="text-ink-3">Model</dt>
                   <dd>
@@ -211,7 +217,7 @@ export function ExplainabilitySection() {
                   <li key={caveat}>{caveat}</li>
                 ))}
               </ul>
-            </section>
+            </Disclosure>
           ) : null}
         </>
       )}

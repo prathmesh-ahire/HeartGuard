@@ -1,10 +1,10 @@
 {
   "framework": "PV-MEPCG / PulseVision",
-  "run_id": "20260916T163904Z-ded30e85",
-  "git_commit": "ac9bdc020b8b59cd0d1fadc6ed7264f0917ae29c",
+  "run_id": "20260916T192210Z-c766f867",
+  "git_commit": "ef15e9fb47daf5b409b567cd53efbc5dc1908cb0",
   "git_branch": "main",
   "git_dirty": true,
-  "exported_utc": "2026-09-16T16:39:08.764255+00:00",
+  "exported_utc": "2026-09-16T19:22:36.291359+00:00",
   "exporter": "python scripts/17_export_frontend_data.py --include-results",
   "source_dirs": [
     "dataset_audit",

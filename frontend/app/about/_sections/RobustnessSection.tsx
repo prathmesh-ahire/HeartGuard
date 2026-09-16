@@ -2,9 +2,9 @@ import Link from 'next/link';
 
 import { FigurePanel } from '@/components/charts/FigurePanel';
 import { FacetTable } from '@/components/table/FacetTable';
+import { Disclosure } from '@/components/ui/Disclosure';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { SectionHeader } from '@/components/ui/SectionHeader';
 import { table } from '@/lib/generated/tables';
 
 /**
@@ -137,17 +137,24 @@ export function RobustnessSection() {
         ))}
       </nav>
 
-      {BLOCKS.map((block) => {
+      {BLOCKS.map((block, index) => {
         const source = table(block.tableId);
         return (
-          <section key={block.id} id={block.id} className="scroll-mt-24">
-            <SectionHeader
-              eyebrow={block.eyebrow}
-              title={source ? source.title : block.title}
-              description={block.body}
-              level={2}
-            />
-            <GlassCard className="mt-4" bodyClassName="p-3">
+          <Disclosure
+            key={block.id}
+            id={block.id}
+            defaultOpen={index === 0}
+            summary={
+              <span>
+                <span className="mr-2 font-mono text-label-sm uppercase text-ink-3">
+                  {block.eyebrow}
+                </span>
+                {source ? source.title : block.title}
+              </span>
+            }
+          >
+            <p className="mb-4 text-body-sm text-ink-2">{block.body}</p>
+            <GlassCard bodyClassName="p-3">
               <FacetTable table={source} facets={block.facets} />
             </GlassCard>
             {block.figureId ? (
@@ -155,7 +162,7 @@ export function RobustnessSection() {
                 <FigurePanel className="max-w-4xl" figureId={block.figureId} />
               </GlassCard>
             ) : null}
-          </section>
+          </Disclosure>
         );
       })}
     </div>

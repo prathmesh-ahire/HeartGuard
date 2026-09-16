@@ -1,5 +1,6 @@
 import { ConvergencePanel, FrameTable } from '@/app/about/_sections/SearchViews';
 import { ResultsTable } from '@/components/table/ResultsTable';
+import { Disclosure } from '@/components/ui/Disclosure';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionHeader } from '@/components/ui/SectionHeader';
@@ -49,54 +50,82 @@ export function OptimizationSection() {
       </section>
 
       <section>
-        <SectionHeader
-          eyebrow="SO-04"
-          title="How performance moves with subset size"
-          description="Each row is one subset size under one ranker, scored across the outer folds. Dropping features is a trade, and this is the shape of it."
-          level={2}
-        />
-        <GlassCard className="mt-4" bodyClassName="p-3">
-          <FrameTable frame={optimization.feature_count_curve} />
-        </GlassCard>
-      </section>
+        <SectionHeader eyebrow="Detail" title="Feature count, ensemble weights and search method" level={2} />
+        <div className="mt-4 space-y-3">
+          <Disclosure
+            summary={
+              <>
+                <span className="mr-2 font-mono text-label-sm uppercase text-ink-3">SO-04</span>
+                How performance moves with subset size
+              </>
+            }
+          >
+            <p className="mb-3 text-body-sm text-ink-2">
+              Each row is one subset size under one ranker, scored across the outer folds.
+              Dropping features is a trade, and this is the shape of it.
+            </p>
+            <GlassCard bodyClassName="p-3">
+              <FrameTable frame={optimization.feature_count_curve} />
+            </GlassCard>
+          </Disclosure>
 
-      <section>
-        <SectionHeader
-          eyebrow="SO-05"
-          title="Ensemble weights, and whether the search moved them"
-          description="Weight stability across folds, and the searched weighting compared against equal weighting on the same folds."
-          level={2}
-        />
-        <GlassCard className="mt-4" eyebrow="Weight stability" bodyClassName="p-3">
-          <FrameTable frame={optimization.weight_stability} />
-        </GlassCard>
-        <GlassCard className="mt-3" eyebrow="Searched against equal weighting" bodyClassName="p-3">
-          <FrameTable frame={optimization.equal_vs_optimized} maxRows={25} />
-        </GlassCard>
-      </section>
+          <Disclosure
+            summary={
+              <>
+                <span className="mr-2 font-mono text-label-sm uppercase text-ink-3">SO-05</span>
+                Ensemble weights, and whether the search moved them
+              </>
+            }
+          >
+            <p className="mb-3 text-body-sm text-ink-2">
+              Weight stability across folds, and the searched weighting compared against equal
+              weighting on the same folds.
+            </p>
+            <GlassCard eyebrow="Weight stability" bodyClassName="p-3">
+              <FrameTable frame={optimization.weight_stability} />
+            </GlassCard>
+            <GlassCard className="mt-3" eyebrow="Searched against equal weighting" bodyClassName="p-3">
+              <FrameTable frame={optimization.equal_vs_optimized} maxRows={25} />
+            </GlassCard>
+          </Disclosure>
 
-      <section>
-        <SectionHeader
-          eyebrow="SO-06"
-          title="The Pareto front"
-          description="Performance against complexity. A configuration on the front is one no other configuration beats on both axes at once; it is not automatically the one to deploy."
-          level={2}
-        />
-        <GlassCard className="mt-4" bodyClassName="p-3">
-          <FrameTable frame={optimization.pareto} />
-        </GlassCard>
-      </section>
+          <Disclosure
+            summary={
+              <>
+                <span className="mr-2 font-mono text-label-sm uppercase text-ink-3">SO-06</span>
+                The Pareto front
+              </>
+            }
+          >
+            <p className="mb-3 text-body-sm text-ink-2">
+              Performance against complexity. A configuration on the front is one no other
+              configuration beats on both axes at once; it is not automatically the one to deploy.
+            </p>
+            <GlassCard bodyClassName="p-3">
+              <FrameTable frame={optimization.pareto} />
+            </GlassCard>
+          </Disclosure>
 
-      <section>
-        <SectionHeader
-          eyebrow="SO-01 vs SO-02"
-          title="Random against Bayesian search"
-          description="The same space, the same folds, two search strategies. Both inner and outer scores are shown, because an inner-fold improvement that does not survive to the outer fold is the search fitting the inner split."
-          level={2}
-        />
-        <GlassCard className="mt-4" bodyClassName="p-3">
-          <FrameTable frame={optimization.method_comparison} />
-        </GlassCard>
+          <Disclosure
+            summary={
+              <>
+                <span className="mr-2 font-mono text-label-sm uppercase text-ink-3">
+                  SO-01 vs SO-02
+                </span>
+                Random against Bayesian search
+              </>
+            }
+          >
+            <p className="mb-3 text-body-sm text-ink-2">
+              The same space, the same folds, two search strategies. Both inner and outer scores
+              are shown, because an inner-fold improvement that does not survive to the outer
+              fold is the search fitting the inner split.
+            </p>
+            <GlassCard bodyClassName="p-3">
+              <FrameTable frame={optimization.method_comparison} />
+            </GlassCard>
+          </Disclosure>
+        </div>
       </section>
     </div>
   );

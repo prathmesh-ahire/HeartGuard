@@ -1,6 +1,7 @@
 import { SignalExplorer } from '@/app/about/_sections/SignalExplorer';
 import { FigureDownload } from '@/components/charts/FigureDownload';
 import { ResultsTable } from '@/components/table/ResultsTable';
+import { Disclosure } from '@/components/ui/Disclosure';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionHeader } from '@/components/ui/SectionHeader';
@@ -57,37 +58,50 @@ export function PreprocessingSection() {
       </section>
 
       <section>
-        <SectionHeader
-          eyebrow="G05"
-          title="Before and after filtering, at full resolution"
-          description="The interactive view above is strided to a display budget. This figure is the same comparison at full sample resolution, rendered at 300 dpi."
-          level={2}
-        />
-        <GlassCard className="mt-4" eyebrow="G05" title="Filtered against raw, full resolution">
-          <FigureDownload figureId="G05" />
-        </GlassCard>
-      </section>
+        <SectionHeader eyebrow="Detail" title="Full-resolution figures" level={2} />
+        <div className="mt-4 space-y-3">
+          <Disclosure
+            summary={
+              <>
+                <span className="mr-2 font-mono text-label-sm uppercase text-ink-3">G05</span>
+                Before and after filtering, at full resolution
+              </>
+            }
+          >
+            <p className="mb-3 text-body-sm text-ink-2">
+              The interactive view above is strided to a display budget. This figure is the same
+              comparison at full sample resolution, rendered at 300 dpi.
+            </p>
+            <GlassCard eyebrow="G05" title="Filtered against raw, full resolution">
+              <FigureDownload figureId="G05" />
+            </GlassCard>
+          </Disclosure>
 
-      <section>
-        <SectionHeader
-          eyebrow="G06"
-          title="Spectrogram, normal versus abnormal"
-          description="Two panels on one shared colour scale, so the two are directly comparable. Served as the print figure: the underlying grid is 514 frequency bins across 47 time frames."
-          level={2}
-        />
-        <div className="mt-4 grid gap-3 lg:grid-cols-2">
-          <GlassCard eyebrow="G06" title="Spectrogram, shared colour scale">
-            <FigureDownload figureId="G06" />
-          </GlassCard>
-          <GlassCard eyebrow="G09" title="Wavelet decomposition">
-            <FigureDownload figureId="G09" />
-          </GlassCard>
+          <Disclosure
+            summary={
+              <>
+                <span className="mr-2 font-mono text-label-sm uppercase text-ink-3">G06 / G09</span>
+                Spectrogram and wavelet decomposition, normal versus abnormal
+              </>
+            }
+          >
+            <p className="mb-3 text-body-sm text-ink-2">
+              Two spectrogram panels on one shared colour scale, so the two are directly
+              comparable (the underlying grid is 514 frequency bins across 47 time frames). G09 is
+              the wavelet decomposition of the same signal; its sub-bands span three orders of
+              magnitude, so each is drawn on its own y-axis — a shared axis would render the
+              detail bands as flat lines and imply they carry nothing.
+            </p>
+            <div className="grid gap-3 lg:grid-cols-2">
+              <GlassCard eyebrow="G06" title="Spectrogram, shared colour scale">
+                <FigureDownload figureId="G06" />
+              </GlassCard>
+              <GlassCard eyebrow="G09" title="Wavelet decomposition">
+                <FigureDownload figureId="G09" />
+              </GlassCard>
+            </div>
+          </Disclosure>
         </div>
-        <p className="mt-3 text-sm text-ink-2">
-          G09 is the wavelet decomposition of the same signal. Its sub-bands span three
-          orders of magnitude, so each is drawn on its own y-axis — a shared axis would
-          render the detail bands as flat lines and imply they carry nothing.
-        </p>
       </section>
     </div>
   );

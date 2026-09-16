@@ -42,6 +42,7 @@ const PATHS = {
   mic: 'M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3ZM5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21',
   play: 'M8 5.5v13l10.5-6.5L8 5.5Z',
   pause: 'M9 5v14M15 5v14',
+  chevronDown: 'm6 9 6 6 6-6',
 } as const;
 
 export type IconName = keyof typeof PATHS;

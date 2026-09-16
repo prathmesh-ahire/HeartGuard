@@ -3,6 +3,7 @@ import { GroupedBars } from '@/components/charts/Charts';
 import { FigureDownload } from '@/components/charts/FigureDownload';
 import { EquationList } from '@/components/equations/Equations';
 import { ResultsTable } from '@/components/table/ResultsTable';
+import { Disclosure } from '@/components/ui/Disclosure';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionHeader } from '@/components/ui/SectionHeader';
@@ -29,7 +30,7 @@ export function FeaturesSection() {
         level={2}
         title="Feature Extraction"
         lede="Every recording becomes the same fixed vector, in the same order, whichever corpus it came from. That is what makes a PASCAL recording and a PhysioNet one comparable at all, and its column order is a locked literal rather than something the extractor happens to produce."
-        note="The column order is fixed and fingerprinted; two runs that disagree on it are not comparable. The feature list below is in that order and is never sorted by name."
+        note="The column order never changes between runs, and is checked automatically: two runs that disagree on it are not comparable. The feature list below is in that order and is never sorted by name."
       />
 
       <section>
@@ -69,15 +70,13 @@ export function FeaturesSection() {
       </section>
 
       <section>
-        <SectionHeader
-          eyebrow="Registry"
-          title="Every feature, and one record's values"
-          description="The registry in its locked order, filterable by family or name. Turn on the value column to see the full vector for a single recording."
-          level={2}
-        />
-        <div className="mt-4">
+        <SectionHeader eyebrow="Registry" title="Every feature, in its locked order" level={2} />
+        <Disclosure
+          className="mt-4"
+          summary="Full registry — filterable by family or name, with one recording's values"
+        >
           <FeatureExplorer />
-        </div>
+        </Disclosure>
       </section>
 
       <section>
@@ -139,13 +138,13 @@ export function FeaturesSection() {
       </section>
 
       <section>
-        <SectionHeader
-          eyebrow="Definitions"
-          title="The formulas behind the families"
-          description="Rendered from the source document's own formulas, each cross-checked against the code that implements it."
-          level={2}
-        />
-        <EquationList className="mt-4" />
+        <SectionHeader eyebrow="Definitions" title="The formulas behind the families" level={2} />
+        <Disclosure
+          className="mt-4"
+          summary="Every formula — cross-checked against the code that implements it"
+        >
+          <EquationList />
+        </Disclosure>
       </section>
     </div>
   );
