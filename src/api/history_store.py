@@ -77,6 +77,7 @@ __all__ = [
     "BATCH_STATUSES",
     "CONFIDENCE_BINS",
     "MAX_BATCH_ROWS",
+    "MAX_EXPORT_ROWS",
     "MAX_NOTES_CHARS",
     "MAX_PAGE_SIZE",
     "MAX_TAGS",
@@ -115,6 +116,10 @@ _BATCH_ID = re.compile(r"^[0-9a-f]{32}$")
 BATCH_STATUSES = ("scored", "not_scored", "failed", "cancelled")
 #: More rows than any batch the page allows, and a bound on one request body.
 MAX_BATCH_ROWS = 500
+#: T134.2: a bound on a filtered bulk export. Generous for one operator's own
+#: History; a filter that would exceed it is asked to narrow rather than
+#: silently truncated, the same choice `export_batch_csv` makes at 500.
+MAX_EXPORT_ROWS = 5000
 #: A cell opening with one of these is a formula to a spreadsheet (CSV injection).
 _FORMULA_LEADS = ("=", "+", "-", "@", "\t", "\r")
 #: UTC-14 .. UTC+14, the real range of civil time zones.
@@ -571,32 +576,19 @@ class HistoryStore:
             found = table.all() if condition is None else table.search(condition)
         return [_upgrade(dict(row)) for row in found]
 
-    def list_records(
+    def _filter_condition(
         self,
         *,
-        query: str | None = None,
-        task: str | None = None,
-        result: str | None = None,
-        tag: str | None = None,
-        low_confidence: bool | None = None,
-        date_from: str | None = None,
-        date_to: str | None = None,
-        batch_id: str | None = None,
-        sort: str = "created_at",
-        order: str = "desc",
-        page: int = 1,
-        page_size: int = DEFAULT_PAGE_SIZE,
-    ) -> dict[str, Any]:
-        """T129.4: search, filter, sort and page. Filters combine with AND."""
-        if sort not in SORT_FIELDS:
-            raise HistoryValidationError("sort must be one of " + ", ".join(SORT_FIELDS))
-        if order not in ("asc", "desc"):
-            raise HistoryValidationError("order must be asc or desc")
-        if page < 1:
-            raise HistoryValidationError("page starts at 1")
-        if not 1 <= page_size <= MAX_PAGE_SIZE:
-            raise HistoryValidationError("page_size must be between 1 and " + str(MAX_PAGE_SIZE))
-
+        query: str | None,
+        task: str | None,
+        result: str | None,
+        tag: str | None,
+        low_confidence: bool | None,
+        date_from: str | None,
+        date_to: str | None,
+        batch_id: str | None,
+    ) -> QueryInstance | None:
+        """The AND of every given filter (T129.4 / T134.2 share this)."""
         record = Query()
         conditions: list[QueryInstance] = []
         if task:
@@ -628,6 +620,44 @@ class HistoryStore:
         condition: QueryInstance | None = None
         for item in conditions:
             condition = item if condition is None else condition & item
+        return condition
+
+    def list_records(
+        self,
+        *,
+        query: str | None = None,
+        task: str | None = None,
+        result: str | None = None,
+        tag: str | None = None,
+        low_confidence: bool | None = None,
+        date_from: str | None = None,
+        date_to: str | None = None,
+        batch_id: str | None = None,
+        sort: str = "created_at",
+        order: str = "desc",
+        page: int = 1,
+        page_size: int = DEFAULT_PAGE_SIZE,
+    ) -> dict[str, Any]:
+        """T129.4: search, filter, sort and page. Filters combine with AND."""
+        if sort not in SORT_FIELDS:
+            raise HistoryValidationError("sort must be one of " + ", ".join(SORT_FIELDS))
+        if order not in ("asc", "desc"):
+            raise HistoryValidationError("order must be asc or desc")
+        if page < 1:
+            raise HistoryValidationError("page starts at 1")
+        if not 1 <= page_size <= MAX_PAGE_SIZE:
+            raise HistoryValidationError("page_size must be between 1 and " + str(MAX_PAGE_SIZE))
+
+        condition = self._filter_condition(
+            query=query,
+            task=task,
+            result=result,
+            tag=tag,
+            low_confidence=low_confidence,
+            date_from=date_from,
+            date_to=date_to,
+            batch_id=batch_id,
+        )
         rows = self._rows(condition)
 
         rows.sort(key=lambda row: (row["created_at"], row["id"]), reverse=order == "desc")
@@ -764,6 +794,100 @@ class HistoryStore:
                     "",
                     "",
                     clean_batch,
+                ]
+            )
+        return buffer.getvalue()
+
+    # -- T134.2 -- bulk filtered export --------------------------------------
+
+    def export_filtered_csv(
+        self,
+        *,
+        query: str | None = None,
+        task: str | None = None,
+        result: str | None = None,
+        tag: str | None = None,
+        low_confidence: bool | None = None,
+        date_from: str | None = None,
+        date_to: str | None = None,
+        batch_id: str | None = None,
+        sort: str = "created_at",
+        order: str = "desc",
+    ) -> str:
+        """Every row the given filters match, as CSV -- the whole result, not a page.
+
+        Unlike `export_batch_csv`, rows may span several tasks (a filter can
+        leave "all checks" selected), so classes are not split into per-class
+        columns -- they are not the same five names for every row, and a
+        shared column would be exactly the label-space merge research rule 4
+        forbids. Probabilities are one column instead, `Class: 87%; ...`, kept
+        attached to the row's own task.
+        """
+        if sort not in SORT_FIELDS:
+            raise HistoryValidationError("sort must be one of " + ", ".join(SORT_FIELDS))
+        if order not in ("asc", "desc"):
+            raise HistoryValidationError("order must be asc or desc")
+        condition = self._filter_condition(
+            query=query,
+            task=task,
+            result=result,
+            tag=tag,
+            low_confidence=low_confidence,
+            date_from=date_from,
+            date_to=date_to,
+            batch_id=batch_id,
+        )
+        rows = self._rows(condition)
+        rows.sort(key=lambda row: (row["created_at"], row["id"]), reverse=order == "desc")
+        if sort != "created_at":
+            present = [row for row in rows if row.get(sort) not in (None, "")]
+            absent = [row for row in rows if row.get(sort) in (None, "")]
+            present.sort(key=lambda row: _sort_key(row[sort]), reverse=order == "desc")
+            rows = present + absent
+        if not rows:
+            raise HistoryValidationError("no History rows match these filters")
+        if len(rows) > MAX_EXPORT_ROWS:
+            raise HistoryValidationError(
+                "this filter matches " + str(len(rows)) + " rows, more than the "
+                + str(MAX_EXPORT_ROWS) + "-row export limit -- narrow it and try again"
+            )
+
+        buffer = io.StringIO()
+        writer = csv.writer(buffer, lineterminator="\r\n")
+        writer.writerow(
+            [
+                "history_id",
+                "created_at",
+                "file_name",
+                "task",
+                "result",
+                "confidence",
+                "low_confidence",
+                "probabilities",
+                "notes",
+                "tags",
+                "batch_id",
+            ]
+        )
+        for row in rows:
+            spec = TASKS.get(row["task"])
+            probabilities = row.get("probabilities") or {}
+            prob_text = "; ".join(
+                name + ": " + format_value(value, "metric") for name, value in probabilities.items()
+            )
+            writer.writerow(
+                [
+                    row["id"],
+                    row["created_at"],
+                    _csv_text(row["file_name"]),
+                    spec.title if spec is not None else row["task"],
+                    row.get("result") or "",
+                    format_value(row.get("confidence"), "metric"),
+                    "true" if row.get("low_confidence") else "false",
+                    _csv_text(prob_text),
+                    _csv_text(str(row.get("notes") or "")),
+                    _csv_text(", ".join(row.get("tags") or [])),
+                    row.get("batch_id") or "",
                 ]
             )
         return buffer.getvalue()

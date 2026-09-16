@@ -27,6 +27,8 @@ export function GlassCard({
   marked = false,
   /** Removes body padding, for a panel whose body is a table or a canvas. */
   flush = false,
+  /** For `as="section"`/`"aside"`: an accessible name, since `title` may not be plain text. */
+  ariaLabel,
 }: {
   children: ReactNode;
   className?: string;
@@ -38,13 +40,14 @@ export function GlassCard({
   meta?: ReactNode;
   marked?: boolean;
   flush?: boolean;
+  ariaLabel?: string;
 }) {
   const surface =
     variant === 'glass' ? SURFACE.glass : variant === 'sunken' ? SURFACE.sunken : SURFACE.card;
   const hasHeader = eyebrow !== undefined || title !== undefined || meta !== undefined;
 
   return (
-    <Component className={cn(surface, 'overflow-hidden', className)}>
+    <Component aria-label={ariaLabel} className={cn(surface, 'overflow-hidden', className)}>
       {marked ? <div aria-hidden="true" className="h-0.5 w-full bg-accent" /> : null}
 
       {hasHeader ? (

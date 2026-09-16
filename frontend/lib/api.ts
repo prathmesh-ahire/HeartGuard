@@ -231,16 +231,6 @@ export function sampleReport(task: string, source: { sampleId: string } | { file
   return document('/report/sample', { method: 'POST', body });
 }
 
-/** T117.3: one experiment run, summarised from the files it wrote. */
-export function experimentReport(expId: string): Promise<GeneratedDocument> {
-  return document('/report/experiment/' + encodeURIComponent(expId));
-}
-
-/** T117.3: the objective-coverage report (T29's DOCX). */
-export function objectivesReport(): Promise<GeneratedDocument> {
-  return document('/report/objectives');
-}
-
 /** Hand a generated document to the browser's own download. */
 export function saveDocument({ blob, filename }: GeneratedDocument): void {
   const url = URL.createObjectURL(blob);
@@ -249,6 +239,63 @@ export function saveDocument({ blob, filename }: GeneratedDocument): void {
   anchor.download = filename;
   anchor.click();
   URL.revokeObjectURL(url);
+}
+
+// ---------------------------------------------------------------------------
+// T134 — Reports page: per-recording PDF, bulk CSV, model summary, recent list
+// ---------------------------------------------------------------------------
+
+/** T134.1: one History record's PDF, built only from what History saved. */
+export function recordingReportPdf(recordId: string): Promise<GeneratedDocument> {
+  return document('/api/history/' + encodeURIComponent(recordId) + '/report.pdf');
+}
+
+/** T134.5: the plain-language model summary PDF. */
+export function modelSummaryReportPdf(): Promise<GeneratedDocument> {
+  return document('/api/reports/model-summary.pdf');
+}
+
+/** T134.2: every History row the given filters match, as one CSV. */
+export function exportHistoryCsv(
+  filters: {
+    q?: string;
+    task?: string;
+    result?: string;
+    tag?: string;
+    dateFrom?: string;
+    dateTo?: string;
+  } = {},
+): Promise<GeneratedDocument> {
+  const q = new URLSearchParams();
+  if (filters.q) q.set('q', filters.q);
+  if (filters.task) q.set('task', filters.task);
+  if (filters.result) q.set('result', filters.result);
+  if (filters.tag) q.set('tag', filters.tag);
+  if (filters.dateFrom) q.set('date_from', filters.dateFrom);
+  if (filters.dateTo) q.set('date_to', filters.dateTo);
+  const qs = q.toString();
+  return document('/api/history/export' + (qs ? '?' + qs : ''));
+}
+
+export interface RecentReport {
+  id: string;
+  kind: 'recording' | 'model_summary' | 'bulk_csv';
+  title: string;
+  filename: string;
+  size_bytes: number;
+  size_display: string;
+  record_id: string | null;
+  created_at: string;
+}
+
+/** T134.4: the reports generated so far in this run, newest first. */
+export function listRecentReports(): Promise<{ items: RecentReport[]; notice: string | null }> {
+  return call('/api/reports');
+}
+
+/** T134.4: re-download one, byte-identical to what was first produced. */
+export function redownloadReport(reportId: string): Promise<GeneratedDocument> {
+  return document('/api/reports/' + encodeURIComponent(reportId));
 }
 
 export function health(): Promise<{ status: string; tasks: TaskStatus[]; n_available: number }> {

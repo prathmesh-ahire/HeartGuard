@@ -61,6 +61,7 @@ import shutil
 import tempfile
 from collections.abc import AsyncIterator, Callable
 from contextlib import asynccontextmanager, suppress
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Annotated, Any
 
@@ -78,6 +79,7 @@ from src.api.history_store import (
     HistoryValidationError,
     clean_batch_id,
 )
+from src.api.report_store import ReportStore
 from src.evaluation.aggregation import AGGREGATION_RULES, POSITIVE_LABEL
 from src.inference.predictor import (
     DISCLAIMER,
@@ -523,6 +525,7 @@ async def lifespan(application: FastAPI) -> AsyncIterator[None]:
         clear_bundle_cache()
         application.state.loaded_tasks = []
         application.state.history.close()
+        application.state.reports.close()
 
 
 def create_app(
@@ -530,6 +533,8 @@ def create_app(
     static_root: Path | None = None,
     preload: bool = True,
     history_path: Path | None = None,
+    reports_db_path: Path | None = None,
+    reports_dir_path: Path | None = None,
 ) -> FastAPI:
     """Build the application.
 
@@ -537,8 +542,10 @@ def create_app(
     they never call; it changes nothing about how a request is served, because
     `predict_recording` loads on demand through the same cache.
 
-    `history_path` overrides `cache.history_db`. The store opens lazily, so
-    building the app never touches the disk.
+    `history_path` overrides `cache.history_db`; `reports_db_path` /
+    `reports_dir_path` override `cache.reports_db` / `cache.reports_dir`
+    (Phase 134). Both stores open lazily, so building the app never touches
+    the disk.
     """
     application = FastAPI(
         title=API_TITLE,
@@ -557,6 +564,7 @@ def create_app(
     application.router.route_class = SafeRoute
     application.state.loaded_tasks = []
     application.state.history = HistoryStore(history_path)
+    application.state.reports = ReportStore(reports_db_path, reports_dir_path)
 
     application.add_middleware(
         CORSMiddleware,
@@ -1082,6 +1090,52 @@ def _register_history_routes(application: FastAPI) -> None:
             lambda store: store.insights(task=task, days=days, tz_offset_minutes=tz_offset_minutes),
         )
 
+    # Registered before `/api/history/{record_id}` for the same reason as
+    # "insights" above -- "export" would otherwise be read as a record id.
+    @application.get("/api/history/export", tags=["history"])
+    def history_export_filtered(
+        q: Annotated[str | None, QueryParam(description="Free-text search")] = None,
+        task: str | None = None,
+        result: str | None = None,
+        tag: str | None = None,
+        low_confidence: bool | None = None,
+        date_from: Annotated[str | None, QueryParam(description="YYYY-MM-DD or ISO")] = None,
+        date_to: Annotated[str | None, QueryParam(description="YYYY-MM-DD (inclusive)")] = None,
+        batch_id: str | None = None,
+        sort: str = "created_at",
+        order: str = "desc",
+    ) -> Response:
+        """T134.2: every History row the current filters match, as one CSV."""
+        text = _history_call(
+            application,
+            lambda store: store.export_filtered_csv(
+                query=q,
+                task=task,
+                result=result,
+                tag=tag,
+                low_confidence=low_confidence,
+                date_from=date_from,
+                date_to=date_to,
+                batch_id=batch_id,
+                sort=sort,
+                order=order,
+            ),
+        )
+        content = text.encode("utf-8")
+        name = "pv-mepcg-history-" + _utc_stamp() + ".csv"
+        application.state.reports.save(
+            kind="bulk_csv",
+            title="History export (" + str(len(content)) + " bytes)",
+            filename=name,
+            content_type="text/csv; charset=utf-8",
+            content=content,
+        )
+        return Response(
+            content=content,
+            media_type="text/csv; charset=utf-8",
+            headers={"Content-Disposition": 'attachment; filename="' + name + '"'},
+        )
+
     @application.get("/api/history/{record_id}", tags=["history"], responses=not_found)
     def history_get(record_id: str) -> dict[str, Any]:
         row = _history_call(application, lambda store: store.get(record_id))
@@ -1116,6 +1170,137 @@ def _register_history_routes(application: FastAPI) -> None:
                 "History was emptied, or many later deletions replaced it.",
             )
         return row
+
+    @application.get(
+        "/api/history/{record_id}/report.pdf", tags=["history"], responses=not_found
+    )
+    def history_report_pdf(record_id: str) -> Response:
+        """T134.1: one History record to one PDF, built only from what was saved.
+
+        No model runs. The waveform is redrawn only when `file_name` names a
+        built-in sample -- the only case where the audio still exists on this
+        machine (`history_store.py`: "The audio is never stored").
+        """
+        from src.reporting.pdf_report import render_recording_pdf
+
+        record = _history_call(application, lambda store: store.get(record_id))
+        if record is None:
+            raise missing(record_id)
+
+        workdir = Path(tempfile.mkdtemp(prefix="pvmepcg_report_"))
+        try:
+            waveform: Path | None = None
+            # `source_kind == "sample"` is the authoritative check -- the same
+            # one `frontend/lib/history.ts`'s `recordAudio()` uses -- because
+            # only a sample-sourced record has `file_name == sample_id`.
+            if record.get("source_kind") == "sample":
+                try:
+                    path = resolve_sample(record["file_name"])
+                    if path is not None:
+                        _, detail = predict_recording(
+                            path, task=record["task"], with_detail=True
+                        )
+                        from src.reporting.sample_report import _waveform_and_spectrogram
+
+                        images = _waveform_and_spectrogram(
+                            detail.signal, int(detail.fs), workdir, record_id
+                        )
+                        waveform = images[0]
+                except (AudioValidationError, ModelUnavailableError):
+                    waveform = None  # the report still renders; the note explains why not
+            target = workdir / (record_id + "_report.pdf")
+            render_recording_pdf(record, target, waveform_png=waveform)
+            content = target.read_bytes()
+        finally:
+            shutil.rmtree(workdir, ignore_errors=True)
+
+        name = "pv-mepcg-" + record["file_name"] + "-report.pdf"
+        application.state.reports.save(
+            kind="recording",
+            title=record["file_name"] + " -- " + record["task_title"],
+            filename=name,
+            content_type="application/pdf",
+            content=content,
+            record_id=record_id,
+        )
+        return Response(
+            content=content,
+            media_type="application/pdf",
+            headers={"Content-Disposition": 'attachment; filename="' + name + '"'},
+        )
+
+    _register_report_routes(application)
+
+
+def _register_report_routes(application: FastAPI) -> None:
+    """T134.4/T134.5: the model-summary PDF, and the recent-reports list."""
+
+    @application.get("/api/reports/model-summary.pdf", tags=["reports"])
+    def reports_model_summary() -> Response:
+        from src.reporting.pdf_report import render_model_summary_pdf
+        from src.utils.config import load_config
+
+        generated_dir = Path(str(load_config("paths").get("frontend.generated")))
+        workdir = Path(tempfile.mkdtemp(prefix="pvmepcg_report_"))
+        try:
+            target = workdir / "model_summary.pdf"
+            render_model_summary_pdf(target, generated_dir=generated_dir)
+            content = target.read_bytes()
+        finally:
+            shutil.rmtree(workdir, ignore_errors=True)
+
+        name = "pv-mepcg-model-summary.pdf"
+        application.state.reports.save(
+            kind="model_summary",
+            title="Model summary",
+            filename=name,
+            content_type="application/pdf",
+            content=content,
+        )
+        return Response(
+            content=content,
+            media_type="application/pdf",
+            headers={"Content-Disposition": 'attachment; filename="' + name + '"'},
+        )
+
+    @application.get("/api/reports", tags=["reports"])
+    def reports_recent() -> dict[str, Any]:
+        rows = application.state.reports.list_recent()
+        return {
+            "items": [
+                {
+                    "id": row["id"],
+                    "kind": row["kind"],
+                    "title": row["title"],
+                    "filename": row["filename"],
+                    "size_bytes": row["size_bytes"],
+                    "size_display": format_value(row["size_bytes"], "count"),
+                    "record_id": row.get("record_id"),
+                    "created_at": row["created_at"],
+                }
+                for row in rows
+            ],
+            "notice": application.state.reports.notice,
+        }
+
+    @application.get(
+        "/api/reports/{report_id}",
+        tags=["reports"],
+        responses={404: {"model": ErrorResponse, "description": "No such report"}},
+    )
+    def reports_redownload(report_id: str) -> Response:
+        found = application.state.reports.get(report_id)
+        if found is None:
+            raise HTTPException(
+                status_code=404,
+                detail="no report with id " + repr(report_id) + " (it may have expired)",
+            )
+        content, row = found
+        return Response(
+            content=content,
+            media_type=str(row["content_type"]),
+            headers={"Content-Disposition": 'attachment; filename="' + str(row["filename"]) + '"'},
+        )
 
 
 def _positive_class(classes: list[str]) -> str:
@@ -1197,6 +1382,11 @@ def _patient_rules(results: list[PredictResponse], classes: list[str]) -> list[P
             )
         )
     return rules
+
+
+def _utc_stamp() -> str:
+    """A filesystem-safe UTC timestamp, for report/export filenames."""
+    return datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
 
 
 def _unknown_task(task: str) -> str:

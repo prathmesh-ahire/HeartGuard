@@ -3,6 +3,16 @@
 python-docx==1.2.0   # .docx thesis and audit report generation
 openpyxl==3.1.5      # .xlsx table workbooks
 
+# Product Reports page (Phase 134, T134.1/T134.5): per-recording and
+# model-summary PDFs. python-docx is not reused here -- the operator-facing
+# Reports page wants a file every viewer can open with no application
+# installed, which DOCX does not guarantee and PDF does. reportlab is
+# pure-Python (no compiler toolchain, verified on Windows + 3.11.9). pypdf
+# reads a rendered PDF back for T134.7's round-trip test, the same role
+# python-docx plays for the DOCX reports.
+reportlab==5.0.1     # PDF report generation
+pypdf==6.19.0         # read a generated PDF back, for the T134.7 test
+
 # kaleido: static image export for Plotly figures.
 # WINDOWS NOTE (Phase 02): kaleido 1.x dropped the bundled Chromium that 0.2.1
 # shipped and now drives an EXTERNAL Chrome/Chromium via choreographer. No

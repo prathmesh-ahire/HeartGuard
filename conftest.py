@@ -48,6 +48,8 @@ REAL_RUN_MANIFEST = ROOT / "outputs" / "00_evidence_index" / "run_manifest.json"
 
 MANIFEST_ENV = "HEARTGUARD__PATHS__OUTPUTS__RUN_MANIFEST"
 HISTORY_ENV = "HEARTGUARD__PATHS__CACHE__HISTORY_DB"
+REPORTS_DB_ENV = "HEARTGUARD__PATHS__CACHE__REPORTS_DB"
+REPORTS_DIR_ENV = "HEARTGUARD__PATHS__CACHE__REPORTS_DIR"
 
 _manifest_sandbox: Path | None = None
 
@@ -119,6 +121,12 @@ def _redirect_run_manifest() -> None:
     # operator's own history.
     if not os.environ.get(HISTORY_ENV):
         os.environ[HISTORY_ENV] = str(_manifest_sandbox / "history" / "history.json")
+    # Same promise for the Reports store (Phase 134): a test that generates a
+    # report must not leave it in the operator's own `cache/reports/`.
+    if not os.environ.get(REPORTS_DB_ENV):
+        os.environ[REPORTS_DB_ENV] = str(_manifest_sandbox / "reports" / "reports.json")
+    if not os.environ.get(REPORTS_DIR_ENV):
+        os.environ[REPORTS_DIR_ENV] = str(_manifest_sandbox / "reports" / "files")
 
     from src.utils.config import clear_cache
 

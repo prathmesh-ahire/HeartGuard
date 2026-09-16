@@ -27,6 +27,6 @@ test('the Analyse page shows a visible error when the API is not there', async (
 
 test('a report request fails visibly when the API is not there', async ({ page }) => {
   await page.goto(STATIC_ONLY + '/reports/', { waitUntil: 'networkidle' });
-  await page.getByRole('button', { name: 'Download objective-coverage report' }).click();
+  await page.getByRole('button', { name: 'Download model summary PDF' }).click();
   await expect(page.getByRole('alert').filter({ hasText: 'The report was not produced' })).toBeVisible();
 });

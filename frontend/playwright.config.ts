@@ -36,6 +36,11 @@ const PYTHON = JSON.stringify(
 process.env.PV_E2E_HISTORY_DB ??= join(tmpdir(), 'pv-mepcg-e2e-' + String(process.pid), 'history.json');
 export const E2E_HISTORY_DB: string = process.env.PV_E2E_HISTORY_DB;
 
+/** T134.7: same isolation, for the Reports store (`cache/reports/`). */
+process.env.PV_E2E_REPORTS_DB ??= join(tmpdir(), 'pv-mepcg-e2e-' + String(process.pid), 'reports.json');
+process.env.PV_E2E_REPORTS_DIR ??= join(tmpdir(), 'pv-mepcg-e2e-' + String(process.pid), 'reports-files');
+export const E2E_REPORTS_DB: string = process.env.PV_E2E_REPORTS_DB;
+
 export const API_URL = 'http://127.0.0.1:8000';
 export const STATIC_ONLY_URL = 'http://127.0.0.1:8001';
 
@@ -69,6 +74,8 @@ export default defineConfig({
       // conftest applies to pytest.
       env: {
         HEARTGUARD__PATHS__CACHE__HISTORY_DB: E2E_HISTORY_DB,
+        HEARTGUARD__PATHS__CACHE__REPORTS_DB: process.env.PV_E2E_REPORTS_DB as string,
+        HEARTGUARD__PATHS__CACHE__REPORTS_DIR: process.env.PV_E2E_REPORTS_DIR as string,
       },
     },
     {

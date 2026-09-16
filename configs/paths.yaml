@@ -85,6 +85,11 @@ cache:
   # NOT regenerable: it is the operator's own saved results. Clearing cache/
   # deletes it. Tests redirect it through HEARTGUARD__PATHS__CACHE__HISTORY_DB.
   history_db: "cache/history/history.json"
+  # The Reports store (Phase 134): metadata index for T134.4's re-download
+  # list. Same gitignore/not-regenerable treatment as history_db above; the
+  # PDF/CSV files themselves live under reports_dir, named by report id.
+  reports_db: "cache/reports/reports.json"
+  reports_dir: "cache/reports/files"
   preprocessed: "cache/preprocessed"
   features: "cache/features"
   metadata: "cache/metadata"

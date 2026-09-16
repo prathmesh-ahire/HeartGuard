@@ -159,12 +159,14 @@ module = [
     "docx.*",
     "openpyxl.*",
     "kaleido.*",
-    # pypdf is deliberately NOT a project dependency. It is installed to extract
-    # the blueprint's equations (Phase 113) and locked objectives (Phase 114),
-    # then uninstalled -- the extracted content is committed, and re-extraction
-    # is a verification step, not a build step. `objectives.verify_against_source`
-    # imports it inside a try/except and reports "not installed" as a state
-    # rather than failing, so mypy must tolerate its absence.
+    # `reportlab` (PDF writer, Phase 134) has no maintained type stubs.
+    "reportlab.*",
+    # pypdf started as an install-then-uninstall verification tool (Phase 113's
+    # equations, Phase 114's objectives; `objectives.verify_against_source`
+    # still imports it inside a try/except and tolerates its absence there).
+    # Phase 134 pins it for real, to read a generated PDF back in the T134.7
+    # test -- the same round-trip role python-docx plays for the DOCX reports.
+    # No maintained type stubs either way.
     "pypdf.*",
 ]
 ignore_missing_imports = true

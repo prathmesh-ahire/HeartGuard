@@ -41,15 +41,22 @@ export function AppShell({
         Skip to content
       </a>
 
-      <SideNav open={navOpen} onClose={() => setNavOpen(false)} />
+      <div className="print:hidden">
+        <SideNav open={navOpen} onClose={() => setNavOpen(false)} />
+      </div>
 
-      <div className="flex min-h-screen flex-col lg:pl-rail">
-        {disclaimer}
-        <TopBar onMenu={() => setNavOpen(true)} menuOpen={navOpen} />
+      {/* T134.3: a printed page (or Print -> Save as PDF) drops the nav rail,
+          top bar and footer -- Tailwind's `print:` variant, not a separate
+          print-only route, so every page prints clean, not just Reports'. */}
+      <div className="flex min-h-screen flex-col lg:pl-rail print:pl-0">
+        <div className="print:hidden">{disclaimer}</div>
+        <div className="print:hidden">
+          <TopBar onMenu={() => setNavOpen(true)} menuOpen={navOpen} />
+        </div>
         <main id="main" className={cn(LAYOUT.page, LAYOUT.pageBlock, 'flex-1')}>
           {children}
         </main>
-        {footer}
+        <div className="print:hidden">{footer}</div>
       </div>
     </>
   );
