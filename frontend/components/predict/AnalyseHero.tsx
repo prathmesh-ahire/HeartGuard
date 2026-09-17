@@ -46,9 +46,7 @@ export function AnalyseHero({ className }: { className?: string }) {
         ease: 'none',
         scrollTrigger: {
           trigger: el,
-          // metric-guard: allow -- scroll offsets, not measurements
           start: 'top bottom',
-          // metric-guard: allow -- scroll offsets, not measurements
           end: 'bottom top',
           scrub: true,
         },

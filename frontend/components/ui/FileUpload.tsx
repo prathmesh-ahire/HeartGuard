@@ -6,7 +6,7 @@ import { AnimatePresence, LazyMotion, m } from 'framer-motion';
 
 import { useReducedMotion } from '@/lib/capability';
 import { cn } from '@/lib/cn';
-import { LIFT_SPRING } from '@/lib/motion';
+import { DRAG_HOVER_SCALE, LIFT_SPRING, SWEEP_X, SWEEP_X_SETTLED } from '@/lib/motion';
 import { SURFACE, TYPE_SCALE } from '@/lib/tokens';
 import { Badge } from '@/components/ui/Badge';
 
@@ -100,8 +100,7 @@ export function FileUpload({
           setDragging(false);
           if (!disabled) accept(event.dataTransfer.files[0]);
         }}
-        // metric-guard: allow -- a drag-hover scale, not a measurement
-        animate={reduced ? undefined : { scale: dragging ? 1.015 : 1 }}
+        animate={reduced ? undefined : { scale: dragging ? DRAG_HOVER_SCALE : 1 }}
         transition={LIFT_SPRING}
         className={cn(
           'rounded-lg border-2 border-dashed p-8 text-center transition-colors',
@@ -160,8 +159,7 @@ export function FileUpload({
                 // whole "Analysing…" phase. A short segment sweeps instead.
                 <m.div
                   className="h-full w-1/3 rounded bg-accent"
-                  // metric-guard: allow -- a sweep offset, not a measurement
-                  animate={reduced ? { x: '100%' } : { x: ['-100%', '250%'] }}
+                  animate={reduced ? { x: SWEEP_X_SETTLED } : { x: SWEEP_X }}
                   transition={reduced ? { duration: 0 } : { duration: 1.1, ease: 'easeInOut', repeat: Infinity }}
                 />
               ) : (

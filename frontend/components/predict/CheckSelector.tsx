@@ -4,7 +4,7 @@ import { LazyMotion, m } from 'framer-motion';
 
 import { useReducedMotion } from '@/lib/capability';
 import { cn } from '@/lib/cn';
-import { PRESS_SPRING } from '@/lib/motion';
+import { CARD_HOVER, CARD_TAP, PRESS_SPRING } from '@/lib/motion';
 import { TYPE_SCALE } from '@/lib/tokens';
 
 const loadFeatures = () => import('@/components/motion/features').then((mod) => mod.default);
@@ -66,10 +66,8 @@ export function CheckSelector({
                   const first = check.tasks[0];
                   if (!selected && first !== undefined) onChange(first.task);
                 }}
-                // metric-guard: allow -- a press-spring scale/offset, not a measurement
-                whileHover={press ? { scale: 1.015, y: -2 } : undefined}
-                // metric-guard: allow -- a press-spring scale/offset, not a measurement
-                whileTap={press ? { scale: 0.985, y: 0 } : undefined}
+                whileHover={press ? CARD_HOVER : undefined}
+                whileTap={press ? CARD_TAP : undefined}
                 transition={PRESS_SPRING}
                 className={cn(
                   'rounded-xl border p-3 text-left transition-colors disabled:opacity-60',

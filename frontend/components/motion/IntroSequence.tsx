@@ -127,16 +127,22 @@ export function IntroSequence() {
               </span>
             </m.div>
 
-            {/* `mix-blend-mode: difference` rather than a fixed colour: the
-                label has to stay readable against all four scheme colours as
-                they change underneath it, and the four are deliberately close
-                in lightness to each other in places. */}
-            <span
-              className="absolute bottom-6 right-6 font-mono text-label-sm uppercase tracking-wide text-white"
-              style={{ mixBlendMode: 'difference' }}
+            {/* Timed with the heart mark rather than shown from frame one: a
+                fixed off-scheme colour (white, or `mix-blend-mode` against
+                one) would be readable against all four layers as they change
+                underneath it, but the brand rule is the four scheme colours
+                and nothing else, and `text-on-accent` only reads against the
+                accent layer -- which is exactly the one on screen once this
+                fades in. The whole overlay is click- and keydown-skippable
+                from the first frame regardless; this is the visible label. */}
+            <m.span
+              className="absolute bottom-6 right-6 font-mono text-label-sm uppercase tracking-wide text-on-accent"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: LAYERS.length * STEP, duration: STEP }}
             >
               Skip
-            </span>
+            </m.span>
           </m.div>
         ) : null}
       </AnimatePresence>
