@@ -3,6 +3,8 @@ import { join, resolve } from 'node:path';
 
 import { expect, test, type ConsoleMessage, type Page } from '@playwright/test';
 
+import { SHOW_SCREENING_NOTICE } from '../lib/flags';
+
 /**
  * The thirteen dashboard screenshots (T120.1 - T120.6).
  *
@@ -168,9 +170,15 @@ for (const shot of plan.shots) {
     expect(faded, shot.route + ' has text rendered at opacity < 0.9').toEqual([]);
 
     // T120.7's "no placeholder or empty chart", asserted before the shutter.
-    await expect(page.getByRole('note', { name: 'Scope and safety notice' })).toContainText(
-      plan.disclaimer,
-    );
+    // The notice itself is OFF for the presentation (Open Item 17, T127.2's
+    // flag; T138.6 restores it afterward) -- same condition smoke.spec.ts
+    // checks, so a capture never asserts a banner the site was told to hide.
+    const notice = page.getByRole('note', { name: 'Scope and safety notice' });
+    if (SHOW_SCREENING_NOTICE) {
+      await expect(notice).toContainText(plan.disclaimer);
+    } else {
+      await expect(notice).toHaveCount(0);
+    }
     for (const text of shot.must_contain) {
       await expect(page.getByText(text, { exact: false }).first()).toBeVisible();
     }

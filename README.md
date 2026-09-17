@@ -497,8 +497,12 @@ but the hardware does bound what could be searched.
 
 ## Status
 
-Complete through Part XI. Every pipeline stage, experiment, analysis, asset pack
-and dashboard page is built; the QA sweep, compliance review and delivery
-checklist are generated into `outputs/00_evidence_index/`. What is *not* done is
+Complete through Part XI, plus Part XII's five-page product UI (Analyse,
+History, Insights, Reports, About the Model) — every automated phase and gate
+through T138.4 is done; the screening notice restore (T138.6) is a deliberate,
+user-only step held for after the presentation (see `Docs/note.md`). Every
+pipeline stage, experiment, analysis, asset pack and dashboard page is built;
+the QA sweep, compliance review and delivery checklist are generated into
+`outputs/00_evidence_index/`. What is *not* done is
 written down rather than omitted — see `outputs/missing_outputs_report.txt` and
 [HANDOVER.md](HANDOVER.md).

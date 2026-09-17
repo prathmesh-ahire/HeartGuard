@@ -5,8 +5,8 @@
     {
       "number": 1,
       "title": "Home and project overview",
-      "route": "/",
-      "caption": "The PV-MEPCG / PulseVision dashboard home page: the framework in one line, the six locked research objectives, the pipeline from recording to screening indication, and the scope-and-safety notice that appears on every route.",
+      "route": "/about/",
+      "caption": "The PV-MEPCG / PulseVision framework in one line, the six locked research objectives, the pipeline from recording to screening indication, and the scope-and-safety notice that appears on every route.",
       "steps": [],
       "must_contain": [
         "PV-MEPCG"
@@ -17,7 +17,7 @@
         "This chart could not be drawn.",
         "Nothing scored yet"
       ],
-      "slug": "",
+      "slug": "home",
       "full_page": true,
       "height": 1400,
       "shot_id": "SS-01",
@@ -54,8 +54,7 @@
         }
       ],
       "must_contain": [
-        "1. Choose a recording",
-        "D1_training-b_b0033"
+        "Add a recording"
       ],
       "must_not_contain": [
         "Route scaffolded; content not built yet.",
@@ -327,24 +326,32 @@
     {
       "number": 13,
       "title": "Exported report preview",
-      "route": "/reports/",
-      "caption": "The report export panel after a recording report has really been generated and saved by the running service, with the objective-coverage table (T29) rendered below it -- the same content the downloadable DOCX carries. A DOCX cannot be previewed inside the browser, so what is shown is the export in its completed state plus the rendered content of the document it produced.",
+      "route": "/",
+      "caption": "The Reports page after a per-recording PDF has really been generated and saved by the running service: the report listed under Recently generated reports, with re-download offered. A PDF cannot be previewed inside the browser, so what is shown is the export in its completed state -- the same PDF T134.7 checks byte-for-byte.",
       "steps": [
         {
-          "action": "select",
-          "label": "Built-in sample",
-          "value": "binary-abnormal"
+          "action": "sample",
+          "sample_id": "binary-abnormal"
         },
         {
           "action": "click",
-          "name": "Generate recording report"
+          "name": "Analyse recording"
         },
         {
-          "action": "await_saved"
+          "action": "await_result"
+        },
+        {
+          "action": "goto",
+          "route": "/reports/"
+        },
+        {
+          "action": "click",
+          "name": "Download PDF"
         }
       ],
       "must_contain": [
-        "Objective coverage"
+        "Recently generated reports",
+        "Re-download"
       ],
       "must_not_contain": [
         "Route scaffolded; content not built yet.",
@@ -352,7 +359,7 @@
         "This chart could not be drawn.",
         "Nothing scored yet"
       ],
-      "slug": "",
+      "slug": "reports",
       "full_page": true,
       "height": 1800,
       "shot_id": "SS-13",

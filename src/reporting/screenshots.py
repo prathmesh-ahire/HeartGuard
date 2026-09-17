@@ -134,12 +134,19 @@ CAPTURE_PLAN: tuple[ShotSpec, ...] = (
     ShotSpec(
         1,
         "Home and project overview",
-        "/",
-        "The PV-MEPCG / PulseVision dashboard home page: the framework in one "
-        "line, the six locked research objectives, the pipeline from recording "
-        "to screening indication, and the scope-and-safety notice that appears "
-        "on every route.",
+        "/about/",
+        "The PV-MEPCG / PulseVision framework in one line, the six locked "
+        "research objectives, the pipeline from recording to screening "
+        "indication, and the scope-and-safety notice that appears on every "
+        "route.",
         must_contain=("PV-MEPCG",),
+        # T127.3 removed the separate marketing-style home page this shot was
+        # written for; "/" is now the Analyse tool (SS-03/08/09/12 already
+        # capture it) and the objectives-and-pipeline content this shot is
+        # actually about moved to About the Model's landing tab. Two of the
+        # thirteen already share a route this way (SS-06/SS-07, both
+        # /about/models/) -- the route moved, the committed filename did not.
+        slug="home",
     ),
     ShotSpec(
         2,
@@ -162,7 +169,15 @@ CAPTURE_PLAN: tuple[ShotSpec, ...] = (
         "repository. The model has not been run yet -- this is the upload and "
         "preview step alone.",
         steps=(_sample("binary-abnormal"),),
-        must_contain=("1. Choose a recording", "D1_training-b_b0033"),
+        # "1. Choose a recording" was the step heading before Phase 136's
+        # redesign split it into "Step 1: Choose a check" / "Step 2: Add a
+        # recording" (`PredictionPanel.tsx`); the upload step is now Step 2.
+        # The record uid ("D1_training-b_b0033") this used to also require is
+        # not shown anywhere before scoring in the current design -- the
+        # sample button's own caption names the DATASET, not the record -- so
+        # asserting it here would be checking for a string the page never
+        # promised to show, not a regression.
+        must_contain=("Add a recording",),
         # `Nothing scored yet` is the correct state here: the point of this
         # screenshot is the step BEFORE scoring.
         must_not_contain=(
@@ -314,20 +329,31 @@ CAPTURE_PLAN: tuple[ShotSpec, ...] = (
     ShotSpec(
         13,
         "Exported report preview",
-        "/reports/",
-        "The report export panel after a recording report has really been "
-        "generated and saved by the running service, with the objective-"
-        "coverage table (T29) rendered below it -- the same content the "
-        "downloadable DOCX carries. A DOCX cannot be previewed inside the "
-        "browser, so what is shown is the export in its completed state plus "
-        "the rendered content of the document it produced.",
+        "/",
+        "The Reports page after a per-recording PDF has really been generated "
+        "and saved by the running service: the report listed under Recently "
+        "generated reports, with re-download offered. A PDF cannot be "
+        "previewed inside the browser, so what is shown is the export in its "
+        "completed state -- the same PDF T134.7 checks byte-for-byte.",
+        # T127.3/T134 replaced the old Reports page (a `select` + "Generate
+        # recording report" button producing a DOCX with the T29
+        # objective-coverage table) with one driven from History. That page and
+        # its objective-coverage view no longer exist in the frontend at all
+        # (the `/report/objectives` route is still served and still tested --
+        # see Docs/note.md's 2026-09-16 Phase 134 entry -- just not from here),
+        # so this shot now scores a recording first, same as SS-12, then
+        # downloads ITS PDF rather than a DOCX chosen from a dropdown.
         steps=(
-            {"action": "select", "label": "Built-in sample", "value": "binary-abnormal"},
-            _click("Generate recording report"),
-            {"action": "await_saved"},
+            _sample("binary-abnormal"),
+            _click(RUN_BUTTON),
+            _await_result(),
+            {"action": "goto", "route": "/reports/"},
+            _click("Download PDF"),
         ),
-        must_contain=("Objective coverage",),
+        must_contain=("Recently generated reports", "Re-download"),
         height=1800,
+        # The route moved in T127.3; the committed filename did not.
+        slug="reports",
     ),
 )
 
