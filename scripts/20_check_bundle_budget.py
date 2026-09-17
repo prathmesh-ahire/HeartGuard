@@ -70,13 +70,13 @@ LAZY_MARKERS = {
 #: failed; if one IS bundled it is still held to the not-on-first-load rule.
 #: Every entry must name the task that removes it. An entry with no end is how
 #: a check quietly stops measuring anything.
-NOT_YET_BUNDLED: dict[str, str] = {
-    "three.js": (
-        "the 3D heart lived on the old home page, which T127.3 replaced with Analyse; "
-        "T136.5 tunes it for Analyse without slowing the first interaction, and "
-        "removes this entry"
-    ),
-}
+#:
+#: `three.js` was here from T127.3 (the 3D heart lived on the old home page,
+#: which Analyse replaced) until T136.5 put it back on Analyse behind the same
+#: `next/dynamic(..., { ssr: false })` boundary as before -- so it is bundled
+#: again, but still must not be on any route's first load, which is what the
+#: normal (non-exempt) check below now enforces for it.
+NOT_YET_BUNDLED: dict[str, str] = {}
 
 #: Libraries that must not reach the browser AT ALL, with the evidence that
 #: they nevertheless ran.

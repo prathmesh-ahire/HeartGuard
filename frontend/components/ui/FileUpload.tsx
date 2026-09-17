@@ -2,9 +2,15 @@
 
 import { useCallback, useId, useRef, useState } from 'react';
 
+import { AnimatePresence, LazyMotion, m } from 'framer-motion';
+
+import { useReducedMotion } from '@/lib/capability';
 import { cn } from '@/lib/cn';
+import { LIFT_SPRING } from '@/lib/motion';
 import { SURFACE, TYPE_SCALE } from '@/lib/tokens';
 import { Badge } from '@/components/ui/Badge';
+
+const loadFeatures = () => import('@/components/motion/features').then((mod) => mod.default);
 
 /**
  * The recording upload control (T111.3): drag-and-drop, format validation and
@@ -78,10 +84,12 @@ export function FileUpload({
 
   const shownError = error ?? localError;
   const busy = phase === 'uploading' || phase === 'validating';
+  const reduced = useReducedMotion();
 
   return (
     <div className={className}>
-      <div
+      <LazyMotion features={loadFeatures} strict>
+      <m.div
         onDragOver={(event) => {
           event.preventDefault();
           if (!disabled) setDragging(true);
@@ -92,6 +100,9 @@ export function FileUpload({
           setDragging(false);
           if (!disabled) accept(event.dataTransfer.files[0]);
         }}
+        // metric-guard: allow -- a drag-hover scale, not a measurement
+        animate={reduced ? undefined : { scale: dragging ? 1.015 : 1 }}
+        transition={LIFT_SPRING}
         className={cn(
           'rounded-lg border-2 border-dashed p-8 text-center transition-colors',
           dragging
@@ -143,10 +154,23 @@ export function FileUpload({
               aria-label={phase === 'validating' ? 'Validating' : 'Uploading'}
               className="h-1.5 w-full overflow-hidden rounded bg-sunken"
             >
-              <div
-                className="h-full bg-accent transition-[width]"
-                style={{ width: progress === null ? '35%' : `${progress}%` }}
-              />
+              {progress === null ? (
+                // Indeterminate: the caller never reports a percentage for a
+                // local inference call, so a fixed-width bar sat still for the
+                // whole "Analysing…" phase. A short segment sweeps instead.
+                <m.div
+                  className="h-full w-1/3 rounded bg-accent"
+                  // metric-guard: allow -- a sweep offset, not a measurement
+                  animate={reduced ? { x: '100%' } : { x: ['-100%', '250%'] }}
+                  transition={reduced ? { duration: 0 } : { duration: 1.1, ease: 'easeInOut', repeat: Infinity }}
+                />
+              ) : (
+                <m.div
+                  className="h-full bg-accent"
+                  animate={{ width: `${progress}%` }}
+                  transition={reduced ? { duration: 0 } : { duration: 0.25, ease: 'easeOut' }}
+                />
+              )}
             </div>
             <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mt-2')}>
               {phase === 'validating' ? 'Checking the file…' : 'Sending for inference…'}
@@ -154,12 +178,21 @@ export function FileUpload({
           </div>
         ) : null}
 
-        {phase === 'done' && !shownError ? (
-          <p className="mt-4">
-            <Badge tone="good">Received</Badge>
-          </p>
-        ) : null}
-      </div>
+        <AnimatePresence>
+          {phase === 'done' && !shownError ? (
+            <m.p
+              className="mt-4"
+              initial={reduced ? undefined : { opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={reduced ? undefined : { opacity: 0, scale: 0.8 }}
+              transition={LIFT_SPRING}
+            >
+              <Badge tone="good">Received</Badge>
+            </m.p>
+          ) : null}
+        </AnimatePresence>
+      </m.div>
+      </LazyMotion>
 
       {shownError ? (
         <p

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { DatasetSection } from '@/app/about/_sections/DatasetSection';
+import { Reveal } from '@/components/motion/Reveal';
 import { routeFor } from '@/lib/routes';
 
 const tab = routeFor('/about/datasets/');
@@ -11,5 +12,9 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <DatasetSection />;
+  return (
+    <Reveal>
+      <DatasetSection />
+    </Reveal>
+  );
 }

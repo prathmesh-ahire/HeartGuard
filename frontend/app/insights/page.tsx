@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { InsightsBoard } from '@/components/insights/InsightsBoard';
+import { Reveal } from '@/components/motion/Reveal';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { routeFor } from '@/lib/routes';
 
@@ -19,8 +20,12 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div className="space-y-8">
-      <PageHeader title="Insights" lede={route?.summary ?? ''} />
-      <InsightsBoard />
+      <Reveal>
+        <PageHeader title="Insights" lede={route?.summary ?? ''} />
+      </Reveal>
+      <Reveal delay={0.05}>
+        <InsightsBoard />
+      </Reveal>
     </div>
   );
 }

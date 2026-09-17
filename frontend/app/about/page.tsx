@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 
 import { PreprocessingSection } from '@/app/about/_sections/PreprocessingSection';
 import { Objectives } from '@/components/objectives/Objectives';
+import { Reveal } from '@/components/motion/Reveal';
 import { PipelineWalkthrough } from '@/components/pipeline/PipelineWalkthrough';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { routeFor } from '@/lib/routes';
@@ -17,14 +18,16 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div className="space-y-10">
-      <section>
-        <SectionHeader
-          eyebrow="Scope"
-          title="The six research objectives"
-          description="Quoted exactly as the source document fixes them."
-        />
-        <Objectives className="mt-4" />
-      </section>
+      <Reveal>
+        <section>
+          <SectionHeader
+            eyebrow="Scope"
+            title="The six research objectives"
+            description="Quoted exactly as the source document fixes them."
+          />
+          <Objectives className="mt-4" />
+        </section>
+      </Reveal>
 
       <section>
         <SectionHeader
@@ -35,7 +38,9 @@ export default function Page() {
         <PipelineWalkthrough className="mt-4" />
       </section>
 
-      <PreprocessingSection />
+      <Reveal>
+        <PreprocessingSection />
+      </Reveal>
     </div>
   );
 }

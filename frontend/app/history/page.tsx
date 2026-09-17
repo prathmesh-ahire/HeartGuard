@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { HistoryBrowser } from '@/components/history/HistoryBrowser';
+import { Reveal } from '@/components/motion/Reveal';
 import { ButtonLink } from '@/components/ui/Button';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { routeFor } from '@/lib/routes';
@@ -20,16 +21,20 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div className="space-y-8">
-      <PageHeader
-        title="History"
-        lede={route?.summary ?? ''}
-        primaryAction={
-          <ButtonLink href="/" tone="primary" icon="pulse">
-            Analyse a recording
-          </ButtonLink>
-        }
-      />
-      <HistoryBrowser />
+      <Reveal>
+        <PageHeader
+          title="History"
+          lede={route?.summary ?? ''}
+          primaryAction={
+            <ButtonLink href="/" tone="primary" icon="pulse">
+              Analyse a recording
+            </ButtonLink>
+          }
+        />
+      </Reveal>
+      <Reveal delay={0.05}>
+        <HistoryBrowser />
+      </Reveal>
     </div>
   );
 }

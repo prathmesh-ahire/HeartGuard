@@ -1,6 +1,6 @@
 'use client';
 
-import { Environment, OrbitControls } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useTheme } from 'next-themes';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -26,6 +26,22 @@ import * as THREE from 'three';
  * The geometry is generated in the browser from a parametric curve rather than
  * loaded from a .glb. A model file would be a few hundred kilobytes of asset to
  * commit, host and cache-bust for a shape that is forty lines of maths.
+ *
+ * ## No `<Environment>` (removed T136.5)
+ *
+ * drei's `<Environment preset="city">` fetched its HDRI from
+ * raw.githack.com/pmndrs/drei-assets on every mount -- a live request to a
+ * third party this component had never been caught making, because nothing
+ * before T136.5 ever mounted `Hero3D` on a page an automated test waited on
+ * with a real WebGL context. On this network that fetch took 28-30 s to
+ * resolve (or fail), which `page.goto(..., { waitUntil: 'networkidle' })`
+ * faithfully waited out on every load of Analyse, several times over the
+ * budget T136.5 itself sets ("without slowing the first interaction"). It is
+ * also a hero that is supposed to work with no network at all, same reasoning
+ * as the parametric geometry above. Removed outright rather than pointed at a
+ * bundled local HDR: the two directional lights plus the ambient light below
+ * are enough shading for a single smooth mesh, and `envMapIntensity` went with
+ * it since it has nothing to multiply without an environment map.
  */
 
 const BEATS_PER_MINUTE = 72;
@@ -95,12 +111,7 @@ function Heart({ animate, color }: { animate: boolean; color: string }): JSX.Ele
 
   return (
     <mesh ref={mesh} geometry={geometry} castShadow receiveShadow>
-      <meshStandardMaterial
-        color={color}
-        roughness={0.35}
-        metalness={0.15}
-        envMapIntensity={0.6}
-      />
+      <meshStandardMaterial color={color} roughness={0.35} metalness={0.15} />
     </mesh>
   );
 }
@@ -142,7 +153,6 @@ export default function HeartScene({
       <directionalLight position={[3, 4, 5]} intensity={1.6} />
       <directionalLight position={[-4, -2, -3]} intensity={0.4} />
       {color !== null ? <Heart animate={animate} color={color} /> : null}
-      <Environment preset="city" />
       {interactive ? (
         <OrbitControls enablePan={false} enableZoom={false} rotateSpeed={0.6} />
       ) : null}

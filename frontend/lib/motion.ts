@@ -21,6 +21,16 @@ export const DURATION = {
 export const STAGGER_STEP = 0.06;
 
 /**
+ * The press spring (T136.4): stiff and slightly under-damped, so a tap
+ * overshoots by a pixel or two on release rather than snapping to rest. A
+ * critically-damped spring here reads as a state flip, not a touch.
+ */
+export const PRESS_SPRING: Transition = { type: 'spring', stiffness: 500, damping: 30, mass: 0.6 };
+
+/** A calmer spring for a larger surface -- a card or a hero layer. */
+export const LIFT_SPRING: Transition = { type: 'spring', stiffness: 300, damping: 26 };
+
+/**
  * The one rule every animated primitive follows: under reduced motion the
  * transition is a state change, not an animation. The start and end states
  * never change -- only how long it takes to get between them -- so the server

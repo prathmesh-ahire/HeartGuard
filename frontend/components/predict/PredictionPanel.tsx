@@ -2,7 +2,11 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { AnimatePresence, LazyMotion, m } from 'framer-motion';
+
+import { useReducedMotion } from '@/lib/capability';
 import { cn } from '@/lib/cn';
+import { LIFT_SPRING } from '@/lib/motion';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { Button } from '@/components/ui/Button';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/States';
@@ -56,6 +60,8 @@ import {
  * Python.
  */
 
+const loadFeatures = () => import('@/components/motion/features').then((mod) => mod.default);
+
 function taskSpec(name: string): GeneratedTaskSpec | undefined {
   return prediction.tasks.find((entry) => entry.task === name);
 }
@@ -72,6 +78,7 @@ export function PredictionPanel({
   checks: readonly AnalyseCheck[];
   className?: string;
 }) {
+  const reduced = useReducedMotion();
   const [task, setTask] = useState(checks[0]?.tasks[0]?.task ?? 'binary');
   const [live, setLive] = useState<TaskStatus[] | null>(null);
   const [servable, setServable] = useState<SampleStatus[] | null>(null);
@@ -81,6 +88,9 @@ export function PredictionPanel({
   const [chosenSample, setChosenSample] = useState<string | null>(null);
   const [phase, setPhase] = useState<UploadPhase>('idle');
   const [result, setResult] = useState<PredictResult | null>(null);
+  // Bumped on every successful run, purely to key the result reveal's
+  // animation -- `PredictResult` carries no request id to key on instead.
+  const [resultKey, setResultKey] = useState(0);
   const [failure, setFailure] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   // T131: one recording, or a batch. A running batch locks the check and the mode.
@@ -153,6 +163,7 @@ export function PredictionPanel({
         return;
       }
       setResult(outcome);
+      setResultKey((key) => key + 1);
       // T117.2: hand the response to About the Model's Performance tab.
       rememberPrediction(outcome);
       setPhase('done');
@@ -336,26 +347,60 @@ export function PredictionPanel({
       {mode === 'single' ? (
       <section aria-label="Result" className="space-y-3 lg:sticky lg:top-6">
         <h2 className={cn(TYPE_SCALE.h2, 'text-ink')}>Result</h2>
-        {busy ? <LoadingState label="Cleaning the recording, measuring it and scoring it" /> : null}
-        {failure !== null ? (
-          <ErrorState title="No prediction was produced" detail={failure} onRetry={() => void run()} />
-        ) : null}
-        {result !== null && !busy ? (
-          <ResultCard
-            result={result}
-            classes={spec?.classes ?? []}
-            taskTitle={spec?.title}
-            sample={activeSample}
-            onDownloadReport={downloadReport}
-          />
-        ) : null}
-        {result === null && !busy && failure === null ? (
-          <EmptyState
-            icon="pulse"
-            title="Nothing scored yet"
-            description="Add a recording and select Analyse recording. The result appears here."
-          />
-        ) : null}
+        <LazyMotion features={loadFeatures} strict>
+          <AnimatePresence mode="wait">
+            {busy ? (
+              <m.div
+                key="busy"
+                initial={reduced ? undefined : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={reduced ? undefined : { opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <LoadingState label="Cleaning the recording, measuring it and scoring it" />
+              </m.div>
+            ) : failure !== null ? (
+              <m.div
+                key="failure"
+                initial={reduced ? undefined : { opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={LIFT_SPRING}
+              >
+                <ErrorState title="No prediction was produced" detail={failure} onRetry={() => void run()} />
+              </m.div>
+            ) : result !== null ? (
+              // Keyed by result identity so a second analysis on the same task
+              // re-triggers the reveal rather than reusing the first mount.
+              <m.div
+                key={'result-' + resultKey}
+                initial={reduced ? undefined : { opacity: 0, scale: 0.96, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={LIFT_SPRING}
+              >
+                <ResultCard
+                  result={result}
+                  classes={spec?.classes ?? []}
+                  taskTitle={spec?.title}
+                  sample={activeSample}
+                  onDownloadReport={downloadReport}
+                />
+              </m.div>
+            ) : (
+              <m.div
+                key="empty"
+                initial={reduced ? undefined : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.2 }}
+              >
+                <EmptyState
+                  icon="pulse"
+                  title="Nothing scored yet"
+                  description="Add a recording and select Analyse recording. The result appears here."
+                />
+              </m.div>
+            )}
+          </AnimatePresence>
+        </LazyMotion>
       </section>
       ) : null}
     </div>

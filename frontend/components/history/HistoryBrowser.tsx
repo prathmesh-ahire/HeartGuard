@@ -2,7 +2,11 @@
 
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 
+import { LazyMotion, m } from 'framer-motion';
+
+import { useReducedMotion } from '@/lib/capability';
 import { cn } from '@/lib/cn';
+import { LIFT_SPRING } from '@/lib/motion';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Overlay';
@@ -69,7 +73,10 @@ function classesOf(task: string): readonly string[] {
 
 const INPUT = 'rounded-lg border border-line bg-panel px-3 py-1.5 text-body-md text-ink';
 
+const loadFeatures = () => import('@/components/motion/features').then((mod) => mod.default);
+
 export function HistoryBrowser() {
+  const reduced = useReducedMotion();
   const [filters, setFilters] = useState<HistoryFilters | null>(null);
   const baseId = useId();
   const fieldId = (name: string) => baseId + name;
@@ -387,6 +394,7 @@ export function HistoryBrowser() {
           </div>
 
           <div className="overflow-x-auto rounded-lg border border-line">
+            <LazyMotion features={loadFeatures} strict>
             <table className="min-w-full text-left text-sm">
               <thead className="border-b-2 border-line bg-sunken font-mono text-label-sm uppercase text-ink-3">
                 <tr>
@@ -403,7 +411,14 @@ export function HistoryBrowser() {
               </thead>
               <tbody>
                 {page.items.map((record) => (
-                  <tr key={record.id} className="border-t border-line align-top" data-record-id={record.id} data-file={record.file_name}>
+                  <m.tr
+                    key={record.id}
+                    className="border-t border-line align-top"
+                    data-record-id={record.id}
+                    data-file={record.file_name}
+                    whileHover={reduced ? undefined : { backgroundColor: 'rgb(var(--sunken))' }}
+                    transition={LIFT_SPRING}
+                  >
                     <td className="px-3 py-2">
                       <input
                         type="checkbox"
@@ -450,10 +465,11 @@ export function HistoryBrowser() {
                         ))}
                       </span>
                     </td>
-                  </tr>
+                  </m.tr>
                 ))}
               </tbody>
             </table>
+            </LazyMotion>
           </div>
 
           <nav aria-label="Pages" className="flex flex-wrap items-center justify-between gap-3">

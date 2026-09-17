@@ -1,7 +1,13 @@
 'use client';
 
+import { LazyMotion, m } from 'framer-motion';
+
+import { useReducedMotion } from '@/lib/capability';
 import { cn } from '@/lib/cn';
+import { PRESS_SPRING } from '@/lib/motion';
 import { TYPE_SCALE } from '@/lib/tokens';
+
+const loadFeatures = () => import('@/components/motion/features').then((mod) => mod.default);
 
 /**
  * What to check (T130.4).
@@ -41,35 +47,44 @@ export function CheckSelector({
   className?: string;
 }) {
   const active = checks.find((check) => check.tasks.some((entry) => entry.task === task)) ?? checks[0];
+  const reduced = useReducedMotion();
 
   return (
     <div className={className}>
-      <div role="group" aria-label="What to check" className="grid gap-2 sm:grid-cols-3">
-        {checks.map((check) => {
-          const selected = check.id === active?.id;
-          return (
-            <button
-              key={check.id}
-              type="button"
-              aria-pressed={selected}
-              disabled={disabled}
-              onClick={() => {
-                const first = check.tasks[0];
-                if (!selected && first !== undefined) onChange(first.task);
-              }}
-              className={cn(
-                'rounded-xl border p-3 text-left transition-colors disabled:opacity-60',
-                selected
-                  ? 'border-accent bg-accent-soft shadow-panel'
-                  : 'border-line bg-panel hover:border-accent-line',
-              )}
-            >
-              <span className={cn(TYPE_SCALE.body, 'block font-medium text-ink')}>{check.label}</span>
-              <span className={cn(TYPE_SCALE.caption, 'mt-1 block text-ink-2')}>{check.description}</span>
-            </button>
-          );
-        })}
-      </div>
+      <LazyMotion features={loadFeatures} strict>
+        <div role="group" aria-label="What to check" className="grid gap-2 sm:grid-cols-3">
+          {checks.map((check) => {
+            const selected = check.id === active?.id;
+            const press = !reduced && !disabled;
+            return (
+              <m.button
+                key={check.id}
+                type="button"
+                aria-pressed={selected}
+                disabled={disabled}
+                onClick={() => {
+                  const first = check.tasks[0];
+                  if (!selected && first !== undefined) onChange(first.task);
+                }}
+                // metric-guard: allow -- a press-spring scale/offset, not a measurement
+                whileHover={press ? { scale: 1.015, y: -2 } : undefined}
+                // metric-guard: allow -- a press-spring scale/offset, not a measurement
+                whileTap={press ? { scale: 0.985, y: 0 } : undefined}
+                transition={PRESS_SPRING}
+                className={cn(
+                  'rounded-xl border p-3 text-left transition-colors disabled:opacity-60',
+                  selected
+                    ? 'border-accent bg-accent-soft shadow-panel'
+                    : 'border-line bg-panel hover:border-accent-line',
+                )}
+              >
+                <span className={cn(TYPE_SCALE.body, 'block font-medium text-ink')}>{check.label}</span>
+                <span className={cn(TYPE_SCALE.caption, 'mt-1 block text-ink-2')}>{check.description}</span>
+              </m.button>
+            );
+          })}
+        </div>
+      </LazyMotion>
 
       {active !== undefined && active.tasks.length > 1 ? (
         <div role="group" aria-label="Which set of categories" className="mt-3 flex flex-wrap items-center gap-2">

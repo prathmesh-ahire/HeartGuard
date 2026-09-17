@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 
+import { Reveal } from '@/components/motion/Reveal';
+import { AnalyseHero } from '@/components/predict/AnalyseHero';
 import { PatientPanel } from '@/components/predict/PatientPanel';
 import { PredictionPanel } from '@/components/predict/PredictionPanel';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -32,45 +34,54 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div className="space-y-12">
-      <PageHeader title="Analyse a heart sound" lede={route?.summary ?? ''} />
+      <Reveal>
+        <AnalyseHero />
+      </Reveal>
+      <Reveal delay={0.05}>
+        <PageHeader title="Analyse a heart sound" lede={route?.summary ?? ''} />
+      </Reveal>
 
-      <PredictionPanel
-        checks={[
-          {
-            id: 'normal',
-            label: 'Normal or abnormal',
-            description: 'Screens the heart sound as normal, or as abnormal and worth a closer look.',
-            tasks: [{ task: 'binary', label: 'Normal / abnormal' }],
-          },
-          {
-            id: 'sound',
-            label: 'Sound type',
-            description: 'Sorts the sound into categories such as murmur or an extra heart sound.',
-            tasks: [
-              { task: 'pascal_a', label: 'PASCAL A — four classes' },
-              { task: 'pascal_b', label: 'PASCAL B — three classes' },
-            ],
-          },
-          {
-            id: 'murmur',
-            label: 'Murmur and outcome',
-            description: 'Looks for a murmur, or screens the overall result, in a child’s recording.',
-            tasks: [
-              { task: 'murmur', label: 'Murmur annotation' },
-              { task: 'outcome', label: 'Clinical outcome' },
-            ],
-          },
-        ]}
-      />
-
-      <section>
-        <SectionHeader
-          eyebrow="Patient"
-          title="Recording level and patient level"
-          description="One subject at every auscultation location, combined into a patient-level murmur result by each declared rule."
+      <Reveal delay={0.1}>
+        <PredictionPanel
+          checks={[
+            {
+              id: 'normal',
+              label: 'Normal or abnormal',
+              description: 'Screens the heart sound as normal, or as abnormal and worth a closer look.',
+              tasks: [{ task: 'binary', label: 'Normal / abnormal' }],
+            },
+            {
+              id: 'sound',
+              label: 'Sound type',
+              description: 'Sorts the sound into categories such as murmur or an extra heart sound.',
+              tasks: [
+                { task: 'pascal_a', label: 'PASCAL A — four classes' },
+                { task: 'pascal_b', label: 'PASCAL B — three classes' },
+              ],
+            },
+            {
+              id: 'murmur',
+              label: 'Murmur and outcome',
+              description: 'Looks for a murmur, or screens the overall result, in a child’s recording.',
+              tasks: [
+                { task: 'murmur', label: 'Murmur annotation' },
+                { task: 'outcome', label: 'Clinical outcome' },
+              ],
+            },
+          ]}
         />
-        <PatientPanel task="murmur" className="mt-4" />
-      </section>
+      </Reveal>
+
+      <Reveal>
+        <section>
+          <SectionHeader
+            eyebrow="Patient"
+            title="Recording level and patient level"
+            description="One subject at every auscultation location, combined into a patient-level murmur result by each declared rule."
+          />
+          <PatientPanel task="murmur" className="mt-4" />
+        </section>
+      </Reveal>
     </div>
   );
 }
