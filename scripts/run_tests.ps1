@@ -101,7 +101,7 @@ if ($Frontend -or $FrontendOnly) {
         # the displayed-value audit: the capture's globalSetup refuses unless
         # the site on disk is byte-for-byte the build that audit passed on.
         @{ Name = 'dashboard screenshots (gated)'; Run = {
-            & $python (Join-Path $root 'scripts'_dashboard_screenshots.py') } }
+            & $python (Join-Path $root 'scripts\47_dashboard_screenshots.py') } }
     )
     Push-Location (Join-Path $root 'frontend')
     # npm, Next and Playwright's servers write progress to stderr. Under 'Stop',
