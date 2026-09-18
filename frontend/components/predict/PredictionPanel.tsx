@@ -144,9 +144,29 @@ export function PredictionPanel({
   useCardScrollReveal(resultRef);
 
   useEffect(() => {
-    if (reduced) return;
     const el = step1Ref.current;
     if (el === null) return;
+
+    // Same race `useCardScrollReveal` guards against (see that hook's own
+    // comment): `reduced` starts `false` and only flips after its own effect
+    // reads `matchMedia`, so on a page where reduced motion is already on
+    // from the first paint this effect could still run once with `reduced`
+    // stale at `false` -- and GSAP's `fromTo` below writes its "from" opacity
+    // to `el`'s inline style synchronously on creation, before the later
+    // re-render tears the timeline down. `.kill()` never reverts a style it
+    // already wrote. Checking `matchMedia` directly here closes the race;
+    // Step 1 has its own copy of this effect (see the doc comment above) so
+    // it needs its own copy of the guard, not just `useCardScrollReveal`'s.
+    const prefersReduced =
+      reduced ||
+      (typeof window.matchMedia === 'function' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    if (prefersReduced) {
+      el.style.removeProperty('opacity');
+      el.style.removeProperty('transform');
+      el.style.removeProperty('filter');
+      return;
+    }
     let cleanup: (() => void) | undefined;
 
     void (async () => {

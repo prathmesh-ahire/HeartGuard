@@ -38,9 +38,33 @@ export function useCardScrollReveal(ref: RefObject<HTMLElement | null>): void {
   const reduced = useReducedMotion();
 
   useEffect(() => {
-    if (reduced) return;
     const el = ref.current;
     if (el === null) return;
+
+    // `reduced` (this project's own hook) starts `false` and only flips
+    // after ITS OWN effect reads `matchMedia` and re-renders. On a page
+    // where reduced motion is already on from the very first paint --
+    // Playwright's `contextOptions.reducedMotion: 'reduce'`, or a real
+    // visitor's OS setting -- this effect could still run once with
+    // `reduced` stale at `false`. GSAP's `fromTo` below writes its "from"
+    // values (opacity < 1) to the element's inline style SYNCHRONOUSLY on
+    // creation, before the later re-render tears it down; `.kill()` stops
+    // the tween but never reverts an inline style it already wrote, so that
+    // first frame's faded opacity stuck on the element forever -- caught by
+    // T143.3's screenshot suite as a `<section>` frozen at opacity 0.35.
+    // Checking `matchMedia` directly here, in addition to `reduced`, closes
+    // the race, and clearing the three properties this hook ever sets
+    // recovers an element a previous mount already left mid-tween.
+    const prefersReduced =
+      reduced ||
+      (typeof window.matchMedia === 'function' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    if (prefersReduced) {
+      el.style.removeProperty('opacity');
+      el.style.removeProperty('transform');
+      el.style.removeProperty('filter');
+      return;
+    }
     let cleanup: (() => void) | undefined;
 
     void (async () => {
