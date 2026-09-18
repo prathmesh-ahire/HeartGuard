@@ -24,7 +24,7 @@ export function DisclaimerBanner() {
       aria-label="Scope and safety notice"
       className="flex items-start gap-2 border-b border-line bg-sunken px-4 py-1.5 text-body-sm leading-relaxed text-ink-2 lg:px-6"
     >
-      <span className="mt-px shrink-0 rounded border border-accent-line bg-accent-soft px-1.5 py-0.5 font-mono text-label-sm uppercase text-accent-deep">
+      <span className="mt-px shrink-0 rounded border border-accent-line bg-accent-soft px-1.5 py-0.5 text-label-sm uppercase text-accent-deep">
         Screening only
       </span>
       <span className="min-w-0">{DISCLAIMER_TEXT}</span>

@@ -1,12 +1,22 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { AnimatePresence, LazyMotion, m } from 'framer-motion';
 
 import { useReducedMotion } from '@/lib/capability';
 import { cn } from '@/lib/cn';
-import { LIFT_SPRING } from '@/lib/motion';
+import {
+  CARD_SCROLL_REVEAL_BLUR_PX,
+  CARD_SCROLL_REVEAL_OPACITY,
+  CARD_SCROLL_REVEAL_SCALE,
+  LIFT_SPRING,
+  STEP1_CARD_BLUR_SCROLL_PX,
+  STEP1_CARD_EXIT_BLUR_DELAY_PX,
+  STEP1_CARD_EXIT_BLUR_PX,
+  STEP1_CARD_SCROLL_PX,
+} from '@/lib/motion';
+import { useCardScrollReveal } from '@/lib/useCardScrollReveal';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { Button } from '@/components/ui/Button';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/States';
@@ -58,6 +68,35 @@ import {
  *
  * Every number rendered downstream comes from `result.display.*`, formatted in
  * Python.
+ *
+ * ## The Step 1 card's own scroll intro and exit
+ *
+ * Small, faint and blurred at the top of the page, resolving to its normal
+ * size/opacity/sharpness over `STEP1_CARD_SCROLL_PX` of scroll -- see the
+ * constant's own comment in `lib/motion.ts`. This wraps just the Step 1
+ * `GlassCard` in a plain ref'd `div`, rather than reaching into `GlassCard`
+ * itself, so the shared card primitive (used everywhere else in the app)
+ * stays untouched.
+ *
+ * The exit mirrors it as the card scrolls past the top of the viewport --
+ * but as one combined timeline per property (scale+opacity, and separately
+ * filter) spanning intro, a held resting state and exit together, not as
+ * separate intro/exit tweens. Two tweens both writing `filter` fought each
+ * other wherever their ranges met, which on this page is close: the card
+ * sits high enough that intro-finished and exit-starting are not far apart
+ * in scroll terms. One timeline per property means one owner at every
+ * scroll position. Both timelines share one body-anchored `ScrollTrigger`
+ * range, `elTop`/`elBottom` (the card's own absolute position, read once at
+ * mount) standing in for the card-relative positions a second `ScrollTrigger`
+ * would otherwise need.
+ *
+ * ## Step 2 and the Result card get the same reveal, the easy way
+ *
+ * Both start below the fold, so unlike Step 1 they have a natural "scrolling
+ * up into view" distance to trigger from -- their whole intro-hold-exit
+ * cycle runs off `useCardScrollReveal`, one hook call each, rather than the
+ * hand-built effect above. Step 1 could not use it: it is visible from the
+ * first paint, with no such distance to read the intro from.
  */
 
 const loadFeatures = () => import('@/components/motion/features').then((mod) => mod.default);
@@ -96,6 +135,121 @@ export function PredictionPanel({
   // T131: one recording, or a batch. A running batch locks the check and the mode.
   const [mode, setMode] = useState<'single' | 'batch'>('single');
   const [batchBusy, setBatchBusy] = useState(false);
+
+  const step1Ref = useRef<HTMLDivElement>(null);
+  const step2Ref = useRef<HTMLDivElement>(null);
+  const resultRef = useRef<HTMLElement>(null);
+  useCardScrollReveal(step2Ref);
+  useCardScrollReveal(resultRef);
+
+  useEffect(() => {
+    if (reduced) return;
+    const el = step1Ref.current;
+    if (el === null) return;
+    let cleanup: (() => void) | undefined;
+
+    void (async () => {
+      const [{ default: gsap }, { ScrollTrigger }] = await Promise.all([
+        import('gsap'),
+        import('gsap/ScrollTrigger'),
+      ]);
+      gsap.registerPlugin(ScrollTrigger);
+
+      // One timeline per property, covering the card's whole journey --
+      // intro, a held resting state, then the exit -- rather than four
+      // independent tweens. Two tweens both targeting `filter` (one for the
+      // intro, one for the exit) fought over the same property wherever
+      // their ranges came near each other, which on this page is close: the
+      // card sits high enough that "intro finished" and "exit starting" are
+      // not far apart in scroll terms. A single timeline has exactly one
+      // owner per property at every scroll position, so there is nothing
+      // left to fight.
+      //
+      // `elTop`/`elBottom` are the card's own absolute position on the page,
+      // read once here rather than re-derived from `ScrollTrigger`'s own
+      // element-relative positions, so both the page-anchored intro and the
+      // card-anchored exit can sit on the same body-anchored timeline.
+      const elTop = el.getBoundingClientRect().top + window.scrollY;
+      const elBottom = elTop + el.getBoundingClientRect().height;
+
+      const sizeTl = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: {
+          trigger: document.body,
+          start: 'top top',
+          end: `+=${elBottom}`,
+          scrub: true,
+        },
+      });
+      sizeTl
+        .fromTo(
+          el,
+          { scale: CARD_SCROLL_REVEAL_SCALE, opacity: CARD_SCROLL_REVEAL_OPACITY },
+          { scale: 1, opacity: 1, duration: STEP1_CARD_SCROLL_PX },
+          0,
+        )
+        // No tween between here and `elTop`: the timeline simply holds
+        // whatever the intro left it at, for as long as the card is not yet
+        // near the top of the viewport.
+        .to(
+          el,
+          { scale: CARD_SCROLL_REVEAL_SCALE, opacity: CARD_SCROLL_REVEAL_OPACITY, duration: elBottom - elTop },
+          elTop,
+        );
+
+      const blurTl = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: {
+          trigger: document.body,
+          start: 'top top',
+          end: `+=${elBottom}`,
+          scrub: true,
+        },
+      });
+      blurTl
+        .fromTo(
+          el,
+          { filter: `blur(${CARD_SCROLL_REVEAL_BLUR_PX}px)` },
+          { filter: 'blur(0px)', duration: STEP1_CARD_BLUR_SCROLL_PX },
+          0,
+        )
+        // Delayed start, same idea as the hold above: nothing touches
+        // `filter` again until STEP1_CARD_EXIT_BLUR_DELAY_PX past `elTop`,
+        // so the shrink is already under way before the blur follows it.
+        //
+        // Duration is `elBottom - elTop` -- the shrink's own full span, not
+        // the short STEP1_CARD_BLUR_SCROLL_PX the intro uses -- so the blur
+        // keeps climbing for the whole exit instead of maxing out in the
+        // first ~90px and then holding flat while the card is still visibly
+        // shrinking the rest of the way out. That flat hold was why the exit
+        // read as weaker than the intro even after raising the target
+        // strength: most of the exit showed no change at all.
+        //
+        // `power2.in` (2026-09-18, replacing the linear default just for
+        // this tween): linear still read as too intense right after the
+        // delayed start -- a straight ramp spends as much blur on its first
+        // pixels of scroll as its last. An in-ease spends the early part of
+        // the exit barely blurring at all and saves most of the climb to
+        // `STEP1_CARD_EXIT_BLUR_PX` for the back half, so it reads as normal
+        // just after the delay and only gets dramatic as the card actually
+        // gets small. (`power2.out`, tried earlier for the opposite reason --
+        // to front-load the climb -- was reverted; this is not that.)
+        .to(
+          el,
+          { filter: `blur(${STEP1_CARD_EXIT_BLUR_PX}px)`, duration: elBottom - elTop, ease: 'power2.in' },
+          elTop + STEP1_CARD_EXIT_BLUR_DELAY_PX,
+        );
+
+      cleanup = () => {
+        sizeTl.scrollTrigger?.kill();
+        sizeTl.kill();
+        blurTl.scrollTrigger?.kill();
+        blurTl.kill();
+      };
+    })();
+
+    return () => cleanup?.();
+  }, [reduced]);
 
   useEffect(() => {
     let disposed = false;
@@ -186,15 +340,9 @@ export function PredictionPanel({
   const source = file ?? (chosenSample !== null ? sampleAudioUrl(chosenSample) : null);
 
   return (
-    <div
-      className={cn(
-        'grid items-start gap-6',
-        mode === 'single' && 'lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]',
-        className,
-      )}
-    >
-      <div className="min-w-0 space-y-6">
-        <GlassCard eyebrow="Step 1" title="Choose a check">
+    <div className={cn('space-y-6', className)}>
+      <div ref={step1Ref}>
+        <GlassCard eyebrow="Step 1" title="Choose a check" className="rounded-3xl">
           <CheckSelector
             checks={checks}
             task={task}
@@ -211,14 +359,15 @@ export function PredictionPanel({
             </p>
           ) : null}
         </GlassCard>
+      </div>
 
-        {!available ? (
-          <EmptyState
-            title="No model is deployed for this task yet"
-            description={<p>{unavailableReason}</p>}
-          />
-        ) : (
-          <>
+      {!available ? (
+        <EmptyState
+          title="No model is deployed for this task yet"
+          description={<p>{unavailableReason}</p>}
+        />
+      ) : (
+        <>
           <div role="group" aria-label="How many recordings" className="flex flex-wrap gap-2">
             {(['single', 'batch'] as const).map((value) => (
               <button
@@ -228,7 +377,7 @@ export function PredictionPanel({
                 disabled={busy || batchBusy}
                 onClick={() => setMode(value)}
                 className={cn(
-                  'rounded-lg border px-3 py-1.5 font-mono text-label-md uppercase transition-colors',
+                  'rounded-lg border px-3 py-1.5 text-label-md uppercase transition-colors',
                   mode === value
                     ? 'border-accent bg-accent-soft text-accent-deep'
                     : 'border-line bg-panel text-ink-2 hover:border-accent-line',
@@ -240,18 +389,22 @@ export function PredictionPanel({
             ))}
           </div>
           {mode === 'batch' ? (
-            <GlassCard eyebrow="Step 2" title="Add several recordings">
-              {/* Keyed by task: a batch's rows belong to the check they were scored for. */}
-              <BatchPanel
-                key={task}
-                task={task}
-                taskTitle={spec?.title ?? task}
-                classes={spec?.classes ?? []}
-                onRunningChange={setBatchBusy}
-              />
-            </GlassCard>
+            <div ref={step2Ref}>
+              <GlassCard eyebrow="Step 2" title="Add several recordings" className="rounded-3xl">
+                {/* Keyed by task: a batch's rows belong to the check they were scored for. */}
+                <BatchPanel
+                  key={task}
+                  task={task}
+                  taskTitle={spec?.title ?? task}
+                  classes={spec?.classes ?? []}
+                  onRunningChange={setBatchBusy}
+                />
+              </GlassCard>
+            </div>
           ) : (
-          <GlassCard eyebrow="Step 2" title="Add a recording">
+          <>
+          <div ref={step2Ref}>
+          <GlassCard eyebrow="Step 2" title="Add a recording" className="rounded-3xl">
             <FileUpload onFile={acceptFile} phase={phase} fileName={file?.name ?? null} disabled={busy} />
 
             <MicRecorder
@@ -268,6 +421,23 @@ export function PredictionPanel({
               {prediction.upload.min_duration_display} and {prediction.upload.max_duration_display}.{' '}
               {prediction.upload.duration_note}
             </p>
+
+            <WaveformPlayer
+              className="mt-5"
+              source={source}
+              label={file?.name ?? (activeSample !== null ? activeSample.dataset_name + ' sample' : 'recording')}
+            />
+
+            <Button
+              tone="primary"
+              size="lg"
+              icon="pulse"
+              className="mt-5 w-full"
+              onClick={() => void run()}
+              disabled={busy || (file === null && chosenSample === null)}
+            >
+              {busy ? 'Analysing…' : 'Analyse recording'}
+            </Button>
 
             {pageSamples.length > 0 ? (
               <div className="mt-5">
@@ -316,93 +486,85 @@ export function PredictionPanel({
               </div>
             ) : null}
 
-            <WaveformPlayer
-              className="mt-5"
-              source={source}
-              label={file?.name ?? (activeSample !== null ? activeSample.dataset_name + ' sample' : 'recording')}
-            />
-
-            <Button
-              tone="primary"
-              size="lg"
-              icon="pulse"
-              className="mt-5 w-full"
-              onClick={() => void run()}
-              disabled={busy || (file === null && chosenSample === null)}
-            >
-              {busy ? 'Analysing…' : 'Analyse recording'}
-            </Button>
-
             {probeFailed !== null ? (
               <p className={cn(TYPE_SCALE.caption, 'mt-3 rounded border border-warn-line bg-warn-soft p-2 text-warn')}>
                 {probeFailed}
               </p>
             ) : null}
           </GlassCard>
-          )}
+          </div>
+
+          <section ref={resultRef} aria-label="Result" className="space-y-3">
+            <h2 className={cn(TYPE_SCALE.h2, 'text-ink')}>Result</h2>
+            <LazyMotion features={loadFeatures} strict>
+              <AnimatePresence mode="wait">
+                {busy ? (
+                  <m.div
+                    key="busy"
+                    initial={reduced ? undefined : { opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={reduced ? undefined : { opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <LoadingState
+                      label="Cleaning the recording, measuring it and scoring it"
+                      className="rounded-3xl"
+                    />
+                  </m.div>
+                ) : failure !== null ? (
+                  <m.div
+                    key="failure"
+                    initial={reduced ? undefined : { opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={LIFT_SPRING}
+                  >
+                    <ErrorState
+                      title="No prediction was produced"
+                      detail={failure}
+                      onRetry={() => void run()}
+                      className="rounded-3xl"
+                    />
+                  </m.div>
+                ) : result !== null ? (
+                  // Keyed by result identity so a second analysis on the same task
+                  // re-triggers the reveal rather than reusing the first mount.
+                  <m.div
+                    key={'result-' + resultKey}
+                    initial={reduced ? undefined : { opacity: 0, scale: 0.96, y: 10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    transition={LIFT_SPRING}
+                  >
+                    <ResultCard
+                      result={result}
+                      classes={spec?.classes ?? []}
+                      taskTitle={spec?.title}
+                      sample={activeSample}
+                      onDownloadReport={downloadReport}
+                      className="rounded-3xl"
+                    />
+                  </m.div>
+                ) : (
+                  <m.div
+                    key="empty"
+                    initial={reduced ? undefined : { opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <EmptyState
+                      icon="pulse"
+                      title="Nothing scored yet"
+                      description="Add a recording and select Analyse recording. The result appears here."
+                      className="rounded-3xl"
+                    />
+                  </m.div>
+                )}
+              </AnimatePresence>
+            </LazyMotion>
+          </section>
           </>
         )}
-      </div>
-
-      {mode === 'single' ? (
-      <section aria-label="Result" className="space-y-3 lg:sticky lg:top-6">
-        <h2 className={cn(TYPE_SCALE.h2, 'text-ink')}>Result</h2>
-        <LazyMotion features={loadFeatures} strict>
-          <AnimatePresence mode="wait">
-            {busy ? (
-              <m.div
-                key="busy"
-                initial={reduced ? undefined : { opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={reduced ? undefined : { opacity: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <LoadingState label="Cleaning the recording, measuring it and scoring it" />
-              </m.div>
-            ) : failure !== null ? (
-              <m.div
-                key="failure"
-                initial={reduced ? undefined : { opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={LIFT_SPRING}
-              >
-                <ErrorState title="No prediction was produced" detail={failure} onRetry={() => void run()} />
-              </m.div>
-            ) : result !== null ? (
-              // Keyed by result identity so a second analysis on the same task
-              // re-triggers the reveal rather than reusing the first mount.
-              <m.div
-                key={'result-' + resultKey}
-                initial={reduced ? undefined : { opacity: 0, scale: 0.96, y: 10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                transition={LIFT_SPRING}
-              >
-                <ResultCard
-                  result={result}
-                  classes={spec?.classes ?? []}
-                  taskTitle={spec?.title}
-                  sample={activeSample}
-                  onDownloadReport={downloadReport}
-                />
-              </m.div>
-            ) : (
-              <m.div
-                key="empty"
-                initial={reduced ? undefined : { opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.2 }}
-              >
-                <EmptyState
-                  icon="pulse"
-                  title="Nothing scored yet"
-                  description="Add a recording and select Analyse recording. The result appears here."
-                />
-              </m.div>
-            )}
-          </AnimatePresence>
-        </LazyMotion>
-      </section>
-      ) : null}
+        </>
+      )}
     </div>
   );
 }

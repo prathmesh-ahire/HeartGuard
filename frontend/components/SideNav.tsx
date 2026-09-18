@@ -10,13 +10,13 @@ import { cn } from '@/lib/cn';
 import { ROUTES, sectionFor, type RouteDefinition } from '@/lib/routes';
 
 /**
- * The navigation: the five product pages and nothing else (T127.3, T128.4).
+ * The navigation (T127.3, T128.4; moved to the top bar in the redesign).
  *
- * On a wide screen it is a fixed rail. On a narrow one the rail is hidden and
- * the same list opens in a left `Drawer` from the top bar's menu button, which
- * brings the drawer's focus handling and Escape with it. Only one of the two is
- * ever in the accessibility tree: the rail is `display: none` below `lg`, and
- * the drawer renders nothing while closed.
+ * On a wide screen the five pages are horizontal links in `TopBar`, so the
+ * page runs full width instead of losing a rail's worth of it. This component
+ * now only supplies the narrow-screen equivalent: the same list opens in a
+ * left `Drawer` from the top bar's menu button, which brings the drawer's
+ * focus handling and Escape with it.
  *
  * Built from `lib/routes.ts` rather than from a second hand-written list, so a
  * page and its nav entry cannot drift apart. The icon is the only thing chosen
@@ -89,29 +89,8 @@ export function SideNav({ open, onClose }: { open: boolean; onClose: () => void 
   }, [pathname]);
 
   return (
-    <>
-      <aside
-        id="primary-rail"
-        className="fixed inset-y-0 left-0 z-30 hidden w-rail flex-col gap-8 overflow-y-auto border-r border-line bg-panel px-4 py-5 lg:flex"
-      >
-        <Link href="/" className="flex items-center gap-2.5 px-1">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent text-on-accent">
-            <Icon name="pulse" className="h-5 w-5" strokeWidth={1.8} />
-          </span>
-          <span className="flex min-w-0 flex-col leading-none">
-            <span className="truncate text-headline-sm font-bold tracking-tight text-accent-strong">
-              PulseVision
-            </span>
-            <span className="label-micro mt-1 truncate">PV-MEPCG</span>
-          </span>
-        </Link>
-
-        <PrimaryNav current={current} />
-      </aside>
-
-      <Drawer side="left" open={open} onClose={onClose} title="PulseVision">
-        <PrimaryNav current={current} onNavigate={onClose} />
-      </Drawer>
-    </>
+    <Drawer side="left" open={open} onClose={onClose} title="PulseVision">
+      <PrimaryNav current={current} onNavigate={onClose} />
+    </Drawer>
   );
 }

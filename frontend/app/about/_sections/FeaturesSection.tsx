@@ -89,7 +89,7 @@ export function FeaturesSection() {
         {selected.available ? (
           <div className="mt-4 overflow-x-auto rounded-lg border border-line bg-panel">
             <table className="min-w-full border-collapse text-left text-body-sm">
-              <thead className="border-b-2 border-line bg-sunken font-mono text-label-sm uppercase text-ink-3">
+              <thead className="border-b-2 border-line bg-sunken text-label-sm uppercase text-ink-3">
                 <tr>
                   <th scope="col" className="px-3 py-2">
                     Rank

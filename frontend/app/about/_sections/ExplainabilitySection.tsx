@@ -9,7 +9,7 @@ import { SectionHeader } from '@/components/ui/SectionHeader';
 import { explainability } from '@/lib/generated/explainability';
 
 const CELL = 'stat px-3 py-1.5 text-body-sm';
-const HEAD = 'whitespace-nowrap px-3 py-2 font-mono text-label-sm uppercase text-ink-3';
+const HEAD = 'whitespace-nowrap px-3 py-2 text-label-sm uppercase text-ink-3';
 
 /**
  * Explainability (T117.2; moved under About the Model by T127.3).

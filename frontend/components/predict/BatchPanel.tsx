@@ -330,15 +330,15 @@ export function BatchPanel({
                 data-count={entry.id}
                 className="flex items-baseline gap-2 rounded-lg border border-line bg-panel px-3 py-1.5"
               >
-                <dt className="font-mono text-label-sm uppercase text-ink-3">{entry.label}</dt>
-                <dd className="stat font-mono text-label-lg text-ink">{String(entry.count)}</dd>
+                <dt className="text-label-sm uppercase text-ink-3">{entry.label}</dt>
+                <dd className="stat text-label-lg text-ink">{String(entry.count)}</dd>
               </div>
             ))}
           </dl>
 
           <div className="mt-4 overflow-x-auto rounded-lg border border-line">
             <table className="min-w-full text-left text-sm">
-              <thead className="border-b-2 border-line bg-sunken font-mono text-label-sm uppercase text-ink-3">
+              <thead className="border-b-2 border-line bg-sunken text-label-sm uppercase text-ink-3">
                 <tr>
                   <th scope="col" className="px-3 py-2">
                     <span className="sr-only">Select to compare</span>

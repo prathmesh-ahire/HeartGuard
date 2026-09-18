@@ -1,0 +1,169 @@
+/*
+ * Adapted from a Uiverse.io toggle by JkHuger (T-adhoc, 2026-09-17): a sun/moon
+ * switch, re-themed onto this project's own CSS custom properties instead of
+ * the original's fixed hsl() values, so it follows the light/dark scheme like
+ * every other coloured element rather than carrying its own hardcoded palette.
+ *
+ * Two things deliberately dropped from the original:
+ * - `.theme__fill`, a fixed full-viewport `mix-blend-mode: difference` layer
+ *   the original used for its own page-wide reveal transition. This app
+ *   already switches themes via next-themes swapping a class on <html>, and
+ *   every token-based colour already transitions on its own -- adding a
+ *   second, competing full-screen transition mechanism would fight it.
+ * - The original's `var(--primary)`/`var(--primaryT)` focus ring, replaced
+ *   with this project's own `--accent`/`--accent-line` tokens.
+ *
+ * `prefers-reduced-motion` is handled here directly (not through
+ * `useReducedMotion()`): this is a plain CSS component with no JS-driven
+ * animation, so a media query is the direct way to keep the state change
+ * instant instead of a slide when motion is reduced -- same end result the
+ * rest of the app reaches through the hook.
+ */
+
+.theme {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  font-size: 0.62em;
+}
+
+.toggleWrap {
+  position: relative;
+  display: block;
+}
+
+.icon,
+.toggle {
+  transition: 0.32s ease-in-out;
+}
+
+.icon,
+.toggle {
+  z-index: 1;
+}
+
+.icon,
+.iconPart {
+  position: absolute;
+}
+
+.icon {
+  display: block;
+  /* Centred on the 2.5em knob (0.25em inset on the 3em track): (2.5 - 1.5) / 2
+     = 0.5em margin, so top/left = 0.25 + 0.5 = 0.75em. The original snippet
+     used 0.5em, which sits 0.25em toward the top-left of true centre. */
+  top: 0.75em;
+  left: 0.75em;
+  width: 1.5em;
+  height: 1.5em;
+  pointer-events: none;
+}
+
+.iconPart {
+  border-radius: 50%;
+  box-shadow: 0.4em -0.4em 0 0.5em rgb(var(--on-accent)) inset;
+  top: calc(50% - 0.5em);
+  left: calc(50% - 0.5em);
+  width: 1em;
+  height: 1em;
+  transition:
+    box-shadow 0.32s ease-in-out,
+    opacity 0.32s ease-in-out,
+    transform 0.32s ease-in-out;
+  transform: scale(0.5);
+}
+
+.iconPart ~ .iconPart {
+  background-color: rgb(var(--on-accent));
+  border-radius: 0.05em;
+  top: 50%;
+  left: calc(50% - 0.05em);
+  transform: rotate(0deg) translateY(0.5em);
+  transform-origin: 50% 0;
+  width: 0.1em;
+  height: 0.2em;
+}
+
+.iconPart:nth-child(3) { transform: rotate(45deg) translateY(0.45em); }
+.iconPart:nth-child(4) { transform: rotate(90deg) translateY(0.45em); }
+.iconPart:nth-child(5) { transform: rotate(135deg) translateY(0.45em); }
+.iconPart:nth-child(6) { transform: rotate(180deg) translateY(0.45em); }
+.iconPart:nth-child(7) { transform: rotate(225deg) translateY(0.45em); }
+.iconPart:nth-child(8) { transform: rotate(270deg) translateY(0.5em); }
+.iconPart:nth-child(9) { transform: rotate(315deg) translateY(0.5em); }
+
+.toggle {
+  position: relative;
+  display: block;
+  background-color: rgb(var(--accent-soft));
+  border-radius: 25% / 50%;
+  box-shadow: 0 0 0 0.125em rgb(var(--accent-line) / 0.5);
+  padding: 0.25em;
+  width: 6em;
+  height: 3em;
+  margin: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  transition:
+    background-color 0.32s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+.toggle::before {
+  display: block;
+  background-color: rgb(var(--accent));
+  border-radius: 50%;
+  content: '';
+  width: 2.5em;
+  height: 2.5em;
+  transition: 0.32s ease-in-out;
+}
+
+.toggle:focus-visible {
+  box-shadow: 0 0 0 0.125em rgb(var(--accent));
+  outline: transparent;
+}
+
+.toggle:checked {
+  background-color: rgb(var(--accent-deep));
+}
+
+.toggle:checked::before {
+  background-color: rgb(var(--accent-strong));
+  transform: translateX(3em);
+}
+
+.toggle:checked ~ .icon {
+  transform: translateX(3em);
+}
+
+.toggle:checked ~ .icon .iconPart:first-child {
+  box-shadow: 0.2em -0.2em 0 0.2em rgb(var(--on-accent)) inset;
+  transform: scale(1);
+  top: 0.2em;
+  left: -0.2em;
+}
+
+.toggle:checked ~ .icon .iconPart ~ .iconPart {
+  opacity: 0;
+}
+
+.toggle:checked ~ .icon .iconPart:nth-child(2) { transform: rotate(45deg) translateY(0.8em); }
+.toggle:checked ~ .icon .iconPart:nth-child(3) { transform: rotate(90deg) translateY(0.8em); }
+.toggle:checked ~ .icon .iconPart:nth-child(4) { transform: rotate(135deg) translateY(0.8em); }
+.toggle:checked ~ .icon .iconPart:nth-child(5) { transform: rotate(180deg) translateY(0.8em); }
+.toggle:checked ~ .icon .iconPart:nth-child(6) { transform: rotate(225deg) translateY(0.8em); }
+.toggle:checked ~ .icon .iconPart:nth-child(7) { transform: rotate(270deg) translateY(0.8em); }
+.toggle:checked ~ .icon .iconPart:nth-child(8) { transform: rotate(315deg) translateY(0.8em); }
+.toggle:checked ~ .icon .iconPart:nth-child(9) { transform: rotate(360deg) translateY(0.8em); }
+
+@media (prefers-reduced-motion: reduce) {
+  .icon,
+  .iconPart,
+  .toggle,
+  .toggle::before {
+    transition: none !important;
+  }
+}

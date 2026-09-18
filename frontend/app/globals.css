@@ -141,7 +141,7 @@ body {
    * as an instrument marking rather than as prose.
    */
   .label-micro {
-    @apply font-mono text-label-sm uppercase text-ink-3;
+    @apply text-label-sm uppercase text-ink-3;
   }
 
   /*

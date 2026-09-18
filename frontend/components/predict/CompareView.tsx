@@ -110,7 +110,7 @@ function Side({ item }: { item: CompareItem }) {
             return (
               <li key={name}>
                 <div className="flex items-baseline justify-between gap-3">
-                  <span className={cn('font-mono text-label-md uppercase', top ? 'text-accent-deep' : 'text-ink-2')}>
+                  <span className={cn('text-label-md uppercase', top ? 'text-accent-deep' : 'text-ink-2')}>
                     {name}
                   </span>
                   <span className="stat font-mono text-telemetry-sm text-ink">

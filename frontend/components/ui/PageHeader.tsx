@@ -45,7 +45,7 @@ export function PageHeader({
       )}
     >
       <div className="max-w-reading">
-        {eyebrow ? <p className="font-mono text-label-md uppercase text-accent">{eyebrow}</p> : null}
+        {eyebrow ? <p className="text-label-md uppercase text-accent">{eyebrow}</p> : null}
         <Heading
           className={cn(level === 1 ? 'text-title' : 'text-headline-lg', 'text-ink', eyebrow && 'mt-2')}
         >

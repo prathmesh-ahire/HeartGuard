@@ -75,13 +75,13 @@ export function ConvergencePanel({ run }: { run: Run }) {
     <article className="overflow-hidden rounded-xl border border-line bg-panel shadow-panel">
       <header className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-4 py-2.5">
         <h3 className="flex flex-wrap items-baseline gap-2 text-headline-sm text-ink">
-          <span className="rounded border border-accent-line bg-accent-soft px-1.5 py-0.5 font-mono text-label-md uppercase text-accent-deep">
+          <span className="rounded border border-accent-line bg-accent-soft px-1.5 py-0.5 text-label-md uppercase text-accent-deep">
             {run.run_id}
           </span>
           {run.title}
         </h3>
         {!run.available ? (
-          <span className="rounded border border-warn-line bg-warn-soft px-1.5 py-0.5 font-mono text-label-sm uppercase text-warn">
+          <span className="rounded border border-warn-line bg-warn-soft px-1.5 py-0.5 text-label-sm uppercase text-warn">
             not run
           </span>
         ) : null}
@@ -148,7 +148,7 @@ export function FrameTable({
     <div className={className}>
       <div className="overflow-x-auto rounded-lg border border-line bg-panel">
         <table className="min-w-full border-collapse text-left text-body-sm">
-          <thead className="border-b-2 border-line bg-sunken font-mono text-label-sm uppercase text-ink-3">
+          <thead className="border-b-2 border-line bg-sunken text-label-sm uppercase text-ink-3">
             <tr>
               {frame.columns.map((column) => (
                 <th key={column.name} scope="col" className="whitespace-nowrap px-3 py-2">

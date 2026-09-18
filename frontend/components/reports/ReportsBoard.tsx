@@ -1,9 +1,12 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { LazyMotion, m } from 'framer-motion';
 
+import { useReducedMotion } from '@/lib/capability';
 import { cn } from '@/lib/cn';
 import { SHOW_SCREENING_NOTICE } from '@/lib/flags';
+import { CARD_HOVER, PRESS_SPRING } from '@/lib/motion';
 import { SURFACE, TYPE_SCALE, LAYOUT } from '@/lib/tokens';
 import { formatWhen } from '@/lib/history';
 import { PRINT_ROUTE } from '@/lib/routes';
@@ -29,6 +32,8 @@ const TASKS = prediction.tasks;
 
 const INPUT_CLS = 'rounded-lg border border-line bg-panel px-3 py-1.5 text-body-sm text-ink';
 
+const loadFeatures = () => import('@/components/motion/features').then((mod) => mod.default);
+
 /** One action's status: idle, working, or failed with a message. */
 type ActionState = { key: string; status: 'working' } | { key: string; status: 'failed'; message: string } | null;
 
@@ -41,6 +46,7 @@ function reportMessage(error: unknown): string {
 // ---------------------------------------------------------------------------
 
 function RecentRecordings({ onGenerated }: { onGenerated: () => void }) {
+  const reduced = useReducedMotion();
   const [rows, setRows] = useState<HistoryRecord[] | null>(null);
   const [failed, setFailed] = useState(false);
   const [action, setAction] = useState<ActionState>(null);
@@ -66,7 +72,8 @@ function RecentRecordings({ onGenerated }: { onGenerated: () => void }) {
   );
 
   return (
-    <GlassCard as="section" ariaLabel="Per-recording report" eyebrow="One analysis" title="Per-recording report">
+    <m.div whileHover={reduced ? undefined : CARD_HOVER} transition={PRESS_SPRING}>
+    <GlassCard as="section" ariaLabel="Per-recording report" eyebrow="One analysis" title="Per-recording report" className="rounded-3xl">
       <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mb-3')}>
         A PDF of one analysis: result, probabilities, notes, date, and the waveform when the
         recording is still available (built-in samples only -- History never keeps audio). The
@@ -123,6 +130,7 @@ function RecentRecordings({ onGenerated }: { onGenerated: () => void }) {
         </ul>
       )}
     </GlassCard>
+    </m.div>
   );
 }
 
@@ -131,6 +139,7 @@ function RecentRecordings({ onGenerated }: { onGenerated: () => void }) {
 // ---------------------------------------------------------------------------
 
 function BulkExport({ onGenerated }: { onGenerated: () => void }) {
+  const reduced = useReducedMotion();
   const [task, setTask] = useState('');
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
@@ -151,7 +160,8 @@ function BulkExport({ onGenerated }: { onGenerated: () => void }) {
   };
 
   return (
-    <GlassCard as="section" ariaLabel="Bulk export" eyebrow="Many analyses" title="Bulk export">
+    <m.div whileHover={reduced ? undefined : CARD_HOVER} transition={PRESS_SPRING}>
+    <GlassCard as="section" ariaLabel="Bulk export" eyebrow="Many analyses" title="Bulk export" className="rounded-3xl">
       <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mb-3')}>
         Every History row matching these filters, as one CSV -- the same values History shows, with
         no filter applied at all if left blank.
@@ -184,6 +194,7 @@ function BulkExport({ onGenerated }: { onGenerated: () => void }) {
         <ErrorState className="mt-3" title="The report was not produced" detail={message} />
       ) : null}
     </GlassCard>
+    </m.div>
   );
 }
 
@@ -192,6 +203,7 @@ function BulkExport({ onGenerated }: { onGenerated: () => void }) {
 // ---------------------------------------------------------------------------
 
 function ModelSummary({ onGenerated }: { onGenerated: () => void }) {
+  const reduced = useReducedMotion();
   const [state, setState] = useState<'idle' | 'working' | 'failed'>('idle');
   const [message, setMessage] = useState('');
 
@@ -209,7 +221,8 @@ function ModelSummary({ onGenerated }: { onGenerated: () => void }) {
   };
 
   return (
-    <GlassCard as="section" ariaLabel="Model summary" eyebrow="Overall performance" title="Model summary">
+    <m.div whileHover={reduced ? undefined : CARD_HOVER} transition={PRESS_SPRING}>
+    <GlassCard as="section" ariaLabel="Model summary" eyebrow="Overall performance" title="Model summary" className="rounded-3xl">
       {SHOW_SCREENING_NOTICE ? (
         <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mb-3')}>{prediction.disclaimer}</p>
       ) : null}
@@ -220,6 +233,7 @@ function ModelSummary({ onGenerated }: { onGenerated: () => void }) {
         <ErrorState className="mt-3" title="The report was not produced" detail={message} />
       ) : null}
     </GlassCard>
+    </m.div>
   );
 }
 
@@ -228,6 +242,7 @@ function ModelSummary({ onGenerated }: { onGenerated: () => void }) {
 // ---------------------------------------------------------------------------
 
 function RecentReports({ refreshKey }: { refreshKey: number }) {
+  const reduced = useReducedMotion();
   const [rows, setRows] = useState<RecentReport[] | null>(null);
   const [failed, setFailed] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
@@ -249,7 +264,8 @@ function RecentReports({ refreshKey }: { refreshKey: number }) {
   };
 
   return (
-    <GlassCard as="section" ariaLabel="Recently generated reports" eyebrow="Recent downloads" title="Recently generated reports">
+    <m.div whileHover={reduced ? undefined : CARD_HOVER} transition={PRESS_SPRING}>
+    <GlassCard as="section" ariaLabel="Recently generated reports" eyebrow="Recent downloads" title="Recently generated reports" className="rounded-3xl">
       {failed !== null ? (
         <ErrorState title="The report list could not be loaded" detail={failed} />
       ) : rows === null ? (
@@ -276,6 +292,7 @@ function RecentReports({ refreshKey }: { refreshKey: number }) {
         </ul>
       )}
     </GlassCard>
+    </m.div>
   );
 }
 
@@ -295,12 +312,17 @@ export function ReportsBoard() {
         title="Reports"
         description="Every number below comes from a stored result or the same source as the rest of the dashboard, formatted once in Python."
       />
-      <div className="grid gap-6 lg:grid-cols-2">
+      <LazyMotion features={loadFeatures} strict>
+      {/* One column, not two side by side: one analysis, then many analyses,
+          then the model summary, then recent downloads -- in that order, one
+          under the next, not split into competing columns. */}
+      <div className="space-y-6">
         <RecentRecordings onGenerated={bump} />
         <BulkExport onGenerated={bump} />
         <ModelSummary onGenerated={bump} />
         <RecentReports refreshKey={refreshKey} />
       </div>
+      </LazyMotion>
     </div>
   );
 }

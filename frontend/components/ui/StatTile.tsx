@@ -1,8 +1,15 @@
-import type { ReactNode } from 'react';
+'use client';
 
+import type { ReactNode } from 'react';
+import { LazyMotion, m } from 'framer-motion';
+
+import { useReducedMotion } from '@/lib/capability';
 import { cn } from '@/lib/cn';
+import { CARD_HOVER, PRESS_SPRING } from '@/lib/motion';
 import { SURFACE, TYPE_SCALE } from '@/lib/tokens';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
+
+const loadFeatures = () => import('@/components/motion/features').then((mod) => mod.default);
 
 /**
  * One headline figure, in the shape of an instrument readout: a status rule
@@ -40,8 +47,15 @@ export function StatTile({
   animate?: boolean;
   marked?: boolean;
 }) {
+  const reduced = useReducedMotion();
+
   return (
-    <div className={cn(SURFACE.card, 'overflow-hidden', className)}>
+    <LazyMotion features={loadFeatures} strict>
+    <m.div
+      className={cn(SURFACE.card, 'overflow-hidden rounded-2xl', className)}
+      whileHover={reduced ? undefined : CARD_HOVER}
+      transition={PRESS_SPRING}
+    >
       <div
         aria-hidden="true"
         className={cn('h-0.5 w-full', marked ? 'bg-accent' : 'bg-line')}
@@ -55,7 +69,7 @@ export function StatTile({
             <span className={cn(TYPE_SCALE.stat, 'text-ink')}>{display}</span>
           )}
           {unit ? (
-            <span className={cn('font-mono text-label-md uppercase', SURFACE.subtle)}>{unit}</span>
+            <span className={cn('text-label-md uppercase', SURFACE.subtle)}>{unit}</span>
           ) : null}
         </p>
         {hint ? <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mt-2')}>{hint}</p> : null}
@@ -71,6 +85,7 @@ export function StatTile({
           </p>
         ) : null}
       </div>
-    </div>
+    </m.div>
+    </LazyMotion>
   );
 }

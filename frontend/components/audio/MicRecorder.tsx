@@ -144,7 +144,7 @@ export function MicRecorder({
     <div className={className}>
       {phase === 'recording' ? (
         <div className="flex flex-wrap items-center gap-3">
-          <span className="flex items-center gap-2 font-mono text-label-lg text-danger" aria-live="polite">
+          <span className="flex items-center gap-2 text-label-lg text-danger" aria-live="polite">
             <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-danger motion-safe:animate-pulse" />
             Recording {clock(elapsed)} / {clock(maxSeconds)}
           </span>

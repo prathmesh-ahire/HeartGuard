@@ -117,6 +117,16 @@ Docs/         todo.md (the plan), note.md (the change log), source documents
 Requires **Python 3.11.9** and, from Part X onward, **Node LTS** (>= 18, even
 major version) with npm on PATH.
 
+### Windows: one-click setup
+
+`setup.bat` finds a Python 3.11 install, creates `.venv`, and installs every
+pinned requirement (`base`, `extra`, `api`, `report`) in order — double-click
+it, or run it from a terminal. Once it finishes, double-click
+`Start HeartGuard.bat` to launch the app and open it in the browser. Neither
+script needs Node: `frontend/out/` is committed, so the app runs from it
+directly. This is the whole quickstart below, automated; read on if you'd
+rather do it by hand, or are not on Windows.
+
 ### 1. Create the virtual environment
 
 ```powershell

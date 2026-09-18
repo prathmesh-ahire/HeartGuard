@@ -56,7 +56,7 @@ export function FeatureExplorer() {
           <select
             value={family}
             onChange={(event) => setFamily(event.target.value)}
-            className="rounded border border-line bg-sunken px-2 py-1.5 font-mono text-label-md text-ink focus:border-accent focus:outline-none"
+            className="rounded border border-line bg-sunken px-2 py-1.5 text-label-md text-ink focus:border-accent focus:outline-none"
           >
             <option value="">all families</option>
             {features.families.map((item) => (
@@ -109,7 +109,7 @@ export function FeatureExplorer() {
       ) : (
         <div className="mt-4 max-h-[36rem] overflow-auto rounded-lg border border-line">
           <table className="min-w-full text-left text-sm">
-            <thead className="sticky top-0 border-b-2 border-line bg-sunken font-mono text-label-sm uppercase text-ink-3">
+            <thead className="sticky top-0 border-b-2 border-line bg-sunken text-label-sm uppercase text-ink-3">
               <tr>
                 <th scope="col" className="px-3 py-2">
                   #

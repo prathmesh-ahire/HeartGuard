@@ -207,14 +207,18 @@ def test_the_layout_scale_is_declared_once() -> None:
 
 
 def test_the_shell_uses_the_layout_and_a_drawer_on_narrow_screens() -> None:
+    """Nav moved from the side rail to the top bar (post-launch redesign): the
+    wide-screen list is one `<nav>` in TopBar.tsx now, and SideNav.tsx supplies
+    only the narrow-screen Drawer -- one `<PrimaryNav>`, not two."""
     shell = (COMPONENTS / "AppShell.tsx").read_text(encoding="utf-8")
     assert "LAYOUT.page" in shell
     assert 'href="#main"' in shell and 'id="main"' in shell, "no skip link"
     nav = (COMPONENTS / "SideNav.tsx").read_text(encoding="utf-8")
     assert "<Drawer" in nav and 'side="left"' in nav
-    assert nav.count("<PrimaryNav") == 2, "the rail and the drawer must share one list"
+    assert nav.count("<PrimaryNav") == 1, "the drawer's own list"
     bar = (COMPONENTS / "TopBar.tsx").read_text(encoding="utf-8")
     assert "aria-expanded={menuOpen}" in bar
+    assert "ROUTES.map" in bar, "the wide-screen nav is gone from the top bar"
 
 
 def test_the_title_area_has_exactly_one_primary_action_slot() -> None:

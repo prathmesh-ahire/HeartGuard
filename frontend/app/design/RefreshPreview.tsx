@@ -49,7 +49,7 @@ function ThemePanel({ mode, children }: { mode: Mode; children: ReactNode }) {
       data-theme-preview={mode}
       className={cn(mode, 'min-w-0 space-y-8 rounded-2xl border border-line bg-surface p-5 text-ink')}
     >
-      <p className="font-mono text-label-md uppercase text-accent">
+      <p className="text-label-md uppercase text-accent">
         {mode === 'light' ? 'Light theme' : 'Dark theme'}
       </p>
       {children}

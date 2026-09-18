@@ -90,7 +90,7 @@ export function ModelComparison() {
               setExpId(event.target.value);
               setModelId('');
             }}
-            className="rounded border border-line bg-sunken px-2 py-1.5 font-mono text-label-md text-ink focus:border-accent focus:outline-none"
+            className="rounded border border-line bg-sunken px-2 py-1.5 text-label-md text-ink focus:border-accent focus:outline-none"
           >
             {available.map((item) => (
               <option key={item.exp_id} value={item.exp_id}>
@@ -105,7 +105,7 @@ export function ModelComparison() {
           <select
             value={selectedModel}
             onChange={(event) => setModelId(event.target.value)}
-            className="rounded border border-line bg-sunken px-2 py-1.5 font-mono text-label-md text-ink focus:border-accent focus:outline-none"
+            className="rounded border border-line bg-sunken px-2 py-1.5 text-label-md text-ink focus:border-accent focus:outline-none"
           >
             {models.map((item) => (
               <option key={item.model_id} value={item.model_id}>
@@ -136,7 +136,7 @@ export function ModelComparison() {
       {/* ---------------------------------------------------------------- */}
       <div className="mt-6 overflow-x-auto rounded-lg border border-line">
         <table className="min-w-full text-left text-sm">
-          <thead className="border-b-2 border-line bg-sunken font-mono text-label-sm uppercase text-ink-3">
+          <thead className="border-b-2 border-line bg-sunken text-label-sm uppercase text-ink-3">
             <tr>
               <th scope="col" className="px-3 py-2">
                 Model
@@ -200,7 +200,7 @@ export function ModelComparison() {
           </h3>
           <div className="mt-3 overflow-x-auto rounded-lg border border-line">
             <table className="min-w-full text-left text-sm">
-              <thead className="border-b-2 border-line bg-sunken font-mono text-label-sm uppercase text-ink-3">
+              <thead className="border-b-2 border-line bg-sunken text-label-sm uppercase text-ink-3">
                 <tr>
                   <th className="px-3 py-2">Class</th>
                   <th className="px-3 py-2">Recall</th>
@@ -305,7 +305,7 @@ export function ModelComparison() {
           <>
             <div className="mt-3 inline-block overflow-hidden rounded-lg border border-line">
               <table className="text-sm">
-                <thead className="border-b-2 border-line bg-sunken font-mono text-label-sm uppercase text-ink-3">
+                <thead className="border-b-2 border-line bg-sunken text-label-sm uppercase text-ink-3">
                   <tr>
                     <th className="px-3 py-2 text-left">True \ Predicted</th>
                     {(confusion.class_names ?? []).map((name) => (

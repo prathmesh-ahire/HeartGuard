@@ -61,7 +61,7 @@ export function ProbabilityBars({
         return (
           <li key={name}>
             <div className="flex items-baseline justify-between gap-3">
-              <span className={cn('font-mono text-label-md uppercase', top ? 'text-accent-deep' : 'text-ink-2')}>
+              <span className={cn('text-label-md uppercase', top ? 'text-accent-deep' : 'text-ink-2')}>
                 {name}
               </span>
               <span className={cn('stat font-mono text-telemetry-sm', top ? 'text-ink' : 'text-ink-2')}>
@@ -185,7 +185,7 @@ export function ResultCard({
         aria-label="Prediction result"
       >
         <div className="p-5">
-          <p className="font-mono text-label-sm uppercase text-warn">{taskTitle ?? result.task}</p>
+          <p className="text-label-sm uppercase text-warn">{taskTitle ?? result.task}</p>
           <p className={cn(TYPE_SCALE.h1, 'mt-1 text-warn')}>Not scored</p>
           <p role="alert" className={cn(TYPE_SCALE.body, 'mt-4 max-w-prose text-warn')}>
             {result.not_scorable_reason ??
@@ -284,7 +284,7 @@ export function ResultCard({
 
         <StaggerItem className="px-5 pb-5">
           <details className="mt-4 rounded-lg border border-line bg-sunken p-3">
-            <summary className="cursor-pointer font-mono text-label-md uppercase text-accent-strong marker:text-accent">
+            <summary className="cursor-pointer text-label-md uppercase text-accent-strong marker:text-accent">
               Details
             </summary>
             <dl className="mt-3 grid gap-x-4 gap-y-1.5 text-body-sm sm:grid-cols-2">
@@ -317,7 +317,7 @@ export function ResultCard({
 
           {reference !== null ? (
             <details className="mt-3 rounded-lg border border-line bg-sunken p-3">
-              <summary className="cursor-pointer font-mono text-label-md uppercase text-accent-strong marker:text-accent">
+              <summary className="cursor-pointer text-label-md uppercase text-accent-strong marker:text-accent">
                 What cross-validation recorded for this sample
               </summary>
               <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mt-2')}>{prediction.reference.note}</p>

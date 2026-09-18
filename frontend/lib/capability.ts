@@ -134,3 +134,22 @@ export function useReducedMotion(): boolean {
 
   return reduced;
 }
+
+/**
+ * Whether the page has scrolled past `threshold` px (the top bar's
+ * floating-nav crossfade). False on the server and on the first client
+ * render -- there is no scroll position before hydration -- so this never
+ * disagrees with what the server rendered.
+ */
+export function useScrolled(threshold = 24): boolean {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const read = (): void => setScrolled(window.scrollY > threshold);
+    read();
+    window.addEventListener('scroll', read, { passive: true });
+    return () => window.removeEventListener('scroll', read);
+  }, [threshold]);
+
+  return scrolled;
+}

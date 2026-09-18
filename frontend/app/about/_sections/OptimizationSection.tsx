@@ -55,7 +55,7 @@ export function OptimizationSection() {
           <Disclosure
             summary={
               <>
-                <span className="mr-2 font-mono text-label-sm uppercase text-ink-3">SO-04</span>
+                <span className="mr-2 text-label-sm uppercase text-ink-3">SO-04</span>
                 How performance moves with subset size
               </>
             }
@@ -72,7 +72,7 @@ export function OptimizationSection() {
           <Disclosure
             summary={
               <>
-                <span className="mr-2 font-mono text-label-sm uppercase text-ink-3">SO-05</span>
+                <span className="mr-2 text-label-sm uppercase text-ink-3">SO-05</span>
                 Ensemble weights, and whether the search moved them
               </>
             }
@@ -92,7 +92,7 @@ export function OptimizationSection() {
           <Disclosure
             summary={
               <>
-                <span className="mr-2 font-mono text-label-sm uppercase text-ink-3">SO-06</span>
+                <span className="mr-2 text-label-sm uppercase text-ink-3">SO-06</span>
                 The Pareto front
               </>
             }
@@ -109,7 +109,7 @@ export function OptimizationSection() {
           <Disclosure
             summary={
               <>
-                <span className="mr-2 font-mono text-label-sm uppercase text-ink-3">
+                <span className="mr-2 text-label-sm uppercase text-ink-3">
                   SO-01 vs SO-02
                 </span>
                 Random against Bayesian search

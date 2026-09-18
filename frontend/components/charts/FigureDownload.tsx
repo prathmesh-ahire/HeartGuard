@@ -42,7 +42,7 @@ export function FigureDownload({
         download
         className={cn(
           'inline-flex items-center gap-1.5 rounded border px-2.5 py-1',
-          'border-line font-mono text-label-md uppercase text-ink-2',
+          'border-line text-label-md uppercase text-ink-2',
           'hover:border-accent-line hover:text-accent-strong',
         )}
       >

@@ -63,7 +63,7 @@ export function PreprocessingSection() {
           <Disclosure
             summary={
               <>
-                <span className="mr-2 font-mono text-label-sm uppercase text-ink-3">G05</span>
+                <span className="mr-2 text-label-sm uppercase text-ink-3">G05</span>
                 Before and after filtering, at full resolution
               </>
             }
@@ -80,7 +80,7 @@ export function PreprocessingSection() {
           <Disclosure
             summary={
               <>
-                <span className="mr-2 font-mono text-label-sm uppercase text-ink-3">G06 / G09</span>
+                <span className="mr-2 text-label-sm uppercase text-ink-3">G06 / G09</span>
                 Spectrogram and wavelet decomposition, normal versus abnormal
               </>
             }

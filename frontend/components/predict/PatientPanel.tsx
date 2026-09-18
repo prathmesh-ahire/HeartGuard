@@ -74,7 +74,7 @@ export function PatientPanel({ task, className }: { task: string; className?: st
             Dataset sample {group.subject_id}: the four recordings this subject was screened
             with. Not a patient and not a case — de-identified paediatric screening data.
           </caption>
-          <thead className="border-b-2 border-line bg-sunken font-mono text-label-sm uppercase text-ink-3">
+          <thead className="border-b-2 border-line bg-sunken text-label-sm uppercase text-ink-3">
             <tr>
               <th scope="col" className="px-3 py-2">Recording</th>
               <th scope="col" className="px-3 py-2">Location</th>

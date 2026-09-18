@@ -133,7 +133,7 @@ export function ResultsTable({
             onChange={(event) => setFilter(event.target.value)}
             placeholder={'search ' + source.id}
             className={cn(
-              'rounded border border-line bg-panel px-2 py-1 font-mono text-label-md',
+              'rounded border border-line bg-panel px-2 py-1 text-label-md',
               'placeholder:text-ink-3 focus:border-accent focus:outline-none',
             )}
           />
@@ -164,7 +164,7 @@ export function ResultsTable({
                       }
                       className={cn(
                         'border-b-2 border-line bg-sunken px-3 py-2',
-                        'whitespace-nowrap font-mono text-label-sm uppercase text-ink-3',
+                        'whitespace-nowrap text-label-sm uppercase text-ink-3',
                       )}
                     >
                       <button

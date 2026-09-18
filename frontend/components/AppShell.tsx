@@ -8,12 +8,12 @@ import { cn } from '@/lib/cn';
 import { LAYOUT } from '@/lib/tokens';
 
 /**
- * The page shell (T128.4): the navigation rail on a wide screen, a menu that
- * opens the same five pages in a drawer on a narrow one, a quiet top bar, and
- * the page in one centred content width.
+ * The page shell (T128.4, top nav in the redesign): the top bar carries the
+ * five-page navigation on a wide screen, and a menu that opens the same list
+ * in a drawer on a narrow one, with the page in one centred content width.
  *
- * It exists as one client component only because the rail, the drawer and the
- * bar share a single piece of state -- whether the mobile menu is open.
+ * It exists as one client component only because the drawer and the bar share
+ * a single piece of state -- whether the mobile menu is open.
  *
  * The disclaimer and the footer are SLOTS, filled by the root layout, not
  * imported here. T110.3's guarantee is that the root layout itself renders
@@ -48,7 +48,7 @@ export function AppShell({
       {/* T134.3: a printed page (or Print -> Save as PDF) drops the nav rail,
           top bar and footer -- Tailwind's `print:` variant, not a separate
           print-only route, so every page prints clean, not just Reports'. */}
-      <div className="flex min-h-screen flex-col lg:pl-rail print:pl-0">
+      <div className="flex min-h-screen flex-col print:pl-0">
         <div className="print:hidden">{disclaimer}</div>
         <div className="print:hidden">
           <TopBar onMenu={() => setNavOpen(true)} menuOpen={navOpen} />

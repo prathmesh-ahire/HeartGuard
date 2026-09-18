@@ -31,7 +31,7 @@ export function seriesColor(index: number): string {
  * enough that hierarchy is legible without weight changes.
  */
 export const TYPE_SCALE = {
-  micro: 'font-mono text-label-sm uppercase',
+  micro: 'text-label-sm uppercase',
   /** A provenance line: monospace for the paths, but not shouted. */
   provenance: 'font-mono text-body-sm normal-case tracking-normal',
   caption: 'text-body-sm',

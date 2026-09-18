@@ -3,11 +3,15 @@
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 
-import { Icon } from '@/components/ui/Icon';
+import styles from '@/components/ThemeToggle.module.css';
 
 /**
- * The theme is only known in the browser, so the button renders a stable
- * placeholder until it mounts. Without that guard the server-rendered markup
+ * A sun/moon switch (T-adhoc, 2026-09-17), adapted from a Uiverse.io toggle by
+ * JkHuger onto this project's own CSS custom properties -- see
+ * `ThemeToggle.module.css` for what changed and why.
+ *
+ * The theme is only known in the browser, so the checkbox renders unchecked
+ * (its default) until mount. Without that guard the server-rendered markup
  * and the first client render disagree and React logs a hydration error --
  * which on a static export is the whole page re-rendering.
  */
@@ -25,15 +29,28 @@ export function ThemeToggle() {
       : 'Switch to dark theme';
 
   return (
-    <button
-      type="button"
-      aria-label={label}
-      title={label}
-      onClick={() => setTheme(dark ? 'light' : 'dark')}
-      className="flex items-center gap-1.5 rounded-lg border border-line bg-panel px-2 py-1.5 font-mono text-label-md text-ink-2 transition-colors hover:border-accent-line hover:text-accent-strong"
-    >
-      <Icon name={dark ? 'sun' : 'moon'} className="h-3.5 w-3.5 text-accent" />
-      <span className="hidden sm:inline">{mounted ? (dark ? 'LIGHT' : 'DARK') : 'THEME'}</span>
-    </button>
+    <label className={styles.theme} title={label}>
+      <span className={styles.toggleWrap}>
+        <input
+          className={styles.toggle}
+          type="checkbox"
+          role="switch"
+          checked={dark}
+          onChange={() => setTheme(dark ? 'light' : 'dark')}
+          aria-label={label}
+        />
+        <span className={styles.icon} aria-hidden="true">
+          <span className={styles.iconPart} />
+          <span className={styles.iconPart} />
+          <span className={styles.iconPart} />
+          <span className={styles.iconPart} />
+          <span className={styles.iconPart} />
+          <span className={styles.iconPart} />
+          <span className={styles.iconPart} />
+          <span className={styles.iconPart} />
+          <span className={styles.iconPart} />
+        </span>
+      </span>
+    </label>
   );
 }

@@ -91,7 +91,7 @@ export function SignalExplorer() {
           <select
             value={record.key}
             onChange={(event) => setRecordKey(event.target.value)}
-            className="rounded border border-line bg-sunken px-2 py-1.5 font-mono text-label-md text-ink focus:border-accent focus:outline-none"
+            className="rounded border border-line bg-sunken px-2 py-1.5 text-label-md text-ink focus:border-accent focus:outline-none"
           >
             {examples.records.map((item) => (
               <option key={item.key} value={item.key}>

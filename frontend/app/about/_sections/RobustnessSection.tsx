@@ -130,7 +130,7 @@ export function RobustnessSection() {
           <a
             key={block.id}
             href={'#' + block.id}
-            className="rounded-lg border border-line bg-panel px-2.5 py-1 font-mono text-label-md uppercase text-ink-2 transition-colors hover:border-accent-line hover:text-accent-strong"
+            className="rounded-lg border border-line bg-panel px-2.5 py-1 text-label-md uppercase text-ink-2 transition-colors hover:border-accent-line hover:text-accent-strong"
           >
             {block.title}
           </a>
@@ -146,7 +146,7 @@ export function RobustnessSection() {
             defaultOpen={index === 0}
             summary={
               <span>
-                <span className="mr-2 font-mono text-label-sm uppercase text-ink-3">
+                <span className="mr-2 text-label-sm uppercase text-ink-3">
                   {block.eyebrow}
                 </span>
                 {source ? source.title : block.title}

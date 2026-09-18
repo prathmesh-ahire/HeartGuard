@@ -122,7 +122,7 @@ export function IntroSequence() {
               }}
             >
               <span className="text-4xl">♥</span>
-              <span className="font-mono text-label-sm uppercase tracking-[0.2em]">
+              <span className="text-label-sm uppercase tracking-[0.2em]">
                 PV-MEPCG / PulseVision
               </span>
             </m.div>
@@ -136,7 +136,7 @@ export function IntroSequence() {
                 fades in. The whole overlay is click- and keydown-skippable
                 from the first frame regardless; this is the visible label. */}
             <m.span
-              className="absolute bottom-6 right-6 font-mono text-label-sm uppercase tracking-wide text-on-accent"
+              className="absolute bottom-6 right-6 text-label-sm uppercase tracking-wide text-on-accent"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: LAYERS.length * STEP, duration: STEP }}

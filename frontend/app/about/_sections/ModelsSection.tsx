@@ -78,7 +78,7 @@ export function ModelsSection() {
                 key={item.exp_id}
                 className="rounded-lg border border-dashed border-line bg-panel p-3 text-body-sm"
               >
-                <span className="font-mono text-label-md uppercase text-accent-strong">
+                <span className="text-label-md uppercase text-accent-strong">
                   {item.exp_id}
                 </span>{' '}
                 — {item.title}

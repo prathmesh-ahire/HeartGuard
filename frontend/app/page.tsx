@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 
+import { HomeBackgroundReveal } from '@/components/motion/HomeBackgroundReveal';
 import { Reveal } from '@/components/motion/Reveal';
 import { AnalyseHero } from '@/components/predict/AnalyseHero';
 import { PatientPanel } from '@/components/predict/PatientPanel';
 import { PredictionPanel } from '@/components/predict/PredictionPanel';
-import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionHeader } from '@/components/ui/SectionHeader';
+import { cn } from '@/lib/cn';
 import { routeFor } from '@/lib/routes';
 
 const route = routeFor('/');
@@ -30,19 +31,48 @@ export const metadata: Metadata = {
  *
  * The page declares no number. Every value on it arrives formatted from the
  * server or from `generated/prediction.json`.
+ *
+ * The hero (redesign, 2026-09-17) is one bento panel rather than two stacked
+ * blocks: the title/lede and the heart share it, on the same ambient glow, so
+ * the heart reads as part of the page's one statement instead of a separate
+ * ornament above it. `PageHeader` is not reused here on purpose -- its title
+ * is fixed at `text-title` (30px) and this hero wants a larger, page-specific
+ * statement; every other page keeps `PageHeader` unchanged.
+ *
+ * `HomeBackgroundReveal` opens the page on a plain white ground that fades
+ * onto the ordinary cream/wine surface over the first stretch of scroll, in
+ * step with the heart in `AnalyseHero` growing and fading over the same
+ * distance -- this page only; every other page keeps its normal ground from
+ * the first paint.
  */
 export default function Page() {
   return (
     <div className="space-y-12">
+      <HomeBackgroundReveal />
       <Reveal>
-        <AnalyseHero />
-      </Reveal>
-      <Reveal delay={0.05}>
-        <PageHeader title="Analyse a heart sound" lede={route?.summary ?? ''} />
+        <section className={cn('relative isolate overflow-hidden')}>
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_closest-side_at_78%_28%,rgb(var(--accent)/0.20),transparent_75%)] motion-safe:animate-pulse-subtle"
+          />
+          <div className="relative grid gap-8 p-6 sm:p-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:gap-12 lg:p-14">
+            <div className="max-w-reading">
+              <p className="text-label-md uppercase text-accent">Analyse</p>
+              <h1 className="mt-2 text-[2.25rem] font-semibold leading-[1.08] tracking-tight text-ink sm:text-[2.75rem]">
+                Analyse <span className="font-normal text-ink-2">a heart sound</span>
+              </h1>
+              {route?.summary ? (
+                <p className="mt-4 text-lede text-ink-2">{route.summary}</p>
+              ) : null}
+            </div>
+            <AnalyseHero />
+          </div>
+        </section>
       </Reveal>
 
       <Reveal delay={0.1}>
         <PredictionPanel
+          className="mx-auto w-full max-w-3xl"
           checks={[
             {
               id: 'normal',

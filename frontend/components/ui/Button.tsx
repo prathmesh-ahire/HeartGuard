@@ -44,7 +44,7 @@ export type ButtonTone = keyof typeof TONES;
 function classes(tone: ButtonTone, size: keyof typeof SIZES, className?: string): string {
   return cn(
     'inline-flex items-center justify-center gap-2 rounded-lg border',
-    'font-mono uppercase transition-all',
+    'uppercase transition-all',
     TONES[tone],
     SIZES[size],
     className,

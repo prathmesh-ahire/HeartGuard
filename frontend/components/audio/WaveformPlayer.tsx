@@ -188,7 +188,7 @@ export function WaveformPlayer({
       data-player-status={status}
     >
       <figcaption className="flex flex-wrap items-baseline justify-between gap-2">
-        <span className="truncate font-mono text-label-lg text-ink">{label}</span>
+        <span className="truncate text-label-lg text-ink">{label}</span>
         <span className={cn(TYPE_SCALE.caption, 'text-ink-3')}>
           The file as recorded. The model scores a cleaned copy of it.
         </span>
@@ -235,7 +235,7 @@ export function WaveformPlayer({
             }}
             className="h-1 min-w-0 flex-1 cursor-pointer accent-accent"
           />
-          <span className="shrink-0 font-mono text-label-md text-ink-2" data-testid="player-clock">
+          <span className="shrink-0 text-label-md text-ink-2" data-testid="player-clock">
             {clock(position)} / {clock(duration)}
           </span>
         </div>

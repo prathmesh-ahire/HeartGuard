@@ -59,7 +59,7 @@ export function GlassCard({
             ) : null}
           </div>
           {meta ? (
-            <div className="flex shrink-0 items-center gap-2 font-mono text-label-sm uppercase text-ink-3">
+            <div className="flex shrink-0 items-center gap-2 text-label-sm uppercase text-ink-3">
               {meta}
             </div>
           ) : null}

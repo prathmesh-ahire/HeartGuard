@@ -248,7 +248,7 @@ export function HistoryBrowser() {
         </p>
       ) : null}
 
-      <section aria-label="Search and filters" className="rounded-xl border border-line bg-sunken p-4">
+      <section aria-label="Search and filters" className="rounded-2xl border border-line bg-sunken p-4">
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <div className="block sm:col-span-2 lg:col-span-3">
             <label htmlFor={fieldId('q')} className="label-micro block">Search file names, notes and tags</label>
@@ -340,7 +340,7 @@ export function HistoryBrowser() {
       </section>
 
       {undo !== null ? (
-        <div role="status" className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-panel p-3">
+        <div role="status" className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line bg-panel p-3">
           <span className={TYPE_SCALE.body}>
             Deleted <span className="font-mono">{undo.file_name}</span>.
           </span>
@@ -396,7 +396,7 @@ export function HistoryBrowser() {
           <div className="overflow-x-auto rounded-lg border border-line">
             <LazyMotion features={loadFeatures} strict>
             <table className="min-w-full text-left text-sm">
-              <thead className="border-b-2 border-line bg-sunken font-mono text-label-sm uppercase text-ink-3">
+              <thead className="border-b-2 border-line bg-sunken text-label-sm uppercase text-ink-3">
                 <tr>
                   <th scope="col" className="px-3 py-2">
                     <span className="sr-only">Select to compare</span>

@@ -104,7 +104,7 @@ export function DatasetExplorer() {
             <select
               value={filters[facet.name] ?? ''}
               onChange={(event) => setFilter(facet.name, event.target.value)}
-              className="rounded border border-line bg-sunken px-2 py-1.5 font-mono text-label-md text-ink focus:border-accent focus:outline-none"
+              className="rounded border border-line bg-sunken px-2 py-1.5 text-label-md text-ink focus:border-accent focus:outline-none"
             >
               <option value="">any</option>
               {facet.values.map((value) => (
@@ -148,7 +148,7 @@ export function DatasetExplorer() {
       ) : (
         <div className="mt-4 overflow-x-auto rounded-lg border border-line">
           <table className="min-w-full text-left text-sm">
-            <thead className="border-b-2 border-line bg-sunken font-mono text-label-sm uppercase text-ink-3">
+            <thead className="border-b-2 border-line bg-sunken text-label-sm uppercase text-ink-3">
               <tr>
                 {tableColumns.map((column) => (
                   <th key={column.name} scope="col" className="whitespace-nowrap px-3 py-2">

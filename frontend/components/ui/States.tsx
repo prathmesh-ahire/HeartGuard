@@ -132,7 +132,7 @@ export function ErrorState({
           <button
             type="button"
             onClick={onRetry}
-            className="mt-3 rounded-lg border border-danger-line px-3 py-1.5 font-mono text-label-md uppercase text-danger hover:bg-danger-line/20"
+            className="mt-3 rounded-lg border border-danger-line px-3 py-1.5 text-label-md uppercase text-danger hover:bg-danger-line/20"
           >
             Try again
           </button>

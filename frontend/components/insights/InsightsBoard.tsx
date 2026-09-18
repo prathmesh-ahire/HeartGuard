@@ -1,11 +1,14 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useId, useState } from 'react';
+import { useCallback, useEffect, useMemo, useId, useState, type ReactNode } from 'react';
 import { useTheme } from 'next-themes';
+import { LazyMotion, m } from 'framer-motion';
 
+import { useReducedMotion } from '@/lib/capability';
 import { cn } from '@/lib/cn';
 import { SHOW_SCREENING_NOTICE } from '@/lib/flags';
 import { tokenColour } from '@/lib/cssTokens';
+import { CARD_HOVER, PRESS_SPRING } from '@/lib/motion';
 import { seriesColor, SURFACE, TYPE_SCALE, LAYOUT } from '@/lib/tokens';
 import { prediction } from '@/lib/generated/prediction';
 import { ButtonLink } from '@/components/ui/Button';
@@ -29,6 +32,25 @@ import {
 
 const TREND_WINDOW_OPTIONS = [7, 14, 30, 90] as const;
 type TrendWindow = (typeof TREND_WINDOW_OPTIONS)[number];
+
+const loadFeatures = () => import('@/components/motion/features').then((mod) => mod.default);
+
+/**
+ * This page's cards react the same way the Analyse page's Step 1 check cards
+ * do (2026-09-18, replacing a first, CSS-only hover that read as too weak):
+ * the same `CARD_HOVER` scale-and-lift on the same `PRESS_SPRING`, not a
+ * separate hand-tuned motion. No `whileTap` though, unlike Step 1's own
+ * cards -- these are not buttons, and a press state would claim a click
+ * these cards do not have.
+ */
+function InteractiveCard({ className, children }: { className?: string; children: ReactNode }) {
+  const reduced = useReducedMotion();
+  return (
+    <m.div className={cn('rounded-2xl', className)} whileHover={reduced ? undefined : CARD_HOVER} transition={PRESS_SPRING}>
+      {children}
+    </m.div>
+  );
+}
 
 const TASKS = prediction.tasks;
 
@@ -229,13 +251,13 @@ function ReliabilitySummary() {
       ) : null}
       <div className="space-y-3">
         {TASKS.map((task) => (
-          <div key={task.task} className={cn(SURFACE.card, 'p-4')}>
+          <InteractiveCard key={task.task} className={cn(SURFACE.card, 'p-4')}>
             <p className={cn(TYPE_SCALE.caption, 'font-semibold text-ink')}>{task.title}</p>
             <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mt-1')}>{task.description}</p>
-          </div>
+          </InteractiveCard>
         ))}
       </div>
-      <div className={cn(SURFACE.sunken, 'p-4 space-y-1')}>
+      <div className={cn(SURFACE.sunken, 'rounded-2xl p-4 space-y-1')}>
         <p className={cn(TYPE_SCALE.caption, 'font-semibold text-ink')}>Low-confidence flag</p>
         <p className={cn(TYPE_SCALE.caption, SURFACE.muted)}>{prediction.low_confidence.note}</p>
       </div>
@@ -265,7 +287,7 @@ function FiltersBar({
   return (
     <section
       aria-label="Insights filters"
-      className="flex flex-wrap items-end gap-4 rounded-xl border border-line bg-sunken p-4"
+      className="flex flex-wrap items-end gap-4 rounded-2xl border border-line bg-sunken p-4"
     >
       <div>
         <label htmlFor={baseId + 'task'} className="label-micro mb-1 block">
@@ -362,6 +384,7 @@ export function InsightsBoard() {
   const isEmpty = data !== null && data.total === 0 && !task;
 
   return (
+    <LazyMotion features={loadFeatures} strict>
     <div className="space-y-10">
       {/* T133.5: Filters drive every chart on the page together. */}
       <FiltersBar task={task} days={days} onTask={onTask} onDays={onDays} />
@@ -459,9 +482,9 @@ export function InsightsBoard() {
         <section aria-label="Trend over time" className={LAYOUT.section}>
           <SectionHeader title={`Analyses over the last ${String(days)} days`} />
           {data.trend.points.some((p) => p.count > 0) ? (
-            <div className={cn(SURFACE.card, 'p-4')}>
+            <InteractiveCard className={cn(SURFACE.card, 'p-4')}>
               <TrendChart points={data.trend.points} days={days} />
-            </div>
+            </InteractiveCard>
           ) : (
             <div className={cn(SURFACE.sunken, 'p-6')}>
               <p className={cn(TYPE_SCALE.caption, SURFACE.muted)}>
@@ -478,9 +501,9 @@ export function InsightsBoard() {
           <section aria-label="Results by check type" className={LAYOUT.section}>
             <SectionHeader title="Results by check type" />
             {data.result_split.length > 0 ? (
-              <div className={cn(SURFACE.card, 'p-4')}>
+              <InteractiveCard className={cn(SURFACE.card, 'p-4')}>
                 <OutcomeSplitChart splits={data.result_split} />
-              </div>
+              </InteractiveCard>
             ) : (
               <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'p-4')}>
                 No result breakdown available for the current filter.
@@ -491,9 +514,9 @@ export function InsightsBoard() {
           <section aria-label="Confidence distribution" className={LAYOUT.section}>
             <SectionHeader title="Confidence distribution" />
             {data.confidence_distribution.n > 0 ? (
-              <div className={cn(SURFACE.card, 'p-4')}>
+              <InteractiveCard className={cn(SURFACE.card, 'p-4')}>
                 <ConfidenceChart bins={data.confidence_distribution.bins} />
-              </div>
+              </InteractiveCard>
             ) : (
               <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'p-4')}>
                 No confidence data yet.
@@ -506,5 +529,6 @@ export function InsightsBoard() {
       {/* T133.4: Model reliability — read from generated/, never typed */}
       <ReliabilitySummary />
     </div>
+    </LazyMotion>
   );
 }

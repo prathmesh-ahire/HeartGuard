@@ -106,7 +106,11 @@ function Heart({ animate, color }: { animate: boolean; color: string }): JSX.Ele
     }
     const pulse = 1 + beatEnvelope(state.clock.elapsedTime) * 0.07;
     target.scale.set(pulse, pulse, pulse);
-    target.rotation.y = Math.sin(state.clock.elapsedTime * 0.25) * 0.35;
+    // 0.55 rad/s and a 0.5 rad swing (redesign, 2026-09-17): the original
+    // 0.25/0.35 pairing took ~25s per swing, which read as static rather than
+    // idle -- too slow to register against the pointer tilt now layered on
+    // top of it in `AnalyseHero`.
+    target.rotation.y = Math.sin(state.clock.elapsedTime * 0.55) * 0.5;
   });
 
   return (

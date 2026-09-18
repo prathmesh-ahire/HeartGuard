@@ -21,7 +21,7 @@ export function Badge({
     <span
       className={cn(
         'inline-flex items-center gap-1.5 rounded border px-1.5 py-0.5',
-        'font-mono text-label-sm uppercase',
+        'text-label-sm uppercase',
         STATUS[tone],
         className,
       )}
