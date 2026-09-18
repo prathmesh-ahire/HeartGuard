@@ -4,6 +4,7 @@ import { Hanken_Grotesk, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 
 import { AppShell } from '@/components/AppShell';
+import { DepthLayer } from '@/components/DepthLayer';
 import { DisclaimerBanner } from '@/components/Disclaimer';
 import { Footer } from '@/components/Footer';
 import { IntroSequence } from '@/components/motion/IntroSequence';
@@ -55,6 +56,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning className={`${sans.variable} ${mono.variable}`}>
       <body>
         <ThemeProvider>
+          <DepthLayer />
           <IntroSequence />
           <SmoothScroll>
             <AppShell

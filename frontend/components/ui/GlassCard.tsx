@@ -47,7 +47,14 @@ export function GlassCard({
   const hasHeader = eyebrow !== undefined || title !== undefined || meta !== undefined;
 
   return (
-    <Component aria-label={ariaLabel} className={cn(surface, 'overflow-hidden', className)}>
+    <Component
+      aria-label={ariaLabel}
+      className={cn(
+        surface,
+        'overflow-hidden transition-[transform,box-shadow] duration-200 ease-out motion-safe:hover:-translate-y-[3px] motion-safe:hover:shadow-glow',
+        className,
+      )}
+    >
       {marked ? <div aria-hidden="true" className="h-0.5 w-full bg-accent" /> : null}
 
       {hasHeader ? (

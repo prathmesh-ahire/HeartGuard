@@ -5,6 +5,8 @@ import { Reveal } from '@/components/motion/Reveal';
 import { AnalyseHero } from '@/components/predict/AnalyseHero';
 import { PatientPanel } from '@/components/predict/PatientPanel';
 import { PredictionPanel } from '@/components/predict/PredictionPanel';
+import { EcgLine } from '@/components/ui/EcgLine';
+import { ScrollCue } from '@/components/ui/ScrollCue';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { cn } from '@/lib/cn';
 import { routeFor } from '@/lib/routes';
@@ -55,6 +57,7 @@ export default function Page() {
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_closest-side_at_78%_28%,rgb(var(--accent)/0.20),transparent_75%)] motion-safe:animate-pulse-subtle"
           />
+          <EcgLine className="pointer-events-none absolute inset-x-0 bottom-6 -z-10 h-10 w-full text-accent-line/25" />
           <div className="relative grid gap-8 p-6 sm:p-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:gap-12 lg:p-14">
             <div className="max-w-reading">
               <p className="text-label-md uppercase text-accent">Analyse</p>
@@ -66,6 +69,9 @@ export default function Page() {
               ) : null}
             </div>
             <AnalyseHero />
+          </div>
+          <div className="relative flex justify-center pb-4">
+            <ScrollCue />
           </div>
         </section>
       </Reveal>

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import { GrowBar } from '@/components/ui/GrowBar';
 import { cn } from '@/lib/cn';
 import type { GeneratedExplainability } from '@/lib/generated/types';
 import { seriesColor, SURFACE, TYPE_SCALE } from '@/lib/tokens';
@@ -61,13 +62,9 @@ export function ImportanceView({ groups }: { groups: Group[] }) {
                 {row.feature}
               </span>
               <span className="flex items-center gap-2">
-                <span
-                  aria-hidden="true"
-                  className="h-3 rounded-sm"
-                  style={{
-                    width: String(width * 70) + '%',
-                    backgroundColor: seriesColor(Math.max(0, families.indexOf(row.family))),
-                  }}
+                <GrowBar
+                  percent={width * 70}
+                  color={seriesColor(Math.max(0, families.indexOf(row.family)))}
                 />
                 <span className={cn(TYPE_SCALE.caption, 'tabular-nums')}>
                   {row.importance_display} ± {row.importance_sd_display}

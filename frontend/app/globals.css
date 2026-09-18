@@ -145,6 +145,50 @@ body {
   }
 
   /*
+   * The page depth layer (T139.2): one fixed, `pointer-events-none` sheet
+   * behind everything, rendered once from `DepthLayer` in the root layout.
+   * Three pieces, all token-derived so light and dark need no separate rules:
+   *
+   *   .depth-mesh  a wide, faint radial wash -- reads as atmosphere, not a shape
+   *   .depth-orb   two soft blurred circles, positioned per-instance below
+   *   .depth-grid  the existing `.telemetry-grid` pattern at low opacity
+   *
+   * Every panel (`bg-panel`) sits on its own opaque ground, so this only ever
+   * shows through the `bg-surface` gaps between them -- the same reasoning
+   * `SURFACE.card` already relies on. Negative z-index, not `-1` alone: it
+   * must stay behind `main`'s own stacking context too, not just this layer.
+   */
+  .depth-mesh {
+    background-image:
+      radial-gradient(60% 50% at 12% -6%, rgb(var(--accent) / 0.10), transparent 70%),
+      radial-gradient(55% 45% at 104% 18%, rgb(var(--accent-line) / 0.14), transparent 72%),
+      radial-gradient(75% 55% at 50% 112%, rgb(var(--line) / 0.08), transparent 70%);
+  }
+
+  .depth-orb {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(64px);
+  }
+
+  .depth-grid {
+    opacity: 0.5;
+  }
+
+  /*
+   * T139.4: a gradient fill for a single emphasised word in a hero heading --
+   * wraps one `<span>`, never a whole heading, so the rest of the sentence
+   * keeps normal `text-ink` contrast. Wine to the soft accent line, the same
+   * two tokens the brand's own accent range already uses.
+   */
+  .text-gradient-accent {
+    background-image: linear-gradient(90deg, rgb(var(--accent)), rgb(var(--accent-line)));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  /*
    * The calibration grid behind a hero or a waveform bed. One class rather
    * than a Tailwind background-image plus a background-size utility, because
    * those two generate the same `bg-telemetry` name and collide.

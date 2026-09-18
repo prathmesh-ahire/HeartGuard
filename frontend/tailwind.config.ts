@@ -98,6 +98,11 @@ const config: Config = {
         lede: ['16px', { lineHeight: '26px' }],
         title: ['30px', { lineHeight: '38px', letterSpacing: '-0.02em', fontWeight: '650' }],
         display: ['40px', { lineHeight: '48px', letterSpacing: '-0.02em', fontWeight: '700' }],
+        /* T139.4: one fluid step for a hero-level heading, so the landing
+         * page's headline scales with viewport width instead of jumping
+         * between fixed breakpoints. `display` above stays fixed for section
+         * heads that sit inside a normal content column. */
+        hero: ['clamp(2.5rem, 1.9rem + 3vw, 4.5rem)', { lineHeight: '1.04', letterSpacing: '-0.025em', fontWeight: '700' }],
       },
       maxWidth: {
         /** One content width for every page (T128.2). */
@@ -122,6 +127,9 @@ const config: Config = {
         panel: '0 1px 2px rgb(var(--scrim) / 0.04)',
         raised: '0 12px 32px -8px rgb(var(--scrim) / 0.22)',
         accent: '0 2px 10px rgb(var(--accent) / 0.28)',
+        /* T139.3: the global card-hover glow, softer and wider than `accent`
+         * above (which marks a pressed/active state, not a hover). */
+        glow: '0 16px 40px -12px rgb(var(--accent) / 0.32)',
       },
       keyframes: {
         'pulse-subtle': {

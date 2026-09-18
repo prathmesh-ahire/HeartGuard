@@ -2,6 +2,7 @@ import { FeatureExplorer } from '@/app/about/_sections/FeatureExplorer';
 import { GroupedBars } from '@/components/charts/Charts';
 import { FigureDownload } from '@/components/charts/FigureDownload';
 import { EquationList } from '@/components/equations/Equations';
+import { Stagger, StaggerItem } from '@/components/motion/Reveal';
 import { ResultsTable } from '@/components/table/ResultsTable';
 import { Disclosure } from '@/components/ui/Disclosure';
 import { GlassCard } from '@/components/ui/GlassCard';
@@ -35,17 +36,19 @@ export function FeaturesSection() {
 
       <section>
         <SectionHeader eyebrow="Composition" title="The six families" level={2} />
-        <div className="mt-4 grid gap-3 sm:grid-cols-3 xl:grid-cols-6">
+        <Stagger className="mt-4 grid gap-3 sm:grid-cols-3 xl:grid-cols-6">
           {features.families.map((item) => (
-            <StatTile
-              key={item.family}
-              label={item.family}
-              display={item.n_features_display}
-              value={item.n_features}
-              unit="features"
-            />
+            <StaggerItem key={item.family}>
+              <StatTile
+                label={item.family}
+                display={item.n_features_display}
+                value={item.n_features}
+                unit="features"
+                animate
+              />
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
         <GlassCard className="mt-3" eyebrow="G10" title="Features per family">
           <GroupedBars
             source={G10}

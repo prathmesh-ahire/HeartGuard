@@ -1,6 +1,7 @@
 import { DatasetExplorer } from '@/app/about/_sections/DatasetExplorer';
 import { GroupedBars } from '@/components/charts/Charts';
 import { FigureDownload } from '@/components/charts/FigureDownload';
+import { Stagger, StaggerItem } from '@/components/motion/Reveal';
 import { ResultsTable } from '@/components/table/ResultsTable';
 import { Disclosure } from '@/components/ui/Disclosure';
 import { GlassCard } from '@/components/ui/GlassCard';
@@ -45,23 +46,25 @@ export function DatasetSection() {
           title="Files on disk, and the subset actually modelled"
           level={2}
         />
-        <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <Stagger className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
           {datasetSummary.summary.map((row) => (
-            <StatTile
-              key={row.dataset_source}
-              label={row.dataset_name}
-              display={row.n_modelled_display}
-              value={row.n_modelled}
-              unit="modelled"
-              hint={
-                <>
-                  {row.n_files_display} files · {row.n_subjects_display} subjects ·{' '}
-                  {row.hours_modelled_display} h modelled
-                </>
-              }
-            />
+            <StaggerItem key={row.dataset_source}>
+              <StatTile
+                label={row.dataset_name}
+                display={row.n_modelled_display}
+                value={row.n_modelled}
+                unit="modelled"
+                animate
+                hint={
+                  <>
+                    {row.n_files_display} files · {row.n_subjects_display} subjects ·{' '}
+                    {row.hours_modelled_display} h modelled
+                  </>
+                }
+              />
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       </section>
 
       <section>

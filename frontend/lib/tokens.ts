@@ -43,6 +43,8 @@ export const TYPE_SCALE = {
   display: 'text-headline-xl',
   /** Metrics are tabular so digits line up column to column. */
   stat: 'stat font-mono text-telemetry',
+  /** The one fluid step (T139.4): a landing-page headline, never a section head. */
+  hero: 'text-hero',
 } as const;
 
 /** A 4px base step. Named so a card and a section cannot drift apart. */
