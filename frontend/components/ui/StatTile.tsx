@@ -8,6 +8,7 @@ import { cn } from '@/lib/cn';
 import { CARD_HOVER, PRESS_SPRING } from '@/lib/motion';
 import { SURFACE, TYPE_SCALE } from '@/lib/tokens';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
+import { Icon, type IconName } from '@/components/ui/Icon';
 
 const loadFeatures = () => import('@/components/motion/features').then((mod) => mod.default);
 
@@ -32,6 +33,7 @@ export function StatTile({
   unit,
   source,
   hint,
+  icon,
   className,
   animate = false,
   /** Draws the top rule in the accent rather than the neutral hairline. */
@@ -43,6 +45,8 @@ export function StatTile({
   unit?: string;
   source?: string;
   hint?: ReactNode;
+  /** A small glyph beside the label (T140.3's "icon + value + sub-label" tile). Purely decorative. */
+  icon?: IconName;
   className?: string;
   animate?: boolean;
   marked?: boolean;
@@ -61,7 +65,10 @@ export function StatTile({
         className={cn('h-0.5 w-full', marked ? 'bg-accent' : 'bg-line')}
       />
       <div className="p-4">
-        <p className={cn(TYPE_SCALE.micro, SURFACE.subtle)}>{label}</p>
+        <p className={cn(TYPE_SCALE.micro, SURFACE.subtle, 'flex items-center gap-1.5')}>
+          {icon ? <Icon name={icon} className="h-3.5 w-3.5 shrink-0 text-accent" /> : null}
+          {label}
+        </p>
         <p className="mt-2 flex items-baseline gap-1.5">
           {animate && value !== null ? (
             <AnimatedCounter value={value} display={display} />

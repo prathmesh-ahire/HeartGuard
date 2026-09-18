@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
+import { LivePill } from '@/components/LivePill';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Icon, type IconName } from '@/components/ui/Icon';
 import { useReducedMotion, useScrolled } from '@/lib/capability';
@@ -185,6 +186,7 @@ export function TopBar({ onMenu, menuOpen = false }: { onMenu: () => void; menuO
           </div>
 
           <div className="flex shrink-0 items-center gap-3">
+            <LivePill />
             <span className="hidden items-center gap-1.5 text-label-sm uppercase text-ink-3 xl:flex">
               <Icon name="check" className="h-3.5 w-3.5 text-accent" />
               Research prototype

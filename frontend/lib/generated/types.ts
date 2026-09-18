@@ -746,3 +746,67 @@ export interface GeneratedPrediction {
   low_confidence: { margin: number; margin_display: string; note: string };
   operating_point: { threshold: number; threshold_display: string; note: string };
 }
+
+export interface GeneratedLandingMetric {
+  key: string;
+  label: string;
+  value: number | null;
+  display: string;
+}
+
+export interface GeneratedLandingTrustItem {
+  label: string;
+  detail: string;
+}
+
+export interface GeneratedLandingEvidenceHighlight {
+  label: string;
+  display: string;
+  source: string;
+}
+
+export interface GeneratedLandingExperiment {
+  exp_id: string;
+  task: string;
+  title: string;
+  description: string | null;
+  available: boolean;
+  reason: string | null;
+  model_id: string | null;
+  metrics: GeneratedLandingMetric[];
+  finding: string | null;
+  link: string;
+}
+
+export interface GeneratedLandingDataset {
+  dataset_source: string;
+  dataset_name: string;
+  n_files_display: string;
+  n_modelled_display: string;
+  n_subjects_display: string;
+  hours_modelled_display: string;
+  classes: string[];
+  sample_rate_display: string;
+}
+
+export interface GeneratedLanding {
+  champion_model_id: string | null;
+  hero: {
+    headline: GeneratedLandingMetric[];
+    exp_id: string;
+  };
+  metrics_strip: GeneratedLandingMetric[];
+  trust_line: GeneratedLandingTrustItem[];
+  evidence_highlights: GeneratedLandingEvidenceHighlight[];
+  experiments: GeneratedLandingExperiment[];
+  datasets: GeneratedLandingDataset[];
+  footer: {
+    brand: string;
+    tagline: string;
+    results_summary: string;
+    version: string;
+    run_id: string | null;
+    git_commit: string | null;
+  };
+  disclaimer: string;
+}

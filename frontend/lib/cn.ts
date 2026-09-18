@@ -25,6 +25,7 @@ const FONT_SIZES = [
   'headline-md',
   'headline-lg',
   'headline-xl',
+  'hero',
 ];
 
 const twMerge = extendTailwindMerge({

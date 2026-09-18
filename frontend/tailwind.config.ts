@@ -149,6 +149,13 @@ const config: Config = {
           '0%, 100%': { opacity: '1' },
           '50%': { opacity: '0.5' },
         },
+        /* T140.2: the hero's segmentation chips, each drifting up and down a
+         * few pixels on its own phase offset (staggered via `animation-delay`
+         * at the call site) so the set reads as afloat rather than synced. */
+        'float-subtle': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-6px)' },
+        },
       },
       animation: {
         'pulse-subtle': 'pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
@@ -158,6 +165,7 @@ const config: Config = {
         'drawer-in-left': 'drawer-in-left 280ms cubic-bezier(0.16, 1, 0.3, 1)',
         'sheet-in': 'sheet-in 280ms cubic-bezier(0.16, 1, 0.3, 1)',
         skeleton: 'skeleton 1.6s ease-in-out infinite',
+        'float-subtle': 'float-subtle 4s ease-in-out infinite',
       },
     },
   },

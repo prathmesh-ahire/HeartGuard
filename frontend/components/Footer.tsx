@@ -9,6 +9,12 @@ import { LAYOUT } from '@/lib/tokens';
  * every build, by `scripts/45_audit_displayed_values.py`, which confirms the
  * numbers on screen came from a recorded export run. It is simply no longer
  * printed for the person using the app, who has no use for a commit hash.
+ *
+ * Kept deliberately light (T140.6): it is rendered from the root layout, so
+ * every one of the five routes pays for whatever it imports. The richer
+ * "results summary, version, run id" footer T140.6 asks for is
+ * `LandingFooterSummary`, scoped to `/` alone, for the same reason `landing`
+ * itself is its own module and not in the barrel -- see that component.
  */
 export function Footer() {
   return (

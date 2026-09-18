@@ -1,0 +1,367 @@
+{
+  "champion_model_id": "M1",
+  "hero": {
+    "headline": [
+      {
+        "key": "sensitivity",
+        "label": "Sensitivity",
+        "value": 0.8648233891627352,
+        "display": "0.865"
+      },
+      {
+        "key": "balanced_accuracy",
+        "label": "Balanced accuracy",
+        "value": 0.8468043977525701,
+        "display": "0.847"
+      },
+      {
+        "key": "roc_auc",
+        "label": "ROC AUC",
+        "value": 0.9212095305753734,
+        "display": "0.921"
+      },
+      {
+        "key": "records_supervised",
+        "label": "Recordings analysed",
+        "value": 6988,
+        "display": "6,988"
+      }
+    ],
+    "exp_id": "EXP-A2"
+  },
+  "metrics_strip": [
+    {
+      "key": "sensitivity",
+      "label": "Sensitivity",
+      "value": 0.8648233891627352,
+      "display": "0.865"
+    },
+    {
+      "key": "specificity",
+      "label": "Specificity",
+      "value": 0.8287854063424053,
+      "display": "0.829"
+    },
+    {
+      "key": "balanced_accuracy",
+      "label": "Balanced accuracy",
+      "value": 0.8468043977525701,
+      "display": "0.847"
+    },
+    {
+      "key": "f1",
+      "label": "F1",
+      "value": 0.6867062637528286,
+      "display": "0.687"
+    },
+    {
+      "key": "roc_auc",
+      "label": "ROC AUC",
+      "value": 0.9212095305753734,
+      "display": "0.921"
+    },
+    {
+      "key": "n_features",
+      "label": "Engineered features",
+      "value": 138,
+      "display": "138"
+    }
+  ],
+  "trust_line": [
+    {
+      "label": "Cross-validation",
+      "detail": "25-fold repeated subject-grouped (5x5)"
+    },
+    {
+      "label": "Seed",
+      "detail": "Fixed at 42, every run"
+    },
+    {
+      "label": "Fold safety",
+      "detail": "Scaler, imputer and feature selector are fit inside the training fold only."
+    },
+    {
+      "label": "Label spaces",
+      "detail": "Binary, PASCAL A, PASCAL B, CirCor murmur and CirCor outcome are five separate tasks with five separate targets. They are never merged, and no number is comparable across them."
+    },
+    {
+      "label": "CirCor external transfer",
+      "detail": "Balanced accuracy 0.847 in-domain to 0.526 external (0.379 relative drop) -- an adult-to-paediatric population effect (EXP-D1), not a method failure."
+    },
+    {
+      "label": "Statistical significance",
+      "detail": "M1 and M6 are statistically indistinguishable (paired t-test, n=25, p=0.7248, Holm-corrected p=1). The observed gap is 0.0033 in favour of M1, with Cohen d (paired) 0.071 -- a difference this test had the power to detect and did not."
+    }
+  ],
+  "evidence_highlights": [
+    {
+      "label": "Calibration (Brier / ECE)",
+      "display": "0.230 / 0.051",
+      "source": "T23"
+    },
+    {
+      "label": "Noise robustness (SNR-proxy grouping)",
+      "display": "clean 0.901 vs noisy 0.595 sensitivity",
+      "source": "T20"
+    },
+    {
+      "label": "Inference time (bench, per recording)",
+      "display": "2.34 s",
+      "source": "T25"
+    }
+  ],
+  "experiments": [
+    {
+      "exp_id": "EXP-A1",
+      "task": "binary",
+      "title": "PhysioNet binary baseline",
+      "description": "Every model at its configured defaults over the 25-fold repeated subject-grouped map. No search runs inside it.",
+      "available": true,
+      "reason": null,
+      "model_id": "M1",
+      "metrics": [
+        {
+          "key": "sensitivity",
+          "label": "Sensitivity",
+          "value": 0.8479933187885698,
+          "display": "0.848"
+        },
+        {
+          "key": "specificity",
+          "label": "Specificity",
+          "value": 0.8378530531876638,
+          "display": "0.838"
+        },
+        {
+          "key": "balanced_accuracy",
+          "label": "Balanced accuracy",
+          "value": 0.8429231859881168,
+          "display": "0.843"
+        },
+        {
+          "key": "roc_auc",
+          "label": "ROC AUC",
+          "value": 0.9221754145146952,
+          "display": "0.922"
+        }
+      ],
+      "finding": "Model M1: sensitivity 0.848 and specificity 0.838 over 25-fold repeated subject-grouped (5x5).",
+      "link": "/about/models/"
+    },
+    {
+      "exp_id": "EXP-A2",
+      "task": "binary",
+      "title": "PhysioNet binary, nested search",
+      "description": "Hyperparameters chosen inside each training fold by nested cross-validation. The outer fold is never seen by the search.",
+      "available": true,
+      "reason": null,
+      "model_id": "M1",
+      "metrics": [
+        {
+          "key": "sensitivity",
+          "label": "Sensitivity",
+          "value": 0.8648233891627352,
+          "display": "0.865"
+        },
+        {
+          "key": "specificity",
+          "label": "Specificity",
+          "value": 0.8287854063424053,
+          "display": "0.829"
+        },
+        {
+          "key": "balanced_accuracy",
+          "label": "Balanced accuracy",
+          "value": 0.8468043977525701,
+          "display": "0.847"
+        },
+        {
+          "key": "roc_auc",
+          "label": "ROC AUC",
+          "value": 0.9212095305753734,
+          "display": "0.921"
+        }
+      ],
+      "finding": "Model M1: sensitivity 0.865 and specificity 0.829 over 25-fold repeated subject-grouped (5x5).",
+      "link": "/about/models/"
+    },
+    {
+      "exp_id": "EXP-A2-so04_subset",
+      "task": "binary",
+      "title": "PhysioNet binary, nested search on the selected subset",
+      "description": "The same nested protocol restricted to the feature subset SO-04 selected, so the cost of dropping features is measurable.",
+      "available": true,
+      "reason": null,
+      "model_id": "M6",
+      "metrics": [
+        {
+          "key": "sensitivity",
+          "label": "Sensitivity",
+          "value": 0.8606643775476922,
+          "display": "0.861"
+        },
+        {
+          "key": "specificity",
+          "label": "Specificity",
+          "value": 0.8575817581965677,
+          "display": "0.858"
+        },
+        {
+          "key": "balanced_accuracy",
+          "label": "Balanced accuracy",
+          "value": 0.85912306787213,
+          "display": "0.859"
+        },
+        {
+          "key": "roc_auc",
+          "label": "ROC AUC",
+          "value": 0.9389039579010398,
+          "display": "0.939"
+        }
+      ],
+      "finding": "Model M6: sensitivity 0.861 and specificity 0.858 over 25-fold repeated subject-grouped (5x5).",
+      "link": "/about/models/"
+    },
+    {
+      "exp_id": "EXP-B1",
+      "task": "pascal_a",
+      "title": "PASCAL A, four classes",
+      "description": "Four-class classification over PASCAL set A.",
+      "available": true,
+      "reason": null,
+      "model_id": "M4",
+      "metrics": [
+        {
+          "key": "macro_f1",
+          "label": "Macro F1",
+          "value": 0.6263469691986043,
+          "display": "0.626"
+        },
+        {
+          "key": "macro_recall",
+          "label": "Macro recall",
+          "value": 0.6639440359477125,
+          "display": "0.664"
+        },
+        {
+          "key": "balanced_accuracy",
+          "label": "Balanced accuracy",
+          "value": 0.6639440359477125,
+          "display": "0.664"
+        },
+        {
+          "key": "ovr_auc_macro",
+          "label": "AUC (one-vs-rest)",
+          "value": 0.8803005993147863,
+          "display": "0.880"
+        }
+      ],
+      "finding": "Model M4: macro f1 0.626 and macro recall 0.664 over 10-fold repeated stratified (5x2).",
+      "link": "/about/models/"
+    },
+    {
+      "exp_id": "EXP-B2",
+      "task": "pascal_b",
+      "title": "PASCAL B, three classes",
+      "description": "Three-class classification over PASCAL set B.",
+      "available": true,
+      "reason": null,
+      "model_id": "M1",
+      "metrics": [
+        {
+          "key": "macro_f1",
+          "label": "Macro F1",
+          "value": 0.4704075427892693,
+          "display": "0.470"
+        },
+        {
+          "key": "macro_recall",
+          "label": "Macro recall",
+          "value": 0.4887889863547758,
+          "display": "0.489"
+        },
+        {
+          "key": "balanced_accuracy",
+          "label": "Balanced accuracy",
+          "value": 0.4887889863547758,
+          "display": "0.489"
+        },
+        {
+          "key": "ovr_auc_macro",
+          "label": "AUC (one-vs-rest)",
+          "value": 0.6697672244716263,
+          "display": "0.670"
+        }
+      ],
+      "finding": "Model M1: macro f1 0.470 and macro recall 0.489 over 5-fold subject-grouped.",
+      "link": "/about/models/"
+    }
+  ],
+  "datasets": [
+    {
+      "dataset_source": "D1",
+      "dataset_name": "PhysioNet 2016",
+      "n_files_display": "3,541",
+      "n_modelled_display": "3,240",
+      "n_subjects_display": "857",
+      "hours_modelled_display": "20.216",
+      "classes": [
+        "abnormal",
+        "normal"
+      ],
+      "sample_rate_display": "2,000 Hz"
+    },
+    {
+      "dataset_source": "D2",
+      "dataset_name": "PASCAL set_a",
+      "n_files_display": "176",
+      "n_modelled_display": "124",
+      "n_subjects_display": "175",
+      "hours_modelled_display": "0.276",
+      "classes": [
+        "artifact",
+        "extrahls",
+        "murmur",
+        "normal"
+      ],
+      "sample_rate_display": "44,100 Hz"
+    },
+    {
+      "dataset_source": "D3",
+      "dataset_name": "PASCAL set_b",
+      "n_files_display": "656",
+      "n_modelled_display": "461",
+      "n_subjects_display": "171",
+      "hours_modelled_display": "0.830",
+      "classes": [
+        "extrastole",
+        "murmur",
+        "normal"
+      ],
+      "sample_rate_display": "4,000 Hz"
+    },
+    {
+      "dataset_source": "D4",
+      "dataset_name": "CirCor 2022",
+      "n_files_display": "3,163",
+      "n_modelled_display": "3,163",
+      "n_subjects_display": "942",
+      "hours_modelled_display": "20.094",
+      "classes": [
+        "Absent",
+        "Present",
+        "Unknown"
+      ],
+      "sample_rate_display": "4,000 Hz"
+    }
+  ],
+  "footer": {
+    "brand": "PV-MEPCG / PulseVision",
+    "tagline": "Phonocardiogram heart-sound analysis -- academic research prototype.",
+    "results_summary": "PV-MEPCG screens 6,988 labelled recordings across 4 public corpora, over 6 locked objectives and 5 of 5 declared experiments. Final model selection prioritises sensitivity and balanced accuracy, never accuracy alone.",
+    "version": "0.1.0",
+    "run_id": "20260918T165946Z-6fde23ac",
+    "git_commit": "13075cd464941fe503fef686b38ed1f747bfce8a"
+  },
+  "disclaimer": "Academic screening and decision-support prototype. Not a diagnostic device and not a substitute for clinical assessment."
+}
