@@ -1,31 +1,38 @@
-import type { ReactNode } from 'react';
+'use client';
 
+import { useEffect, useRef, type ReactNode } from 'react';
+
+import { useReducedMotion } from '@/lib/capability';
 import { cn } from '@/lib/cn';
 import { SURFACE, TYPE_SCALE } from '@/lib/tokens';
 import { Icon } from '@/components/ui/Icon';
 
 /**
- * Secondary detail behind a native disclosure (T135.5).
+ * Secondary detail behind a `<details>` (T135.5, animated open/close in T142.5).
  *
- * `<details>`/`<summary>` rather than a client-side accordion: it needs no
- * JavaScript, it is keyboard- and screen-reader-accessible for free, and a
- * browser auto-opens the closed `<details>` ancestor of a URL fragment's
- * target -- so a deep link into a collapsed section (the page's own "jump to"
- * nav, a link from another page) still lands open. A client accordion would
- * need its own fragment-handling code to get that; this gets it from the
- * platform.
+ * Still a real `<details>`/`<summary>` element -- not a div-based accordion --
+ * because that is what gives two things away for free that a from-scratch
+ * accordion has to rebuild by hand: keyboard behaviour (Enter/Space on a
+ * focused `<summary>` already toggles it -- no key handler needed, and none is
+ * added here) and a browser auto-opening the closed `<details>` ancestor of a
+ * URL fragment's target (T135.5's own deep-link behaviour, still exercised by
+ * `e2e/about.spec.ts`). Swapping the element for a `<div>` would have to
+ * reimplement both by hand and could silently regress either.
  *
- * **`id` goes on a marker just inside the content, not on `<details>`
- * itself.** The auto-open behaviour fires for a fragment target that is
- * *hidden* by the closed ancestor; `<details>` itself is never hidden (only
- * its content region is), so a browser has no reason to open it for its own
- * id -- confirmed by running this in a real browser rather than assumed, T135.7's
- * Playwright spec pins it. The marker also carries `scroll-mt-24` so the open
- * panel lands below the sticky tab bar, not under it.
+ * What T142.5 changes is the TRANSITION: a native `<details>` snaps its
+ * content open and closed with no animation at all. The click handler below
+ * intercepts only that snap and replaces it with a height tween via
+ * `element.animate()` -- the Web Animations API, a browser primitive, not a
+ * library, so this adds no bundle weight. It still finishes by setting the
+ * same boolean `open` a native toggle would have set, just after the tween
+ * ends rather than instantly, so anything reading `.open` (the fragment
+ * behaviour above, or `e2e`'s own assertions) sees the same state either way.
  *
- * `defaultOpen` marks the one or two panels a tab should show without a
- * click -- the "key charts" T135.3 asks for. Everything else here is real
- * content, not omitted, just not first on screen.
+ * A fragment jump sets `.open` directly and never dispatches a `click` on
+ * `<summary>`, so it never runs through this handler and stays instant --
+ * exactly the native behaviour T135.5 relied on. Reduced motion, and a
+ * browser with no `element.animate`, both fall through to the plain native
+ * toggle untouched.
  */
 export function Disclosure({
   id,
@@ -40,8 +47,47 @@ export function Disclosure({
   className?: string;
   children: ReactNode;
 }) {
+  const detailsRef = useRef<HTMLDetailsElement>(null);
+  const animationRef = useRef<Animation | null>(null);
+  const reduced = useReducedMotion();
+
+  useEffect(() => {
+    const el = detailsRef.current;
+    if (el === null || reduced || typeof el.animate !== 'function') return;
+
+    const summaryEl = el.querySelector('summary');
+    if (summaryEl === null) return;
+
+    const onClick = (event: MouseEvent) => {
+      event.preventDefault();
+      animationRef.current?.cancel();
+
+      const opening = !el.open;
+      const startHeight = el.getBoundingClientRect().height;
+      if (opening) el.open = true; // lays out the full content so scrollHeight below is the real target
+      const endHeight = opening ? el.scrollHeight : summaryEl.getBoundingClientRect().height;
+
+      const animation = el.animate(
+        { height: [startHeight + 'px', endHeight + 'px'] },
+        { duration: 220, easing: 'ease-out' },
+      );
+      animationRef.current = animation;
+      animation.onfinish = () => {
+        el.open = opening;
+        animationRef.current = null;
+      };
+    };
+
+    summaryEl.addEventListener('click', onClick);
+    return () => summaryEl.removeEventListener('click', onClick);
+  }, [reduced]);
+
   return (
-    <details open={defaultOpen} className={cn(SURFACE.card, 'group overflow-hidden', className)}>
+    <details
+      ref={detailsRef}
+      open={defaultOpen}
+      className={cn(SURFACE.card, 'group overflow-hidden', className)}
+    >
       <summary
         className={cn(
           'flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3',

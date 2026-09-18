@@ -3,13 +3,16 @@
 import { useMemo, useState } from 'react';
 
 import { CurveChart } from '@/components/charts/CurveChart';
+import { Badge } from '@/components/ui/Badge';
+import { cn } from '@/lib/cn';
 import { Disclosure } from '@/components/ui/Disclosure';
+import { FilterPills } from '@/components/ui/FilterPills';
 import { EmptyState } from '@/components/ui/States';
 import { experiments as generated } from '@/lib/generated/experiments';
 
 /**
- * The metric table, the model selector, and the curve and confusion viewers
- * (T115.3, T115.4).
+ * The leaderboard, the model selector, and the curve and confusion viewers
+ * (T115.3, T115.4; leaderboard, task pills and numbered charts added T142).
  *
  * ## Sorting is a view, not a computation
  *
@@ -24,40 +27,113 @@ import { experiments as generated } from '@/lib/generated/experiments';
  * column descending would present the worst-calibrated model as the best. The
  * arrow and the ordering both read that flag.
  *
+ * ## "Best" is a rank, not a claim (T142.1)
+ *
+ * Rank 1 is whichever row the current sort already put first — the table's own
+ * ordering, just labelled. Never "SOTA": nothing here was benchmarked against a
+ * published result, so the badge says "Best" (best among these declared runs,
+ * by the metric currently sorted) and nothing stronger.
+ *
+ * ## Task first, run second (T142.2, T142.6)
+ *
+ * The old flat "Experiment" dropdown mixed three binary re-runs with one
+ * PASCAL A and one PASCAL B run in one list, so switching "experiment" and
+ * switching "label space" looked like the same action. `FilterPills` now
+ * switches the task (a pill per distinct label space among the available
+ * experiments, sliding highlight, no `layoutId`) and a plain `<select>` only
+ * appears underneath it when that task has more than one declared run to
+ * choose between — which is exactly when a second control earns its place.
+ * The rest (curves, confusion matrix, per-class cards) is the same live
+ * component reacting to the new value, not a static figure switched by CSS.
+ *
  * ## The confusion matrix is not normalised here
  *
  * Counts render as counts. A percentage computed in the browser would be a
  * client-side metric, which this project forbids, and the row totals are
  * visible anyway. The support note explains why the totals are five times the
  * corpus: the matrix sums element-wise over a repeated 5x5 map.
+ *
+ * ## Per-class cards, not a raw table (T142.3)
+ *
+ * Recall/precision/F1 render as small proportional bars sized from the same
+ * `mean` (0..1) the old table's `display` string was formatted from — the bar
+ * is geometry only, the printed number is still the server's string.
+ *
+ * ## Numbered so the tab reads as complete (T142.4)
+ *
+ * Per-class, ROC, precision-recall and the confusion matrix are the four
+ * visual sections this component can show for one model; each is labelled
+ * "Graph N of 4" so a reader who has seen three of them knows there is
+ * exactly one left, not an unknown number.
  */
 
 type SortState = { metric: string; descending: boolean };
 
+const TASK_LABELS: Record<string, string> = {
+  binary: 'Binary',
+  pascal_a: 'PASCAL A',
+  pascal_b: 'PASCAL B',
+  murmur: 'Murmur',
+  outcome: 'Outcome',
+};
+
+function taskLabel(task: string): string {
+  return TASK_LABELS[task] ?? task;
+}
+
+const GRAPH_TOTAL = 4;
+
+type PerClassMetric = { label?: string; mean?: number; display?: string };
+type PerClassRow = Record<string, unknown> & {
+  class?: string;
+  support_display?: string;
+};
+
 export function ModelComparison() {
   const available = generated.experiments.filter((item) => item.available);
-  const [expId, setExpId] = useState(available[0]?.exp_id ?? '');
+
+  const tasks = useMemo(() => {
+    const seen = new Set<string>();
+    const ordered: string[] = [];
+    for (const item of available) {
+      if (!seen.has(item.task)) {
+        seen.add(item.task);
+        ordered.push(item.task);
+      }
+    }
+    return ordered;
+  }, [available]);
+
+  const [task, setTask] = useState(tasks[0] ?? '');
+  const experimentsForTask = useMemo(
+    () => available.filter((item) => item.task === task),
+    [available, task],
+  );
+  const [expId, setExpId] = useState(experimentsForTask[0]?.exp_id ?? '');
 
   const experiment = useMemo(
-    () => available.find((item) => item.exp_id === expId) ?? available[0],
-    [available, expId],
+    () => experimentsForTask.find((item) => item.exp_id === expId) ?? experimentsForTask[0],
+    [experimentsForTask, expId],
   );
 
   const metrics = experiment?.metrics ?? [];
   const [sort, setSort] = useState<SortState>({ metric: 'sensitivity', descending: true });
   const [modelId, setModelId] = useState<string>('');
 
+  const sortKey = metrics.some((item) => item.name === sort.metric)
+    ? sort.metric
+    : (metrics[0]?.name ?? '');
+  const sortMetric = metrics.find((item) => item.name === sortKey);
+
   const models = useMemo(() => {
     const rows = [...(experiment?.models ?? [])];
-    const known = metrics.some((item) => item.name === sort.metric);
-    const key = known ? sort.metric : (metrics[0]?.name ?? '');
     rows.sort((a, b) => {
-      const left = a.metrics[key]?.mean ?? Number.NEGATIVE_INFINITY;
-      const right = b.metrics[key]?.mean ?? Number.NEGATIVE_INFINITY;
+      const left = a.metrics[sortKey]?.mean ?? Number.NEGATIVE_INFINITY;
+      const right = b.metrics[sortKey]?.mean ?? Number.NEGATIVE_INFINITY;
       return sort.descending ? right - left : left - right;
     });
     return rows;
-  }, [experiment, metrics, sort]);
+  }, [experiment, sortKey, sort.descending]);
 
   const selectedModel = modelId !== '' ? modelId : (models[0]?.model_id ?? '');
 
@@ -77,28 +153,47 @@ export function ModelComparison() {
   ) as
     | Record<string, { x: number[]; x_display: string[]; mean: number[]; sd: number[] } | undefined>
     | undefined;
+  const perClassRows = (models.find((m) => m.model_id === selectedModel)?.per_class ??
+    []) as PerClassRow[];
 
   return (
     <div>
       {/* ---------------------------------------------------------------- */}
       <div className="flex flex-wrap items-end gap-4 rounded-xl border border-line bg-panel px-4 py-3 shadow-panel">
-        <label className="flex flex-col gap-1.5">
-          <span className="label-micro">Experiment</span>
-          <select
-            value={experiment.exp_id}
-            onChange={(event) => {
-              setExpId(event.target.value);
+        <div className="flex flex-col gap-1.5">
+          <span className="label-micro">Task</span>
+          <FilterPills
+            ariaLabel="Which label space"
+            options={tasks.map((item) => ({ id: item, label: taskLabel(item) }))}
+            value={task}
+            onChange={(next) => {
+              setTask(next);
+              const first = available.find((item) => item.task === next);
+              setExpId(first?.exp_id ?? '');
               setModelId('');
             }}
-            className="rounded border border-line bg-sunken px-2 py-1.5 text-label-md text-ink focus:border-accent focus:outline-none"
-          >
-            {available.map((item) => (
-              <option key={item.exp_id} value={item.exp_id}>
-                {item.exp_id} — {item.title}
-              </option>
-            ))}
-          </select>
-        </label>
+          />
+        </div>
+
+        {experimentsForTask.length > 1 ? (
+          <label className="flex flex-col gap-1.5">
+            <span className="label-micro">Run</span>
+            <select
+              value={experiment.exp_id}
+              onChange={(event) => {
+                setExpId(event.target.value);
+                setModelId('');
+              }}
+              className="rounded border border-line bg-sunken px-2 py-1.5 text-label-md text-ink focus:border-accent focus:outline-none"
+            >
+              {experimentsForTask.map((item) => (
+                <option key={item.exp_id} value={item.exp_id}>
+                  {item.exp_id} — {item.title}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
 
         <label className="flex flex-col gap-1.5">
           <span className="label-micro">Model</span>
@@ -138,6 +233,9 @@ export function ModelComparison() {
         <table className="min-w-full text-left text-sm">
           <thead className="border-b-2 border-line bg-sunken text-label-sm uppercase text-ink-3">
             <tr>
+              <th scope="col" className="px-3 py-2 text-center">
+                Rank
+              </th>
               <th scope="col" className="px-3 py-2">
                 Model
               </th>
@@ -163,29 +261,39 @@ export function ModelComparison() {
             </tr>
           </thead>
           <tbody>
-            {models.map((row) => (
-              <tr
-                key={row.model_id}
-                className={
-                  row.model_id === selectedModel
-                    ? 'border-t border-line bg-accent-soft/60'
-                    : 'border-t border-line'
-                }
-              >
-                <td className="px-3 py-1.5 font-medium">{row.model_id}</td>
-                {metrics.map((metric) => (
-                  <td key={metric.name} className="whitespace-nowrap px-3 py-1.5 tabular-nums">
-                    {row.metrics[metric.name]?.display ?? 'n/a'}
+            {models.map((row, index) => {
+              const rank = index + 1;
+              const best = rank === 1;
+              return (
+                <tr
+                  key={row.model_id}
+                  className={cn(
+                    'border-t border-line',
+                    best ? 'bg-good-soft/50' : row.model_id === selectedModel ? 'bg-accent-soft/60' : undefined,
+                  )}
+                >
+                  <td className="px-3 py-1.5 text-center font-mono tabular-nums text-ink-3">{rank}</td>
+                  <td className="px-3 py-1.5 font-medium">
+                    <span className="flex items-center gap-2">
+                      {row.model_id}
+                      {best ? <Badge tone="good">Best</Badge> : null}
+                    </span>
                   </td>
-                ))}
-              </tr>
-            ))}
+                  {metrics.map((metric) => (
+                    <td key={metric.name} className="whitespace-nowrap px-3 py-1.5 tabular-nums">
+                      {row.metrics[metric.name]?.display ?? 'n/a'}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
       <p className="mt-2 text-xs text-ink-3">
-        Mean +/- standard deviation across {models[0]?.n_folds_display ?? 'the'} folds.
-        Sorting reorders rows; it never changes what a cell says.
+        Mean +/- standard deviation across {models[0]?.n_folds_display ?? 'the'} folds. Ranked by{' '}
+        {sortMetric?.label ?? 'the sorted column'}; sorting reorders rows, it never changes what a
+        cell says.
       </p>
 
       {/* ---------------------------------------------------------------- */}
@@ -193,49 +301,45 @@ export function ModelComparison() {
         className="mt-8"
         summary={<>Per-class breakdown, ROC / precision-recall curves and confusion matrix for {selectedModel}</>}
       >
-      {(experiment.models?.[0]?.per_class ?? []).length > 0 ? (
+      {perClassRows.length > 0 ? (
         <section>
           <h3 className="label-micro">
-            Per class, for {selectedModel}
+            Graph 1 of {GRAPH_TOTAL} — Per class, for {selectedModel}
           </h3>
-          <div className="mt-3 overflow-x-auto rounded-lg border border-line">
-            <table className="min-w-full text-left text-sm">
-              <thead className="border-b-2 border-line bg-sunken text-label-sm uppercase text-ink-3">
-                <tr>
-                  <th className="px-3 py-2">Class</th>
-                  <th className="px-3 py-2">Recall</th>
-                  <th className="px-3 py-2">Precision</th>
-                  <th className="px-3 py-2">F1</th>
-                  <th className="px-3 py-2">Mean support</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(models.find((m) => m.model_id === selectedModel)?.per_class ?? []).map(
-                  (row) => {
-                    const cell = (key: string) =>
-                      (row[key] as { display?: string } | undefined)?.display ?? 'n/a';
-                    return (
-                      <tr
-                        key={String(row.class)}
-                        className="border-t border-line"
-                      >
-                        <td className="px-3 py-1.5">{String(row.class)}</td>
-                        <td className="px-3 py-1.5 tabular-nums">{cell('recall')}</td>
-                        <td className="px-3 py-1.5 tabular-nums">{cell('precision')}</td>
-                        <td className="px-3 py-1.5 tabular-nums">{cell('f1')}</td>
-                        <td className="px-3 py-1.5 tabular-nums">
-                          {String(row.support_display ?? 'n/a')}
-                        </td>
-                      </tr>
-                    );
-                  },
-                )}
-              </tbody>
-            </table>
-          </div>
+          <ul className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {perClassRows.map((row) => {
+              const cls = String(row.class ?? '');
+              const metricCell = (key: string) => row[key] as PerClassMetric | undefined;
+              return (
+                <li key={cls} className="rounded-xl border border-line bg-panel p-4 shadow-panel">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-label-md uppercase text-ink">{cls}</span>
+                    <span className="text-xs text-ink-3">support {row.support_display ?? 'n/a'}</span>
+                  </div>
+                  <ul className="mt-3 space-y-2">
+                    {(['recall', 'precision', 'f1'] as const).map((key) => {
+                      const entry = metricCell(key);
+                      const width = typeof entry?.mean === 'number' ? entry.mean * 100 : 0;
+                      return (
+                        <li key={key}>
+                          <div className="flex items-baseline justify-between text-xs text-ink-2">
+                            <span>{entry?.label ?? key}</span>
+                            <span className="font-mono tabular-nums">{entry?.display ?? 'n/a'}</span>
+                          </div>
+                          <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full border border-line bg-sunken">
+                            <div className="h-full rounded-full bg-accent" style={{ width: width + '%' }} />
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </li>
+              );
+            })}
+          </ul>
           <p className="mt-2 text-xs text-ink-3">
-            A macro average says nothing about the thinnest class. Support is on every row
-            so the weight behind each number is visible.
+            A macro average says nothing about the thinnest class. Support is on every card so
+            the weight behind each number is visible.
           </p>
         </section>
       ) : null}
@@ -244,7 +348,7 @@ export function ModelComparison() {
       <section className="mt-10 grid gap-8 lg:grid-cols-2">
         <div>
           <h3 className="label-micro">
-            ROC — {selectedModel}
+            Graph 2 of {GRAPH_TOTAL} — ROC, {selectedModel}
           </h3>
           {curves?.available && curveModel?.roc ? (
             <CurveChart
@@ -268,7 +372,7 @@ export function ModelComparison() {
         </div>
         <div>
           <h3 className="label-micro">
-            Precision-recall — {selectedModel}
+            Graph 3 of {GRAPH_TOTAL} — Precision-recall, {selectedModel}
           </h3>
           {curves?.available && curveModel?.pr ? (
             <CurveChart
@@ -299,7 +403,7 @@ export function ModelComparison() {
       {/* ---------------------------------------------------------------- */}
       <section className="mt-10">
         <h3 className="label-micro">
-          Confusion matrix — {selectedModel}
+          Graph 4 of {GRAPH_TOTAL} — Confusion matrix, {selectedModel}
         </h3>
         {confusion?.available && confusion.models?.[selectedModel] ? (
           <>

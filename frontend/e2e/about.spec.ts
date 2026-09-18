@@ -32,7 +32,7 @@ test('T135.1: all six About the Model tabs render with a heading and the tab bar
   }
 });
 
-test('T135.5: secondary detail is collapsed by default and opens on click', async ({ page }) => {
+test('T135.5/T142.5: secondary detail is collapsed by default and opens on click', async ({ page }) => {
   await page.goto('/about/features/', { waitUntil: 'domcontentloaded' });
   const registry = page.locator('details', { hasText: 'Full registry' });
   await expect(registry).toBeVisible();
@@ -41,7 +41,10 @@ test('T135.5: secondary detail is collapsed by default and opens on click', asyn
   await expect(table).toBeHidden();
 
   await registry.locator('summary').click();
-  expect(await registry.evaluate((el) => (el as HTMLDetailsElement).open)).toBe(true);
+  // T142.5: the open/close snap is now a ~220ms `element.animate()` tween
+  // (`Disclosure.tsx`), and `.open` is set when that tween finishes rather
+  // than synchronously on click -- so this polls instead of reading once.
+  await expect.poll(() => registry.evaluate((el) => (el as HTMLDetailsElement).open)).toBe(true);
   await expect(table.first()).toBeVisible();
 });
 
