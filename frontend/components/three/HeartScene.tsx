@@ -158,7 +158,17 @@ export default function HeartScene({
       <directionalLight position={[-4, -2, -3]} intensity={0.4} />
       {color !== null ? <Heart animate={animate} color={color} /> : null}
       {interactive ? (
-        <OrbitControls enablePan={false} enableZoom={false} rotateSpeed={0.6} />
+        <OrbitControls
+          enablePan={false}
+          enableZoom={false}
+          rotateSpeed={0.6}
+          // T141.6: a slow idle drift so the model reads as alive even before
+          // a visitor drags it -- off whenever `animate` is (no WebGL, or
+          // reduced motion asked for the pose rather than the beat), same
+          // gate the beat and the rotation-y tween already use above.
+          autoRotate={animate}
+          autoRotateSpeed={0.6}
+        />
       ) : null}
     </Canvas>
   );

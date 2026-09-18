@@ -8,7 +8,7 @@ import { Button, ButtonLink } from '@/components/ui/Button';
 import { Stagger, StaggerItem } from '@/components/motion/Reveal';
 import { ConfidenceGauge } from '@/components/predict/ConfidenceGauge';
 import { SHOW_SCREENING_NOTICE } from '@/lib/flags';
-import { SURFACE, TYPE_SCALE, seriesColor } from '@/lib/tokens';
+import { SURFACE, TYPE_SCALE } from '@/lib/tokens';
 import { prediction } from '@/lib/generated/prediction';
 import type { GeneratedSample } from '@/lib/generated/types';
 import type { PredictResult } from '@/lib/api';
@@ -54,7 +54,7 @@ export function ProbabilityBars({
   const rest = Object.keys(result.probabilities).filter((name) => !ordered.includes(name));
   return (
     <ul className="mt-3 space-y-2.5">
-      {[...ordered, ...rest].map((name, index) => {
+      {[...ordered, ...rest].map((name) => {
         const value = result.probabilities[name];
         const width = typeof value === 'number' ? value * 100 : 0;
         const top = name === result.predicted_class;
@@ -71,18 +71,18 @@ export function ProbabilityBars({
                 </span>
               </span>
             </div>
+            {/* T141.4: two colours across the whole list, not one per class --
+                the predicted class in the accent, every other category in one
+                shared neutral, so the eye reads "this one" against "the rest"
+                rather than a rainbow with no legend. */}
             <div
               className="mt-1 h-2 w-full overflow-hidden rounded-full border border-line bg-sunken"
               role="img"
               aria-label={name + ' probability ' + (result.display.probabilities[name] ?? 'n/a')}
             >
               <div
-                className="h-full rounded-full"
-                style={{
-                  width: width + '%',
-                  backgroundColor: seriesColor(index),
-                  opacity: top ? 1 : 0.55,
-                }}
+                className={cn('h-full rounded-full', top ? 'bg-accent' : 'bg-ink-3')}
+                style={{ width: width + '%' }}
               />
             </div>
           </li>
@@ -267,6 +267,28 @@ export function ResultCard({
           <ProbabilityBars result={result} classes={classes} />
         </StaggerItem>
 
+        {result.explanation?.available === true && result.explanation.rows.length > 0 ? (
+          <StaggerItem className="px-5 pt-4">
+            <p className="label-micro">What drove this result</p>
+            <ul className="mt-2 space-y-1.5">
+              {result.explanation.rows.slice(0, 3).map((row) => (
+                <li
+                  key={row.feature}
+                  className={cn(TYPE_SCALE.caption, 'flex items-center justify-between gap-3')}
+                >
+                  <span className="truncate font-mono text-ink-2">{row.feature}</span>
+                  <span className={cn(SURFACE.muted, 'shrink-0')}>{row.direction}</span>
+                </li>
+              ))}
+            </ul>
+            <p className={cn(TYPE_SCALE.caption, SURFACE.muted, 'mt-2 max-w-prose')}>
+              The largest factors the model weighed for this recording, from its{' '}
+              {result.explanation.method}. This says what the model responded to — it is not a
+              diagnosis and not a medical explanation.
+            </p>
+          </StaggerItem>
+        ) : null}
+
         {result.warnings.length > 0 ? (
           <StaggerItem>
             <ul
@@ -288,6 +310,12 @@ export function ResultCard({
               Details
             </summary>
             <dl className="mt-3 grid gap-x-4 gap-y-1.5 text-body-sm sm:grid-cols-2">
+              <div className="flex justify-between gap-3">
+                <dt className="label-micro">Model</dt>
+                <dd className="stat truncate font-mono text-ink">
+                  {result.model.estimator_class ?? result.model.model_id ?? 'n/a'}
+                </dd>
+              </div>
               <div className="flex justify-between gap-3">
                 <dt className="label-micro">Operating point</dt>
                 <dd className="stat font-mono text-ink">{result.display.operating_threshold ?? 'argmax'}</dd>

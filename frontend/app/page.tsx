@@ -12,9 +12,39 @@ import { Reveal } from '@/components/motion/Reveal';
 import { PatientPanel } from '@/components/predict/PatientPanel';
 import { PredictionPanel } from '@/components/predict/PredictionPanel';
 import { SectionHeader } from '@/components/ui/SectionHeader';
+import { prediction } from '@/lib/generated/prediction';
 import { routeFor } from '@/lib/routes';
 
 const route = routeFor('/');
+
+/**
+ * T141.1: what the deployed models can find, at a glance, above the tool.
+ * The class list comes straight from `generated/prediction.json` -- the same
+ * `tasks[].classes` `CheckSelector`'s own caption already reads -- deduplicated
+ * across the five tasks (binary and murmur both declare "abnormal", for
+ * instance). A server component: this never ships as client JS.
+ */
+function DetectsBar() {
+  const classes = Array.from(new Set(prediction.tasks.flatMap((entry) => entry.classes)));
+  return (
+    <div
+      role="list"
+      aria-label="What this tool can detect"
+      className="mt-4 flex flex-wrap items-center gap-2"
+    >
+      <span className="label-micro">Detects</span>
+      {classes.map((name) => (
+        <span
+          key={name}
+          role="listitem"
+          className="rounded-full border border-line bg-panel px-3 py-1 text-label-md capitalize text-ink-2"
+        >
+          {name}
+        </span>
+      ))}
+    </div>
+  );
+}
 
 export const metadata: Metadata = {
   title: 'Analyse',
@@ -91,6 +121,7 @@ export default function Page() {
             title="Analyse a heart sound"
             description={route?.summary}
           />
+          <DetectsBar />
         </section>
       </Reveal>
 

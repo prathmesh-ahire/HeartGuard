@@ -38,13 +38,21 @@ import { Hero3D } from '@/components/three/Hero3D';
  *    panel's own `overflow-hidden` edge, a hard box-shaped line cutting
  *    across the heart mid-scroll.
  * 3. **Cursor tilt** (redesign) -- a plain CSS 3D transform on `stage`, the
- *    div wrapping the canvas, driven by `pointermove`. This is NOT
- *    `OrbitControls` (still off, per `Hero3D`'s `interactive` default): it
+ *    div wrapping the canvas, driven by `pointermove`. This runs alongside
+ *    `OrbitControls` (T141.6, turned on below), not instead of it: it
  *    rotates the whole stage as one composited layer rather than the scene's
  *    own camera, and `pointermove` never calls `preventDefault`, so it cannot
  *    trap wheel or touch scroll the way a drag-to-orbit control would. Mouse
  *    only -- `pointerType !== 'mouse'` bails, so a touch tap does not leave
  *    the heart tilted toward wherever it was last touched.
+ * 4. **Orbit and idle auto-rotate** (T141.6) -- `Hero3D interactive` is on
+ *    for this one mount, so a drag on the canvas itself orbits the camera via
+ *    drei's `OrbitControls`, and `HeartScene` spins it slowly on its own
+ *    whenever nothing is dragging. This is the one place on the page that
+ *    intentionally captures a touch drag rather than letting it scroll --
+ *    accepted here because the canvas is small and the gesture (grab the
+ *    heart, turn it) reads as deliberate rather than an attempt to scroll
+ *    past it.
  *
  * The ambient glow behind the heart is the same motif the hero panel's own
  * background carries in `app/page.tsx`, just local and slightly stronger, so
@@ -136,7 +144,7 @@ export function AnalyseHero({ className }: { className?: string }) {
             }}
             className="h-full w-full"
           >
-            <Hero3D height="100%" className="h-full" />
+            <Hero3D height="100%" className="h-full" interactive />
           </div>
         </div>
       </div>

@@ -19,7 +19,8 @@ import {
 import { useCardScrollReveal } from '@/lib/useCardScrollReveal';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { Button } from '@/components/ui/Button';
-import { EmptyState, ErrorState, LoadingState } from '@/components/ui/States';
+import { EmptyState, ErrorState } from '@/components/ui/States';
+import { AnalyseProgress } from '@/components/predict/AnalyseProgress';
 import { FileUpload, type UploadPhase } from '@/components/ui/FileUpload';
 import { MicRecorder } from '@/components/audio/MicRecorder';
 import { WaveformPlayer } from '@/components/audio/WaveformPlayer';
@@ -506,10 +507,7 @@ export function PredictionPanel({
                     exit={reduced ? undefined : { opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <LoadingState
-                      label="Cleaning the recording, measuring it and scoring it"
-                      className="rounded-3xl"
-                    />
+                    <AnalyseProgress className="rounded-3xl" />
                   </m.div>
                 ) : failure !== null ? (
                   <m.div

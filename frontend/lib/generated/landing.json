@@ -360,8 +360,8 @@
     "tagline": "Phonocardiogram heart-sound analysis -- academic research prototype.",
     "results_summary": "PV-MEPCG screens 6,988 labelled recordings across 4 public corpora, over 6 locked objectives and 5 of 5 declared experiments. Final model selection prioritises sensitivity and balanced accuracy, never accuracy alone.",
     "version": "0.1.0",
-    "run_id": "20260918T165946Z-6fde23ac",
-    "git_commit": "13075cd464941fe503fef686b38ed1f747bfce8a"
+    "run_id": "20260918T171634Z-27f86615",
+    "git_commit": "db8ed5285f784eacc3eecc50d6693ae35b854f01"
   },
   "disclaimer": "Academic screening and decision-support prototype. Not a diagnostic device and not a substitute for clinical assessment."
 }
